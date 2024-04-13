@@ -1,9 +1,8 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.DTO;
 
 import com.f2z.gach.Entity.EnumType.LogLevel;
 import com.f2z.gach.Entity.EnumType.Properties;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.springframework.http.HttpMethod;
 
@@ -15,10 +14,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Log extends BaseTimeEntity{
+public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logId;
+    private Timestamp logCreatedAt;
     @Enumerated(EnumType.STRING)
     private LogLevel logLevel;
     private Properties property;

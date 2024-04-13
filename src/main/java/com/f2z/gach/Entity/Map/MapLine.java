@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Entity.Map;
 
 import com.f2z.gach.Entity.EnumType.Satisfaction;
 import jakarta.persistence.Entity;
@@ -16,16 +16,17 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Inquiry extends BaseTimeEntity{
+public class MapLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer inquiryId;
-    private boolean inquiryProgress;
-    private Long userCode;
-    private String inquiryTitle;
-    private String inquiryContent;
-    private String inquiryAnswer;
-
+    private Integer lineId;
+    private String lineName;
+    private Integer nodeCodeFirst;
+    private String nodeNameFirst;
+    private Integer nodeCodeSecond;
+    private String nodeNameSecond;
+    private Double weightShortest;
+    private Double weightOptimal;
 
 
 }

@@ -28,4 +28,13 @@ public enum Properties {
     public String getMessage() {
         return message;
     }
+
+    public static Properties findByCode(int code) {
+        for (Properties property : Properties.values()) {
+            if (property.getCode() == code) {
+                return property;
+            }
+        }
+        return null;
+    }
 }

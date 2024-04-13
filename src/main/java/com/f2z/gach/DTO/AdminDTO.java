@@ -1,11 +1,7 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.DTO;
 
 import com.f2z.gach.Entity.EnumType.Authorization;
-import com.f2z.gach.Entity.EnumType.Departments;
-import com.f2z.gach.Entity.EnumType.Gender;
-import com.f2z.gach.Entity.EnumType.Speed;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Date;
@@ -16,17 +12,14 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Admin {
+public class AdminDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer adminNum;
-    @NotBlank(message = "아이디를 입력해주세요.")
+
     private String adminId;
-    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String adminPassword;
-    @NotBlank(message = "생년월일을 입력해주세요.")
     private Date adminBirthday;
-    @NotBlank(message = "이름을 입력해주세요.")
     private String adminName;
     @Enumerated(EnumType.STRING)
     private Authorization adminAuthorization;

@@ -1,8 +1,9 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.DTO.User;
 
 import com.f2z.gach.Entity.EnumType.Departments;
 import com.f2z.gach.Entity.EnumType.Gender;
 import com.f2z.gach.Entity.EnumType.Speed;
+import com.f2z.gach.Entity.User.UserInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,12 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class UserInfo {
-    @Id
-    @ManyToOne(targetEntity = User.class)
+public class UserInfoDTO {
     private Long userCode;
-
     @Enumerated(EnumType.STRING)
     private Departments UserDepartment;
     private String userNickname;
@@ -30,11 +27,8 @@ public class UserInfo {
     private Double userHeight;
     private Double userWeight;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "userCode", referencedColumnName = "userId")
-    private User user;
 
-
-
+    public UserInfo toEntity() {
+        return new UserInfo(userCode, UserDepartment, userNickname, userSpeed, userGender, userBirth, userHeight, userWeight);
+    }
 }

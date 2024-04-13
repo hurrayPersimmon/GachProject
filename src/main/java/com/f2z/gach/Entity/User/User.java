@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Entity.User;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
@@ -24,4 +23,9 @@ public class User {
     private UserInfo userInfo;
 
 
+    public User(Long userId, String username, String password) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+    }
 }

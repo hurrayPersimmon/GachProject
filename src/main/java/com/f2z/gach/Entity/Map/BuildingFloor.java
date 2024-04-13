@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Entity.Map;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,13 +12,15 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
-public class MapNode {
+public class BuildingFloor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer nodeId;
-    private String nodeName;
-    private Double nodeLatitude;
-    private Double nodeLongitude;
-    private Double nodeAltitude;
+    private Integer buildingFloorId;
+    private Integer buildingCode;
+    private String buildingName;
+    private String buildingFloor;
+    private String buildingFloorInfo;
+
+
 
 }

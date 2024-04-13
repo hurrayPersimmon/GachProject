@@ -1,7 +1,9 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.DTO.Event;
 
-import com.f2z.gach.Entity.EnumType.PlaceCategory;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter

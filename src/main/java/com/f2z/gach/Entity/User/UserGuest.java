@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Entity.User;
 
 import com.f2z.gach.Entity.EnumType.Departments;
 import com.f2z.gach.Entity.EnumType.Gender;
@@ -10,7 +10,6 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
@@ -28,5 +27,15 @@ public class UserGuest {
     private Date guestBirth;
     private Double guestHeight;
     private Double guestWeight;
+
+    public UserGuest (Integer guestId, Departments guestDepartment, Speed guestSpeed, Gender guestGender, Date guestBirth, Double guestHeight, Double guestWeight) {
+        this.guestId = guestId;
+        this.guestDepartment = guestDepartment;
+        this.guestSpeed = guestSpeed;
+        this.guestGender = guestGender;
+        this.guestBirth = guestBirth;
+        this.guestHeight = guestHeight;
+        this.guestWeight = guestWeight;
+    }
 
 }
