@@ -38,6 +38,11 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/test")
+    public String test(Model model){
+        return "main-page";
+    }
+
 //    @PostMapping("/login")
 //    public String login(@ModelAttribute @Valid Admin admin,
 //                        BindingResult result,

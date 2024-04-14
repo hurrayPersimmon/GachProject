@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <style>
+        .nav-pills li a:hover{
+            background-color: rgb(204,230,255);
+        }
+        .noto-sans-sidebar {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+        }
+        .noto-sans-header {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-style: normal;
+        }
+        .noto-sans-700 {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+        }
+        .noto-sans-100 {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 100;
+            font-style: normal;
+        }
+        .noto-sans-200 {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 200;
+            font-style: normal;
+        }
+        .noto-sans-400 {
+            font-family: "Noto Sans KR", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .row-mine {
+            max-width: 83%;
+        }
+        .green-color {
+            color: rgb(46, 189, 143);
+        }
+        .nanum-gothic-regular {
+            font-family: "Nanum Gothic", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .nanum-gothic-Bold {
+            font-family: "Nanum Gothic", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+        .ubuntu-light {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        .ubuntu-regular {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .ubuntu-medium {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 500;
+            font-style: normal;
+        }
+        .btn-toggle {
+            padding: .25rem .5rem;
+            font-weight: 600;
+            color: var(--bs-emphasis-color);
+            background-color: transparent;
+        }
+        .btn-toggle:hover, .btn-toggle:focus {
+            color: rgba(var(--bs-emphasis-color-rgb), .85);
+            background-color: var(--bs-tertiary-bg);
+        }
+        .btn-toggle::before {
+            width: 1.25em;
+            line-height: 0;
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            transition: transform .35s ease;
+            transform-origin: .5em 50%;
+        }
+        [data-bs-theme="dark"] .btn-toggle::before {
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+        }
+        .btn-toggle[aria-expanded="true"] {
+            color: rgba(var(--bs-emphasis-color-rgb), .85);
+        }
+        .btn-toggle[aria-expanded="true"]::before {
+            transform: rotate(90deg);
+        }
+        .btn-toggle-nav a {
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 1.25rem;
+        }
+        .btn-toggle-nav a:hover, .btn-toggle-nav a:focus {
+            background-color: var(--bs-tertiary-bg);
+        }
+        .scrollarea {
+            overflow-y: auto;
+        }
+        .additional-options {
+            display: none;
+            transition: max-height 2s ease-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+        .additional-options.show {
+            display: block;
+            max-height: 150px; /* 변경할 수 있는 최대 높이 */
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="bg-white col-auto col-md-2" style="max-width: 250px;">
+            <div class="bg-white p-2">
+                <p class="d-flex mt-2 align-items-center">
+                    <span class="d-none d-sm-inline">
+                        <img src="Assets/Gach가자_홈페이지용.png" class="img-fluid">
+                    </span>
+                </p>
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/squares.leading.rectangle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">대시보드</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/arrow.triangle.branch.png" class="img-fluid mb-2">
+                            <span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">경로 관리</span>
+                            <img src="Assets/chevron.down.png" class="img-fluid mb-2 ms-3" onclick="viewDetail()">
+                        </a>
+                        <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
+                            <li class="nav-item mt-1 nav-link">
+                                <img src="Assets/dot.viewfinder.png" class="img-fluid mb-1">
+                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
+                            </li>
+                            <li class="nav-item mt-1 nav-link">
+                                <img src="Assets/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
+                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
+                            </li>
+                            <li class="nav-item mt-1 nav-link">
+                                <img src="Assets/map.png" class="img-fluid mb-1">
+                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none">경로 테스트</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/brain.head.profile.png" class="img-fluid mb-2 me-4">
+                            <span class="fs-5 d-none d-sm-inline noto-sans-sidebar">AI 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/building.2.png" class="img-fluid mb-2 me-1"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">장소 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/calendar.badge.plus.png" class="img-fluid mb-2"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">행사 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary ps-2">
+                            <img src="Assets/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-2 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/person.fill.questionmark.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">문의 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="Assets/exclamationmark.circle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">로그</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary ps-2">
+                            <img src="Assets/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Content -->
+
+        <div class="row-mine py-3 px-0 mx-0 shadow-lg bg-body-tertiary rounded">
+            <div class="container">
+
+                <!-- Header -->
+
+                <div class="row">
+                    <div class="col align-items-start noto-sans-700 fs-2">
+                        Dashboard
+                    </div>
+                    <div class="col align-items-end text-end">
+                        <img src="/image/nmj.JPG" class="rounded-circle mb-3 mx-3" style="width:40px">
+                        <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
+                    </div>
+                </div>
+
+                <!-- Small Box-->
+
+                <div class="row">
+                    <div class="col-3">
+                        <div class="card border-light">
+                            <div class="shadow p-3 rounded border-bottom border-4 border-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card-title fs-5 noto-sans-100">총 회원가입자 수</div>
+                                        <div>
+                                            <span class="card-text noto-sans-400 fs-3">5235명</span>
+                                            <span class="card-text text-primary fs-5 ms-4">+10%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 pt-3">
+                                        <i class="bi bi-person-up fs-1 text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-light">
+                            <div class="shadow p-3 rounded border-bottom border-4 border-success-subtle">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card-title fs-5 noto-sans-100">일일 접속자 수</div>
+                                        <div>
+                                            <span class="card-text noto-sans-400 fs-3">2320명</span>
+                                            <span class="card-text green-color fs-5 ms-4">+1%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 pt-3">
+                                        <i class="bi bi-graph-up-arrow fs-1 green-color"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-light">
+                            <div class="shadow p-3 rounded border-bottom border-4 border-warning-subtle">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card-title fs-5 noto-sans-100">일일 요청 수</div>
+                                        <div>
+                                            <span class="card-text noto-sans-400 fs-3">3210건</span>
+                                            <span class="card-text text-warning fs-5 ms-4">+31%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 pt-3">
+                                        <i class="bi bi-graph-up-arrow fs-1 text-warning"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card border-light">
+                            <div class="shadow p-3 rounded border-bottom border-4 border-danger">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card-title fs-5 noto-sans-100">일일 오류 발생 수</div>
+                                        <div>
+                                            <span class="card-text noto-sans-400 fs-3">20건</span>
+                                            <span class="card-text text-danger fs-5 ms-4">-0.4%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 pt-3">
+                                        <i class="bi bi-graph-down-arrow fs-1 text-danger"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="shadow card col m-3 border-light rounded ps-4">
+                        <div class="card-title noto-sans-500 fs-2 mb-3">
+                            <div class="row justify-content-between mt-2 p-2">
+                                <div class="col-4 noto-sans-700">
+                                    경로 요청
+                                </div>
+                                <div class="col-3 mt-3 me-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>이번주</option>
+                                        <option value="1">이번달</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas id="myChart1"></canvas>
+                    </div>
+                    <div class="shadow card col m-3 border-light rounded">
+                        <div class="card-title noto-sans-500 fs-2 mb-3">
+                            <div class="row justify-content-between mt-2 p-2">
+                                <div class="col-4 noto-sans-700">
+                                    인기 노드
+                                </div>
+                                <div class="col-3 mt-3 me-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>오늘</option>
+                                        <option value="1">이번주</option>
+                                        <option value="2">이번달</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas id="myChart2" style="max-height:30vh"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="shadow card col m-3 border-light rounded ps-4">
+                        <div class="card-title noto-sans-500 fs-2 mb-3">
+                            <div class="row justify-content-between mt-2 p-2">
+                                <div class="col-7 noto-sans-700">
+                                    AI 소요시간 만족도
+                                </div>
+                                <div class="col-3 mt-3 me-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>이번주</option>
+                                        <option value="1">이번달</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas id="myChart3"></canvas>
+                    </div>
+                    <div class="shadow card col m-3 border-light rounded">
+                        <div class="card-title noto-sans-500 fs-2 mb-3">
+                            <div class="row justify-content-between mt-2 p-2">
+                                <div class="col-7 noto-sans-700">
+                                    AI 소요시간 정확도
+                                </div>
+                                <div class="col-3 mt-3 me-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>오늘</option>
+                                        <option value="1">이번주</option>
+                                        <option value="2">이번달</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas id="myChart4" style="max-height:30vh"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="shadow card col ms-3 me-3 border-light rounded">
+                        <div class="card-title noto-sans-500 fs-2 mb-3" style="max-height: 30vh">
+                            <div class="row ms-3 mt-3 noto-sans-700">
+                                로그
+                            </div>
+                            <div class="row ms-3 mt-1 me-2" style="font-size:1rem; overflow: scroll; max-height: 15.8vh">
+                                <table class="table" style="overflow: scroll; white-space: nowrap; border-collapse: collapse;">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">회원번호</th>
+                                        <th scope="col">Code</th>
+                                        <th scope="col">Message</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>2023-03-14T11:20:36.222</td>
+                                        <td>김민서</td>
+                                        <td>Not Find Node</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-14T11:20:34.222</td>
+                                        <td>원웅주</td>
+                                        <td>Not Find Path</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-14T11:20:31.222</td>
+                                        <td>이수현</td>
+                                        <td>Connection Failed</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-14T11:20:30.222</td>
+                                        <td>이찬용</td>
+                                        <td>Not Find Node</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-14T11:20:25.222</td>
+                                        <td>이규동</td>
+                                        <td>Not Find Path</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-14T11:19:59.222</td>
+                                        <td>노명준</td>
+                                        <td>Connection Failed</td>
+                                        <td>비전타워 1번출구</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx1 = document.getElementById('myChart1');
+
+    const data1 = {
+        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        datasets: [{
+            label: '이번주 요청건수',
+            data: [145, 189, 280, 381, 156, 355, 340],
+            fill: false,
+            borderColor: '#1167b1',
+            tension: 0.1
+        }]
+    };
+
+    new Chart(ctx1, {
+        type: 'line',
+        data : data1,
+        options : {
+            plugins : {
+                legend:false
+            }
+        }
+    });
+
+
+    const ctx2 = document.getElementById('myChart2');
+
+    const data2 = {
+        labels: [
+            '가천대역 1번출구',
+            'AI공학관 1번출구',
+            '교육대학원 식당',
+            '가천관 2번출구',
+            '산학협력관 1번출구'
+        ],
+        datasets: [{
+            label: 'Popular Node',
+            data: [300, 200, 100, 50, 10],
+            backgroundColor: [
+                'rgb(13, 110, 253)',
+                'rgb(163, 207, 187)',
+                'rgb(255, 231, 161)',
+                'rgb(220, 53, 69)',
+                'rgb(107, 147, 140)'
+            ],
+            hoverOffset: 3,
+            cutout : '90%',
+            borderRadius : 10
+        }]
+    };
+
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data : data2,
+        options : {
+            plugins : {
+                legend:false
+            },
+            elements : {
+                arc : {
+                    borderWidth : 1
+                }
+            }
+        }
+    });
+
+    function viewDetail() {
+        var additionalOptions = document.getElementById("additionalOptions");
+        if (additionalOptions.classList.contains("show")) {
+            additionalOptions.classList.remove("show");
+        } else {
+            additionalOptions.classList.add("show");
+        }
+    }
+
+    const ctx3 = document.getElementById('myChart3');
+
+    const data3 = {
+        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        datasets: [{
+            label: 'AI 소요시간 만족도',
+            data: [145, 189, 280, 381, 156, 355, 340],
+            fill: false,
+            tension: 0.1
+        }]
+    };
+
+    new Chart(ctx3, {
+        type: 'bar',
+        data : data3,
+        options : {
+            plugins : {
+                legend:false
+            }
+        }
+    });
+
+    const ctx4 = document.getElementById('myChart4');
+
+    const data4 = {
+        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        datasets: [{
+            label: '이번주 요청건수',
+            data: [145, 189, 280, 381, 156, 355, 340],
+            fill: false,
+            borderColor: '#1167b1',
+            tension: 0.1
+        }]
+    };
+
+    new Chart(ctx4, {
+        type: 'line',
+        data : data4,
+        options : {
+            plugins : {
+                legend:false
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
