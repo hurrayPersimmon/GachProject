@@ -9,10 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class PlaceSource {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PlaceSourceDTO {
     private Integer placeId;
     private String placeName;
     @Enumerated(EnumType.STRING)

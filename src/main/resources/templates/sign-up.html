@@ -17,35 +17,38 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">아이디</label>
+                    <form action="/admin/signUp" method="post">
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingAdminId" name="adminId" placeholder="id@example.com">
+                                <label for="floatingAdminId">아이디</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingAdminName" name="adminName" placeholder="AdminName">
+                                <label for="floatingAdminName">이름</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="floatingAdminBirthday" name="adminBirthday" placeholder="AdminBirthday">
+                                <label for="floatingAdminBirthday">생년월일</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="floatingPassword" name="adminPassword" placeholder="AdminPassword">
+                                <label for="floatingPassword">비밀번호</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingPasswordCheck" placeholder="AdminPasswordCheck">
+                                <label for="floatingPasswordCheck">비밀번호확인</label>
+                            </div>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">이름</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">생년월일</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">비밀번호</label>
-                        </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">비밀번호확인</label>
-                        </div>
-                    </div>
+                    </form>
+
                 </div>
                 <div class="row mt-4 mt-3">
                     <div class="col text-start fs-6">
                         <a class="btn btn-outline-secondary">메인 페이지</a>
                     </div>
                     <div class="col text-end">
-                        <a class="btn btn-outline-primary">회원가입</a>
+                        <button type="submit" class="btn btn-outline-primary">회원가입</button>
                     </div>
                 </div>
                 <hr>

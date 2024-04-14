@@ -13,10 +13,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class AiModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AiModelDTO {
     private Integer aiModelId;
     private Timestamp aiCreatedAt;
     private Double aiModelVersion;

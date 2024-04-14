@@ -13,10 +13,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class Log {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LogDTO {
     private Integer logId;
     private Timestamp logCreatedAt;
     @Enumerated(EnumType.STRING)

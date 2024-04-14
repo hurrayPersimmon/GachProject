@@ -15,10 +15,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class UserHistory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserHistoryDTO {
     private Integer historyId;
     private Timestamp historyCreatedAt;
     private Long userCode;

@@ -11,10 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class EventLocation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EventLocationDTO {
     private Integer eventInfoId;
     private Integer eventCode;
     private String eventName;

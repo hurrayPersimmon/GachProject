@@ -10,10 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class BuildingKeyword {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BuildingKeywordDTO {
     private Integer keywordId;
     private Integer buildingCode;
     private String buildingName;

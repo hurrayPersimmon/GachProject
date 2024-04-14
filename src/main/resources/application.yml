@@ -6,25 +6,26 @@ server:
     whitelabel:
       enabled: false
   port: 60002
-  address: ceprj.gachon.ac.kr
+#  address: ceprj.gachon.ac.kr
 
 
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/demodb
+#    url: jdbc:h2:
     username: sa
     password: 1234
 
   jpa:
     hibernate:
       ddl-auto: update #?? ?? DB
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: false #???? ? ??? ????
     properties:
       hibernate:
         format_sql: false #??? ????.
     defer-datasource-initialization: true # ?????? ?? data.sql ??!!
-
   sql:
     init:
       mode: always #?? ?? ???? ???? ?? ???? ????.

@@ -11,10 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class MapLine {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MapLineDTO {
     private Integer lineId;
     private String lineName;
     private Integer nodeCodeFirst;

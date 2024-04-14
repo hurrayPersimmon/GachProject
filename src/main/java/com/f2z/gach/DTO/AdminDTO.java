@@ -11,12 +11,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class AdminDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer adminNum;
-
     private String adminId;
     private String adminPassword;
     private Date adminBirthday;

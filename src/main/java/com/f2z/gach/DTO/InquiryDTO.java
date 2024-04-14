@@ -13,10 +13,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class Inquiry {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class InquiryDTO {
     private Integer inquiryId;
     private boolean inquiryProgress;
     private Timestamp inquiryCreatedAt;

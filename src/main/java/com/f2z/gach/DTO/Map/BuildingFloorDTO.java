@@ -11,17 +11,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class BuildingInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer buildingInfoId;
+public class BuildingFloorDTO {
+    private Integer buildingFloorId;
     private Integer buildingCode;
     private String buildingName;
-    private Double buildingHeight;
-    private String thumbnailImageName;
-    private String thumbnailImagePath;
-    private String arImageName;
-    private String arImagePath;
+    private String buildingFloor;
+    private String buildingFloorInfo;
+
+
 
 }

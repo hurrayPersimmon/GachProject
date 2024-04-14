@@ -11,10 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class MapNode {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MapNodeDTO {
     private Integer nodeId;
     private String nodeName;
     private Double nodeLatitude;

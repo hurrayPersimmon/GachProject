@@ -16,7 +16,6 @@ import java.util.Date;
 @Entity
 public class UserInfo {
     @Id
-    @ManyToOne(targetEntity = User.class)
     private Long userCode;
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +31,7 @@ public class UserInfo {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "userCode", referencedColumnName = "userId")
+    @JoinColumn(name = "userCode")
     private User user;
 
 

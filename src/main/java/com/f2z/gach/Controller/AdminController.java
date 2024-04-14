@@ -28,14 +28,35 @@ public class AdminController {
                         Model model){
         if(result.hasErrors()){
             model.addAttribute("errors", result.getAllErrors());
-            return "admin_login";
+            return "redirect:/sign-up";
         }
         else {
             admin.setAdminAuthorization(Authorization.valueOf("WAITER"));
             adminRepository.save(admin);
-            model.addAttribute("number",adminRepository.getAdminSize());
-            return "admin_info";
+            return "redirect:/waiter";
         }
+    }
+
+    @PostMapping("/login")
+    public String login(String username, String password, Model model){
+        Admin admin = adminRepository.findByAdminName(username);
+        if(admin == null){
+            model.addAttribute("message", "아이디가 존재하지 않습니다.");
+            return "redirect:/sign-in";
+        }
+        if(!admin.getAdminPassword().equals(password)){
+            model.addAttribute("message", "비밀번호가 일치하지 않습니다.");
+            return "redirect:/sign-in";
+        }
+        if(admin.getAdminAuthorization().equals(Authorization.WAITER)){
+            return "redirect:/waiter";
+        } else if (admin.getAdminAuthorization().equals(Authorization.GUEST)) {
+            return "redirect:/dashboard-guest";
+        } else{
+            model.addAttribute("admin", admin);
+            return "redirect:/dashboard";
+        }
+
     }
 
     @GetMapping("/test")

@@ -13,10 +13,7 @@ import java.sql.Time;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
-public class HistoryLineTime {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class HistoryLineTimeDTO {
     private Integer lineHistoryId;
     private Integer HistoryCode;
     private Long userCode;

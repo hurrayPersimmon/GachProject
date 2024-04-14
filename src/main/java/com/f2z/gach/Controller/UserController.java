@@ -3,8 +3,10 @@ package com.f2z.gach.Controller;
 import com.f2z.gach.DTO.User.UserDTO;
 import com.f2z.gach.DTO.User.UserGuestDTO;
 import com.f2z.gach.DTO.User.UserInfoDTO;
+import com.f2z.gach.Entity.EnumType.Properties;
 import com.f2z.gach.Entity.User.User;
 import com.f2z.gach.Entity.User.UserInfo;
+import com.f2z.gach.ExceptionHandler.ApiException;
 import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -28,7 +30,7 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "login success", user);
         } catch (Exception error) {
             log.info("login error : " + error.getMessage());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST, error.getMessage(), error);
+            throw new ApiException(false, Properties.BAD_REQUEST.getCode(), Properties.BAD_REQUEST.getMessage(), error);
         }
     }
 

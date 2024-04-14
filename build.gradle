@@ -33,7 +33,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.json:json:20210307'
-    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:${hypersistence-utils.version}'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.7.3'
 }
 
 tasks.named('test') {
