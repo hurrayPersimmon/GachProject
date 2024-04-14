@@ -28,7 +28,7 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "login success", user);
         } catch (Exception error) {
             log.info("login error : " + error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST, error.getMessage(), error);
         }
     }
 
@@ -40,7 +40,7 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "info success", userCode);
         } catch (Exception error) {
             log.info("info error : " + error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST, error.getMessage(), error);
         }
     }
 
@@ -52,7 +52,7 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "info success", guestId);
         } catch (Exception error) {
             log.info("info error : " + error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST,error.getMessage(), error);
         }
     }
 
@@ -64,7 +64,8 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "update success", userCode);
         } catch (Exception error) {
             log.info("update error : " + error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST, error.getMessage(), error);
+
         }
     }
 
@@ -76,7 +77,8 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK, "delete success", userId);
         } catch (Exception error) {
             log.info("delete error : " + error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST, error.getMessage(), error);
+
         }
     }
 
