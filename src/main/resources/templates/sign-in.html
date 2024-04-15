@@ -17,16 +17,18 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">아이디</label>
+                    <form action="#" th:object="${userdto}" th:action="@{/login}" method="post">
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" th:field="*{username}">
+                                <label for="floatingInput">아이디</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" th:field="*{password}">
+                                <label for="floatingPassword">비밀번호</label>
+                            </div>
                         </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">비밀번호</label>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="row mt-4 mt-3">
                     <div class="col text-start fs-6">

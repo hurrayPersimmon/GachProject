@@ -17,28 +17,30 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">아이디</label>
+                    <form th:object="${admindto}" th:action="@{/signup}" method="post">
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput1" placeholder="name@example.com" th:field="*{adminId}">
+                                <label for="floatingInput1">아이디</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com" th:field="*{adminPassword}">
+                                <label for="floatingInput2">이름</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="floatingInput3" placeholder="name@example.com" th:field="*{adminBirthday}">
+                                <label for="floatingInput3">생년월일</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="floatingPassword4" placeholder="Password" th:field="*{adminPassword}">
+                                <label for="floatingPassword4">비밀번호</label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingPassword5" placeholder="Password" th:field="*{adminPassword}">
+                                <label for="floatingPassword5">비밀번호확인</label>
+                            </div>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">이름</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">생년월일</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">비밀번호</label>
-                        </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">비밀번호확인</label>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="row mt-4 mt-3">
                     <div class="col text-start fs-6">
@@ -51,7 +53,7 @@
                 <hr>
                 <div class="row" style="opacity: 40%;">
                     <div class="col-2 mt-3">
-                        <img src="Assets/gachon_symbolmark.png" class="img-fluid">
+                        <img src="/image/gachon_symbolmark.png" class="img-fluid">
                     </div>
                     <div class="col-8 p-0 ms-5">
                         <table class="table table-borderless ms-5 ps-3">

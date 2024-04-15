@@ -1,5 +1,7 @@
 package com.f2z.gach.Controller;
 
+import com.f2z.gach.DTO.AdminDTO;
+import com.f2z.gach.DTO.User.UserDTO;
 import com.f2z.gach.Entity.Admin;
 import com.f2z.gach.Entity.EnumType.Authorization;
 import com.f2z.gach.Repository.AdminRepository;
@@ -41,6 +43,18 @@ public class AdminController {
     @GetMapping("/test")
     public String test(Model model){
         return "main-page";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+        model.addAttribute("userdto", new UserDTO());
+        return "sign-in";
+    }
+
+    @GetMapping("/signup")
+    public String signup(Model model){
+        model.addAttribute("admindto", new AdminDTO());
+        return "sign-up";
     }
 
 //    @PostMapping("/login")
