@@ -28,4 +28,8 @@ public class User {
         this.username = username;
         this.password = password;
     }
+
+    public User(Long userId) {
+        this.userId = userId;
+    }
 }

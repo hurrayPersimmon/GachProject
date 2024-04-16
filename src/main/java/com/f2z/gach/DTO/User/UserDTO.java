@@ -13,6 +13,10 @@ public class UserDTO {
     private String username;
     private String password;
 
+    public UserDTO(Long userId) {
+        this.userId = userId;
+    }
+
     public User toEntity() {
         return new User(userId, username, password);
     }

@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -25,9 +28,18 @@ public class UserController {
     //가천대 로그인 요청
     @PostMapping("/login")
     public ResponseEntity<?> loginMember(@RequestBody UserDTO userDto) {
+        log.info("login try " + userDto);
         try{
             User user= userService.loginMember(userDto);
-            return new ResponseEntity<>(true, HttpStatus.OK, "login success", user);
+            log.info("login success " + userDto);
+            return new ResponseEntity<>(true, HttpStatus.OK, "login success", user.getUserId());
+//            return new ResponseEntity<>(true, HttpStatus.OK, "login success", userService.ExistUserInfo(user.getUsername());
+//            if(userService.checkExistUserInfo(user.getUsername())) {
+//                return new ResponseEntity<>(true, HttpStatus.OK, "login success", Collections.singletonList(new UserDTO(user.getUserId())));
+//            } else {
+//                user.setUserId((long) -1);
+//                return new ResponseEntity<>(true, HttpStatus.OK, "login success but no Info", Collections.singletonList(new UserDTO(user.getUserId())));
+//            }
         } catch (Exception error) {
             log.info("login error : " + error.getMessage());
             throw new ApiException(false, Properties.BAD_REQUEST.getCode(), Properties.BAD_REQUEST.getMessage(), error);
@@ -70,6 +82,8 @@ public class UserController {
 
         }
     }
+
+    // 회원 정보 조회 요청
 
     // 회원 정보 삭제 요청
     @DeleteMapping("/{userId}")

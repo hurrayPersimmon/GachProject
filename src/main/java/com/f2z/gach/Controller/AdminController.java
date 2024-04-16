@@ -22,6 +22,11 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class AdminController {
     private final AdminRepository adminRepository;
 
+    @GetMapping("/test-login")
+    public String loginTest(){
+        return "log-in";
+    }
+
     @PostMapping("/signup")
     public String login(@ModelAttribute @Valid Admin admin,
                         BindingResult result,
@@ -39,6 +44,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(String username, String password, Model model){
+//        model.addAttribute(adminDto, new adminDTO());
         Admin admin = adminRepository.findByAdminName(username);
         if(admin == null){
             model.addAttribute("message", "아이디가 존재하지 않습니다.");

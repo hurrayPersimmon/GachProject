@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Array;
 
 @Service
 @AllArgsConstructor
@@ -170,4 +171,10 @@ public class UserService {
     }
 
 
+//    public Object ExistUserInfo(String username) {
+//        boolean isExistUserInfo = userInfoRepository.existsByUserCode(userRepository.findByUsername(username).getUserId());
+//        return new Array() {
+//            isExistUserInfo
+//        }
+//    }
 }
