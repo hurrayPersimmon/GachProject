@@ -10,6 +10,7 @@ import com.f2z.gach.ExceptionHandler.ApiException;
 import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.Service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,11 @@ import java.util.Collections;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "static/image/Gach가자_홈페이지용.png";
+    }
+
 
     //가천대 로그인 요청
     @PostMapping("/login")
@@ -32,6 +38,8 @@ public class UserController {
         try{
             User user= userService.loginMember(userDto);
             log.info("login success " + userDto);
+            // info가 DB에 없으면 202
+            // DB에 있으면 200
             return new ResponseEntity<>(true, HttpStatus.OK, "login success", user.getUserId());
 //            return new ResponseEntity<>(true, HttpStatus.OK, "login success", userService.ExistUserInfo(user.getUsername());
 //            if(userService.checkExistUserInfo(user.getUsername())) {

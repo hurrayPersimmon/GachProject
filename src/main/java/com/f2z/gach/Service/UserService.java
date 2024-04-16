@@ -68,8 +68,9 @@ public class UserService {
         jsonObject.put("APPS_ID","com.sz.Atwee.gachon");
 
         HttpEntity<String> requestMessage = new HttpEntity<>(jsonObject.toString(), httpHeaders); //Request&Header Setting
+        log.info("Request : " + requestMessage);
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class); //호출 하여 Response 받기
-
+        log.info(String.valueOf(response));
         JSONObject data = new JSONObject(response.getBody());
 
         if(data.getString("ErrorCode").equals("0")) {

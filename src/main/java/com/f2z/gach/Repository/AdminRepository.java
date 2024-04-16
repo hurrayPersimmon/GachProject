@@ -9,4 +9,6 @@ import java.util.Map;
 public interface AdminRepository extends JpaRepository <Admin, Long> {
     Admin findByAdminNum(Integer adminNum);
     Admin findByAdminName(String username);
+
+    Admin findByAdminId(String adminId);
 }
