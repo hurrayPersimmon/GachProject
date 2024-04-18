@@ -1,9 +1,12 @@
 package com.f2z.gach.User;
 
 import com.f2z.gach.Response.ResponseEntity;
+import com.f2z.gach.User.DTOs.UserGuestRequestDTO;
+import com.f2z.gach.User.DTOs.UserGuestResponseDTO;
 import com.f2z.gach.User.DTOs.UserRequestDTO;
 import com.f2z.gach.User.DTOs.UserResponseDTO;
 import com.f2z.gach.User.Entities.User;
+import com.f2z.gach.User.Entities.UserGuest;
 import com.f2z.gach.User.Repositories.UserGuestRepository;
 import com.f2z.gach.User.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +21,7 @@ import static com.f2z.gach.User.DTOs.UserResponseDTO.toProvideUserDetailInfo;
 
 @Service
 @AllArgsConstructor
+@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService{
 
@@ -64,7 +68,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    @Transactional
     public ResponseEntity<UserResponseDTO.respondUserId> signUpUser(UserRequestDTO.UserDetailInfo userDetailInfo) throws Exception {
         if(userRepository.existsByUsername(userDetailInfo.getUsername())) {
             return ResponseEntity.DuplicateID(userDetailInfo.getUsername());
@@ -93,24 +96,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDTO.respondUserId deleteUser(Long userId) throws Exception {
+    public ResponseEntity<UserResponseDTO.respondUserId> deleteUser(Long userId) throws Exception {
         if (userRepository.existsById(userId)) {
             try {
                 userRepository.deleteById(userId);
-                return new UserResponseDTO.respondUserId(userId);
+                return ResponseEntity.requestSuccess(new UserResponseDTO.respondUserId(userId));
             } catch (Exception error) {
                 log.info("삭제 실패 : " + error.getMessage());
                 throw new Exception(error);
             }
         } else {
             log.info("삭제 실패, 해당 유저가 없음.");
-            throw new Exception("해당 유저가 없습니다");
+            return ResponseEntity.notFound(null);
         }
     }
 
 
     @Override
-    @Transactional
     public ResponseEntity<UserResponseDTO.respondUserId> updateUserDetailInfo(Long userId, UserRequestDTO.UserDetailInfo userDetailInfo) throws Exception {
         if (userRepository.existsById(userId)) {
             try {
@@ -158,6 +160,12 @@ public class UserServiceImpl implements UserService{
         } else {
             return ResponseEntity.notFound(null);
         }
+    }
+
+    @Override
+    public ResponseEntity<UserGuestResponseDTO.respondGuestId> saveGuestUser(UserGuestRequestDTO.UserGuestRequest userGuestRequest) {
+        UserGuest guestMember = userGuestRepository.save(UserGuestRequestDTO.UserGuestRequest.toEntity(userGuestRequest));
+        return ResponseEntity.saveSuccess(new UserGuestResponseDTO.respondGuestId(guestMember.getGuestId()));
     }
 
 

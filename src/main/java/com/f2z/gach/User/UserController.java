@@ -1,5 +1,7 @@
 package com.f2z.gach.User;
 
+import com.f2z.gach.User.DTOs.UserGuestRequestDTO;
+import com.f2z.gach.User.DTOs.UserGuestResponseDTO;
 import com.f2z.gach.User.DTOs.UserRequestDTO;
 import com.f2z.gach.User.DTOs.UserResponseDTO;
 import com.f2z.gach.Response.ResponseEntity;
@@ -40,7 +42,7 @@ public class UserController {
     @DeleteMapping ("/{userId}")
     public ResponseEntity<UserResponseDTO.respondUserId> deleteUser(
             @PathVariable Long userId) throws Exception {
-        return ResponseEntity.requestSuccess(userService.deleteUser(userId));
+        return userService.deleteUser(userId);
     }
 
     /*
@@ -67,6 +69,15 @@ public class UserController {
             @RequestBody UserRequestDTO.UserLoginInfo userLoginInfo) throws Exception {
         return userService.checkUserPassword(userLoginInfo);
     }
+
+    @PostMapping("/guest")
+    public ResponseEntity<UserGuestResponseDTO.respondGuestId> saveGuestUser(
+            @RequestBody UserGuestRequestDTO.UserGuestRequest userGuestRequest
+            ) throws Exception {
+        return userService.saveGuestUser(userGuestRequest);
+    }
+
+
 
 
 

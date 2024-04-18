@@ -16,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class UserGuest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

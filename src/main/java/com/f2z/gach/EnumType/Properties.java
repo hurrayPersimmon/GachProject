@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Properties {
-    OK(200, "정상 접속"),
+    OK(200, "요청 성공"),
     LOGIN_SUCCESS(200, "로그인 성공"),
     CREATED(201, "DB에 데이터가 생성됨"),
     NO_CONTENT(204, "정상 접속이나, 줄 데이터가 없음."),
