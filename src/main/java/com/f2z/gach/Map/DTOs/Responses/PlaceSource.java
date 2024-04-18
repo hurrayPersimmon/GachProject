@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.Map;
+package com.f2z.gach.Map.DTOs.Responses;
 
 import com.f2z.gach.EnumType.PlaceCategory;
 import jakarta.persistence.*;

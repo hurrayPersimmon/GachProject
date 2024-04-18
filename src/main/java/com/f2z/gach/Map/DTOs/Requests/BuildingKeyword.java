@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.Map;
+package com.f2z.gach.Map.DTOs.Requests;
 
 import com.f2z.gach.EnumType.College;
 import com.f2z.gach.EnumType.Departments;

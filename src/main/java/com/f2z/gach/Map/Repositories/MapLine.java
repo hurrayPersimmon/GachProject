@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.Map;
+package com.f2z.gach.Map.Repositories;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
