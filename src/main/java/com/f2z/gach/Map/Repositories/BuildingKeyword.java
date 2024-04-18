@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class BuildingKeyword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

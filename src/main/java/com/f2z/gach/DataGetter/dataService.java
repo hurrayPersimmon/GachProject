@@ -13,9 +13,12 @@ public class dataService {
 
     public dataEntity getData(dataDto datadto) {
         dataEntity data = datadto.toEntity();
+
+        log.info(datadto.toString());
         nodeEntity nodeOne = nodeRepository.findByNodeName(data.getNode1());
         nodeEntity nodeTwo = nodeRepository.findByNodeName(data.getNode2());
-
+        log.info(nodeOne.toString());
+        log.info(nodeTwo.toString());
 
         double distance = getDistance(nodeTwo, nodeOne);
         double deltaAltitude = nodeTwo.getNodeAltitude() - nodeOne.getNodeAltitude();

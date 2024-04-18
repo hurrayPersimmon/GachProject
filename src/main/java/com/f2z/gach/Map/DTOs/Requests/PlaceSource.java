@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class PlaceSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,19 +13,28 @@
             <div class="card text-center p-5 border border-0 shadow-lg bg-body-tertiary rounded">
                 <div class="row">
                     <div class="col text-center">
-                        <img src="/image/Gach가자_홈페이지용.png" class="img-fluid">
+                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <form id="login-form" action="#" th:object="${adminDto}" th:action="@{/admin/login}" method="post">
+                    <form id="login-form" action="#" th:object="${loginDto}" th:action="@{/admin/login}" method="post">
                         <div class="col">
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-1">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" th:field="*{adminId}">
                                 <label for="floatingInput">아이디</label>
                             </div>
-                            <div class="form-floating">
+                            <div th:if="${#fields.hasErrors('adminId')}" th:errors="*{adminId}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                아이디 오류
+                            </div>
+                            <div th:if="idMessage" th:text="${idMessage}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                아이디 오류
+                            </div>
+                            <div class="form-floating mt-2 mb-1">
                                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password" th:field="*{adminPassword}">
                                 <label for="floatingPassword">비밀번호</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('adminPassword')}" th:errors="*{adminPassword}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                패스워드 오류
                             </div>
                         </div>
                     </form>
@@ -35,6 +44,7 @@
                         <button type="button" class="btn btn-outline-secondary">메인 페이지</button>
                     </div>
                     <div class="col text-end">
+                        <a href="/admin/signup" class="btn btn-outline-warning">회원가입</a>
                         <button type="submit" form="login-form" class="btn btn-outline-primary">로그인</button>
                     </div>
                 </div>

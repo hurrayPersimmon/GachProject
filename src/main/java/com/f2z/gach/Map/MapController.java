@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/map")
 public class MapController {
-    private final MapService mapService;
+    //private final MapService mapService;
 }

@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class BuildingKeyword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +22,4 @@ public class BuildingKeyword {
     private Departments departments;
     private String professorName;
     private String professorClass;
-
-
-
 }

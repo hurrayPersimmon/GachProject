@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class MapNode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
