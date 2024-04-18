@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.EnumType;
+package com.f2z.gach.EnumType;
 
 public enum LogLevel {
     DEBUG,

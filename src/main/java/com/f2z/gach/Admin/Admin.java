@@ -1,16 +1,11 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Admin;
 
-import com.f2z.gach.Entity.EnumType.Authorization;
-import com.f2z.gach.Entity.EnumType.Departments;
-import com.f2z.gach.Entity.EnumType.Gender;
-import com.f2z.gach.Entity.EnumType.Speed;
+import com.f2z.gach.EnumType.Authorization;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter

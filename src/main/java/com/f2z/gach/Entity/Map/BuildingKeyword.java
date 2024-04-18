@@ -1,7 +1,7 @@
 package com.f2z.gach.Entity.Map;
 
-import com.f2z.gach.Entity.EnumType.College;
-import com.f2z.gach.Entity.EnumType.Departments;
+import com.f2z.gach.EnumType.College;
+import com.f2z.gach.EnumType.Departments;
 import jakarta.persistence.*;
 import lombok.*;
 

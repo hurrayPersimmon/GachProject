@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.EnumType;
+package com.f2z.gach.EnumType;
 
 public enum Departments {
     //가천리버럴아츠칼리지

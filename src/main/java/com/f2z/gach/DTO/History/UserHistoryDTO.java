@@ -1,10 +1,6 @@
 package com.f2z.gach.DTO.History;
 
-import com.f2z.gach.Entity.EnumType.Satisfaction;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.f2z.gach.EnumType.Satisfaction;
 import lombok.*;
 
 import java.sql.Time;

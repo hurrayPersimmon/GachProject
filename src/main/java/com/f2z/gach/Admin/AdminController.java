@@ -1,16 +1,11 @@
-package com.f2z.gach.Controller;
+package com.f2z.gach.Admin;
 
-import com.f2z.gach.DTO.AdminDTO;
-import com.f2z.gach.Entity.Admin;
-import com.f2z.gach.Entity.EnumType.Authorization;
-import com.f2z.gach.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;

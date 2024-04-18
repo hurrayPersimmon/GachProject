@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.EnumType;
+package com.f2z.gach.EnumType;
 
 public enum PlaceCategory {
     BUILDING, // 교내 건물(바람개비 동산, 비타 광장 추가)

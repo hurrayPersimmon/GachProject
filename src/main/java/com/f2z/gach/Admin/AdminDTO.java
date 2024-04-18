@@ -1,13 +1,11 @@
-package com.f2z.gach.DTO;
+package com.f2z.gach.Admin;
 
-import com.f2z.gach.Entity.Admin;
-import com.f2z.gach.Entity.EnumType.Authorization;
+import com.f2z.gach.EnumType.Authorization;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter

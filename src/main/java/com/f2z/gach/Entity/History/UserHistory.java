@@ -1,14 +1,11 @@
 package com.f2z.gach.Entity.History;
 
 import com.f2z.gach.Entity.BaseTimeEntity;
-import com.f2z.gach.Entity.EnumType.Authorization;
-import com.f2z.gach.Entity.EnumType.Satisfaction;
+import com.f2z.gach.EnumType.Satisfaction;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Getter
 @Setter

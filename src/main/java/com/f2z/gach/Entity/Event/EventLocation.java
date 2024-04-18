@@ -1,6 +1,5 @@
 package com.f2z.gach.Entity.Event;
 
-import com.f2z.gach.Entity.EnumType.PlaceCategory;
 import jakarta.persistence.*;
 import lombok.*;
 

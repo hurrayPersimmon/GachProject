@@ -1,6 +1,6 @@
 package com.f2z.gach.DTO.Map;
 
-import com.f2z.gach.Entity.EnumType.PlaceCategory;
+import com.f2z.gach.EnumType.PlaceCategory;
 import jakarta.persistence.*;
 import lombok.*;
 

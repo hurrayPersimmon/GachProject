@@ -1,7 +1,7 @@
 package com.f2z.gach.DTO;
 
-import com.f2z.gach.Entity.EnumType.LogLevel;
-import com.f2z.gach.Entity.EnumType.Properties;
+import com.f2z.gach.EnumType.LogLevel;
+import com.f2z.gach.EnumType.Properties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.http.HttpMethod;

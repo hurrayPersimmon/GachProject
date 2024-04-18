@@ -1,6 +1,6 @@
-package com.f2z.gach.Repository.User;
+package com.f2z.gach.User.Repositories;
 
-import com.f2z.gach.Entity.User.UserGuest;
+import com.f2z.gach.User.Entities.UserGuest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

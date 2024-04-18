@@ -1,11 +1,14 @@
-package com.f2z.gach.Entity.User;
+package com.f2z.gach.User.Entities;
 
-import com.f2z.gach.Entity.EnumType.Departments;
-import com.f2z.gach.Entity.EnumType.Gender;
-import com.f2z.gach.Entity.EnumType.Speed;
+import com.f2z.gach.EnumType.Departments;
+import com.f2z.gach.EnumType.Gender;
+import com.f2z.gach.EnumType.Speed;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -24,11 +27,12 @@ public class UserGuest {
     private Speed guestSpeed;
     @Enumerated(EnumType.STRING)
     private Gender guestGender;
-    private Date guestBirth;
+    @DateTimeFormat(pattern = "yyyy")
+    private LocalDate guestBirth;
     private Double guestHeight;
     private Double guestWeight;
 
-    public UserGuest (Integer guestId, Departments guestDepartment, Speed guestSpeed, Gender guestGender, Date guestBirth, Double guestHeight, Double guestWeight) {
+    public UserGuest (Integer guestId, Departments guestDepartment, Speed guestSpeed, Gender guestGender, LocalDate guestBirth, Double guestHeight, Double guestWeight) {
         this.guestId = guestId;
         this.guestDepartment = guestDepartment;
         this.guestSpeed = guestSpeed;
