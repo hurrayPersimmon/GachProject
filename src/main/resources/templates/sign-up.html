@@ -21,7 +21,8 @@
                     <form id="signup-form" th:object="${adminDto}" th:action="@{/admin/signup}" method="post">
                         <div class="col">
                             <div class="form-floating mb-1">
-                                <input type="text" class="form-control" id="floatingInput1" placeholder="name@example.com" th:field="*{adminId}">
+                                <input type="text" class="form-control" id="floatingInput1" placeholder="name@example.com" th:field="*{adminId}"
+                                       th:classappend="${#fields.hasErrors('adminId')} or ${idMessage} == '이미 존재하는 아이디입니다.' ? 'border border-danger' : ''">
                                 <label for="floatingInput1">아이디</label>
                             </div>
                             <div th:if="${#fields.hasErrors('adminId')}" class="text-start ms-2 text-danger" style="font-size:80%">
@@ -31,32 +32,39 @@
                                 <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${idMessage}">아이디 오류</span>
                             </div>
                             <div class="form-floating mb-1">
-                                <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com" th:field="*{adminName}">
+                                <input type="text" class="form-control" id="floatingInput2" placeholder="name@example.com" th:field="*{adminName}"
+                                       th:classappend="${#fields.hasErrors('adminName')} ? 'border border-danger' : ''">
                                 <label for="floatingInput2">이름</label>
                             </div>
                             <div th:if="${#fields.hasErrors('adminName')}" class="text-start ms-2 text-danger" style="font-size:80%">
                                 <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminName}">이름 오류</span>
                             </div>
                             <div class="form-floating mb-1">
-                                <input type="date" class="form-control" id="floatingInput3" placeholder="name@example.com" th:field="*{adminBirthday}">
+                                <input type="date" class="form-control" id="floatingInput3" placeholder="name@example.com" th:field="*{adminBirthday}"
+                                       th:classappend="${#fields.hasErrors('adminBirthday')} ? 'border border-danger' : ''">
                                 <label for="floatingInput3">생년월일</label>
                             </div>
                             <div th:if="${#fields.hasErrors('adminBirthday')}" class="text-start ms-2 text-danger" style="font-size:80%">
                                 <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminBirthday}">생년월일 오류</span>
                             </div>
                             <div class="form-floating mb-1">
-                                <input type="password" class="form-control" id="floatingPassword4" placeholder="Password" th:field="*{adminPassword}">
+                                <input type="password" class="form-control" id="floatingPassword4" placeholder="Password" th:field="*{adminPassword}"
+                                       th:classappend="${#fields.hasErrors('adminPassword')} or ${passMessage} == '비밀번호가 다릅니다.' ? 'border border-danger' : ''">
                                 <label for="floatingPassword4">비밀번호</label>
                             </div>
                             <div th:if="${#fields.hasErrors('adminPassword')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminPassword}">생년월일 오류</span>
+                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminPassword}">패스워드 오류</span>
+                            </div>
+                            <div th:if="${passMessage == '비밀번호가 다릅니다.'}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${passMessage}">패스워드 확인 오류</span>
                             </div>
                             <div class="form-floating">
-                                <input type="password" class="form-control" id="floatingPassword5" placeholder="Password" th:field="*{adminPasswordCheck}">
+                                <input type="password" class="form-control" id="floatingPassword5" placeholder="Password" th:field="*{adminPasswordCheck}"
+                                       th:classappend="${#fields.hasErrors('adminPasswordCheck')} ? 'border border-danger' : ''">
                                 <label for="floatingPassword5">비밀번호확인</label>
                             </div>
                             <div th:if="${#fields.hasErrors('adminPasswordCheck')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminPasswordCheck}">생년월일 오류</span>
+                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminPasswordCheck}">패스워드 체크 오류</span>
                             </div>
                         </div>
                         <div class="row mt-4 mt-3">

@@ -64,12 +64,16 @@ public class AdminController {
     public String signup(@Valid @ModelAttribute("adminDto") AdminDTO adminDto, BindingResult result, Model model){
         if(result.hasErrors()){
             return "sign-up";
+        } else if(!adminDto.getAdminPassword().equals(adminDto.getAdminPasswordCheck())){
+            model.addAttribute("passMessage", "비밀번호가 다릅니다.");
+            return "sign-up"; //비밀번호가 다른 경우
         }
         Admin admin = adminRepository.findByAdminId(adminDto.getAdminId());
         if(admin != null){
             model.addAttribute("idMessage", "이미 존재하는 아이디입니다.");
             return "sign-up";
         }
+
         adminDto.setAdminAuthorization(Authorization.WAITER);
         adminRepository.save(adminDto.toEntity());
         model.addAttribute("message", "회원가입이 완료되었습니다. 다시 로그인 하세요.");
