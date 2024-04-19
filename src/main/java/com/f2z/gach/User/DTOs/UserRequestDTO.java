@@ -42,8 +42,8 @@ public class UserRequestDTO {
         private Long userId;
         private String username;
         private String password;
-        @Enumerated(EnumType.STRING)
-        private Departments userDepartment;
+//        @Enumerated(EnumType.STRING)
+//        private Departments userDepartment;
         private String userNickname;
         @Enumerated(EnumType.ORDINAL)
         private Speed userSpeed;
@@ -59,7 +59,7 @@ public class UserRequestDTO {
             return User.builder()
                     .username(userDetailInfo.getUsername())
                     .password(userDetailInfo.getPassword())
-                    .userDepartment(userDetailInfo.getUserDepartment())
+//                    .userDepartment(userDetailInfo.getUserDepartment())
                     .userNickname(userDetailInfo.getUserNickname())
                     .userSpeed(userDetailInfo.getUserSpeed())
                     .userGender(userDetailInfo.getUserGender())

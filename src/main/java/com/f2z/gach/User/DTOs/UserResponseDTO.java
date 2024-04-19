@@ -40,8 +40,8 @@ public class UserResponseDTO {
     @Getter
     public static class provideUserDetailInfo {
         private Long userId;
-        @Enumerated(EnumType.STRING)
-        private Departments userDepartment;
+//        @Enumerated(EnumType.STRING)
+//        private Departments userDepartment;
         private String userNickname;
         @Enumerated(EnumType.ORDINAL)
         private Speed userSpeed;
@@ -56,7 +56,7 @@ public class UserResponseDTO {
     public static provideUserDetailInfo toProvideUserDetailInfo(User user) {
         return provideUserDetailInfo.builder()
                 .userId(user.getUserId())
-                .userDepartment(user.getUserDepartment())
+//                .userDepartment(user.getUserDepartment())
                 .userNickname(user.getUserNickname())
                 .userSpeed(user.getUserSpeed())
                 .userGender(user.getUserGender())

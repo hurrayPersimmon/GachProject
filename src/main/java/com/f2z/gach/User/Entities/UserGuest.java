@@ -22,8 +22,8 @@ public class UserGuest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer guestId;
 
-    @Enumerated(EnumType.STRING)
-    private Departments guestDepartment;
+//    @Enumerated(EnumType.STRING)
+//    private Departments guestDepartment;
     @Enumerated(EnumType.ORDINAL)
     private Speed guestSpeed;
     @Enumerated(EnumType.STRING)
@@ -33,9 +33,9 @@ public class UserGuest {
     private Double guestHeight;
     private Double guestWeight;
 
-    public UserGuest (Integer guestId, Departments guestDepartment, Speed guestSpeed, Gender guestGender, LocalDate guestBirth, Double guestHeight, Double guestWeight) {
+    public UserGuest (Integer guestId, Speed guestSpeed, Gender guestGender, LocalDate guestBirth, Double guestHeight, Double guestWeight) {
         this.guestId = guestId;
-        this.guestDepartment = guestDepartment;
+//        this.guestDepartment = guestDepartment;
         this.guestSpeed = guestSpeed;
         this.guestGender = guestGender;
         this.guestBirth = guestBirth;

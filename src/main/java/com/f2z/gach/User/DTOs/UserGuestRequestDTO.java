@@ -21,8 +21,8 @@ public class UserGuestRequestDTO {
     @Getter
     public static class UserGuestRequest {
         private static Integer guestId;
-        @Enumerated(EnumType.STRING)
-        private Departments guestDepartment;
+//        @Enumerated(EnumType.STRING)
+//        private Departments guestDepartment;
         @Enumerated(EnumType.ORDINAL)
         private Speed guestSpeed;
         @Enumerated(EnumType.STRING)
@@ -34,7 +34,7 @@ public class UserGuestRequestDTO {
 
         public static UserGuest toEntity(UserGuestRequest userGuestRequest) {
             return UserGuest.builder()
-                    .guestDepartment(userGuestRequest.guestDepartment)
+//                    .guestDepartment(userGuestRequest.guestDepartment)
                     .guestSpeed(userGuestRequest.guestSpeed)
                     .guestGender(userGuestRequest.guestGender)
                     .guestBirth(userGuestRequest.guestBirth)
