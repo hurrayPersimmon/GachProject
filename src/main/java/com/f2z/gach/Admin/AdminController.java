@@ -32,11 +32,11 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute loginDTO loginDto, BindingResult result, Model model){
+    public String login(@Valid @ModelAttribute("loginDto") loginDTO loginDto, BindingResult result, Model model){
         if(result.hasErrors()){
             return "log-in";
         }
-        Admin admin = adminRepository.findByAdminName(loginDto.getAdminId());
+        Admin admin = adminRepository.findByAdminId(loginDto.getAdminId());
         if(admin == null){
             model.addAttribute("idMessage", "아이디가 존재하지 않습니다.");
             return "log-in";
@@ -73,7 +73,8 @@ public class AdminController {
         adminDto.setAdminAuthorization(Authorization.WAITER);
         adminRepository.save(adminDto.toEntity());
         model.addAttribute("message", "회원가입이 완료되었습니다. 다시 로그인 하세요.");
-        return "redirect:/admin/login";
+        model.addAttribute("loginDto", new loginDTO());
+        return "log-in";
     }
 
 
