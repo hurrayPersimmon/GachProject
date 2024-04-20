@@ -1,5 +1,6 @@
 package com.f2z.gach.Entity;
 
+import com.f2z.gach.Config.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Inquiry extends BaseTimeEntity{
+public class Inquiry extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer inquiryId;

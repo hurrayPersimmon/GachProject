@@ -61,8 +61,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseEntity<UserResponseDTO.respondUsername> duplicateCheck(String username) {
         if(!userRepository.existsByUsername(username)) {
+            log.info("아이디 : " + username);
             return ResponseEntity.NotDuplicateID(username);
         } else {
+            log.info("중복 아이디 : " + username);
             return ResponseEntity.DuplicateID(username);
         }
     }

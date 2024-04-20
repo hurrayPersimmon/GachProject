@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Config;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

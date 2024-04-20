@@ -16,9 +16,9 @@ public class BuildingInfo {
     private Integer buildingCode;
     private String buildingName;
     private Double buildingHeight;
-    private String thumbnailImageName;
-    private String thumbnailImagePath;
-    private String arImageName;
-    private String arImagePath;
+    @Lob
+    private byte[] thumbnailImage;
+    @Lob
+    private byte[] arImage;
 
 }

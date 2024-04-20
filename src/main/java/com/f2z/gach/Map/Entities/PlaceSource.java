@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
+
 public class PlaceSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +21,13 @@ public class PlaceSource {
     private Double placeLatitude;
     private Double placeLongitude;
     private Double placeAltitude;
+    private String placeSummary;
+    private Double buildingHeight;
+
     private String mainImageName;
     private String mainImagePath;
-    private String placeSummary;
-
+    private String thumbnailImageName;
+    private String thumbnailImagePath;
+    private String arImageName;
+    private String arImagePath;
 }

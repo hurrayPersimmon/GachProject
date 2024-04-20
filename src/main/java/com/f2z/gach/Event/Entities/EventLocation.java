@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.Event;
+package com.f2z.gach.Event.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
