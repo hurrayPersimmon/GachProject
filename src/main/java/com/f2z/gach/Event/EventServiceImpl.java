@@ -28,7 +28,7 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<EventResponseDTO.EventList> getEventList() {
         LocalDate currentDate = LocalDate.now();
         log.info("currentDate: " + currentDate);
-        List<Event> eventList = eventRepository.findByEventEndDateAfterAndEventStartDateBefore(currentDate, currentDate);
+        List<Event> eventList = eventRepository.findByEventEndDateAfter(currentDate);
         if(eventList.isEmpty()){
             return ResponseEntity.notFound(null);
         }

@@ -27,8 +27,7 @@ public class UserGuestRequestDTO {
         private Speed guestSpeed;
         @Enumerated(EnumType.STRING)
         private Gender guestGender;
-        @DateTimeFormat(pattern = "yyyy")
-        private LocalDate guestBirth;
+        private Integer guestBirth;
         private Double guestHeight;
         private Double guestWeight;
 

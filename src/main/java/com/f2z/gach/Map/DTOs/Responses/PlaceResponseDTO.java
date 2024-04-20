@@ -27,7 +27,7 @@ public class PlaceResponseDTO {
     @NoArgsConstructor
     @Getter
     public static class respondPlaceList {
-        private List<respondPlaceInfoStructure> placeList;
+        private List<respondPlaceInfoStructure> buildingList;
     }
 
     public static respondPlaceInfoStructure toPlaceInfoStructure(PlaceSource place) {
@@ -38,14 +38,14 @@ public class PlaceResponseDTO {
                 .build();
     }
 
-    public static respondPlaceList toRespondPlaceList(List<PlaceSource> places) {
-        List<respondPlaceInfoStructure> placeList = places
+    public static respondPlaceList toRespondPlaceList(List<PlaceSource> buildings) {
+        List<respondPlaceInfoStructure> buildingList = buildings
                 .stream()
                 .map(PlaceResponseDTO::toPlaceInfoStructure)
                 .collect(Collectors.toList());
 
         return respondPlaceList.builder()
-                .placeList(placeList)
+                .buildingList(buildingList)
                 .build();
     }
 
@@ -54,9 +54,11 @@ public class PlaceResponseDTO {
     @NoArgsConstructor
     @Getter
     public static class toRespondBuildingInfo {
-        private Integer placeId;
         private String placeName;
-        private String thumbnailImagePath;
+        private String placeSummary;
+        private Double placeLatitude;
+        private Double placeLongitude;
+        private String mainImagePath;
         private List<toRespondBuildingInfoStructure> buildingFloors;
     }
 
@@ -85,9 +87,11 @@ public class PlaceResponseDTO {
 
     public static toRespondBuildingInfo toRespondBuildingInfo(PlaceSource place, List<toRespondBuildingInfoStructure> buildingFloors) {
         return toRespondBuildingInfo.builder()
-                .placeId(place.getPlaceId())
                 .placeName(place.getPlaceName())
-                .thumbnailImagePath(place.getThumbnailImagePath())
+                .placeSummary(place.getPlaceSummary())
+                .placeLatitude(place.getPlaceLatitude())
+                .placeLongitude(place.getPlaceLongitude())
+                .mainImagePath(place.getMainImagePath())
                 .buildingFloors(buildingFloors)
                 .build();
     }

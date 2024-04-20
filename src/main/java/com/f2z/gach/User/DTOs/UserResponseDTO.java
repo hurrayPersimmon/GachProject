@@ -47,8 +47,7 @@ public class UserResponseDTO {
         private Speed userSpeed;
         @Enumerated(EnumType.STRING)
         private Gender userGender;
-        @DateTimeFormat(pattern = "yyyy")
-        private LocalDate userBirth;
+        private Integer userBirth;
         private Double userHeight;
         private Double userWeight;
     }
