@@ -1,11 +1,10 @@
-package com.f2z.gach.Entity.Event;
+package com.f2z.gach.Event.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,16 +13,18 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventId;
     private String eventName;
     private String eventLink;
-    private Date eventStartDate;
-    private Date eventEndDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate eventStartDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate eventEndDate;
     private String eventInfo;
     private String eventImageName;
     private String eventImagePath;
-
 }

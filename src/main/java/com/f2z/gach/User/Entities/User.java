@@ -26,22 +26,21 @@ public class User {
     private String username;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Departments userDepartment;
+//    @Enumerated(EnumType.STRING)
+//    private Departments userDepartment;
     private String userNickname;
     @Enumerated(EnumType.ORDINAL)
     private Speed userSpeed;
     @Enumerated(EnumType.STRING)
     private Gender userGender;
-    @DateTimeFormat(pattern = "yyyy")
-    private LocalDate userBirth;
+    private Integer userBirth;
     private Double userHeight;
     private Double userWeight;
 
     public void updateUserInfo(User user){
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.userDepartment = user.getUserDepartment();
+//        this.userDepartment = user.getUserDepartment();
         this.userNickname = user.getUserNickname();
         this.userSpeed = user.getUserSpeed();
         this.userGender = user.getUserGender();

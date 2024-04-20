@@ -1,6 +1,6 @@
 package com.f2z.gach.Entity.History;
 
-import com.f2z.gach.Entity.BaseTimeEntity;
+import com.f2z.gach.Config.BaseTimeEntity;
 import com.f2z.gach.EnumType.Satisfaction;
 import jakarta.persistence.*;
 import lombok.*;

@@ -42,15 +42,14 @@ public class UserRequestDTO {
         private Long userId;
         private String username;
         private String password;
-        @Enumerated(EnumType.STRING)
-        private Departments userDepartment;
+//        @Enumerated(EnumType.STRING)
+//        private Departments userDepartment;
         private String userNickname;
         @Enumerated(EnumType.ORDINAL)
         private Speed userSpeed;
         @Enumerated(EnumType.STRING)
         private Gender userGender;
-        @DateTimeFormat(pattern = "yyyy")
-        private LocalDate userBirth;
+        private Integer userBirth;
         private Double userHeight;
         private Double userWeight;
 
@@ -59,7 +58,7 @@ public class UserRequestDTO {
             return User.builder()
                     .username(userDetailInfo.getUsername())
                     .password(userDetailInfo.getPassword())
-                    .userDepartment(userDetailInfo.getUserDepartment())
+//                    .userDepartment(userDetailInfo.getUserDepartment())
                     .userNickname(userDetailInfo.getUserNickname())
                     .userSpeed(userDetailInfo.getUserSpeed())
                     .userGender(userDetailInfo.getUserGender())

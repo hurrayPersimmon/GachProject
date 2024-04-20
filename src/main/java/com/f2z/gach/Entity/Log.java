@@ -1,5 +1,6 @@
 package com.f2z.gach.Entity;
 
+import com.f2z.gach.Config.BaseTimeEntity;
 import com.f2z.gach.EnumType.LogLevel;
 import com.f2z.gach.EnumType.Properties;
 import jakarta.persistence.*;
@@ -12,7 +13,7 @@ import org.springframework.http.HttpMethod;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Log extends BaseTimeEntity{
+public class Log extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer logId;

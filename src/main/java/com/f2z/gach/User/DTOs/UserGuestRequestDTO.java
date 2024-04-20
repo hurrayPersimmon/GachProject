@@ -21,20 +21,19 @@ public class UserGuestRequestDTO {
     @Getter
     public static class UserGuestRequest {
         private static Integer guestId;
-        @Enumerated(EnumType.STRING)
-        private Departments guestDepartment;
+//        @Enumerated(EnumType.STRING)
+//        private Departments guestDepartment;
         @Enumerated(EnumType.ORDINAL)
         private Speed guestSpeed;
         @Enumerated(EnumType.STRING)
         private Gender guestGender;
-        @DateTimeFormat(pattern = "yyyy")
-        private LocalDate guestBirth;
+        private Integer guestBirth;
         private Double guestHeight;
         private Double guestWeight;
 
         public static UserGuest toEntity(UserGuestRequest userGuestRequest) {
             return UserGuest.builder()
-                    .guestDepartment(userGuestRequest.guestDepartment)
+//                    .guestDepartment(userGuestRequest.guestDepartment)
                     .guestSpeed(userGuestRequest.guestSpeed)
                     .guestGender(userGuestRequest.guestGender)
                     .guestBirth(userGuestRequest.guestBirth)

@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class BuildingFloor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,5 @@ public class BuildingFloor {
     private String buildingName;
     private String buildingFloor;
     private String buildingFloorInfo;
-
-
 
 }
