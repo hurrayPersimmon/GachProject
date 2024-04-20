@@ -15,9 +15,6 @@
         .row-mine {
             max-width: 83%;
         }
-        .form-control::placeholder {
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -27,7 +24,7 @@
         <div class="bg-white p-2">
             <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
+                        <img src="/image/Gach_homepage_main.png.png" class="img-fluid">
                     </span>
             </p>
             <ul class="nav flex-column mt-4">
@@ -97,14 +94,14 @@
         </div>
     </div>
 
-    <div class="row-mine py-3 px-0 mx-0 shadow-lg bg-body-tertiary rounded">
+    <div class="row-mine py-3 px-0 mx-0 border border-0">
         <div class="container">
 
             <!-- Header -->
 
             <div class="row">
                 <div class="col align-items-start ubuntu-medium fs-2">
-                    노드 관리
+                    사용자 관리
                 </div>
                 <div class="col align-items-end text-end">
                     <img src="/image/nmj.JPG" class="rounded-circle mb-3 mx-3" style="width:40px">
@@ -114,47 +111,89 @@
 
             <!-- Small Box-->
 
-            <div class="row">
-                <div class="col">
-                    <div class="card border-light" style="max-height: 85vh">
+            <div class="row px-5 py-1">
+                <div class="col px-5 py-1">
+                    <div class="card border-light px-5 py-1" style="max-height: 85vh">
                         <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
                             <div class="row">
-                                <span class="noto-sans-700 fs-3">노드 추가</span>
+                                <div class="col">
+                                    <span class="noto-sans-700 fs-3">사용자 상세 정보</span>
+                                </div>
+                                <div class="col text-end">
+                                    <button type="button" class="btn btn-outline-success">수정</button>
+                                    <button type="button" class="btn btn-outline-danger">삭제</button>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                            <input type="text" class="form-control">
+                                        <div class="col-6">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;아이디&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;성별&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;속도&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">&nbsp;경도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;닉네임&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">출생년도</span>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon2">&nbsp;위도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon2">
+                                        <div class="col-6">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;학과&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;키&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;몸무게&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
-                                        <div class="input-group mb-5 pb-5">
-                                            <span class="input-group-text" id="basic-addon3">&nbsp;고도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon3">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;추천 경로 만족도&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">&nbsp;소요시간 예측 만족도&nbsp;</span>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-5 pt-5 ps-1">
-                                        <div class="col-3">
-                                            <a class="btn btn-primary" href="#" role="button">노드 추가</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div id="map" style="width:100%; height: 100%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -165,12 +204,4 @@
     </div>
 </div>
 </body>
-<script>
-    var mapOptions = {
-        center: new naver.maps.LatLng(37.3595704, 127.105399),
-        zoom: 10
-    };
-
-    var map = new naver.maps.Map('map', mapOptions);
-</script>
 </html>

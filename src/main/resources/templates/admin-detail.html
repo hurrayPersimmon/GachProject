@@ -119,11 +119,12 @@
                     <div class="card border-light px-5 py-1" style="max-height: 85vh">
                         <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
                             <div class="row">
-                                <span class="noto-sans-700 fs-3">관리자 설정</span>
-                            </div>
-                            <div class="row">
-                                <div class="col-3 offset-9 text-end">
-                                    <span style="color:red;">*</span> 필수입력
+                                <div class="col">
+                                    <span class="noto-sans-700 fs-3">관리자 설정</span>
+                                </div>
+                                <div class="col text-end">
+                                    <button type="button" class="btn btn-outline-success">수정</button>
+                                    <button type="button" class="btn btn-outline-danger">삭제</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -132,8 +133,7 @@
                                         <div class="col">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">&nbsp;아이디&nbsp;</span>
-                                                <input type="text" class="form-control" placeholder="
-                                                    *">
+                                                <input type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col">
@@ -152,21 +152,14 @@
                                         <div class="col">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                                <input type="text" class="form-control" placeholder="
-                                                    *">
+                                                <input type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">생년월일</span>
-                                                <input type="text" class="form-control" placeholder="
-                                                    *">
+                                                <input type="text" class="form-control">
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-5 pt-5 ps-1">
-                                        <div class="col-3">
-                                            <a class="btn btn-outline-secondary" href="#" role="button">노드 추가</a>
                                         </div>
                                     </div>
                                 </div>
@@ -179,12 +172,4 @@
     </div>
 </div>
 </body>
-<script>
-    var mapOptions = {
-        center: new naver.maps.LatLng(37.3595704, 127.105399),
-        zoom: 10
-    };
-
-    var map = new naver.maps.Map('map', mapOptions);
-</script>
 </html>

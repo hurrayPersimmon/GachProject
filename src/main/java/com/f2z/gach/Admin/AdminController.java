@@ -20,6 +20,41 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class AdminController {
     private final AdminRepository adminRepository;
 
+    @GetMapping("/main-page")
+    public String mainPage(){
+        return "main-page";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+        model.addAttribute("loginDto", new loginDTO());
+        return "log-in";
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid @ModelAttribute("loginDto") loginDTO adminDto, BindingResult result,
+                        Model model){
+        if(result.hasErrors()){
+            return "log-in";
+        }
+
+        Admin admin = adminRepository.findByAdminId(adminDto.getAdminId());
+        if(admin == null){
+            model.addAttribute("idMessage", "아이디가 존재하지 않습니다.");
+            return "log-in";
+        }
+        if(!admin.getAdminPassword().equals(adminDto.getAdminPassword())){
+            model.addAttribute("message", "비밀번호가 다릅니다.");
+            return "log-in";
+        }
+        if(admin.getAdminAuthorization().equals(Authorization.WAITER)){
+            return "waiter";
+        } else if (admin.getAdminAuthorization().equals(Authorization.GUEST)) {
+            return "dashboard-guest";
+        } else{
+            return "dashboard";
+        }
+    }
 
     @GetMapping("/signup")
     public String signup(Model model){
@@ -28,7 +63,6 @@ public class AdminController {
     }
 
     @PostMapping("/signup")
-<<<<<<< HEAD
     public String signup(@Valid @ModelAttribute("adminDto") AdminDTO adminDto, BindingResult result, Model model){
         if(result.hasErrors()){
             return "sign-up";
@@ -37,70 +71,17 @@ public class AdminController {
             return "sign-up"; //비밀번호가 다른 경우
         }
         Admin admin = adminRepository.findByAdminId(adminDto.getAdminId());
-=======
-    public String signup(@ModelAttribute AdminDTO.AdminSignUpRequest adminDTO){
-        log.info("admin signup");
-        Admin admin = adminRepository.findByAdminId(adminDTO.getAdminId());
->>>>>>> main
+
         if(admin != null){
-//            model.addAttribute("message", "이미 존재하는 아이디입니다.");
-            return "redirect:/admin/signup";
+            model.addAttribute("idMessage", "이미 존재하는 아이디입니다.");
+            return "sign-up";
         }
-<<<<<<< HEAD
 
         adminDto.setAdminAuthorization(Authorization.WAITER);
         adminRepository.save(adminDto.toEntity());
-        model.addAttribute("message", "회원가입이 완료되었습니다. 다시 로그인 하세요.");
+        model.addAttribute("message", "회원가입이 완료되었습니다. 관리자 승인까지 잠시만 기다려주세요.");
         model.addAttribute("loginDto", new loginDTO());
-=======
-//        adminDTO.setAdminAuthorization(Authorization.WAITER);
-//        adminRepository.save(adminDTO.toEntity(admin));
-//        model.addAttribute("message", "회원가입이 완료되었습니다. 다시 로그인 하세요.");
-        return "redirect:/admin/login";
-    }
-
-
-    @GetMapping("/login")
-    public String login(Model model){
-        model.addAttribute("adminDto", new AdminDTO());
->>>>>>> main
         return "log-in";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid BindingResult result,
-                        @ModelAttribute AdminDTO adminDto,
-                        Model model){
-        log.info("login");
-
-        if(result.hasErrors()){
-            return "redirect:/admin_login";
-        }
-
-        Admin admin = adminRepository.findByAdminName(adminDto.getAdminId());
-        if(admin == null){
-            model.addAttribute("idMessage", "아이디가 존재하지 않습니다.");
-            return "redirect:/admin/login";
-        }
-        if(!admin.getAdminPassword().equals(adminDto.getAdminPassword())){
-            model.addAttribute("idMessage", "비밀번호가 존재하지 않습니다.");
-            return "redirect:/admin/login";
-        }
-        if(admin.getAdminAuthorization().equals(Authorization.WAITER)){
-            return "/waiter";
-        } else if (admin.getAdminAuthorization().equals(Authorization.GUEST)) {
-            return "/dashboard-guest";
-        } else{
-            return "/dashboard";
-        }
-
-    }
-
-
-
-    @GetMapping("/main-page")
-    public String test(){
-        return "main-page";
     }
 
 //    @PostMapping("/login")

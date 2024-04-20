@@ -3,6 +3,7 @@ package com.f2z.gach.Admin;
 import com.f2z.gach.EnumType.Authorization;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,6 +23,7 @@ public class AdminDTO {
     private String adminPassword;
     @NotBlank(message = "비밀번호를 확인해주세요.")
     private String adminPasswordCheck;
+    @NotNull(message = "생년월일을 확인해주세요.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate adminBirthday;
     @NotBlank(message = "이름을 입력해주세요.")
@@ -55,13 +57,13 @@ public class AdminDTO {
         private Authorization adminAuthorization;
     }
 
-    public Admin toEntity(AdminSignUpRequest adminSignUpRequest){
+    public Admin toEntity(){
         return Admin.builder()
-                .adminId(adminSignUpRequest.getAdminId())
-                .adminPassword(adminSignUpRequest.getAdminPassword())
-                .adminBirthday(adminSignUpRequest.getAdminBirthday())
-                .adminName(adminSignUpRequest.getAdminName())
-                .adminAuthorization(adminSignUpRequest.getAdminAuthorization())
+                .adminId(adminId)
+                .adminPassword(adminPassword)
+                .adminBirthday(adminBirthday)
+                .adminName(adminName)
+                .adminAuthorization(adminAuthorization)
                 .build();
     }
 
