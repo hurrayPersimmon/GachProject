@@ -27,7 +27,7 @@
         <div class="bg-white p-2">
             <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png.png" class="img-fluid">
+                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
                     </span>
             </p>
             <ul class="nav flex-column mt-4">
@@ -107,7 +107,6 @@
                     관리자 설정
                 </div>
                 <div class="col align-items-end text-end">
-                    <img src="/image/nmj.JPG" class="rounded-circle mb-3 mx-3" style="width:40px">
                     <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
                 </div>
             </div>
@@ -118,52 +117,51 @@
                 <div class="col px-5 py-1">
                     <div class="card border-light px-5 py-1" style="max-height: 85vh">
                         <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
-                            <div class="row">
-                                <div class="col">
-                                    <span class="noto-sans-700 fs-3">관리자 설정</span>
+                            <form th:object="${admin}" th:action="@{/admin/update}" method="post">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="noto-sans-700 fs-3">관리자 설정</span>
+                                    </div>
+                                    <div class="col text-end">
+                                        <button type="submit" class="btn btn-outline-success">수정</button>
+                                        <a th:href="@{'/admin/delete/'+${admin.getAdminNum()}}" class="btn btn-outline-danger">삭제</a>
+                                    </div>
                                 </div>
-                                <div class="col text-end">
-                                    <button type="button" class="btn btn-outline-success">수정</button>
-                                    <button type="button" class="btn btn-outline-danger">삭제</button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="row mt-4">
-                                        <div class="col">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">&nbsp;아이디&nbsp;</span>
-                                                <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text">&nbsp;아이디&nbsp;</span>
+                                                    <input type="text" class="form-control" th:value="${admin.getAdminId()}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="input-group mb-3">
+                                                    <label class="input-group-text" for="inputGroupSelect01">&nbsp;&nbsp;권한&nbsp;&nbsp;</label>
+                                                    <select class="form-select" id="inputGroupSelect01">
+                                                        <option th:each="author : ${authorList}" th:value="${author}" th:text="${author}" th:selected="${author == admin.getAdminAuthorization()}"></option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="input-group mb-3">
-                                                <label class="input-group-text" for="inputGroupSelect01">&nbsp;&nbsp;권한&nbsp;&nbsp;</label>
-                                                <select class="form-select" id="inputGroupSelect01">
-                                                    <option selected>Choose...</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text">&nbsp;이름&nbsp;</span>
+                                                    <input type="text" class="form-control" th:value="${admin.getAdminName()}" >
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text">생년월일</span>
+                                                    <input type="Date" class="form-control" th:value="${admin.getAdminBirthday()}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="col">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">생년월일</span>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

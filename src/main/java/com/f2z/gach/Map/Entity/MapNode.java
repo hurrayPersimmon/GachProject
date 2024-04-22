@@ -1,14 +1,10 @@
 package com.f2z.gach.Map.Entity;
 
-import com.f2z.gach.Map.DTO.MapNodeDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Setter

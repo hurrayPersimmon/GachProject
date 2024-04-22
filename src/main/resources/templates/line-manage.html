@@ -173,7 +173,6 @@
                         간선 관리
                     </div>
                     <div class="col align-items-end text-end">
-                        <img src="/image/nmj.JPG" class="rounded-circle mb-3 mx-3" style="width:40px">
                         <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
                     </div>
                 </div>
@@ -189,10 +188,16 @@
                                         간선 목록
                                     </div>
                                     <div class="col-2 ms-5 ps-5">
-                                        <button type="button" class="btn btn-outline-success btn-sm fs-5">간선 추가</button>
+                                        <a class="btn btn-outline-success btn-sm fs-5" href="/admin/line/add">간선 추가</a>
                                     </div>
                                 </div>
                                 <hr>
+                                <div th:if="${message == '간선이 추가되었습니다.' or message == '간선이 삭제되었습니다.'}">
+                                    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                                        <strong><i class="bi bi-exclamation-circle-fill"></i></strong>&nbsp;<span th:text="${message}"></span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
                                 <div class="row ms-2 me-2" style="overflow: scroll; max-height: 70vh">
                                     <table class="table" style="overflow: auto; white-space: nowrap; border-collapse: collapse;">
                                         <thead>
@@ -205,16 +210,19 @@
                                             <th scope="col">최적경로 가중치</th>
                                             <th scope="col">삭제</th>
                                         </tr>
+
                                         </thead>
                                         <tbody>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
+                                        <tr th:each="line : ${lineList}">
+                                            <th scope="row" th:text="${line.getLineId()}">1</th>
+                                            <td th:text="${line.getLineName()}">Mark</td>
+                                            <td th:text="${line.getNodeCodeFirst()}">Otto</td>
+                                            <td th:text="${line.getNodeCodeSecond()}">@mdo</td>
+                                            <td th:text="${line.getWeightShortest()}">@mdo</td>
+                                            <td th:text="${line.getWeightOptimal()}">@mdo</td>
+                                            <td>
+                                                <a th:href="@{'/admin/line/'+${line.getNodeId()}}"><i class="bi bi-x-lg"></i></a>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -5,4 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MapLineRepository extends JpaRepository<MapLine,Integer>{
     Boolean existsByLineName(String lineName);
+
+    MapLine findByLineId(Integer lineId);
+
+    boolean existsByNodeNameFirstAndNodeNameSecond(String nodeNameFirst, String nodeNameSecond);
 }

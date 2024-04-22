@@ -93,7 +93,7 @@
             <div class="bg-white p-2">
                 <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png.png" class="img-fluid">
+                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
                     </span>
                 </p>
                 <ul class="nav flex-column mt-4">
@@ -173,7 +173,6 @@
                         사용자 관리
                     </div>
                     <div class="col align-items-end text-end">
-                        <img src="/image/nmj.JPG" class="rounded-circle mb-3 mx-3" style="width:40px">
                         <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
                     </div>
                 </div>
@@ -199,66 +198,22 @@
                                             <th scope="col">닉네임</th>
                                             <th scope="col">성별</th>
                                             <th scope="col">출생년도</th>
-                                            <th scope="col">학과</th>
+                                            <th scope="col">상세보기</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
+                                            <tr th:each="user : ${userList}">
+                                                <th scope="row" th:text="${user.getUserId()}">1</th>
+                                                <td th:text="${user.getUsername()}">Mark</td>
+                                                <td th:text="${user.getUserNickname()}">Otto</td>
+                                                <td th:text="${user.getUserGender()}">@mdo</td>
+                                                <td th:text="${user.getUserBirth()}">@mdo</td>
+                                                <td class="text-center pe-5">
+                                                    <a th:href="@{'/admin/user/'+${user.getNodeId()}}" >
+                                                        <i class = "bi bi-info-circle"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

@@ -108,6 +108,35 @@ public class AdminController {
         return "admin-manage";
     }
 
+    @GetMapping("/approve/{adminNum}")
+    public String approveAdmin(@PathVariable Integer adminNum){
+        Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
+        admin.setAdminAuthorization(Authorization.ADMIN);
+        adminRepository.save(admin);
+        return "redirect:/admin/list";
+    }
+
+    @GetMapping("/delete/{adminNum}")
+    public String deleteAdmin(@PathVariable Integer adminNum){
+        adminRepository.deleteById(Long.valueOf(adminNum));
+        return "redirect:/admin/list";
+    }
+
+    @GetMapping("/{adminNum}")
+    public String adminDetail(@PathVariable Integer adminNum, Model model){
+        Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
+        model.addAttribute("admin", admin);
+        model.addAttribute("authorList", Authorization.values());
+        return "admin-detail";
+    }
+
+    @PostMapping("/update")
+    public String updateAdmin(@ModelAttribute Admin admin){
+        adminRepository.save(admin);
+        return "redirect:/admin/list";
+    }
+
+
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleError404(HttpServletRequest request, Exception e) {
         ModelAndView mav = new ModelAndView();
