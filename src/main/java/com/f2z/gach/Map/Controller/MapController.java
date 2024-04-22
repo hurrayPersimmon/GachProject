@@ -1,8 +1,7 @@
-package com.f2z.gach.Map;
+package com.f2z.gach.Map.Controller;
 
-import com.f2z.gach.Map.DTOs.Responses.PlaceResponseDTO;
-import com.f2z.gach.Map.Entities.BuildingInfo;
-import com.f2z.gach.Map.Entities.PlaceSource;
+import com.f2z.gach.Map.DTO.PlaceResponseDTO;
+import com.f2z.gach.Map.Service.MapService;
 import com.f2z.gach.Response.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Slf4j
 @RestController

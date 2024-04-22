@@ -68,6 +68,18 @@ public class UserRequestDTO {
                     .build();
         }
 
+        public static User updateUserDetailInfo(UserDetailInfo userDetailInfo){
+            return User.builder()
+                    .password(userDetailInfo.getPassword())
+                    .userNickname(userDetailInfo.getUserNickname())
+                    .userSpeed(userDetailInfo.getUserSpeed())
+                    .userGender(userDetailInfo.getUserGender())
+                    .userBirth(userDetailInfo.getUserBirth())
+                    .userHeight(userDetailInfo.getUserHeight())
+                    .userWeight(userDetailInfo.getUserWeight())
+                    .build();
+        }
+
     }
 
 

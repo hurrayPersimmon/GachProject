@@ -1,5 +1,6 @@
 package com.f2z.gach.DTO.Map;
 
+import com.f2z.gach.Map.Entity.MapLine;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class MapLineDTO {
     private Integer lineId;
     private String lineName;
@@ -22,4 +24,16 @@ public class MapLineDTO {
     private Double weightOptimal;
 
 
+    public MapLine toEntity() {
+        return MapLine.builder()
+                .lineId(lineId)
+                .lineName(lineName)
+                .nodeCodeFirst(nodeCodeFirst)
+                .nodeNameFirst(nodeNameFirst)
+                .nodeCodeSecond(nodeCodeSecond)
+                .nodeNameSecond(nodeNameSecond)
+                .weightShortest(weightShortest)
+                .weightOptimal(weightOptimal)
+                .build();
+    }
 }

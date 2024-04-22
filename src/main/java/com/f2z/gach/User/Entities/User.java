@@ -38,8 +38,6 @@ public class User {
     private Double userWeight;
 
     public void updateUserInfo(User user){
-        this.username = user.getUsername();
-        this.password = user.getPassword();
 //        this.userDepartment = user.getUserDepartment();
         this.userNickname = user.getUserNickname();
         this.userSpeed = user.getUserSpeed();

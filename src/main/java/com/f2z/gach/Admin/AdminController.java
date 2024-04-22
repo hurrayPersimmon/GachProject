@@ -100,10 +100,12 @@ public class AdminController {
 //        }
 //    }
 
-    @GetMapping("/node/list")
-    public String nodeList(Model model){
-        model.addAttribute("nodeList", adminRepository.findAll());
-        return "node-list";
+    @GetMapping("/list")
+    public String adminList(Model model){
+        model.addAttribute("adminList", adminRepository.findAllByAdminAuthorization(Authorization.ADMIN));
+        model.addAttribute("guestList", adminRepository.findAllByAdminAuthorization(Authorization.GUEST));
+        model.addAttribute("waiterList", adminRepository.findAllByAdminAuthorization(Authorization.WAITER));
+        return "admin-manage";
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

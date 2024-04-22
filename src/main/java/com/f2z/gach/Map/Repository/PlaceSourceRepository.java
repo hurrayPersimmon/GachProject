@@ -1,8 +1,7 @@
-package com.f2z.gach.Map.Repositories;
+package com.f2z.gach.Map.Repository;
 
 import com.f2z.gach.EnumType.PlaceCategory;
-import com.f2z.gach.Map.Entities.BuildingInfo;
-import com.f2z.gach.Map.Entities.PlaceSource;
+import com.f2z.gach.Map.Entity.PlaceSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

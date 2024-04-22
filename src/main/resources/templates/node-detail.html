@@ -122,40 +122,64 @@
                                 <span class="noto-sans-700 fs-3">노드 추가</span>
                             </div>
                             <div class="row">
-                                <div class="col">
+                                <form id = "node-detail-form" th:object="${nodeDto}" th:action="@{/admin/node/update}" method="post" class="col">
+                                    <input type="hidden" th:field="*{nodeId}" th:value="${nodeId}">
                                     <div class="row mt-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" id="floatingInput1"
+                                                   th:field="*{nodeName}"
+                                                   th:classappend="${#fields.hasErrors('nodeName')} or ${errorMessage} == '이미 존재하는 노드입니다.' ? 'border border-danger' : ''">
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('nodeName')}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeName}">이름 오류</span>
+                                        </div>
+                                        <div th:if="${errorMessage == '이미 존재하는 노드입니다.'}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${errorMessage}">아이디 오류</span>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1">&nbsp;경도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                                                   th:field="*{nodeLongitude}"
+                                                   th:classappend="${#fields.hasErrors('nodeLongitude')} ? 'border border-danger' : ''">
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('nodeLongitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeLongitude}">경도 오류</span>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon2">&nbsp;위도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon2">
+                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon2"
+                                                   th:field="*{nodeLatitude}"
+                                                   th:classappend="${#fields.hasErrors('nodeLatitude')} ? 'border border-danger' : ''">
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('nodeLatitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeLatitude}">위도 오류</span>
                                         </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="input-group mb-5 pb-5">
                                             <span class="input-group-text" id="basic-addon3">&nbsp;고도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon3">
+                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon3"
+                                                   th:field="*{nodeAltitude}"
+                                                   th:classappend="${#fields.hasErrors('nodeAltitude')} ? 'border border-danger' : ''">
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('nodeAltitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeAltitude}">경도 오류</span>
                                         </div>
                                     </div>
                                     <div class="row mt-5 pt-5 ps-1">
-                                        <div class="col-3 mx-0" style="width:19%;">
-                                            <a class="btn btn-outline-success" href="#" role="button">노드 수정</a>
+                                        <div class="col-3">
+                                            <button type="submit" form ="node-detail-form" class="btn btn-success" >노드 수정</button>
                                         </div>
-                                        <div class="col-3 ps-1" style="width:19%;">
-                                            <a class="btn btn-outline-danger" href="#" role="button">노드 삭제</a>
+                                        <div class="col-3">
+                                            <a class="btn btn-danger" th:href="@{'/admin/node/delete/'+${nodeId}}">노드 삭제</a>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                                 <div class="col">
                                     <div id="map" style="width:100%; height: 100%;"></div>
                                 </div>
@@ -176,4 +200,5 @@
 
     var map = new naver.maps.Map('map', mapOptions);
 </script>
+
 </html>

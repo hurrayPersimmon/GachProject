@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService{
         if (userRepository.existsById(userId)) {
             try {
                 User target = userRepository.findByUserId(userId);
-                User member = UserRequestDTO.UserDetailInfo.toUserDetailInfo(userDetailInfo);
+                User member = UserRequestDTO.UserDetailInfo.updateUserDetailInfo(userDetailInfo);
                 target.updateUserInfo(member);
                 userRepository.save(target);
                 return ResponseEntity.saveSuccess(new UserResponseDTO.respondUserId(userId));

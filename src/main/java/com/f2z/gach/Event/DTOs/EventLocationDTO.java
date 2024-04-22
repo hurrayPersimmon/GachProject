@@ -1,4 +1,4 @@
-package com.f2z.gach.DTO.Event;
+package com.f2z.gach.Event.DTOs;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

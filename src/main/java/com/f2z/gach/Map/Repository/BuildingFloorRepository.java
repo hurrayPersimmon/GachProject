@@ -1,6 +1,6 @@
-package com.f2z.gach.Map.Repositories;
+package com.f2z.gach.Map.Repository;
 
-import com.f2z.gach.Map.Entities.BuildingFloor;
+import com.f2z.gach.Map.Entity.BuildingFloor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

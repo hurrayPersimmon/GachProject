@@ -1,7 +1,7 @@
-package com.f2z.gach.Map.DTOs.Responses;
+package com.f2z.gach.Map.DTO;
 
-import com.f2z.gach.Map.Entities.BuildingFloor;
-import com.f2z.gach.Map.Entities.PlaceSource;
+import com.f2z.gach.Map.Entity.BuildingFloor;
+import com.f2z.gach.Map.Entity.PlaceSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -42,6 +42,7 @@ public class UserResponseDTO {
         private Long userId;
 //        @Enumerated(EnumType.STRING)
 //        private Departments userDepartment;
+        private String username;
         private String userNickname;
         @Enumerated(EnumType.ORDINAL)
         private Speed userSpeed;
@@ -55,7 +56,7 @@ public class UserResponseDTO {
     public static provideUserDetailInfo toProvideUserDetailInfo(User user) {
         return provideUserDetailInfo.builder()
                 .userId(user.getUserId())
-//                .userDepartment(user.getUserDepartment())
+                .username(user.getUsername())
                 .userNickname(user.getUserNickname())
                 .userSpeed(user.getUserSpeed())
                 .userGender(user.getUserGender())

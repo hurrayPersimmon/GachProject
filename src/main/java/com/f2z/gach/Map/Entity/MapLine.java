@@ -1,4 +1,4 @@
-package com.f2z.gach.Map.Entities;
+package com.f2z.gach.Map.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class MapLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

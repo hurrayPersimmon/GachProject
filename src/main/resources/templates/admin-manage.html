@@ -195,68 +195,27 @@
                                         <tr>
                                             <th scope="col">번호</th>
                                             <th scope="col">아이디</th>
-                                            <th scope="col">권한</th>
                                             <th scope="col">이름</th>
                                             <th scope="col">생년월일</th>
-                                            <th scope="col">설정</th>
+                                            <th scope="col">권한</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
+                                        <tr th:each="admin : ${adminList}">
+                                            <th scope="row" th:text="${admin.getAdminNum()}">1</th>
+                                            <td th:text="${admin.getAdminId()}">Mark</td>
+                                            <td th:text="${admin.getAdminName()}">@mdo</td>
+                                            <td th:text="${admin.getAdminBirthday()}">@mdo</td>
+                                            <td th:text="${admin.getAdminAuthorization()}">Otto</td>
                                         </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
+                                        <tr th:each="guest : ${guestList}">
+                                            <th scope="row" th:text="${guest.getAdminNum()}">1</th>
+                                            <td th:text="${guest.getName()}">Mark</td>
+                                            <td th:text="${guest.getAdminId()}">Mark</td>
+                                            <td th:text="${guest.getAdminName()}">@mdo</td>
+                                            <td th:text="${guest.getAdminBirthday()}">@mdo</td>
+                                            <td th:text="${guest.getAdminAuthorization()}">Otto</td>
+
                                         </tr>
                                         </tbody>
                                     </table>
@@ -268,84 +227,33 @@
                                 </div>
                                 <div class="row ms-2 me-2 mt-3" style="overflow: scroll; max-height: 30vh">
                                     <hr>
-                                    <table class="table" style="overflow: auto; white-space: nowrap; border-collapse: collapse;">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">번호</th>
-                                            <th scope="col">아이디</th>
-                                            <th scope="col">이름</th>
-                                            <th scope="col">생년월일</th>
-                                            <th scope="col">권한</th>
-                                            <th scope="col">승인</th>
-                                            <th scope="col">삭제</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        <tr th:each="node : ${nodeList}">
-                                            <th scope="row" th:text="${node.getId()}">1</th>
-                                            <td th:text="${node.getName()}">Mark</td>
-                                            <td th:text="${node.getPointX()}">Otto</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}">@mdo</td>
-                                            <td th:text="${node.getPointY()}"><i class="bi bi-check-square"></i></td>
-                                            <td><i class="bi bi-x-square"></i></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <form>
+                                        <table class="table" style="overflow: auto; white-space: nowrap; border-collapse: collapse;">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">번호</th>
+                                                <th scope="col">아이디</th>
+                                                <th scope="col">이름</th>
+                                                <th scope="col">생년월일</th>
+                                                <th scope="col">권한</th>
+                                                <th scope="col">승인</th>
+                                                <th scope="col">삭제</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="admin : ${adminList}">
+                                                <th scope="row" th:text="${admin.getAdminId()}">1</th>
+                                                <td th:text="${admin.getAdminNum()}">Mark</td>
+                                                <td th:text="${admin.getAdminName()}">@mdo</td>
+                                                <td th:text="${admin.getAdminBirthday()}">@mdo</td>
+                                                <td th:text="${admin.getAdminAuthorization()}">Otto</td>
+                                                <td><i class="bi bi-check-square"></i></td>
+                                                <td><i class="bi bi-x-square"></i></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>

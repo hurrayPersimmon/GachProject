@@ -1,4 +1,4 @@
-package com.f2z.gach.Map.Entities;
+package com.f2z.gach.Map.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;

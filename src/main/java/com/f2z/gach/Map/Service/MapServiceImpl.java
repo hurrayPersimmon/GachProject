@@ -1,11 +1,11 @@
-package com.f2z.gach.Map;
+package com.f2z.gach.Map.Service;
 
 import com.f2z.gach.EnumType.PlaceCategory;
-import com.f2z.gach.Map.DTOs.Responses.PlaceResponseDTO;
-import com.f2z.gach.Map.Entities.BuildingFloor;
-import com.f2z.gach.Map.Entities.PlaceSource;
-import com.f2z.gach.Map.Repositories.BuildingFloorRepository;
-import com.f2z.gach.Map.Repositories.PlaceSourceRepository;
+import com.f2z.gach.Map.DTO.PlaceResponseDTO;
+import com.f2z.gach.Map.Entity.BuildingFloor;
+import com.f2z.gach.Map.Entity.PlaceSource;
+import com.f2z.gach.Map.Repository.BuildingFloorRepository;
+import com.f2z.gach.Map.Repository.PlaceSourceRepository;
 import com.f2z.gach.Response.ResponseEntity;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
