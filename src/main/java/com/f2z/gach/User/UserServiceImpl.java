@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService{
         Long userId = userLoginInfo.getUserId();
         String username = userLoginInfo.getUsername();
         String password = userLoginInfo.getPassword();
+        log.info(password);
         String targetPassword = userId != null ? userRepository.findByUserId(userId).getPassword() :
                 userRepository.findByUsername(username).getPassword();
 //        if(member.getPassword().equals(encodePassword(password))) {

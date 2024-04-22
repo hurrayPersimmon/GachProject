@@ -39,6 +39,7 @@ public class User {
 
     public void updateUserInfo(User user){
 //        this.userDepartment = user.getUserDepartment();
+        if(user.getPassword() !=null) this.password = user.getPassword();
         this.userNickname = user.getUserNickname();
         this.userSpeed = user.getUserSpeed();
         this.userGender = user.getUserGender();
