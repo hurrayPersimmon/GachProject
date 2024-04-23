@@ -83,122 +83,69 @@
 <body>
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <div class="bg-white col-auto col-md-2 text-start sidebar noto-sans-300" style="max-width: 15vw;">
-            <a href="/admin/test">
-                <div class="row">
-                    <div class="col mt-2">
+        <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
+            <div class="bg-white p-2">
+                <p class="d-flex mt-2 align-items-center">
+                    <span class="d-none d-sm-inline">
                         <img src="/image/Gach_homepage_main.png" class="img-fluid">
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-4 ms-2 ps-5 text-center">
-                        <i class="bi bi-clipboard-data fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-3 mt-1 fs-4 text-start">
-                        대시보드
-                    </div>
-                </div>
-            </a>
-            <a href="/admin/node">
-                <div class="row mt-4">
-                    <div class="col-4 ms-2 ps-5 text-center">
-                        <i class="bi bi-diagram-3 fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-3 mt-1 fs-4 text-start">
-                        노드관리
-                    </div>
-                </div>
-            </a>
-            <a href="/admin/line">
-                <div class="row mt-4">
-                    <div class="col-4 ms-2 ps-5 text-center">
-                        <i class="bi bi-sign-turn-right fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-3 mt-1 fs-4 text-start">
-                        경로관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-2 ps-5 text-center">
-                        <i class="bi bi-compass fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-3 mt-1 fs-4 text-start">
-                        경로 테스트
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-2 ps-5 text-center">
-                        <i class="bi bi-cpu fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-3 mt-1 fs-4 text-start">
-                        AI 관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-calendar fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-2 mt-1 fs-4 text-start">
-                        행사 관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-building fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 pe-2 mt-2 fs-4 text-start">
-                        장소 관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-person-square fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 mt-1 fs-4 text-start">
-                        사용자 관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-question-square fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 mt-1 fs-4 text-start">
-                        문의 관리
-                    </div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-archive fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 mt-1 fs-4 text-start">
-                        로그 관리
-                    </div>
-                </div>
-            </a>
-            <a href="/admin">
-                <div class="row mt-4">
-                    <div class="col-4 ms-1 ps-5 text-center">
-                        <i class="bi bi-person-vcard fs-3"></i>
-                    </div>
-                    <div class="col-6 me-3 mt-1 fs-4 text-start">
-                        관리자 설정
-                    </div>
-                </div>
-            </a>
+                    </span>
+                </p>
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/squares.leading.rectangle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">대시보드</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
+                            <li class="nav-item mt-1 nav-link">
+                                <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
+                                <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
+                            </li>
+                            <li class="nav-item mt-1 nav-link">
+                                <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
+                                <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/brain.head.profile.png" class="img-fluid mb-2 me-4">
+                            <span class="fs-5 d-none d-sm-inline noto-sans-sidebar">AI 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/building.2.png" class="img-fluid mb-2 me-1"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">장소 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/calendar.badge.plus.png" class="img-fluid mb-2"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">행사 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
+                            <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/person.fill.questionmark.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">문의 관리</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="#" class="nav-link text-body-secondary">
+                            <img src="/image/exclamationmark.circle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">로그</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a href="/admin/list" class="nav-link text-body-secondary ps-2">
+                            <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <!-- Content -->

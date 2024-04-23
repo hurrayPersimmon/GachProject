@@ -89,7 +89,7 @@
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <!-- Sidebar -->
-        <div class="bg-white col-auto col-md-2" style="max-width: 250px;">
+        <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
             <div class="bg-white p-2">
                 <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
@@ -103,23 +103,14 @@
                         </a>
                     </li>
                     <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/arrow.triangle.branch.png" class="img-fluid mb-2">
-                            <span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">경로 관리</span>
-                            <img src="/image/chevron.down.png" class="img-fluid mb-2 ms-3" onclick="viewDetail()">
-                        </a>
                         <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
                             <li class="nav-item mt-1 nav-link">
                                 <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
+                                <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
                             </li>
                             <li class="nav-item mt-1 nav-link">
                                 <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                            </li>
-                            <li class="nav-item mt-1 nav-link">
-                                <img src="/image/map.png" class="img-fluid mb-1">
-                                <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none">경로 테스트</a>
+                                <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
                             </li>
                         </ul>
                     </li>
@@ -140,8 +131,8 @@
                         </a>
                     </li>
                     <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary ps-2">
-                            <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-2 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
+                        <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
+                            <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
                         </a>
                     </li>
                     <li class="nav-item mt-2">
@@ -155,7 +146,7 @@
                         </a>
                     </li>
                     <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary ps-2">
+                        <a href="/admin/list" class="nav-link text-body-secondary ps-2">
                             <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
                         </a>
                     </li>
@@ -193,9 +184,8 @@
                                 </div>
                                 <hr>
                                 <div th:if="${message == '간선이 추가되었습니다.' or message == '간선이 삭제되었습니다.'}">
-                                    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                                    <div class="alert alert-success fade show text-center" role="alert">
                                         <strong><i class="bi bi-exclamation-circle-fill"></i></strong>&nbsp;<span th:text="${message}"></span>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 </div>
                                 <div class="row ms-2 me-2" style="overflow: scroll; max-height: 70vh">
@@ -216,12 +206,12 @@
                                         <tr th:each="line : ${lineList}">
                                             <th scope="row" th:text="${line.getLineId()}">1</th>
                                             <td th:text="${line.getLineName()}">Mark</td>
-                                            <td th:text="${line.getNodeCodeFirst()}">Otto</td>
-                                            <td th:text="${line.getNodeCodeSecond()}">@mdo</td>
+                                            <td th:text="${line.getNodeNameFirst()}">Otto</td>
+                                            <td th:text="${line.getNodeNameSecond()}">@mdo</td>
                                             <td th:text="${line.getWeightShortest()}">@mdo</td>
                                             <td th:text="${line.getWeightOptimal()}">@mdo</td>
                                             <td>
-                                                <a th:href="@{'/admin/line/'+${line.getNodeId()}}"><i class="bi bi-x-lg"></i></a>
+                                                <a th:href="@{'/admin/line/'+${line.getLineId()}}"><i class="bi bi-x-lg"></i></a>
                                             </td>
                                         </tr>
                                         </tbody>

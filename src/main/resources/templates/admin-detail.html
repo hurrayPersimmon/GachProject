@@ -23,7 +23,7 @@
 <body>
 <div class="row flex-nowrap">
     <!-- Sidebar -->
-    <div class="bg-white col-auto col-md-2" style="max-width: 250px;">
+    <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
         <div class="bg-white p-2">
             <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
@@ -37,23 +37,14 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/arrow.triangle.branch.png" class="img-fluid mb-2">
-                        <span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">경로 관리</span>
-                        <img src="/image/chevron.down.png" class="img-fluid mb-2 ms-3" onclick="viewDetail()">
-                    </a>
                     <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
                         <li class="nav-item mt-1 nav-link">
                             <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
+                            <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
                         </li>
                         <li class="nav-item mt-1 nav-link">
                             <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                        </li>
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/map.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none">경로 테스트</a>
+                            <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
                         </li>
                     </ul>
                 </li>
@@ -74,8 +65,8 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-2 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
+                    <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
+                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
                     </a>
                 </li>
                 <li class="nav-item mt-2">
@@ -89,7 +80,7 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary ps-2">
+                    <a href="/admin/list" class="nav-link text-body-secondary ps-2">
                         <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
                     </a>
                 </li>
@@ -117,14 +108,14 @@
                 <div class="col px-5 py-1">
                     <div class="card border-light px-5 py-1" style="max-height: 85vh">
                         <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
-                            <form th:object="${admin}" th:action="@{/admin/update}" method="post">
+                            <form th:object="${adminDto}" th:action="@{/admin/update}" method="post">
                                 <div class="row">
                                     <div class="col">
                                         <span class="noto-sans-700 fs-3">관리자 설정</span>
                                     </div>
                                     <div class="col text-end">
                                         <button type="submit" class="btn btn-outline-success">수정</button>
-                                        <a th:href="@{'/admin/delete/'+${admin.getAdminNum()}}" class="btn btn-outline-danger">삭제</a>
+                                        <a th:href="@{'/admin/delete/'+${adminDto.getAdminId()}}" class="btn btn-outline-danger">삭제</a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -133,14 +124,14 @@
                                             <div class="col">
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text">&nbsp;아이디&nbsp;</span>
-                                                    <input type="text" class="form-control" th:value="${admin.getAdminId()}" readonly>
+                                                    <input type="text" class="form-control" th:field="*{adminId}" readonly>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="input-group mb-3">
                                                     <label class="input-group-text" for="inputGroupSelect01">&nbsp;&nbsp;권한&nbsp;&nbsp;</label>
-                                                    <select class="form-select" id="inputGroupSelect01">
-                                                        <option th:each="author : ${authorList}" th:value="${author}" th:text="${author}" th:selected="${author == admin.getAdminAuthorization()}"></option>
+                                                    <select class="form-select" id="inputGroupSelect01" th:field="*{adminAuthorization}">
+                                                        <option th:each="author : ${authorList}" th:value="${author}" th:text="${author}" th:selected="${author == adminDto.getAdminAuthorization()}"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -149,13 +140,13 @@
                                             <div class="col">
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                                    <input type="text" class="form-control" th:value="${admin.getAdminName()}" >
+                                                    <input type="text" class="form-control" th:field="*{adminName}" readonly>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text">생년월일</span>
-                                                    <input type="Date" class="form-control" th:value="${admin.getAdminBirthday()}">
+                                                    <input type="text" class="form-control" th:field="*{adminBirthday}" readonly>
                                                 </div>
                                             </div>
                                         </div>

@@ -3,6 +3,7 @@ package com.f2z.gach.User.Entities;
 import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.EnumType.Gender;
 import com.f2z.gach.EnumType.Speed;
+import com.f2z.gach.User.DTOs.UserForm;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,5 +47,20 @@ public class User {
         this.userBirth = user.getUserBirth();
         this.userHeight = user.getUserHeight();
         this.userWeight = user.getUserWeight();
+    }
+
+    public UserForm getUserForm(){
+        return new UserForm(this.username, this.userNickname, this.userBirth, this.userHeight,
+                this.userWeight, this.userSpeed, this.userGender);
+    }
+
+    public void setUserForm(UserForm userForm){
+        this.username = userForm.getUsername();
+        this.userNickname = userForm.getUserNickname();
+        this.userGender = userForm.getUserGender();
+        this.userBirth = userForm.getUserBirth();
+        this.userHeight = userForm.getUserHeight();
+        this.userSpeed = userForm.getUserSpeed();
+        this.userWeight = userForm.getUserWeight();
     }
 }

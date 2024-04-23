@@ -5,6 +5,7 @@ import com.f2z.gach.DataGetter.dataDto;
 import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.DataGetter.nodeEntity;
 import com.f2z.gach.Map.DTO.MapDTO;
+import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.validation.Valid;
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -32,7 +37,14 @@ public class AdminLineController {
 
     @GetMapping("/line/add")
     public String addLinePage(Model model){
-        model.addAttribute("nodeList", mapNodeRepository.findALLNodeName());
+        List<MapNode> nodeList = mapNodeRepository.findAll();
+        List<String> nodeNameList = new ArrayList<>();
+        for (MapNode mapNode : nodeList) {
+            nodeNameList.add(mapNode.getNodeName());
+        }
+        model.addAttribute("lineDto", new MapLineDTO());
+        model.addAttribute("nodeList1", nodeNameList);
+        model.addAttribute("nodeList2", nodeNameList);
         return "line-add";
     }
 
@@ -41,33 +53,45 @@ public class AdminLineController {
                           BindingResult result,
                           Model model){
 
-        if(result.hasErrors()){
-            return "line-add";
+        List<MapNode> nodeList = mapNodeRepository.findAll();
+        List<String> nodeNameList = new ArrayList<>();
+        for (MapNode mapNode : nodeList) {
+            nodeNameList.add(mapNode.getNodeName());
         }
 
+        if(result.hasErrors()){
+            model.addAttribute("nodeList1", nodeNameList);
+            model.addAttribute("nodeList2", nodeNameList);
+            return "line-add";
+        }
         else if(mapLineRepository.existsByLineName(mapLineDTO.toEntity().getLineName()) &&
                 !(mapLineRepository.findByLineId(mapLineDTO.toEntity().getLineId())
                         .getLineName().replaceAll(".$", "")
                         .equals(mapLineDTO.toEntity().getLineName()))) {
             //정규식 표현으로 마지막 문자 제거 (마지막 문자로 간선을 구분하기에)
+            model.addAttribute("nodeList1", nodeNameList);
+            model.addAttribute("nodeList2", nodeNameList);
             model.addAttribute("errorMessage", "이미 존재하는 이름입니다.");
             return "line-add";
         }
-
         //출발, 도착 노드 중복 확인
         else if(mapLineRepository.existsByNodeNameFirstAndNodeNameSecond(
                 mapLineDTO.toEntity().getNodeNameFirst(),
                 mapLineDTO.toEntity().getNodeNameSecond())){
+            model.addAttribute("nodeList1", nodeNameList);
+            model.addAttribute("nodeList2", nodeNameList);
             model.addAttribute("nameMessage", "이미 존재하는 경로입니다.");
             return "line-add";
         }
-
         // 출발, 도착 노드 같은 거 지정 했는지 확인
         else if(mapLineDTO.toEntity().getNodeNameFirst()
                 .equals(mapLineDTO.toEntity().getNodeNameSecond())){
+            model.addAttribute("nodeList1", nodeNameList);
+            model.addAttribute("nodeList2", nodeNameList);
             model.addAttribute("pathMessage", "같은 경로를 지정하셨습니다.");
             return "line-add";
         }
+
 
         mapLineRepository.save(mapLineDTO.toSaveEntity("A",
                 mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameFirst()),

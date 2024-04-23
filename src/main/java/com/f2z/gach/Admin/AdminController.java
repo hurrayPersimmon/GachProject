@@ -25,6 +25,11 @@ public class AdminController {
         return "main-page";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "dashboard";
+    }
+
     @GetMapping("/login")
     public String login(Model model){
         model.addAttribute("loginDto", new loginDTO());
@@ -50,9 +55,11 @@ public class AdminController {
         if(admin.getAdminAuthorization().equals(Authorization.WAITER)){
             return "waiter";
         } else if (admin.getAdminAuthorization().equals(Authorization.GUEST)) {
+            log.info("게스트");
             return "dashboard-guest";
         } else{
-            return "dashboard";
+            log.info("관리자");
+            return "redirect:/admin/node";
         }
     }
 
@@ -102,9 +109,8 @@ public class AdminController {
 
     @GetMapping("/list")
     public String adminList(Model model){
-        model.addAttribute("adminList", adminRepository.findAllByAdminAuthorization(Authorization.ADMIN));
-        model.addAttribute("guestList", adminRepository.findAllByAdminAuthorization(Authorization.GUEST));
-        model.addAttribute("waiterList", adminRepository.findAllByAdminAuthorization(Authorization.WAITER));
+        model.addAttribute("adminList", adminRepository.findAll());
+        model.addAttribute("waiterList", adminRepository.findByAdminAuthorization(Authorization.WAITER));
         return "admin-manage";
     }
 
@@ -116,23 +122,38 @@ public class AdminController {
         return "redirect:/admin/list";
     }
 
-    @GetMapping("/delete/{adminNum}")
-    public String deleteAdmin(@PathVariable Integer adminNum){
-        adminRepository.deleteById(Long.valueOf(adminNum));
+    @GetMapping("/delete/{adminId}")
+    public String deleteAdmin(@PathVariable Integer adminId){
+        Admin admin = adminRepository.findByAdminNum(adminId);
+        log.info(admin.toString());
+        adminRepository.delete(admin);
         return "redirect:/admin/list";
     }
 
     @GetMapping("/{adminNum}")
     public String adminDetail(@PathVariable Integer adminNum, Model model){
+        log.info(adminNum.toString());
+        log.info(Long.valueOf(adminNum).toString());
         Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
-        model.addAttribute("admin", admin);
+        model.addAttribute("adminDto", admin.getAdminForm());
         model.addAttribute("authorList", Authorization.values());
         return "admin-detail";
     }
 
     @PostMapping("/update")
-    public String updateAdmin(@ModelAttribute Admin admin){
+    public String updateAdmin(@Valid @ModelAttribute("adminDto") AdminForm adminForm, BindingResult result){
+        log.info("업데이트");
+        if(result.hasErrors()){
+            log.info(adminForm.toString());
+            log.info("오류발생");
+            return "redirect:/admin/admin-detail";
+        }
+        log.info(adminForm.toString());
+
+        Admin admin = adminRepository.findByAdminId(adminForm.getAdminId());
+        admin.setUpdate(adminForm);
         adminRepository.save(admin);
+        log.info("저장완료");
         return "redirect:/admin/list";
     }
 

@@ -23,7 +23,7 @@
 <body>
 <div class="row flex-nowrap">
     <!-- Sidebar -->
-    <div class="bg-white col-auto col-md-2" style="max-width: 250px;">
+    <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
         <div class="bg-white p-2">
             <p class="d-flex mt-2 align-items-center">
                     <span class="d-none d-sm-inline">
@@ -37,23 +37,14 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/arrow.triangle.branch.png" class="img-fluid mb-2">
-                        <span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">경로 관리</span>
-                        <img src="/image/chevron.down.png" class="img-fluid mb-2 ms-3" onclick="viewDetail()">
-                    </a>
                     <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
                         <li class="nav-item mt-1 nav-link">
                             <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
+                            <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
                         </li>
                         <li class="nav-item mt-1 nav-link">
                             <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                        </li>
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/map.png" class="img-fluid mb-1">
-                            <a href="#" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none">경로 테스트</a>
+                            <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
                         </li>
                     </ul>
                 </li>
@@ -74,8 +65,8 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-2 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
+                    <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
+                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
                     </a>
                 </li>
                 <li class="nav-item mt-2">
@@ -89,7 +80,7 @@
                     </a>
                 </li>
                 <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary ps-2">
+                    <a href="/admin/list" class="nav-link text-body-secondary ps-2">
                         <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
                     </a>
                 </li>
@@ -120,8 +111,8 @@
                             <div class="row">
                                 <span class="noto-sans-700 fs-3">노드 추가</span>
                             </div>
-                            <div class="row">
-                                <form id = "node-detail-form" th:object="${nodeDto}" th:action="@{/admin/node/update}" method="post" class="col">
+                            <div class="row text-center">
+                                <form id = "node-detail-form" th:object="${nodeDto}" th:action="@{/admin/node/update}" method="post" class="col-6 offset-3">
                                     <input type="hidden" th:field="*{nodeId}" th:value="${nodeId}">
                                     <div class="row mt-4">
                                         <div class="input-group mb-3">
@@ -171,7 +162,7 @@
                                         </div>
                                     </div>
                                     <div class="row mt-5 pt-5 ps-1">
-                                        <div class="col-3">
+                                        <div class="col-3 offset-3">
                                             <button type="submit" form ="node-detail-form" class="btn btn-success" >노드 수정</button>
                                         </div>
                                         <div class="col-3">
@@ -179,9 +170,6 @@
                                         </div>
                                     </div>
                                 </form>
-                                <div class="col">
-                                    <div id="map" style="width:100%; height: 100%;"></div>
-                                </div>
                             </div>
                         </div>
                     </div>

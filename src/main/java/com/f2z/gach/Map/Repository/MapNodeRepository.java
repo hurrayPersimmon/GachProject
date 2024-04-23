@@ -11,7 +11,7 @@ public interface MapNodeRepository extends JpaRepository<MapNode, Integer> {
 
     boolean existsByNodeId(Integer nodeId);
 
-    List<String> findALLNodeName();
-
     MapNode findByNodeName(String nodeNameFirst);
+
+
 }

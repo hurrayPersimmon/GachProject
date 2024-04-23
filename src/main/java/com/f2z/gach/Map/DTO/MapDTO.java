@@ -13,6 +13,7 @@ public class MapDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @Setter
     public static class MapNodeDTO{
         private Integer nodeId;
         @NotBlank(message = "노드 이름을 입력해주세요.")
@@ -40,13 +41,16 @@ public class MapDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    @Setter
     public static class MapLineDTO {
         private Integer lineId;
         @NotBlank(message = "간선 이름을 입력해주세요.")
         private String lineName;
         private Integer nodeCodeFirst;
+        @NotBlank(message = "노드를 지정해주세요.")
         private String nodeNameFirst;
         private Integer nodeCodeSecond;
+        @NotBlank(message = "노드를 지정해주세요.")
         private String nodeNameSecond;
         private Double weightShortest;
         private Double weightOptimal;

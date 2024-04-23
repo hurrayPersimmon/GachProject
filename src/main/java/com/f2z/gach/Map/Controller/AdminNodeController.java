@@ -27,7 +27,7 @@ public class AdminNodeController {
 
     @GetMapping("/node/add")
     public String addNodePage(Model model){
-        model.addAttribute("nodeDto", new MapDTO());
+        model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         return "node-add";
     }
 

@@ -3,6 +3,7 @@ package com.f2z.gach.Admin;
 import com.f2z.gach.EnumType.Authorization;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @Builder
+@DynamicUpdate
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +33,14 @@ public class Admin {
     private Authorization adminAuthorization;
 
 
+    public AdminForm getAdminForm() {
+        return new AdminForm(this.getAdminId(), this.getAdminAuthorization(), this.getAdminName(), this.getAdminBirthday());
+    }
 
+    public void setUpdate(AdminForm form){
+        this.setAdminId(form.getAdminId());
+        this.setAdminName(form.getAdminName());
+        this.setAdminBirthday(form.getAdminBirthday());
+        this.setAdminAuthorization(form.getAdminAuthorization());
+    }
 }

@@ -1,5 +1,8 @@
 package com.f2z.gach.User;
 
+import com.f2z.gach.EnumType.Gender;
+import com.f2z.gach.EnumType.Speed;
+import com.f2z.gach.User.DTOs.UserForm;
 import com.f2z.gach.User.Entities.User;
 import com.f2z.gach.User.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +26,30 @@ public class AdminUserController {
 
     }
 
-    @GetMapping("/users/{userId}")
-    public String userDetail(Model model, Long userId){
-        model.addAttribute("user", userRepository.findById(userId));
+    @GetMapping("/users/{id}")
+    public String userDetail(Model model, @PathVariable String id){
+        UserForm user = userRepository.findByUsername(id).getUserForm();
+        log.info(user.toString());
+        model.addAttribute("userForm", user);
+        model.addAttribute("gender", Gender.values());
+        model.addAttribute("speed", Speed.values());
+        log.info(user.toString());
         return "user-detail";
     }
 
-    @PostMapping("/users/{userId}")
-    public String userUpdate(@PathVariable Long userId, @ModelAttribute("user") User user){
-        User userEntity = userRepository.findById(userId).orElseThrow(
-                ()-> new IllegalArgumentException("해당 사용자가 없습니다.")
-        );
-        userEntity.updateUserInfo(user);
+    @PostMapping("/users/update")
+    public String userUpdate(@ModelAttribute("userForm") UserForm userForm){
+        User user = userRepository.findByUsername(userForm.getUsername());
+        user.setUserForm(userForm);
+        userRepository.save(user);
         return "redirect:/admin/users/list";
     }
 
     @GetMapping("/users/delete/{userId}")
-    public String userDelete(@PathVariable Long userId){
-        userRepository.deleteById(userId);
+    public String userDelete(@PathVariable String userId){
+        User user = userRepository.findByUsername(userId);
+        userRepository.delete(user);
+        log.info(user.toString());
         return "redirect:/admin/users/list";
     }
 
