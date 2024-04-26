@@ -25,4 +25,7 @@ public class AdminForm {
     @NotNull(message = "생년월일을 확인해주세요.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate adminBirthday;
+
+    public AdminForm(Integer adminNum, String adminId, Authorization adminAuthorization, String adminName, LocalDate adminBirthday) {
+    }
 }

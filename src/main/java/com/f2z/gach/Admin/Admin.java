@@ -34,7 +34,7 @@ public class Admin {
 
 
     public AdminForm getAdminForm() {
-        return new AdminForm(this.getAdminId(), this.getAdminAuthorization(), this.getAdminName(), this.getAdminBirthday());
+        return new AdminForm(this.getAdminNum(), this.getAdminId(), this.getAdminAuthorization(), this.getAdminName(), this.getAdminBirthday());
     }
 
     public void setUpdate(AdminForm form){
