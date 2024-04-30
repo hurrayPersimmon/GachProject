@@ -45,7 +45,7 @@ public class AdminNodeController {
         mapNodeRepository.save(mapNodeDTO.toEntity());
         model.addAttribute("message", "노드가 추가되었습니다.");
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "node-manage";
+        return "redirect:/node-manage2";
     }
 
     @GetMapping("/node/{nodeId}")
@@ -71,7 +71,7 @@ public class AdminNodeController {
         mapNodeRepository.save(mapNode);
         model.addAttribute("message", "노드가 수정되었습니다.");
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "node-manage";
+        return "redirect:/node-manage2";
     }
 
     @GetMapping("/node/delete/{nodeId}")

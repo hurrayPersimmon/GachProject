@@ -14,7 +14,7 @@ spring:
     drivar-class-name: org.maridb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/db24102?characterEncoding=UTF-8&serverTimezone=UTC
     username : root
-    password : rlaalstj1!
+    password : mj3269
 
 
   jpa:

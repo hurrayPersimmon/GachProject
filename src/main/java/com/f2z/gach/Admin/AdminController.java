@@ -1,6 +1,7 @@
 package com.f2z.gach.Admin;
 
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

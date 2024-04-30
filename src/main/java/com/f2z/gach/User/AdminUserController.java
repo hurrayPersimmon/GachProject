@@ -23,7 +23,6 @@ public class AdminUserController {
     public String userList(Model model){
         model.addAttribute("userList", userRepository.findAll());
         return "user-manage";
-
     }
 
     @GetMapping("/users/{id}")

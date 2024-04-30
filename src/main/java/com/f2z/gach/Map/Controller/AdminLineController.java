@@ -1,9 +1,6 @@
 package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.DTO.Map.MapLineDTO;
-import com.f2z.gach.DataGetter.dataDto;
-import com.f2z.gach.DataGetter.dataEntity;
-import com.f2z.gach.DataGetter.nodeEntity;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
@@ -17,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -103,7 +99,7 @@ public class AdminLineController {
 
         model.addAttribute("message", "간선이 추가되었습니다.");
         model.addAttribute("lineList", mapLineRepository.findAll());
-        return "line-manage";
+        return "redirect:/line-manage2";
     }
 
     @GetMapping("/line/{lineId}")
@@ -116,7 +112,7 @@ public class AdminLineController {
             mapLineRepository.deleteById(lineId);
             model.addAttribute("message", "간선이 삭제되었습니다.");
             model.addAttribute("lineList", mapLineRepository.findAll());
-            return "line-manage";
+            return "redirect:/line-manage2";
         }
         throw new Exception();
     }
