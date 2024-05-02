@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -110,7 +113,11 @@ public class AdminController {
 
     @GetMapping("/list")
     public String adminList(Model model){
-        model.addAttribute("adminList", adminRepository.findAll());
+
+        List<Admin> admins = adminRepository.findAll();
+        Collections.reverse(admins);
+
+        model.addAttribute("adminList", admins);
         model.addAttribute("waiterList", adminRepository.findByAdminAuthorization(Authorization.WAITER));
         model.addAttribute("authList", Authorization.values());
         return "admin-manage";

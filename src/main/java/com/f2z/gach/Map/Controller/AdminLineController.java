@@ -2,6 +2,7 @@ package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.DTO.Map.MapLineDTO;
 import com.f2z.gach.Map.DTO.MapDTO;
+import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +29,9 @@ public class AdminLineController {
 
     @GetMapping("/line")
     public String lineListPage(Model model){
-        model.addAttribute("lineList", mapLineRepository.findAll());
+        List<MapLine> lineList = mapLineRepository.findAll();
+        Collections.reverse(lineList);
+        model.addAttribute("lineList", lineList);
         return "line-manage";
     }
 

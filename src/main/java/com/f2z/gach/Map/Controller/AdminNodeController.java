@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +24,9 @@ public class AdminNodeController {
 
     @GetMapping("/node")
     public String nodeListPage(Model model){
-        model.addAttribute("nodeList", mapNodeRepository.findAll().reversed());
+        List<MapNode> nodeList = mapNodeRepository.findAll();
+        Collections.reverse(nodeList);
+        model.addAttribute("nodeList", nodeList);
         return "node-manage";
     }
 

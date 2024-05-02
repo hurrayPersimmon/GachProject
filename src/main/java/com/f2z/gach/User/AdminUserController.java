@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -21,8 +24,9 @@ public class AdminUserController {
 
     @GetMapping("/users/list")
     public String userList(Model model){
-        model.addAttribute("userList", userRepository.findAll());
-
+        List<User> users = userRepository.findAll();
+        Collections.reverse(users);
+        model.addAttribute("userList", users);
         return "user-manage";
     }
 
