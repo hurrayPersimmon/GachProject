@@ -99,7 +99,24 @@
                                     <td th:text="${line.getWeightShortest()}">@mdo</td>
                                     <td th:text="${line.getWeightOptimal()}">@mdo</td>
                                     <td>
-                                        <a th:href="@{'/admin/line/'+${line.getLineId()}}"><i class="bi bi-x-lg"></i></a>
+                                        <a class="bi bi-x-lg" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">경로 삭제</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        정말 삭제하시겠습니까?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <a type="button" class="btn btn-danger" th:href="@{'/admin/line/'+${line.getLineId()}}">삭제</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>

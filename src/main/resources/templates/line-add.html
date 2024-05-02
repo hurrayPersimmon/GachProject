@@ -21,40 +21,38 @@
                 </div>
                 <div class="row text-center mx-5 rounded">
                     <form th:object="${lineDto}" th:action="@{/admin/line}" method="post">
-                        <div class="row align-items-center">
-                            <div class="col-3 offset-9 text-end pe-5 me-5"><button type="submit" class="fs-5 mt-3 btn btn-primary save fontHv">경로 저장</button></div>
+                        <div class="row align-items-center mb-5">
+                            <div class="col-3 offset-9 text-end pe-5 me-5"></div>
                         </div>
                             <div class="row">
                                 <div class="col-4 text-start ms-5 ps-5">
                                     <div class="form-floating mb-4">
                                         <p class="fs-4 nodeHeader">경로이름</p>
                                         <hr>
-                                        <input type="text" th:field="*{lineName}" class="small form-control fontHv mt-0 pt-0 fs-6" id="name" placeholder="name@example.com" >
+                                        <input type="text" th:field="*{lineName}" class="form-control fontHv mt-0 pt-0 fs-6" id="name" placeholder="name@example.com" >
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">연결노드1</p>
+                                            <div class="form-floating mb-4">
+                                                <p class="fs-4 nodeHeader">연결노드1 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameFirst}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1" placeholder="name@example.com">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
+                                    <div class="row mt-3 mb-5">
                                         <div class="col">
-                                            <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">연결노드2</p>
+                                            <div class="form-floating mb-4">
+                                                <p class="fs-4 nodeHeader">연결노드2 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameSecond}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2" placeholder="name@example.com">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
+                                    <div class="row mt-3 mb-5 text-end">
                                         <div class="col">
-                                            <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">경로 길이</p>
-                                                <hr>
-                                                <input type="text" class="small form-control fontHv mt-0 pt-0 fs-6" id="distance" placeholder="name@example.com" disabled>
+                                            <div class="form-floating mb-4">
+                                                <button type="submit" class="fs-5 mt-3 btn btn-primary save fontHv">경로 저장</button>
                                             </div>
                                         </div>
                                     </div>

@@ -23,6 +23,6 @@ public class Inquiry extends BaseTimeEntity {
     private String inquiryContent;
     private String inquiryAnswer;
 
-
+    // 문의 종류 반영 해야 함.
 
 }

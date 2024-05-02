@@ -1,6 +1,7 @@
 package com.f2z.gach.Config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -11,4 +12,8 @@ public class SpringConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:///home/t24102/Images/");
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/","/admin/node");
+    }
 }

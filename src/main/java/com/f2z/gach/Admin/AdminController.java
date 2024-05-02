@@ -112,6 +112,7 @@ public class AdminController {
     public String adminList(Model model){
         model.addAttribute("adminList", adminRepository.findAll());
         model.addAttribute("waiterList", adminRepository.findByAdminAuthorization(Authorization.WAITER));
+        model.addAttribute("authList", Authorization.values());
         return "admin-manage";
     }
 
@@ -124,31 +125,24 @@ public class AdminController {
     }
 
     @GetMapping("/delete/{adminId}")
-    public String deleteAdmin(@PathVariable Integer adminId){
-        Admin admin = adminRepository.findByAdminNum(adminId);
+    public String deleteAdmin(@PathVariable String adminId){
+        Admin admin = adminRepository.findByAdminId(adminId);
         log.info(admin.toString());
         adminRepository.delete(admin);
         return "redirect:/admin/list";
     }
 
-    @GetMapping("/{adminNum}")
-    public String adminDetail(@PathVariable Integer adminNum, Model model){
-        log.info(adminNum.toString());
-        log.info(Long.valueOf(adminNum).toString());
+    @GetMapping("/json/{adminNum}")
+    @ResponseBody
+    public Admin adminDetailJson(@PathVariable Integer adminNum){
+        log.info("요청");
         Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
-        model.addAttribute("adminDto", admin.getAdminForm());
-        model.addAttribute("authorList", Authorization.values());
-        return "admin-detail";
+        log.info(admin.toString());
+        return admin;
     }
 
     @PostMapping("/update")
-    public String updateAdmin(@Valid @ModelAttribute("adminDto") AdminForm adminForm, BindingResult result){
-        log.info("업데이트");
-        if(result.hasErrors()){
-            log.info(adminForm.toString());
-            log.info("오류발생");
-            return "redirect:/admin/admin-detail";
-        }
+    public String updateAdmin(AdminForm adminForm){
         log.info(adminForm.toString());
 
         Admin admin = adminRepository.findByAdminId(adminForm.getAdminId());

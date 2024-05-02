@@ -128,10 +128,26 @@
     border-color : white;
 }
 
+@keyframes borderAnimation {
+    0% {
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        box-shadow: 0 0 1.5rem rgb(0, 124, 255);
+    }
+}
 
 input[type="text"] {
     border: none;
     border-radius: 1rem; /* 라운드된 테두리 */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 그림자 */
+    transition: box-shadow 0.3s, transform 0.3s; /* 변화 시 부드럽게 */
+    color : rgb(17,160,248);
+}
+
+select {
+    border: none;
+    border-radius: 1.5rem; /* 라운드된 테두리 */
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 그림자 */
     transition: box-shadow 0.3s, transform 0.3s; /* 변화 시 부드럽게 */
     color : rgb(17,160,248);
@@ -150,8 +166,17 @@ input[type="text"]:hover {
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
 }
 
+select:hover{
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+}
+
 /* 클릭 효과 */
-input[type="text"]:active {
+.small:focus {
+    transform: scale(0.98);
+    animation: borderAnimation 2s infinite alternate;
+}
+
+select:active{
     transform: scale(0.98);
 }
 
