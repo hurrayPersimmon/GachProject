@@ -1,10 +1,9 @@
 package com.f2z.gach.Map.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Getter
 @Setter
@@ -13,10 +12,13 @@ import lombok.*;
 @ToString
 @Entity
 @Builder
+@DynamicUpdate
 public class MapNode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer nodeId;
+
+    @Column(unique = true)
     private String nodeName;
     private Double nodeLatitude;
     private Double nodeLongitude;

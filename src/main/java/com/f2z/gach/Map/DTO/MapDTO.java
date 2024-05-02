@@ -5,6 +5,7 @@ import com.f2z.gach.Map.Entity.MapNode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 public class MapDTO {
@@ -14,6 +15,8 @@ public class MapDTO {
     @NoArgsConstructor
     @Builder
     @Setter
+    @ToString
+    @DynamicUpdate
     public static class MapNodeDTO{
         private Integer nodeId;
         @NotBlank(message = "노드 이름을 입력해주세요.")

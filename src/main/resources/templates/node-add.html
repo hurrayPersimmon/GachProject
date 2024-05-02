@@ -1,171 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="~{/fragment :: head}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    <style>
-        .row-mine {
-            max-width: 83%;
-        }
-        .form-control::placeholder {
-            color: red;
-        }
-    </style>
 </head>
 <body>
-<div class="row flex-nowrap">
-    <!-- Sidebar -->
-    <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
-        <div class="bg-white p-2">
-            <p class="d-flex mt-2 align-items-center">
-                    <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
-                    </span>
-            </p>
-            <ul class="nav flex-column mt-4">
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/squares.leading.rectangle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">대시보드</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                            <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
-                        </li>
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                            <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/brain.head.profile.png" class="img-fluid mb-2 me-4">
-                        <span class="fs-5 d-none d-sm-inline noto-sans-sidebar">AI 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/building.2.png" class="img-fluid mb-2 me-1"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">장소 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/calendar.badge.plus.png" class="img-fluid mb-2"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">행사 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/person.fill.questionmark.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">문의 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/exclamationmark.circle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">로그</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="/admin/list" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="row-mine py-3 px-0 mx-0 shadow-lg bg-body-tertiary rounded">
-        <div class="container">
-
-            <!-- Header -->
-
-            <div class="row">
-                <div class="col align-items-start ubuntu-medium fs-2">
-                    노드 관리
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('node')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2">
+                    관리자 > 지점 관리 > 지점 등록
                 </div>
-                <div class="col align-items-end text-end">
-                    <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
+                <div class="row mb-4 ms-5 fs-1 fontHv">
+                    지점등록
                 </div>
-            </div>
-
-            <!-- Small Box-->
-
-            <div class="row">
-                <div class="col">
-                    <div class="card border-light" style="max-height: 85vh">
-                        <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
-                            <div class="row">
-                                <span class="noto-sans-700 fs-3">노드 추가</span>
-                            </div>
-                            <div class="row">
-                                <form id = "node-add-form" th:object="${nodeDto}" th:action="@{/admin/node}" method="post" class="col-5 offset-4">
-                                    <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                            <input type="text" class="form-control" id="floatingInput1"
-                                                   th:field="*{nodeName}"
-                                                   th:classappend="${#fields.hasErrors('nodeName')} or ${errorMessage} == '이미 존재하는 노드입니다.' ? 'border border-danger' : ''">
-                                        </div>
-                                        <div th:if="${#fields.hasErrors('nodeName')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeName}">이름 오류</span>
-                                        </div>
-                                        <div th:if="${errorMessage == '이미 존재하는 노드입니다.'}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${errorMessage}">아이디 오류</span>
+                <div class="row text-center mx-5 rounded">
+                    <div class="row mb-5 pb-5">
+                        <div class="col-4 text-start ms-5 ps-5">
+                            <form th:object="${nodeDto}" th:action="@{/admin/node}" method="post">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-4 nodeHeader">지점이름</p>
+                                    <hr>
+                                    <input type="text" th:field="*{nodeName}" class="form-control fontHv mt-0 pt-0 fs-6" id="name" placeholder="name@example.com" >
+                                </div>
+                                <div th:if="${#fields.hasErrors('nodeName')}" class="text-start ms-2 text-danger" style="font-size:80%">
+                                    <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeName}">아이디 오류</span>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <p class="fs-4 nodeHeader">위도</p>
+                                            <hr>
+                                            <input type="text" th:field="*{nodeLatitude}" class="form-control fontHv mt-0 pt-0 fs-6" id="lat" placeholder="name@example.com">
                                         </div>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">&nbsp;경도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
-                                                    th:field="*{nodeLongitude}"
-                                                    th:classappend="${#fields.hasErrors('nodeLongitude')} ? 'border border-danger' : ''">
-                                        </div>
-                                        <div th:if="${#fields.hasErrors('nodeLongitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeLongitude}">경도 오류</span>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <p class="fs-4 nodeHeader">경도</p>
+                                            <hr>
+                                            <input type="text" th:field="*{nodeLongitude}" class="form-control fontHv mt-0 pt-0 fs-6" id="lng" placeholder="name@example.com">
                                         </div>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon2">&nbsp;위도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon2"
-                                                    th:field="*{nodeLatitude}"
-                                                    th:classappend="${#fields.hasErrors('nodeLatitude')} ? 'border border-danger' : ''">
-                                        </div>
-                                        <div th:if="${#fields.hasErrors('nodeLatitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeLatitude}">위도 오류</span>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <p class="fs-4 nodeHeader">고도</p>
+                                            <hr>
+                                            <input type="text" th:field="*{nodeAltitude}" class="form-control fontHv mt-0 pt-0 fs-6" id="alti" placeholder="name@example.com">
                                         </div>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="input-group mb-5 pb-5">
-                                            <span class="input-group-text" id="basic-addon3">&nbsp;고도&nbsp;</span>
-                                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon3"
-                                                    th:field="*{nodeAltitude}"
-                                                    th:classappend="${#fields.hasErrors('nodeAltitude')} ? 'border border-danger' : ''">
-                                        </div>
-                                        <div th:if="${#fields.hasErrors('nodeAltitude')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                            <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeAltitude}">경도 오류</span>
-                                        </div>
+                                </div>
+                                <div class="row mt-5 mb-4 pt-5 text-end">
+                                    <div class="fs-6 nodeHeader"><span style="color:red">*&nbsp;</span>파란색 마커로 컨트롤 하십시오</div>
+                                    <div class="col">
+                                        <button type="submit" class="fs-5 mt-3 btn btn-primary save fontHv">지점 저장</button>
                                     </div>
-                                    <div class="row mt-5 pt-5 ps-1 text-center">
-                                        <div class="col-3 text-center offset-3">
-                                            <button type="submit" form ="node-add-form" class="btn btn-primary" >노드 추가</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-6 offset-1 mt-3" id="map">
                         </div>
                     </div>
                 </div>
@@ -173,15 +72,142 @@
         </div>
     </div>
 </div>
-</body>
 <script>
-    var mapOptions = {
-        center: new naver.maps.LatLng(37.3595704, 127.105399),
-        zoom: 10
-    };
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
 
-    var map = new naver.maps.Map('map', mapOptions);
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
 
-    
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                    otherRow.classList.remove('link');
+                }); //remove link
+            }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 </script>
+<script th:inline="javascript">
+
+    const map = null;
+    const mapData = {
+        lat : 0,
+        lng : 0,
+
+        setLat : (value) => {
+            mapData.lat = value;
+        },
+        setLng : (value) => {
+            mapData.lng = value;
+        },
+        getLat : (value) => {
+            return mapData.lat;
+        },
+        getLng : (value) => {
+            return mapData.lng;
+        }
+    }
+    // Google Map 용 Script 태그
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const pinViewScaled = new google.maps.marker.PinView({
+            scale: 0.4,
+        });
+
+        const pinViewBackground = new google.maps.marker.PinView({
+            background: "#046ffb",
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+        const elevator = new google.maps.ElevationService();
+
+        let nodeList = [[${nodeList}]];
+
+        nodeList.forEach(function(data){
+            const markerView = new google.maps.marker.AdvancedMarkerView({
+                map,
+                position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
+                draggable : true,
+                title: data.nodeName,
+                content : pinViewScaled.element
+            });
+            markerView.nodeAltitude = data.nodeAltitude;
+
+            markerView.addListener('click', ({ domEvent, latLng }) => {
+                const { target } = domEvent;
+                infoWindow.close();
+                infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h3>' + markerView.title + "</h3></div>"
+                    + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
+                    + '<div id="bodyContent">' + "<span>지점 위도 : </span>"
+                    + markerView.position.lat + "<br><span>지점 경도 : </span>"
+                    + markerView.position.lng + "<br><span>노드 고도 : </span>"
+                    + markerView.nodeAltitude
+                    + "</div>" + "</div>");
+                infoWindow.open(markerView.map, markerView);
+            });
+        });
+
+        const newMarkerView = new google.maps.marker.AdvancedMarkerView({
+            map,
+            position: {lat: 37.45088195800781, lng: 127.12886810302734},
+            gmpDraggable: true,
+            content : pinViewBackground.element
+        });
+
+        newMarkerView.addListener("dragend", (event) => {
+            const elevator = new google.maps.ElevationService();
+            const position = newMarkerView.position;
+            document.getElementById("lat").value = position.lat;
+            document.getElementById("lng").value = position.lng;
+            elevator
+                .getElevationForLocations({
+                    locations: [position],
+                })
+                .then(({ results }) => {
+                    // Retrieve the first result
+                    if (results[0]) {
+                        // Open the infowindow indicating the elevation at the clicked position.
+                        document.getElementById("alti").value = results[0].elevation;
+                    } else {
+                        alert("오류");
+                    }
+                })
+                .catch((e) =>
+                    alert("오류원인 : " + e)
+                );
+        });
+    }
+    window.initMap = initMap;
+
+    function add(){
+
+    }
+</script>
+</body>
 </html>

@@ -21,68 +21,53 @@ public class AdminNodeController {
 
     @GetMapping("/node")
     public String nodeListPage(Model model){
-        model.addAttribute("nodeList", mapNodeRepository.findAll());
+        model.addAttribute("nodeList", mapNodeRepository.findAll().reversed());
         return "node-manage";
     }
 
     @GetMapping("/node/add")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
+        model.addAttribute("nodeList", mapNodeRepository.findAll());
         return "node-add";
     }
 
     @PostMapping("/node")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
-                          BindingResult result,
-                          Model model){
+                          BindingResult result){
         if(result.hasErrors()){
             return "node-add";
-        }else if(mapNodeRepository.existsByNodeName(mapNodeDTO.toEntity().getNodeName())){
-            model.addAttribute("errorMessage", "이미 존재하는 노드입니다.");
-            return "node-add";
         }
-
         mapNodeRepository.save(mapNodeDTO.toEntity());
-        model.addAttribute("message", "노드가 추가되었습니다.");
-        model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "redirect:/node-manage2";
+        return "redirect:/admin/node";
     }
 
     @GetMapping("/node/{nodeId}")
     public String updateNodePage(@PathVariable Integer nodeId, Model model){
         MapNode mapNode = mapNodeRepository.findByNodeId(nodeId);
         model.addAttribute("nodeDto", mapNode);
+        model.addAttribute("nodeList", mapNodeRepository.findAll());
         return "node-detail";
     }
 
     @PostMapping("/node/update")
     public String updateNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapDTO,
-                             BindingResult result, Model model){
+                             BindingResult result){
         if(result.hasErrors()){
-            return "node-detail";
-        }else if(mapNodeRepository.existsByNodeName(mapDTO.toEntity().getNodeName()) &&
-                !mapNodeRepository.findByNodeId(mapDTO.toEntity().getNodeId()).getNodeName().equals(mapDTO.toEntity().getNodeName())){
-            model.addAttribute("errorMessage", "이미 존재하는 노드입니다.");
+            log.info("오류");
             return "node-detail";
         }
-        log.info("{}", mapDTO.toEntity());
         MapNode mapNode = mapNodeRepository.findByNodeId(mapDTO.toEntity().getNodeId());
         mapNode.update(mapDTO.toEntity());
         mapNodeRepository.save(mapNode);
-        model.addAttribute("message", "노드가 수정되었습니다.");
-        model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "redirect:/node-manage2";
+        return "redirect:/admin/node";
     }
 
     @GetMapping("/node/delete/{nodeId}")
-    public String deleteNode(@PathVariable Integer nodeId,
-                             @ModelAttribute("nodeDto") MapDTO mapDTO,
-                             Model model) throws Exception{
+    public String deleteNode(@PathVariable Integer nodeId) throws Exception{
         if(mapNodeRepository.existsByNodeId(nodeId)) {
             MapNode node = mapNodeRepository.findByNodeId(nodeId);
             mapNodeRepository.delete(node);
-            model.addAttribute("message", "노드가 삭제되었습니다.");
-            model.addAttribute("nodeLIst", mapNodeRepository.findAll());
             return "redirect:/admin/node";
         }
         throw new Exception();

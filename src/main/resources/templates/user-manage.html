@@ -54,7 +54,7 @@
                     <div class="col-4 ps-5">
                         <div class="row w-75">
                             <div class="shadow p-3 mb-1 text-start rounded" style="background-color: white;">
-                                <p class="fs-4 nodeHeader">회원가입한 사용자 수</p>
+                                <p class="fs-4 nodeHeader">총 회원가입 수</p>
                                 <hr>
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-1 rounded-4" style="background-color: rgb(163, 230, 53);"><i class="fa-solid fa-users" style="color:white;"></i></div>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="row w-75">
                             <div class="shadow p-3 mt-1 text-start rounded" style="background-color: white;">
-                                <p class="fs-4 nodeHeader">재사용률</p>
+                                <p class="fs-4 nodeHeader">일일 접속자수</p>
                                 <hr>
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-3 me-0 pe-0 rounded" style="background-color: rgb(110, 231, 183);"><i class="fa-solid fa-percent" style="color : white;"></i></div>
@@ -96,26 +96,18 @@
                             <table class="table table-hover text-center rounded">
                                 <thead>
                                 <tr>
-                                    <th scope="col">번호</th>
                                     <th scope="col">아이디</th>
                                     <th scope="col">닉네임</th>
                                     <th scope="col">성별</th>
                                     <th scope="col">출생년도</th>
-                                    <th scope="col">상세보기</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="user : ${userList}">
-                                    <th scope="row" th:text="${user.getUserId()}">1</th>
+                                <tr th:each="user : ${userList}" th:onclick="|location.href='@{/admin/users/{id}(id=${user.getUsername()})}'|">
                                     <td th:text="${user.getUsername()}">Mark</td>
                                     <td th:text="${user.getUserNickname()}">Otto</td>
                                     <td th:text="${user.getUserGender()}">@mdo</td>
                                     <td th:text="${user.getUserBirth()}">@mdo</td>
-                                    <td class="text-start">
-                                        <a th:href="@{'/admin/users/'+${user.getUsername()}}" >
-                                            <i class = "bi bi-info-circle ms-3"></i>
-                                        </a>
-                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

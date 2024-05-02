@@ -1,170 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="~{/fragment :: head}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=unkjrqfqrq"></script>
-    <style>
-        .row-mine {
-            max-width: 83%;
-        }
-    </style>
 </head>
 <body>
-<div class="row flex-nowrap">
-    <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
-        <div class="bg-white p-2">
-            <p class="d-flex mt-2 align-items-center">
-                    <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
-                    </span>
-            </p>
-            <ul class="nav flex-column mt-4">
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/squares.leading.rectangle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">대시보드</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                            <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
-                        </li>
-                        <li class="nav-item mt-1 nav-link">
-                            <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                            <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/brain.head.profile.png" class="img-fluid mb-2 me-4">
-                        <span class="fs-5 d-none d-sm-inline noto-sans-sidebar">AI 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/building.2.png" class="img-fluid mb-2 me-1"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">장소 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/calendar.badge.plus.png" class="img-fluid mb-2"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">행사 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/person.fill.questionmark.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">문의 관리</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="#" class="nav-link text-body-secondary">
-                        <img src="/image/exclamationmark.circle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">로그</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <a href="/admin/list" class="nav-link text-body-secondary ps-2">
-                        <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="row-mine py-3 px-0 mx-0 border border-0">
-        <div class="container">
-
-            <!-- Header -->
-
-            <div class="row">
-                <div class="col align-items-start ubuntu-medium fs-2">
-                    간선 관리
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('edge')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > 경로 관리 > 경로 등록
                 </div>
-                <div class="col align-items-end text-end">
-                    <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
+                <div class="row mb-4 ms-5 fs-1 fontHv">
+                    경로등록
                 </div>
-            </div>
-
-            <!-- Small Box-->
-
-            <div class="row px-5 py-1">
-                <div class="col px-5 py-1">
-                    <div class="card border-light px-5 py-1" style="max-height: 85vh">
-                        <div class="shadow p-3 rounded border-bottom border-4 border-primary-subtle">
-                            <form th:object="${lineDto}" th:action="@{/admin/line}" method="post">
-                                <div class="row">
-                                    <div class="col">
-                                        <span class="noto-sans-700 fs-3">간선 추가</span>
-                                    </div>
-                                    <div class="col text-end">
-                                        <button type="submit" class="btn btn-outline-primary">추가</button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="row mt-4">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">&nbsp;이름&nbsp;</span>
-                                                <input type="text" class="form-control" th:field="*{lineName}"
-                                                       th:classappend="${#fields.hasErrors('lineName')} or ${nameMessage} == '이미 존재하는 이름입니다.' ? 'border border-danger' : ''">
-                                            </div>
-                                            <div th:if="${#fields.hasErrors('lineName')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{lineName}">아이디 오류</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-4">
-                                            <div class="col">
-                                                <div class="input-group mb-3">
-                                                    <label class="input-group-text" for="inputGroupSelect01">노드1</label>
-                                                    <select class="form-select" id="inputGroupSelect01" th:field="*{nodeNameFirst}"
-                                                            th:classappend="${#fields.hasErrors('nodeNameFirst')} or ${nameMessage} == '이미 존재하는 경로입니다.' ? 'border border-danger' : ''">
-                                                        <option value="" selected>노드 선택</option>
-                                                        <option th:each="node : ${nodeList1}" th:value="${node}" th:text="${node}">One</option>
-                                                    </select>
-                                                </div>
-                                                <div th:if="${#fields.hasErrors('nodeNameFirst')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                                    <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeNameFirst}">아이디 오류</span>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="input-group mb-3">
-                                                    <label class="input-group-text" for="inputGroupSelect02">노드2</label>
-                                                    <select class="form-select" id="inputGroupSelect02" th:field="*{nodeNameSecond}"
-                                                            th:classappend="${#fields.hasErrors('nodeNameSecond')} or ${pathMessage} == '같은 경로를 지정하셨습니다.' ? 'border border-danger' : ''">
-                                                        <option value="" selected>노드 선택</option>
-                                                        <option th:each="node : ${nodeList2}" th:value="${node}" th:text="${node}">One</option>
-                                                    </select>
-                                                </div>
-                                                <div th:if="${#fields.hasErrors('nodeNameSecond')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                                    <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeNameSecond}">아이디 오류</span>
-                                                </div>
-                                                <div th:if="${pathMessage} == '같은 경로를 지정하셨습니다.'" class="text-start ms-2 text-danger" style="font-size:80%">
-                                                    <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${pathMessage}">아이디 오류</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                <div class="row text-center mx-5 rounded">
+                    <form th:object="${lineDto}" th:action="@{/admin/line}" method="post">
+                        <div class="row align-items-center">
+                            <div class="col-3 offset-9 text-end pe-5 me-5"><button type="submit" class="fs-5 mt-3 btn btn-primary save fontHv">경로 저장</button></div>
                         </div>
-                    </div>
+                            <div class="row">
+                                <div class="col-4 text-start ms-5 ps-5">
+                                    <div class="form-floating mb-4">
+                                        <p class="fs-4 nodeHeader">경로이름</p>
+                                        <hr>
+                                        <input type="text" th:field="*{lineName}" class="small form-control fontHv mt-0 pt-0 fs-6" id="name" placeholder="name@example.com" >
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">연결노드1</p>
+                                                <hr>
+                                                <input type="text" th:field="*{nodeNameFirst}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1" placeholder="name@example.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">연결노드2</p>
+                                                <hr>
+                                                <input type="text" th:field="*{nodeNameSecond}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2" placeholder="name@example.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">경로 길이</p>
+                                                <hr>
+                                                <input type="text" class="small form-control fontHv mt-0 pt-0 fs-6" id="distance" placeholder="name@example.com" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 offset-1 mt-3" id="map">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            }); //remove link
+        }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+<script th:inline="javascript">
+
+    const map = null;
+    const mapData = {
+        lat : 0,
+        lng : 0,
+
+        setLat : (value) => {
+            mapData.lat = value;
+        },
+        setLng : (value) => {
+            mapData.lng = value;
+        },
+        getLat : (value) => {
+            return mapData.lat;
+        },
+        getLng : (value) => {
+            return mapData.lng;
+        }
+    }
+
+    let inputFocused1 = false;
+    let inputFocused2 = false;
+
+    document.getElementById("node1").addEventListener("focus", () => inputFocused=true);
+
+    // Google Map 용 Script 태그
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const pinViewScaled = new google.maps.marker.PinView({
+            scale: 0.4,
+        });
+
+        const pinViewBackground1 = new google.maps.marker.PinView({
+            background: "#046ffb",
+        });
+
+        const pinViewBackground2 = new google.maps.marker.PinView({
+            background: "#04fb6f",
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+        let nodeList = [[${nodeList}]];
+
+        nodeList.forEach(function(data){
+            const markerView = new google.maps.marker.AdvancedMarkerView({
+                map,
+                position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
+                draggable : true,
+                title: data.nodeName,
+                content : pinViewScaled.element
+            });
+            markerView.nodeAltitude = data.nodeAltitude;
+
+            document.getElementById("node1").addEventListener("click", function(){
+                inputFocused1=true;
+            });
+
+            document.getElementById("node2").addEventListener("click", function(){
+                inputFocused2=true;
+            });
+
+            markerView.addListener('click', ({ domEvent, latLng }) => {
+                const { target } = domEvent;
+
+                if(inputFocused1) {
+                    infoWindow.close();
+                    infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h5>지점 1 선택' + "</h5></div>"
+                        + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
+                        + '<div id="bodyContent">' + "<span></span>"
+                        + "<span></span>"
+                         + "<span></span>"
+                        + "</div>" + "</div>");
+                    infoWindow.open(markerView.map, markerView);
+                    markerView.content = pinViewBackground1.element;
+                    document.getElementById("node1").value = markerView.title;
+                    inputFocused1=false;
+                }
+
+                if(inputFocused2) {
+                    infoWindow.close();
+                    infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h5>지점 2 선택' + "</h5></div>"
+                        + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
+                        + '<div id="bodyContent">' + "<span></span>"
+                        + "<span></span>"
+                        + "<span></span>"
+                        + "</div>" + "</div>");
+                    infoWindow.open(markerView.map, markerView);
+                    markerView.content = pinViewBackground2.element;
+                    document.getElementById("node2").value = markerView.title;
+                    inputFocused2=false;
+                }
+            });
+        });
+
+
+    }
+    window.initMap = initMap;
+</script>
 </body>
 </html>

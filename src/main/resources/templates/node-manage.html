@@ -71,38 +71,42 @@
                         </div>
                         <div class="row bg-white">
                             <div class="col-5 align-items-center">
-                                <div class="search mt-3 mb-2">
+                                <div class="search mt-3 mb-2 pb-3">
                                     <input type="text" class="form-control form-input" placeholder="Search anything...">
                                 </div>
                             </div>
                             <div class="col-3 offset-4 align-items-center text-end">
-                                <button type="submit" class="mt-3 btn btn-primary add">지점 추가</button>
+                                <a href="/admin/node/add" th:href="@{/admin/node/add}" class="mt-3 btn btn-primary add">지점 추가</a>
                             </div>
                         </div>
                         <div class="row" style="overflow-x: scroll; height:40vh">
-                            <table class="table table-hover text-center rounded">
+                            <table class="table table-hover text-start rounded pt-2 fontReg">
                                 <thead>
-                                    <tr>
-                                        <th scope="col">번호</th>
-                                        <th scope="col">노드 이름</th>
-                                        <th scope="col">경도</th>
-                                        <th scope="col">위도</th>
-                                        <th scope="col">고도</th>
-                                        <th scope="col">상세보기</th>
+                                    <tr class="fs-5">
+                                        <th scope="col">
+                                            <span class="ms-4 ps-3">이름</span>
+                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="ps-3">경도</span>
+                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
+                                        </th>
+                                        <th scope="col">
+                                            <span>위도</span>
+                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
+                                        </th>
+                                        <th scope="col">
+                                            <span>고도</span>
+                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="node : ${nodeList}">
-                                    <th scope="row" th:text="${node.getNodeId()}">1</th>
-                                    <td th:text="${node.getNodeName()}">Mark</td>
-                                    <td th:text="${node.getNodeLatitude()}">Otto</td>
-                                    <td th:text="${node.getNodeLongitude()}">@mdo</td>
-                                    <td th:text="${node.getNodeAltitude()}"></td>
-                                    <td class="text-center">
-                                        <a th:href="@{'/admin/node/'+${node.getNodeId()}}" >
-                                            <i class = "bi bi-info-circle"></i>
-                                        </a>
-                                    </td>
+                                <tr th:each="node : ${nodeList}" th:onclick="|location.href='@{/admin/node/{nodeId}(nodeId=${node.getNodeId()})}'|">
+                                        <td class="ps-5 ms-3" th:text="${node.getNodeName()}">Mark</td>
+                                        <td class="ps-4 ms-4" th:text="${node.getNodeLatitude()}">Otto</td>
+                                        <td class="ps-2" th:text="${node.getNodeLongitude()}">@mdo</td>
+                                        <td class="ps-2 ms-5" th:text="${node.getNodeAltitude()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
