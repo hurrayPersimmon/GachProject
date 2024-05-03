@@ -7,7 +7,10 @@ import java.util.List;
 
 
 public interface InquiryService {
-    ResponseEntity<InquiryResponseDTO.InquiryList> getEventList();
 
-    ResponseEntity<List<Inquiry>> getEventLocationByEventCode(Integer eventCode);
+    ResponseEntity<InquiryResponseDTO.InquiryList> getInquiryList(Integer page, Long userId);
+
+    ResponseEntity<InquiryResponseDTO> getInquiryDetailByInquiryId(Integer inquiryId);
+
+    ResponseEntity<InquiryResponseDTO> createInquiry(InquiryRequestDTO inquiryRequestDTO);
 }
