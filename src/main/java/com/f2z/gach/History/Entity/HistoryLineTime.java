@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity.History;
+package com.f2z.gach.History.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
