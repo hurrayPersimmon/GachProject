@@ -11,4 +11,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     Page<Inquiry> findAllByUserId(Long userId, Pageable pageable);
 
     Inquiry findByInquiryId(Integer inquiryId);
+
+    Integer countByInquiryAnswerIsFalse();
 }
