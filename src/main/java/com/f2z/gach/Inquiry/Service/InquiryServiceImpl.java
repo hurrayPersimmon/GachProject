@@ -39,8 +39,9 @@ public class InquiryServiceImpl implements InquiryService{
             else{
                 return ResponseEntity.notFound(null);
             }
+        }else{
+            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryPage, InquiryResponseDTOList));
         }
-        return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryPage, InquiryResponseDTOList));
     }
 
     @Override
