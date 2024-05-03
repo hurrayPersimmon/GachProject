@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Transactional
@@ -25,7 +27,11 @@ public class InquiryServiceImpl implements InquiryService{
     @Override
     public ResponseEntity<InquiryResponseDTO.InquiryList> getInquiryList(Integer page, Long userId){
         Pageable pageable = Pageable.ofSize(10).withPage(page);
-        Page<InquiryResponseDTO> inquiryPage = inquiryRepository.findAllByUserId(userId, pageable).map(InquiryResponseDTO::toInquiryListResponseDTO);
+        Page<Inquiry> inquiryPage = inquiryRepository.findAllByUserId(userId, pageable);
+
+        List<InquiryResponseDTO> InquiryResponseDTOList = inquiryPage.getContent().stream()
+                .map(InquiryResponseDTO::toInquiryListResponseDTO).toList();
+
         if(inquiryPage.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);
@@ -34,7 +40,7 @@ public class InquiryServiceImpl implements InquiryService{
                 return ResponseEntity.notFound(null);
             }
         }
-        return ResponseEntity.requestSuccess((InquiryResponseDTO.InquiryList) inquiryPage.getContent());
+        return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryPage, InquiryResponseDTOList));
     }
 
     @Override
