@@ -1,4 +1,4 @@
-package com.f2z.gach.Inquiry;
+package com.f2z.gach.Inquiry.Entity;
 
 import com.f2z.gach.Config.BaseTimeEntity;
 import jakarta.persistence.Entity;

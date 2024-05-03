@@ -1,7 +1,12 @@
 package com.f2z.gach.Map.DTO;
 
+import com.f2z.gach.EnumType.College;
+import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.Map.Entity.BuildingFloor;
+import com.f2z.gach.Map.Entity.BuildingKeyword;
 import com.f2z.gach.Map.Entity.PlaceSource;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -95,4 +100,30 @@ public class PlaceResponseDTO {
                 .buildingFloors(buildingFloors)
                 .build();
     }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class BuildingKeywordResponseDTO {
+            private String buildingName;
+            private String professorClass;
+            private Double placeLatitude;
+            private Double placeLongitude;
+            private String placeImagePath;
+            private Integer placeId;
+
+    }
+
+    public static BuildingKeywordResponseDTO toBuildingKeywordResponseDTO(BuildingKeyword buildingkeyword, PlaceSource place) {
+        return BuildingKeywordResponseDTO.builder()
+                .buildingName(buildingkeyword.getBuildingName())
+                .professorClass(buildingkeyword.getProfessorClass())
+                .placeLatitude(place.getPlaceLatitude())
+                .placeLongitude(place.getPlaceLongitude())
+                .placeImagePath(place.getThumbnailImagePath())
+                .placeId(place.getPlaceId())
+                .build();
+    }
+
 }

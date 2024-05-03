@@ -1,9 +1,8 @@
-package com.f2z.gach.Inquiry;
+package com.f2z.gach.Inquiry.Service;
 
-import com.f2z.gach.Event.Service.EventServiceImpl;
+import com.f2z.gach.Inquiry.DTO.InquiryRequestDTO;
+import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
 import com.f2z.gach.Response.ResponseEntity;
-
-import java.util.List;
 
 
 public interface InquiryService {

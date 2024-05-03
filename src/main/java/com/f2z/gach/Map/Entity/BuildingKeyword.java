@@ -20,7 +20,7 @@ public class BuildingKeyword {
     @Enumerated(EnumType.STRING)
     private College college;
     @Enumerated(EnumType.STRING)
-    private Departments departments;
+    private Departments department;
     private String professorName;
     private String professorClass;
 

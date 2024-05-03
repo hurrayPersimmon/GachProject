@@ -1,6 +1,9 @@
-package com.f2z.gach.Inquiry;
+package com.f2z.gach.Inquiry.Controller;
 
 
+import com.f2z.gach.Inquiry.DTO.InquiryRequestDTO;
+import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
+import com.f2z.gach.Inquiry.Service.InquiryService;
 import com.f2z.gach.Response.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

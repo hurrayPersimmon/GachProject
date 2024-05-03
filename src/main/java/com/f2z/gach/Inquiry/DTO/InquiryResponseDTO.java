@@ -1,5 +1,6 @@
-package com.f2z.gach.Inquiry;
+package com.f2z.gach.Inquiry.DTO;
 
+import com.f2z.gach.Inquiry.Entity.Inquiry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

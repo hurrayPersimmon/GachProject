@@ -1,5 +1,9 @@
-package com.f2z.gach.Inquiry;
+package com.f2z.gach.Inquiry.Service;
 
+import com.f2z.gach.Inquiry.DTO.InquiryRequestDTO;
+import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
+import com.f2z.gach.Inquiry.Entity.Inquiry;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -8,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
