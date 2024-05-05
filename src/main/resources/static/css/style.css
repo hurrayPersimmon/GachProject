@@ -235,3 +235,8 @@ a{
     text-decoration : none;
     color : black;
 }
+
+input[type=file] {
+    border : 0.1rem solid grey;
+    width : 20rem;
+}

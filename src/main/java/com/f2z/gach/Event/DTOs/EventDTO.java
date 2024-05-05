@@ -7,9 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +27,8 @@ public class EventDTO {
     private String eventInfo;
     private String eventImageName;
     private String eventImagePath;
+    private List<EventLocationDTO> locations;
+    private MultipartFile file;
 
     public Event toEntity() {
         return Event.builder()

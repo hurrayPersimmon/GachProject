@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건물 추가</title>
+</head>
+<body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('building')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > 건물 관리 > 건물 추가
+                </div>
+                <div class="row ms-1">
+                    <div class="col-11 ms-5" style="width:88%;">
+                        <div class="row mb-3 fs-1 fontHv">
+                            건물 추가
+                        </div>
+                        <div class="row p-4">
+                            <form enctype="multipart/form-data" th:action="@{/admin/building}" th:object="${building}" method="post">
+                                <div class="row mb-3">
+                                    <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
+                                        <button class="btn btn-primary">추가</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">건물 이름</p>
+                                                    <hr>
+                                                    <input th:field="*{buildingName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">건물 종류</p>
+                                                    <hr>
+                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                        <option th:each="b : ${building}" th:value="${b}" th:text="${b}"></option>
+                                                    </select>                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">요약 정보</p>
+                                                <hr>
+                                                <input th:field="*{buildingInfo}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">건물 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput">구글 맵으로 좌표 선택</span></p>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col input-group">
+                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon1">위도</span>
+                                                        <input th:field="*{buildingLat}" type="text"  class="form-control fontHv mt-0 py-2 fs-6">
+                                                    </div>
+                                                    <div class="col input-group">
+                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon2">경도</span>
+                                                        <input th:field="*{buildingLng}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                    </div>
+                                                    <div class="col input-group">
+                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon3">고도</span>
+                                                        <input th:field="*{buildingAlt}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                    </div>
+                                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">층 입력</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body" id="map" style="height:50vh;">
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                                    <button type="button" class="btn btn-primary" onclick="readXYZ()" data-bs-dismiss="modal">좌표 저장</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3" id="floor">
+                                                <p class="fs-4 nodeHeader">층별 안내
+                                                    <span class="ms-3">
+                                                            <i id="deleteFloor" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
+                                                            <i id="addFloor" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
+                                                        </span>
+                                                </p>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <div class="row">
+                                                    <div class="col text-start fs-4 nodeHeader">부가 이미지</div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <img id="thumbnail-image" src="#" style="height:13rem; width:13rem" onerror="this.style.visibility='hidden';">
+                                                    </div>
+                                                    <div class="col-2 sidebarItem fs-3">
+                                                        썸네일용
+                                                    </div>
+                                                    <div class="col-5 text-end">
+                                                        <img id="ar-image" src="#" style="height:13rem; width:23rem" onerror="this.style.visibility='hidden';">
+                                                    </div>
+                                                    <div class="col-2 sidebarItem fs-3">
+                                                        AR 이미지
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class="col-3">
+                                                        <input name="thumbnail" id="thumbnail" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
+                                                        <label class="btn btn-primary fs-6 ms-1" for="thumbnail">이미지 업로드</label>
+                                                    </div>
+                                                    <div class="col-6 offset-2">
+                                                        <input name="ar" id="ar" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
+                                                        <label class="btn btn-primary fs-6 ms-1" for="ar">이미지 업로드</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div>
+                                            <p class="fs-4 nodeHeader text-start">메인 이미지</p>
+                                            <hr>
+                                            <div class="image-wrapper">
+                                                <img id="preview" src="#" style="height:37.8rem; width:24.3rem" onerror="this.style.visibility='hidden';">
+                                            </div>
+                                            <input id="filename" class="p-2 mt-3" value="첨부파일" placeholder="첨부파일" style="border: 1px solid #dddddd; width: 78%; color: #999999; pointer-events: none;">
+                                            <label class="p-2 mb-1 sidebarItem" for="file" style="color: #fff; vertical-align: middle; cursor: pointer; background-color: #999999;">파일찾기</label>
+                                            <input name="file" type="file" accept="image/*" id="file" style="visibility: hidden" onchange="readURL(this)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let tempLat = 0;
+    let tempLng = 0;
+    let tempAlt = 0;
+    let floorIndex = 0;
+
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const pinViewScaled = new google.maps.marker.PinView({
+            scale: 0.4,
+        });
+
+        const pinViewBackground = new google.maps.marker.PinView({
+            background: "#046ffb",
+        });
+
+        const elevator = new google.maps.ElevationService();
+
+        const newMarkerView = new google.maps.marker.AdvancedMarkerView({
+            map,
+            position: {lat: 37.45088195800781, lng: 127.12886810302734},
+            gmpDraggable: true,
+            content : pinViewBackground.element
+        });
+
+        newMarkerView.addListener("dragend", (event) => {
+            const position = newMarkerView.position;
+            tempLat = position.lat;
+            tempLng = position.lng;
+            elevator
+                .getElevationForLocations({
+                    locations: [position],
+                })
+                .then(({ results }) => {
+                    // Retrieve the first result
+                    if (results[0]) {
+                        // Open the infowindow indicating the elevation at the clicked position.
+                        tempAlt = results[0].elevation;
+                    } else {
+                        alert("오류");
+                    }
+                })
+                .catch((e) =>
+                    alert("오류원인 : " + e)
+                );
+        });
+    }
+
+    document.getElementById('addInput').addEventListener('click', function() {
+        // 새로운 input 요소 생성
+        initMap();
+        myModal.show(myModal);
+    });
+
+    function readXYZ(){
+        let lat = document.getElementById("basic-addon1");
+        let lng = document.getElementById("basic-addon2");
+        let alt = document.getElementById("basic-addon3");
+        lat.value = tempLat;
+        lng.value = tempLng;
+        alt.value = tempAlt;
+    }
+
+    document.getElementById("addFloor").addEventListener("click", function(){
+        let newRow = document.createElement('div');
+        newRow.classList.add('row');
+        newRow.classList.add('floorList');
+        newRow.classList.add('my-2');
+        let col4 = document.createElement('div');
+        col4.classList.add('col-3');
+        col4.classList.add('input-group');
+        let col8 = document.createElement('div');
+        col8.classList.add('col-8');
+        col8.classList.add('input-group');
+
+        let labelFloorNum = document.createElement('span');
+        labelFloorNum.classList.add('input-group-text');
+        labelFloorNum.classList.add('fs-5');
+        labelFloorNum.classList.add('sidebarItem');
+        labelFloorNum.innerText = '층 수'
+
+        let inputFloorNum = document.createElement('input');
+        inputFloorNum.type='text';
+        inputFloorNum.classList.add('form-control');
+        inputFloorNum.classList.add('fontHv');
+        inputFloorNum.classList.add('mt-0');
+        inputFloorNum.classList.add('py-2');
+        inputFloorNum.classList.add('fs-4');
+        inputFloorNum.name = 'floor[' + floorIndex + '].num';
+
+        col4.appendChild(labelFloorNum);
+        col4.appendChild(inputFloorNum);
+        col4.style.width = '33%';
+
+        let labelFloorInfo = document.createElement('span');
+        labelFloorInfo.classList.add('input-group-text');
+        labelFloorInfo.classList.add('fs-5');
+        labelFloorInfo.classList.add('sidebarItem');
+        labelFloorInfo.innerText = '정보'
+
+        let inputFloorInfo = document.createElement('input');
+        inputFloorInfo.type='text';
+        inputFloorInfo.classList.add('form-control');
+        inputFloorInfo.classList.add('fontHv');
+        inputFloorInfo.classList.add('mt-0');
+        inputFloorInfo.classList.add('py-2');
+        inputFloorInfo.classList.add('fs-4');
+        inputFloorInfo.name = 'floor[' + floorIndex + '].info';
+
+        col8.appendChild(labelFloorInfo);
+        col8.appendChild(inputFloorInfo);
+        col8.style.width='66.6666%';
+
+        newRow.appendChild(col4);
+        newRow.appendChild(col8);
+
+        document.getElementById('floor').appendChild(newRow);
+        floorIndex++;
+    });
+
+    document.getElementById('deleteFloor').addEventListener("click", function(){
+        let inputContainer = document.getElementById('floor');
+        let inputElements = inputContainer.getElementsByClassName('floorList');
+
+        if (inputElements.length > 0) {
+            inputElements[inputElements.length - 1].remove();
+        }
+    });
+
+    function readURL(input){
+        if(input.id === "thumbnail"){
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+
+                reader.onload = function(e){
+                    document.getElementById('thumbnail-image').src = e.target.result;
+                    document.getElementById('thumbnail-image').style.visibility = 'visible';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        else if(input.id === "ar"){
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+
+                reader.onload = function(e){
+                    document.getElementById('ar-image').src = e.target.result;
+                    document.getElementById('ar-image').style.display = 'visible';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        } else {
+            if(input.files && input.files[0]){
+                let reader = new FileReader();
+
+                reader.onload = function(e){
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('filename').value = input.files[0].name;
+                    document.getElementById('preview').style.visibility = 'visible';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    Array.from(rows).forEach(function(row, index) {
+
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        }
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                }
+            });
+        });
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            });
+        });
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+</body>
+</html>

@@ -26,4 +26,5 @@ public class Log extends BaseTimeEntity {
     private String message;
     private String url;
     private HttpMethod httpMethod;
+    // 로그가 발생하는 시간도 필요함
 }

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('event')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > 행사 관리 > 행사 추가
+                </div>
+                <div class="row ms-1">
+                    <div class="col-11 ms-5" style="width:88%;">
+                        <div class="row mb-3 fs-1 fontHv">
+                            행사 추가
+                        </div>
+                        <div class="row p-4">
+                            <form enctype="multipart/form-data" th:action="@{/admin/event}" th:object="${eventDto}" method="post">
+                                <div class="row">
+                                    <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
+                                        <button class="btn btn-primary">추가</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">행사 이름</p>
+                                                <hr>
+                                                <input th:field="*{eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="fs-4 nodeHeader">시작 시간</p>
+                                                <hr>
+                                                <input th:field="*{eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                            <div class="col">
+                                                <p class="fs-4 nodeHeader">종료 시간</p>
+                                                <hr>
+                                                <input th:field="*{eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">행사 설명 멘트</p>
+                                                <hr>
+                                                <textarea th:field="*{eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">행사 URL</p>
+                                                <hr>
+                                                <input th:field="*{eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3" id="inputContainer">
+                                                <div class="row">
+                                                    <div class="col text-start fs-4 nodeHeader">행사 장소</div>
+                                                    <div class="col text-end">
+                                                        <i id="deleteInput" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
+                                                        <i id="addInput" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
+                                                    </div>
+                                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body" id="map" style="height:50vh;">
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                                    <button type="button" class="btn btn-primary" onclick="readXY()" data-bs-dismiss="modal">좌표 저장</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col mt-3">
+                                        <div class="image-wrapper text-center">
+                                            <img id="preview" src="#" style="height:37.8rem; width:24.3rem" onerror="this.style.visibility='hidden';">
+                                        </div>
+                                        <div class="mt-2" style="margin-left : 18rem;">
+                                            <label class="p-2 mb-1 sidebarItem btn btn-primary" for="file">이미지 업로드</label>
+                                            <input name="file" type="file" accept="image/*" id="file" style="visibility: hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let tempLat = 37.45088195800781;
+    let tempLng = 127.12886810302734;
+    let locationIndex = 0;
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const pinViewScaled = new google.maps.marker.PinView({
+            scale: 0.4,
+        });
+
+        const pinViewBackground = new google.maps.marker.PinView({
+            background: "#046ffb",
+        });
+
+        const elevator = new google.maps.ElevationService();
+
+        const newMarkerView = new google.maps.marker.AdvancedMarkerView({
+            map,
+            position: {lat: 37.45088195800781, lng: 127.12886810302734},
+            gmpDraggable: true,
+            content : pinViewBackground.element
+        });
+
+        newMarkerView.addListener("dragend", (event) => {
+            const position = newMarkerView.position;
+            tempLat = position.lat;
+            tempLng = position.lng;
+        });
+    }
+
+    const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+    function readURL(input){
+        if(input.files && input.files[0]){
+            let reader = new FileReader();
+
+            reader.onload = function(e){
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.visibility = 'visible';
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readXY(){
+        let newDiv = document.createElement('div');
+        newDiv.classList.add('row');
+        newDiv.classList.add('border');
+        newDiv.classList.add('mx-4');
+        newDiv.classList.add('px-3');
+        newDiv.classList.add('eventPlace');
+        let header = document.createElement('p');
+        header.classList.add('fs-5');
+        header.classList.add('nodeHeader');
+        header.innerText = `장소 이름`;
+        let inputName = document.createElement('input');
+        inputName.classList.add('form-control');
+        inputName.classList.add('form-input');
+        inputName.classList.add('py-0');
+        inputName.type='text';
+        inputName.name = 'locations[' + locationIndex + '].' + 'eventPlaceName';
+        let column = document.createElement('div');
+        column.classList.add('mb-1');
+        column.classList.add('form-floating');
+        column.classList.add('px-5');
+        let column2 = document.createElement('div');
+        column2.classList.add('mb-1');
+        column2.classList.add('ms-1');
+        column2.classList.add('form-floating');
+        column2.classList.add('px-5');
+        column2.classList.add('row');
+        let column3 = document.createElement('div');
+        column3.classList.add('mb-1');
+        column3.classList.add('form-floating');
+        column3.classList.add('px-3');
+        column3.classList.add('col');
+        let column4 = document.createElement('div');
+        column4.classList.add('mb-1');
+        column4.classList.add('form-floating');
+        column4.classList.add('px-3');
+        column4.classList.add('col');
+        let latHeader = document.createElement('p');
+        latHeader.classList.add('fs-5');
+        latHeader.classList.add('nodeHeader');
+        latHeader.innerText = `위도`;
+        let inputLat = document.createElement('input');
+        inputLat.classList.add('form-control');
+        inputLat.classList.add('form-input');
+        inputLat.classList.add('py-0');
+        inputLat.type='text';
+        inputLat.value = tempLat;
+        inputLat.name = 'locations[' + locationIndex + '].' + 'eventLatitude';
+        let LngHeader = document.createElement('p');
+        LngHeader.classList.add('fs-5');
+        LngHeader.classList.add('nodeHeader');
+        LngHeader.innerText = `경도`;
+        let inputLng = document.createElement('input');
+        inputLng.classList.add('form-control');
+        inputLng.classList.add('font-input');
+        inputLng.classList.add('py-0');
+        inputLng.type='text';
+        inputLng.value = tempLng;
+        inputLng.name = 'locations[' + locationIndex + '].' + 'eventLatitude';
+        column3.appendChild(latHeader);
+        column3.appendChild(inputLat);
+        column4.appendChild(LngHeader);
+        column4.appendChild(inputLng);
+        column2.appendChild(column3);
+        column2.appendChild(column4);
+        column.appendChild(header);
+        column.appendChild(inputName);
+        newDiv.appendChild(column);
+        newDiv.appendChild(column2);
+        document.getElementById('inputContainer').appendChild(newDiv);
+        locationIndex++;
+    }
+
+    document.getElementById("file").addEventListener("change", function(){
+        readURL(this);
+    });
+
+    document.getElementById('deleteInput').addEventListener('click', function() {
+        let inputContainer = document.getElementById('inputContainer');
+        let inputElements = inputContainer.getElementsByClassName('eventPlace');
+
+        if (inputElements.length > 0) {
+            inputElements[inputElements.length - 1].remove();
+        }
+    });
+
+    document.getElementById('addInput').addEventListener('click', function() {
+        // 새로운 input 요소 생성
+        initMap();
+        myModal.show(myModal);
+    });
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    Array.from(rows).forEach(function(row, index) {
+
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        }
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                }
+            });
+        });
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            });
+        });
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+</body>
+</html>

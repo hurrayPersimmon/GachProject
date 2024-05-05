@@ -14,11 +14,9 @@ public class EventLocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventInfoId;
     private Integer eventCode;
-    private String eventName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Event eventName;
     private String eventPlaceName;
     private Double eventLatitude;
     private Double eventLongitude;
-    private Double eventAltitude;
-
-
 }

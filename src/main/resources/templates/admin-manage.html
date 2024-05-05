@@ -20,61 +20,62 @@
                         <div class="row mb-3 fs-1 fontHv">
                             승인 대기자 목록
                         </div>
-                        <div class="row bg-white">
-                            <div class="col-5 align-items-center">
-                                <div class="search mt-3 mb-2">
-                                    <input type="text" class="form-control form-input" placeholder="Search anything...">
+                        <div class="row align-items-center bg-white" style="overflow-x: scroll; height:20rem;">
+                            <div class="row bg-white" style="height:3rem;">
+                                <div class="col-5 align-items-center">
+                                    <div class="search mt-2">
+                                        <input type="text" class="form-control form-input" placeholder="Search anything...">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row" style="overflow-x: scroll; height:30vh">
-                            <table class="table table-hover text-center rounded">
-                                <thead>
-                                <tr>
-                                    <th scope="col">아이디</th>
-                                    <th scope="col">이름</th>
-                                    <th scope="col">생년월일</th>
-                                    <th scope="col">권한</th>
-                                    <th scope="col">승인</th>
-                                    <th scope="col">삭제</th>
-                                </tr>
+                            <hr>
+                            <table class="table table-hover text-center rounded align-self-center">
+                                <thead class="align-items-center">
+                                    <tr>
+                                        <th scope="col">아이디</th>
+                                        <th scope="col">이름</th>
+                                        <th scope="col">생년월일</th>
+                                        <th scope="col">권한</th>
+                                        <th scope="col">승인</th>
+                                        <th scope="col">삭제</th>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                <tr th:each=" waiter : ${waiterList}">
-                                    <td th:text="${waiter.getAdminId()}">ID</td>
-                                    <td th:text="${waiter.getAdminName()}">Mark</td>
-                                    <td th:text="${waiter.getAdminBirthday()}">@mdo</td>
-                                    <td th:text="${waiter.getAdminAuthorization()}">@mdo</td>
-                                    <td>
-                                        <a class="text-center" th:href="@{'/admin/approve/'+${waiter.getAdminNum()}}">
-                                            <i class="bi bi-check-square"></i>
-                                            <!--  권한을 수락하는 API -->
-                                        </a>
-                                    </td>
-                                    <td class="text-center">
-                                        <a data-bs-toggle="modal" data-bs-target="#exampleModal1">
-                                            <i class="bi bi-x-square"></i>
-                                            <div class="modal fade" id="exampleModal1" tabindex="0" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5 fontHv" id="exampleModalLabel1">대기자 삭제</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body text-center">
-                                                            정말 삭제하시겠습니까?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <a th:href="@{'/admin/delete/'+${waiter.getAdminId()}}" class="btn btn-danger">대기자 삭제</a>
+                                    <tbody>
+                                    <tr style="height:2.8rem;" th:each=" waiter : ${waiterList}" class="align-self-center">
+                                        <td th:text="${waiter.getAdminId()}">ID</td>
+                                        <td th:text="${waiter.getAdminName()}">Mark</td>
+                                        <td th:text="${waiter.getAdminBirthday()}">@mdo</td>
+                                        <td th:text="${waiter.getAdminAuthorization()}">@mdo</td>
+                                        <td>
+                                            <a class="text-center" th:href="@{'/admin/approve/'+${waiter.getAdminNum()}}">
+                                                <i class="bi bi-check-square"></i>
+                                                <!--  권한을 수락하는 API -->
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                                                <i class="bi bi-x-square"></i>
+                                                <div class="modal fade" id="exampleModal1" tabindex="0" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5 fontHv" id="exampleModalLabel1">대기자 삭제</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center">
+                                                                정말 삭제하시겠습니까?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <a th:href="@{'/admin/delete/'+${waiter.getAdminId()}}" class="btn btn-danger">대기자 삭제</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
                             </table>
                         </div>
                         <div class="row mt-4">
@@ -141,7 +142,7 @@
                             <div class="col ps-0 pe-0" style="overflow-x : scroll; height: 30vh;">
                                 <table class="table table-hover text-center rounded" style="overflow-y: auto;">
                                     <thead>
-                                    <tr>
+                                    <tr style="height:5vh;">
                                         <th scope="col">아이디</th>
                                         <th scope="col">이름</th>
                                         <th scope="col">생년월일</th>
@@ -149,7 +150,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="admin : ${adminList}" class="admin-row" th:data-admin-num="${admin.getAdminNum()}" onclick="check(this)">
+                                        <tr style="height:5vh;" th:each="admin : ${adminList}" class="admin-row" th:data-admin-num="${admin.getAdminNum()}" onclick="check(this)">
                                             <td th:text="${admin.getAdminId()}">Mark</td>
                                             <td th:text="${admin.getAdminName()}">@mdo</td>
                                             <td th:text="${admin.getAdminBirthday()}">@mdo</td>
@@ -159,7 +160,7 @@
                                 </table>
                             </div>
                             <div class="col bg-white ms-0 ps-3" style="border-left : 0.1rem solid darkgrey; overflow: hidden; height: 30vh;">
-                                    <div class="row">
+                                    <div class="row align-items-center">
                                         <div class="col-6">
                                             <div class="form-floating">
                                                 <p class="fs-4 nodeHeader">아이디</p>

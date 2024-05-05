@@ -35,6 +35,9 @@ spring:
     init:
       mode: always #?? ?? ???? ???? ?? ???? ????.
 
-  logging :
-    level :
-      com.f2z.gach : debug
+logging :
+  level :
+    com.f2z.gach : debug
+
+gach:
+  img.dir: /Users/nomyeongjun/Documents/GachProject-before/src/main/resources/static/image

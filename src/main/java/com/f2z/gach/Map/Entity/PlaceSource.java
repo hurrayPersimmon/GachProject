@@ -4,13 +4,14 @@ import com.f2z.gach.EnumType.PlaceCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
-
 public class PlaceSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,9 @@ public class PlaceSource {
     private Double placeAltitude;
     private String placeSummary;
     private Double buildingHeight;
+    @OneToMany
+    @JoinColumn(name="building_floor_id")
+    private List<BuildingFloor> buildingFloors;
 
     private String mainImageName;
     private String mainImagePath;

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건물 추가</title>
+</head>
+<body>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('question')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > 문의 관리 > 문의 응답
+                </div>
+                <div class="row ms-1">
+                    <div class="col-11 ms-5" style="width:88%;">
+                        <div class="row mb-3 fs-1 fontHv">
+                            문의 응답
+                        </div>
+                        <div class="row p-4">
+                            <form enctype="multipart/form-data" th:action="@{/admin/question}" th:object="${inquiry}" method="post">
+                                <div class="row mb-3">
+                                    <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
+                                        <button class="btn btn-primary" id="answer">답변 추가하기</button>
+                                        <a class="btn btn-secondary">답변 보내기</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">문의 구분</p>
+                                                    <hr>
+                                                    <input th:field="*{inquiry.status}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">닉네임</p>
+                                                    <hr>
+                                                    <input th:field="*{inquiry.getUser().getUserName()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">시간</p>
+                                                    <hr>
+                                                    <input th:field="*{inquiry.getTime()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">제목</p>
+                                                <hr>
+                                                <input th:field="*{inquiry.getName()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="form-floating mb-3">
+                                                <p class="fs-4 nodeHeader">문의 내용</p>
+                                                <hr>
+                                                <textarea th:field="*{inquiry.getContent()}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-floating mb-3" id="floor">
+                                                <p class="fs-4 nodeHeader">답변 내용</p>
+                                                <hr>
+                                                <textarea th:field="*{inquiry.answer}" class="form-control sidebarItem" style="visibility: hidden" id="sendAns"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById("answer").addEventListener("click", function(){
+        let box = document.getElementById("sendAns");
+        box.style.visibility = 'visible';
+    });
+
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    Array.from(rows).forEach(function(row, index) {
+
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        }
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                }
+            });
+        });
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            });
+        });
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+</body>
+</html>
