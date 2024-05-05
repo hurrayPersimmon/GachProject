@@ -1,6 +1,5 @@
 package com.f2z.gach.Map.Controller;
 
-import com.f2z.gach.DTO.Map.MapLineDTO;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
@@ -37,7 +36,7 @@ public class AdminLineController {
 
     @GetMapping("/line/add")
     public String addLinePage(Model model){
-        model.addAttribute("lineDto", new MapLineDTO());
+        model.addAttribute("lineDto", new MapDTO.MapLineDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
         return "line-add";
     }
