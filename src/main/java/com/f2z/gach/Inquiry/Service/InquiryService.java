@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface InquiryService {
 
-    ResponseEntity<List<Inquiry>> getInquiryList(Long userId);
+    ResponseEntity<List<InquiryResponseDTO.InquiryListStructure>> getInquiryList(Long userId);
 
     ResponseEntity<InquiryResponseDTO.saveInquirySuccess> createInquiry(InquiryRequestDTO inquiryRequestDTO);
 

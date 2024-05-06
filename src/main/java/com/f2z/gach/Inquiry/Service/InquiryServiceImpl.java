@@ -25,9 +25,9 @@ public class InquiryServiceImpl implements InquiryService{
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<List<Inquiry>> getInquiryList(Long userId){
-        List<Inquiry> inquiryPage = inquiryRepository.findAllByUserId(userId);
-        if(inquiryPage.isEmpty()){
+    public ResponseEntity<List<InquiryResponseDTO.InquiryListStructure>> getInquiryList(Long userId){
+        List<Inquiry> inquiryList = inquiryRepository.findAllByUserId(userId);
+        if(inquiryList.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);
             }
@@ -35,7 +35,7 @@ public class InquiryServiceImpl implements InquiryService{
                 return ResponseEntity.notFound(null);
             }
         }else{
-            return ResponseEntity.requestSuccess(inquiryPage);
+            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryList));
         }
     }
 

@@ -11,7 +11,8 @@ public enum InquiryCategory {
     AITime("AI 시간 문의"),
     Event("이벤트 문의"),
     Place("장소 문의"),
-    Etc("기타 문의");
-
+    Etc("기타 문의"),
+    AR("AR 문의"),
+    Gach("가치 문의");
     private final String title;
 }

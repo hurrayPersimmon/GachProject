@@ -23,14 +23,9 @@ public class HistoryServiceImpl implements HistoryService{
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<HistoryResponseDTO.UserHistoryList> getHistoryList(Integer page, Long userId) {
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
-        Page<UserHistory> userHistoryPage= userHistoryRepository.findAllByUserId(userId, pageable);
-
-        List<HistoryResponseDTO> historyResponseDTOList = userHistoryPage.getContent().stream()
-                .map(HistoryResponseDTO::toUserHistoryListResponseDTO).toList();
-
-        if(userHistoryPage.isEmpty()){
+    public ResponseEntity<List<UserHistory>> getHistoryList( Long userId) {
+        List<UserHistory> userHistoryList= userHistoryRepository.findAllByUserId(userId);
+        if(userHistoryList.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);
             }
@@ -38,7 +33,7 @@ public class HistoryServiceImpl implements HistoryService{
                 return ResponseEntity.notFound(null);
             }
         }else{
-            return ResponseEntity.requestSuccess(HistoryResponseDTO.toUserHistoryResponseList(userHistoryPage, historyResponseDTOList));
+            return ResponseEntity.requestSuccess(userHistoryList);
         }
     }
 }
