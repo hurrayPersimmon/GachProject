@@ -30,9 +30,9 @@
                                 <a href="/admin/event/add" class="btn btn-primary add mt-2 sidebarItem fs-6">행사 등록</a>
                             </div>
                         </div>
-                        <div class="row" style="height : 70vh">
+                        <div class="row">
                             <table class="table">
-                                <thead>
+                                <thead class="text-center rounded pt-2 fontReg">
                                 <tr>
                                     <th scope="col">행사 이름</th>
                                     <th scope="col">시작일</th>
@@ -42,7 +42,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                <tr th:each="event : ${eventList}" th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
+                                <tr th:each="event : ${eventList}" style="max-height: 6vh; cursor:pointer" th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
                                     <td th:text="${event.eventName}">1</td>
                                     <td th:text="${event.eventStartDate}">Mark</td>
                                     <td th:text="${event.eventEndDate}">Otto</td>

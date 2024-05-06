@@ -1,8 +1,9 @@
-package com.f2z.gach.Event;
+package com.f2z.gach.Event.Controller;
 
-import com.f2z.gach.Event.DTOs.EventDTO;
-import com.f2z.gach.Event.DTOs.EventLocationDTO;
-import com.f2z.gach.Event.Repositories.EventRepository;
+import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.Event.DTO.EventDTO;
+import com.f2z.gach.Event.Repository.EventRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -23,6 +23,7 @@ import java.util.List;
 @SessionAttributes
 public class AdminEventController {
     private final EventRepository eventRepository;
+    private final AdminRepository adminRepository;
 
     @Value("${gach.img.dir}")
     String fdir;
@@ -30,20 +31,20 @@ public class AdminEventController {
     @GetMapping("/event")
     public String eventListPage(Model model){
         model.addAttribute("eventList", eventRepository.findAll());
-        return "event-manage";
+        return "event/event-manage";
     }
 
     @GetMapping("/event/add")
     public String addEventPage(Model model){
         model.addAttribute("eventDto", new EventDTO());
-        return "event-add";
+        return "event/event-add";
     }
 
     @GetMapping("/event/{id}")
     public String addEventPage(@PathVariable Integer id, Model model){
         //Event객체 혹은 EventDto객체를 전송해야함.
         // 만약 Dto객체를 사용한다면 EventDto => Event로 변경사항을 반영하는 메소드도 필요
-        return "event-add";
+        return "event/event-add";
     }
 
     @PostMapping("/event")
@@ -60,14 +61,18 @@ public class AdminEventController {
         }
         log.info(eventDTO.toString());
         if(result.hasErrors()) {
-            return "event-add";
+            return "event/event-add";
         }
 
         eventRepository.save(eventDTO.toEntity());
         return "redirect:/admin/event";
     }
 
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+    }
+
     // TODO : Update 메소드 필요.
     // TODO : Delete 메소드도 필요.
-
 }

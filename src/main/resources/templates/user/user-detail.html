@@ -23,7 +23,26 @@
                     <div class="row align-items-center">
                         <div class="col-3 offset-9 text-end">
                             <button type="submit" class="fs-5 mt-3 btn btn-primary update fontHv">사용자 수정</button>
-                            <a th:href="@{'/admin/users/delete/'+${userForm.getUsername()}}" class="fs-5 mt-3 btn btn-primary delete fontHv">사용자 삭제</a>
+                            <a class="fs-5 mt-3 btn btn-primary delete fontHv" data-bs-toggle="modal" data-bs-target="#exampleModal">사용자 삭제</a>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">사용자 삭제</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            정말 삭제하시겠습니까?
+                                        </div>
+                                        <hr>
+                                        <div class="text-center mb-3">
+                                            <button type="button" class="btn btn-secondary-subtle" data-bs-dismiss="modal">닫기</button>
+                                            <a class="btn btn-primary delete fontHv" th:href="@{'/admin/users/delete/'+${userForm.getUsername()}}">삭제</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col text-start ms-5 ps-5">
@@ -32,14 +51,14 @@
                                     <div class="form-floating mb-3">
                                         <p class="fs-4 nodeHeader">ID</p>
                                         <hr>
-                                        <input type="text" th:field="*{username}" class="form-control fontHv mt-0 pt-0 fs-6" id="floatingInput1" style="color:black" placeholder="name@example.com" readonly>
+                                        <input type="text" th:field="*{username}" class="form-control fontHv mt-0 pt-0 fs-6" style="color:black" readonly>
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="form-floating mb-3">
                                         <p class="fs-4 nodeHeader">성별</p>
                                         <hr>
-                                        <select th:field="*{userGender}" class="form-control fontHv mt-0 pt-0 fs-6" id="floatingInput2" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                        <select th:field="*{userGender}" class="form-control fontHv mt-0 pt-0 fs-6" style="color : rgb(17,160,248); border-radius : 1rem;">
                                             <option th:each="g : ${gender}" th:value="${g}" th:text="${g}" th:selected="${g == userForm.getUserGender()}"></option>
                                         </select>
                                     </div>
@@ -93,9 +112,5 @@
         </div>
     </div>
 </div>
-<script>
-    let adminList = [[${adminList}]];
-    adminList.
-</script>
 </body>
 </html>

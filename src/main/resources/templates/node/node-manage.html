@@ -16,9 +16,12 @@
                     관리자 >  지점 관리 > 지점 목록 조회
                 </div>
                 <div class="row mb-4 ms-5 fs-1 fontHv">
-                    지점이슈
+                    <div class="col-3">
+                        <span>지점이슈</span>
+                        <span style="cursor: pointer" onclick="changeUp()" id="changeButton"><i class="bi bi-arrow-up-square-fill fs-2" id="button"></i></span>
+                    </div>
                 </div>
-                <div class="row text-center">
+                <div class="row text-center" id="temp">
                     <div class="col-4 ps-5">
                         <div class="shadow p-3 mb-5 text-start rounded" style="background-color: white;">
                             <p class="fs-4 ms-3 nodeHeader">일일 지점 문의 / 일일 전체 문의</p>
@@ -79,30 +82,26 @@
                                 <a href="/admin/node/add" th:href="@{/admin/node/add}" class="mt-3 btn btn-primary add">지점 추가</a>
                             </div>
                         </div>
-                        <div class="row" style="overflow-x: scroll; height:40vh">
-                            <table class="table table-hover text-start rounded pt-2 fontReg">
-                                <thead>
+                        <div class="row table">
+                            <table class="table align-middle table-hover text-center rounded pt-2 fontReg">
+                                <thead style="position : sticky; top:0;">
                                     <tr class="fs-5">
                                         <th scope="col">
                                             <span class="ms-4 ps-3">이름</span>
-                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
                                         </th>
                                         <th scope="col">
                                             <span class="ps-3">경도</span>
-                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
                                         </th>
                                         <th scope="col">
                                             <span>위도</span>
-                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
                                         </th>
                                         <th scope="col">
                                             <span>고도</span>
-                                            <span><i class="bi bi-arrow-down-up ps-2"></i></span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="node : ${nodeList}" th:onclick="|location.href='@{/admin/node/{nodeId}(nodeId=${node.getNodeId()})}'|">
+                                <tr style="max-height : 3vh; cursor:pointer" th:each="node : ${nodeList}" th:onclick="|location.href='@{/admin/node/{nodeId}(nodeId=${node.getNodeId()})}'|">
                                         <td class="ps-5 ms-3" th:text="${node.getNodeName()}">Mark</td>
                                         <td class="ps-4 ms-4" th:text="${node.getNodeLatitude()}">Otto</td>
                                         <td class="ps-2" th:text="${node.getNodeLongitude()}">@mdo</td>
@@ -139,6 +138,7 @@
         </div>
     </div>
 </div>
+<script th:replace="fragment::search"></script>
 <script>
     let rows = document.getElementsByClassName('row menu');
     let cnt = 0;
@@ -220,6 +220,19 @@
             }
         }
     });
+</script>
+<script>
+    function changeUp(){
+        document.getElementById("temp").style.display = 'none';
+        document.getElementById("button").className = "bi bi-arrow-down-square-fill fs-2";
+        document.getElementById("changeButton").onclick = changeDown;
+    }
+
+    function changeDown(){
+        document.getElementById("temp").style.display = 'flex';
+        document.getElementById("button").className = "bi bi-arrow-up-square-fill fs-2";
+        document.getElementById("changeButton").onclick = changeUp;
+    }
 </script>
 </body>
 </html>

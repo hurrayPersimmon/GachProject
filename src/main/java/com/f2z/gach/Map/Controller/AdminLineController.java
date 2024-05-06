@@ -1,8 +1,9 @@
 package com.f2z.gach.Map.Controller;
 
+import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapLine;
-import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.validation.Valid;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,27 +25,28 @@ import java.util.List;
 public class AdminLineController {
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
+    private final AdminRepository adminRepository;
 
     @GetMapping("/line")
     public String lineListPage(Model model){
         List<MapLine> lineList = mapLineRepository.findAll();
         Collections.reverse(lineList);
         model.addAttribute("lineList", lineList);
-        return "line-manage";
+        return "line/line-manage";
     }
 
     @GetMapping("/line/add")
     public String addLinePage(Model model){
         model.addAttribute("lineDto", new MapDTO.MapLineDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "line-add";
+        return "line/line-add";
     }
 
     @PostMapping("/line")
     public String addLine(@Valid @ModelAttribute("lineDto") MapDTO.MapLineDTO mapLineDTO,
                           BindingResult result){
         if(result.hasErrors()){
-            return "line-add";
+            return "line/line-add";
         }
         log.info(mapLineDTO.toString());
         mapLineRepository.save(mapLineDTO.toSaveEntity("A",
@@ -55,7 +56,6 @@ public class AdminLineController {
         mapLineRepository.save(mapLineDTO.toSaveEntity("B",
                 mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameSecond()),
                 mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameFirst())));
-        log.info("성공");
         return "redirect:/admin/line";
     }
 
@@ -72,5 +72,10 @@ public class AdminLineController {
             return "redirect:/admin/line";
         }
         throw new Exception();
+    }
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
     }
 }

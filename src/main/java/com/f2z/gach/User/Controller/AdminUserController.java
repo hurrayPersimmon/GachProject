@@ -1,5 +1,7 @@
 package com.f2z.gach.User.Controller;
 
+import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.Gender;
 import com.f2z.gach.EnumType.Speed;
 import com.f2z.gach.User.DTO.UserForm;
@@ -21,13 +23,14 @@ import java.util.List;
 @SessionAttributes
 public class AdminUserController {
     private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
 
     @GetMapping("/users/list")
     public String userList(Model model){
         List<User> users = userRepository.findAll();
         Collections.reverse(users);
         model.addAttribute("userList", users);
-        return "user-manage";
+        return "user/user-manage";
     }
 
     @GetMapping("/users/{id}")
@@ -38,7 +41,7 @@ public class AdminUserController {
         model.addAttribute("gender", Gender.values());
         model.addAttribute("speed", Speed.values());
         log.info(user.toString());
-        return "user-detail";
+        return "user/user-detail";
     }
 
     @PostMapping("/users/update")
@@ -57,5 +60,8 @@ public class AdminUserController {
         return "redirect:/admin/users/list";
     }
 
-
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+    }
 }

@@ -1,6 +1,7 @@
-package com.f2z.gach.Event.DTOs;
+package com.f2z.gach.Event.DTO;
 
-import com.f2z.gach.Event.Entities.Event;
+import com.f2z.gach.Event.DTO.EventLocationDTO;
+import com.f2z.gach.Event.Entity.Event;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

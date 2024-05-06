@@ -67,10 +67,10 @@
                                                     <h1 class="modal-title fs-5" id="exampleModalLabel">지점 삭제</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div class="modal-body text-center">
                                                     정말 삭제하시겠습니까?
                                                 </div>
-                                                <div class="modal-footer">
+                                                <div class="text-center mb-3">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                                     <a type="button" class="btn btn-danger" th:href="@{/admin/node/delete/{nodeId}(nodeId=${nodeDto.getNodeId()})}">삭제</a>
                                                 </div>

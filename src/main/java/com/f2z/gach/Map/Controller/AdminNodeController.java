@@ -1,5 +1,7 @@
 package com.f2z.gach.Map.Controller;
 
+import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
@@ -21,27 +23,28 @@ import java.util.List;
 @SessionAttributes
 public class AdminNodeController {
     private final MapNodeRepository mapNodeRepository;
+    private final AdminRepository adminRepository;
 
     @GetMapping("/node")
     public String nodeListPage(Model model){
         List<MapNode> nodeList = mapNodeRepository.findAll();
         Collections.reverse(nodeList);
         model.addAttribute("nodeList", nodeList);
-        return "node-manage";
+        return "node/node-manage";
     }
 
     @GetMapping("/node/add")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "node-add";
+        return "node/node-add";
     }
 
     @PostMapping("/node")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
-            return "node-add";
+            return "node/node-add";
         }
         mapNodeRepository.save(mapNodeDTO.toEntity());
         return "redirect:/admin/node";
@@ -52,7 +55,7 @@ public class AdminNodeController {
         MapNode mapNode = mapNodeRepository.findByNodeId(nodeId);
         model.addAttribute("nodeDto", mapNode);
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        return "node-detail";
+        return "node/node-detail";
     }
 
     @PostMapping("/node/update")
@@ -60,7 +63,7 @@ public class AdminNodeController {
                              BindingResult result){
         if(result.hasErrors()){
             log.info("오류");
-            return "node-detail";
+            return "node/node-detail";
         }
         MapNode mapNode = mapNodeRepository.findByNodeId(mapDTO.toEntity().getNodeId());
         mapNode.update(mapDTO.toEntity());
@@ -76,5 +79,10 @@ public class AdminNodeController {
             return "redirect:/admin/node";
         }
         throw new Exception();
+    }
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
     }
 }
