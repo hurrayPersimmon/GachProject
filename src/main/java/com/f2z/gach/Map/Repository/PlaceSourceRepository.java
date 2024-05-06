@@ -11,4 +11,6 @@ import java.util.List;
 public interface PlaceSourceRepository extends JpaRepository<PlaceSource, Integer> {
     List<PlaceSource> findAllByPlaceCategory(PlaceCategory placeCategory);
     PlaceSource findByPlaceId(Integer placeId);
+    List<PlaceSource> findAllByPlaceNameContaining(String placeName);
+    List<PlaceSource> findAllByPlaceCategoryContaining(PlaceCategory placeCategory);
 }

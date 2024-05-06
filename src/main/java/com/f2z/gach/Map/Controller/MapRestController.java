@@ -1,7 +1,6 @@
 package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
-import com.f2z.gach.Map.Entity.BuildingKeyword;
 import com.f2z.gach.Map.Service.MapService;
 import com.f2z.gach.Response.ResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +27,18 @@ public class MapRestController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<BuildingKeyword>> getKeywordResult(@RequestParam String target) throws Exception {
+    public ResponseEntity<List<PlaceResponseDTO.respondKeywordList>> getKeywordResult(@RequestParam String target) throws Exception {
         return mapService.getKeywordResult(target);
     }
 
-    @GetMapping("/find/{keywordId}")
-    public ResponseEntity<PlaceResponseDTO.BuildingKeywordResponseDTO> getKeywordDetailResult(@PathVariable Integer keywordId) throws Exception {
-        return mapService.getKeywordDetailResult(keywordId);
+    @GetMapping("/find/{placeId}")
+    public ResponseEntity<PlaceResponseDTO.placeLocationDTO> getKeywordDetailResult(@PathVariable Integer placeId) throws Exception {
+        return mapService.getKeywordDetailResult(placeId);
+    }
+
+    @GetMapping("/{placeCategory}")
+    public ResponseEntity<List<PlaceResponseDTO.placeLocationDTO>> getPlaceListByCategory(@PathVariable String placeCategory) throws Exception {
+        return mapService.getPlaceListByCategory(placeCategory);
     }
 
 }

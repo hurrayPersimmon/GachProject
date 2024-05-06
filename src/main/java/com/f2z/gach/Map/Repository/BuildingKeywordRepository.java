@@ -8,9 +8,8 @@ import java.util.List;
 
 @Repository
 public interface BuildingKeywordRepository extends JpaRepository<BuildingKeyword, Integer> {
-    List<BuildingKeyword> findAllByBuildingNameContaining(String target);
-    List<BuildingKeyword> findAllByProfessorNameContaining(String target);
-    List<BuildingKeyword> findAllByDepartmentContaining(String target);
-    List<BuildingKeyword> findAllByCollegeContaining(String target);
+    BuildingKeyword findByProfessorNameContaining(String target);
+    BuildingKeyword findByDepartmentContaining(String target);
+    BuildingKeyword findByCollegeContaining(String target);
     BuildingKeyword findByKeywordId(Integer keywordId);
 }

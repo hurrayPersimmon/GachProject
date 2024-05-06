@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,17 +27,7 @@ public class MapServiceImpl implements MapService{
     private final BuildingKeywordRepository buildingKeywordRepository;
 
 
-    public List<BuildingKeyword> getBuildingInfoListByKeyword(String target){
-        if(!buildingKeywordRepository.findAllByBuildingNameContaining(target).isEmpty())
-            return buildingKeywordRepository.findAllByBuildingNameContaining(target);
-        if(!buildingKeywordRepository.findAllByDepartmentContaining(target).isEmpty())
-            return buildingKeywordRepository.findAllByDepartmentContaining(target);
-        if(!buildingKeywordRepository.findAllByDepartmentContaining(target).isEmpty())
-            return buildingKeywordRepository.findAllByDepartmentContaining(target);
-        if(!buildingKeywordRepository.findAllByCollegeContaining(target).isEmpty())
-            return buildingKeywordRepository.findAllByCollegeContaining(target);
-        else return null;
-    }
+
 
     @Override
     public ResponseEntity<PlaceResponseDTO.respondPlaceList> getBuildingInfoList() {
@@ -62,23 +53,64 @@ public class MapServiceImpl implements MapService{
         }
     }
 
+
     @Override
-    public ResponseEntity<List<BuildingKeyword>> getKeywordResult(String target) {
-        List<BuildingKeyword> buildingInfoList = getBuildingInfoListByKeyword(target);
-        if(buildingInfoList != null) {
-            return ResponseEntity.requestSuccess(buildingInfoList);
-        }else{
-            return ResponseEntity.notFound(null);
+    public ResponseEntity<List<PlaceResponseDTO.respondKeywordList>> getKeywordResult(String target) {
+        // 1. 장소 이름 자체를 검색하는 경우
+        // 1-1. 건물 이름으로 검색
+        if(!placeSourceRepository.findAllByPlaceNameContaining(target).isEmpty()){
+            List<PlaceSource> targetList = placeSourceRepository.findAllByPlaceNameContaining(target);
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
+        }
+        // 1-2. 카테고리로 검색
+        else if (!placeSourceRepository.findAllByPlaceCategoryContaining(PlaceCategory.valueOf(target)).isEmpty()) {
+            List<PlaceSource> targetList = placeSourceRepository.findAllByPlaceCategoryContaining(PlaceCategory.valueOf(target));
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
+
+        }
+        // 2. 키워드로 검색하는 경우
+        // 2-1. 학과로 검색
+        else if (buildingKeywordRepository.findByDepartmentContaining(target) != null) {
+            BuildingKeyword keyword = buildingKeywordRepository.findByDepartmentContaining(target);
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
+            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+        }
+        // 2-2. 단과대학으로 검색
+        else if (buildingKeywordRepository.findByCollegeContaining(target) != null) {
+            BuildingKeyword keyword = buildingKeywordRepository.findByCollegeContaining(target);
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
+            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+        }
+        // 2-3. 교수님 성함으로 검색
+        else if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
+            BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
+            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+        }
+        else {
+            return ResponseEntity.saveButNoContent(null);
         }
     }
 
     @Override
-    public ResponseEntity<PlaceResponseDTO.BuildingKeywordResponseDTO> getKeywordDetailResult(Integer keywordId) {
-        BuildingKeyword buildingKeyword = buildingKeywordRepository.findByKeywordId(keywordId);
-        PlaceSource place = placeSourceRepository.findByPlaceId(buildingKeyword.getBuildingCode());
-        return ResponseEntity.requestSuccess(PlaceResponseDTO.toBuildingKeywordResponseDTO(buildingKeyword, place));
+    public ResponseEntity<PlaceResponseDTO.placeLocationDTO> getKeywordDetailResult(Integer placeId) {
+        PlaceSource place = placeSourceRepository.findByPlaceId(placeId);
+        if(place == null){
+            return ResponseEntity.notFound(null);
+        }else{
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toPlaceLocationDTO(place));
+        }
     }
 
+    @Override
+    public ResponseEntity<List<PlaceResponseDTO.placeLocationDTO>> getPlaceListByCategory(String placeCategory) {
+        List<PlaceSource> placeList = placeSourceRepository.findAllByPlaceCategory(PlaceCategory.valueOf(placeCategory));
+        if(placeList.isEmpty()) {
+            return ResponseEntity.notFound(null);
+        }else{
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toPlaceLocationDTOList(placeList));
+        }
+    }
 
 
 }

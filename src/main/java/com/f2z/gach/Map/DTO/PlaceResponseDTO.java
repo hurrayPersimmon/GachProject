@@ -1,12 +1,7 @@
 package com.f2z.gach.Map.DTO;
 
-import com.f2z.gach.EnumType.College;
-import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.Map.Entity.BuildingFloor;
-import com.f2z.gach.Map.Entity.BuildingKeyword;
 import com.f2z.gach.Map.Entity.PlaceSource;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlaceResponseDTO {
+
+
 
     @Builder
     @AllArgsConstructor
@@ -105,25 +102,53 @@ public class PlaceResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class BuildingKeywordResponseDTO {
-            private String buildingName;
-            private String professorClass;
+    public static class placeLocationDTO {
+            private String placeName;
             private Double placeLatitude;
             private Double placeLongitude;
-            private String placeImagePath;
-            private Integer placeId;
-
+            private Double placeAltitude;
     }
 
-    public static BuildingKeywordResponseDTO toBuildingKeywordResponseDTO(BuildingKeyword buildingkeyword, PlaceSource place) {
-        return BuildingKeywordResponseDTO.builder()
-                .buildingName(buildingkeyword.getBuildingName())
-                .professorClass(buildingkeyword.getProfessorClass())
+    public static placeLocationDTO toPlaceLocationDTO(PlaceSource place) {
+        return placeLocationDTO.builder()
+                .placeName(place.getPlaceName())
                 .placeLatitude(place.getPlaceLatitude())
                 .placeLongitude(place.getPlaceLongitude())
-                .placeImagePath(place.getThumbnailImagePath())
-                .placeId(place.getPlaceId())
+                .placeAltitude(place.getPlaceLongitude())
                 .build();
     }
+
+    public static List<placeLocationDTO> toPlaceLocationDTOList(List<PlaceSource> placeList) {
+        return placeList
+                .stream()
+                .map(PlaceResponseDTO::toPlaceLocationDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class respondKeywordList {
+        private Integer placeId;
+        private String placeName;
+        private String placeSummary;
+    }
+
+    public static respondKeywordList toKeywordList(PlaceSource place) {
+        return respondKeywordList.builder()
+                .placeId(place.getPlaceId())
+                .placeName(place.getPlaceName())
+                .placeSummary(place.getPlaceSummary())
+                .build();
+    }
+
+    public static List<respondKeywordList> toKeywordList(List<PlaceSource> places) {
+        return places
+                .stream()
+                .map(PlaceResponseDTO::toKeywordList)
+                .collect(Collectors.toList());
+    }
+
 
 }
