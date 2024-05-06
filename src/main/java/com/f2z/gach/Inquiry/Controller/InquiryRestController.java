@@ -25,7 +25,7 @@ public class InquiryRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<InquiryResponseDTO> createInquiry(@RequestBody InquiryRequestDTO inquiryRequestDTO) {
+    ResponseEntity<InquiryResponseDTO.saveInquirySuccess> createInquiry(@RequestBody InquiryRequestDTO inquiryRequestDTO) {
         return inquiryService.createInquiry(inquiryRequestDTO);
     }
 

@@ -12,7 +12,7 @@ public interface InquiryService {
 
     ResponseEntity<List<Inquiry>> getInquiryList(Long userId);
 
-    ResponseEntity<InquiryResponseDTO> createInquiry(InquiryRequestDTO inquiryRequestDTO);
+    ResponseEntity<InquiryResponseDTO.saveInquirySuccess> createInquiry(InquiryRequestDTO inquiryRequestDTO);
 
     ResponseEntity<InquiryResponseDTO> getInquiryDetailByInquiryId(Integer inquiryId);
 

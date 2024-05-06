@@ -3,6 +3,7 @@ package com.f2z.gach.Map.Repository;
 import com.f2z.gach.EnumType.PlaceCategory;
 import com.f2z.gach.Map.Entity.PlaceSource;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +12,10 @@ import java.util.List;
 public interface PlaceSourceRepository extends JpaRepository<PlaceSource, Integer> {
     List<PlaceSource> findAllByPlaceCategory(PlaceCategory placeCategory);
     PlaceSource findByPlaceId(Integer placeId);
-    List<PlaceSource> findAllByPlaceNameContaining(String placeName);
-    List<PlaceSource> findAllByPlaceCategoryContaining(PlaceCategory placeCategory);
+
+    @Query("SELECT p FROM PlaceSource p WHERE p.placeName LIKE %?1%")
+    List<PlaceSource> findPlaceSourcesByPlaceNameContaining(String placeName);
+    @Query("SELECT p FROM PlaceSource p WHERE p.placeCategory LIKE %?1%")
+    List<PlaceSource> findPlaceSourcesByPlaceCategoryContaining(PlaceCategory placeCategory);
 }
+

@@ -1,5 +1,7 @@
 package com.f2z.gach.Map.Service;
 
+import com.f2z.gach.EnumType.College;
+import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.EnumType.PlaceCategory;
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
 import com.f2z.gach.Map.Entity.BuildingFloor;
@@ -57,32 +59,38 @@ public class MapServiceImpl implements MapService{
     @Override
     public ResponseEntity<List<PlaceResponseDTO.respondKeywordList>> getKeywordResult(String target) {
         // 1. 장소 이름 자체를 검색하는 경우
-        // 1-1. 건물 이름으로 검색
-        if(!placeSourceRepository.findAllByPlaceNameContaining(target).isEmpty()){
-            List<PlaceSource> targetList = placeSourceRepository.findAllByPlaceNameContaining(target);
-            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
-        }
         // 1-2. 카테고리로 검색
-        else if (!placeSourceRepository.findAllByPlaceCategoryContaining(PlaceCategory.valueOf(target)).isEmpty()) {
-            List<PlaceSource> targetList = placeSourceRepository.findAllByPlaceCategoryContaining(PlaceCategory.valueOf(target));
-            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
-
+        try {placeSourceRepository.findPlaceSourcesByPlaceCategoryContaining(PlaceCategory.valueOf(target));
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(placeSourceRepository.findPlaceSourcesByPlaceCategoryContaining(PlaceCategory.valueOf(target))));
+        } catch (IllegalArgumentException e) {
+            log.info("Not a category");
         }
+        // 1-1. 건물 이름으로 검색
+        if(!placeSourceRepository.findPlaceSourcesByPlaceNameContaining(target).isEmpty()){
+            List<PlaceSource> targetList = placeSourceRepository.findPlaceSourcesByPlaceNameContaining(target);
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
+        }
+
         // 2. 키워드로 검색하는 경우
         // 2-1. 학과로 검색
-        else if (buildingKeywordRepository.findByDepartmentContaining(target) != null) {
-            BuildingKeyword keyword = buildingKeywordRepository.findByDepartmentContaining(target);
+        try {
+            BuildingKeyword keyword = buildingKeywordRepository.findByDepartmentContaining(Departments.valueOf(target));
             PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+        } catch (IllegalArgumentException e){
+            log.info("Not a department");
         }
         // 2-2. 단과대학으로 검색
-        else if (buildingKeywordRepository.findByCollegeContaining(target) != null) {
-            BuildingKeyword keyword = buildingKeywordRepository.findByCollegeContaining(target);
+        try{
+            BuildingKeyword keyword = buildingKeywordRepository.findByCollegeContaining(College.valueOf(target));
             PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+        } catch (IllegalArgumentException e){
+            log.info("Not a college");
         }
+
         // 2-3. 교수님 성함으로 검색
-        else if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
+        if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
             BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
             PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getBuildingCode());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));

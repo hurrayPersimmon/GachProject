@@ -40,7 +40,7 @@ public class InquiryServiceImpl implements InquiryService{
     }
 
     @Override
-    public ResponseEntity<InquiryResponseDTO> createInquiry(InquiryRequestDTO inquiryRequestDTO) {
+    public ResponseEntity<InquiryResponseDTO.saveInquirySuccess> createInquiry(InquiryRequestDTO inquiryRequestDTO) {
         Inquiry inquiry = inquiryRepository.save(InquiryRequestDTO.toEntity(inquiryRequestDTO));
         return ResponseEntity.saveSuccess(InquiryResponseDTO.toRespondSuccess(inquiry));
     }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -21,6 +22,7 @@ public class InquiryResponseDTO {
     private String inquiryTitle;
     private String inquiryContent;
     private String inquiryAnswer;
+    private LocalDateTime createDt;
 
     @Builder
     @AllArgsConstructor
@@ -33,6 +35,16 @@ public class InquiryResponseDTO {
         Long totalElements;
         Boolean firstPage;
         Boolean lastPage;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class saveInquirySuccess {
+        private Integer inquiryId;
+        private Long userId;
+
     }
 
     public static InquiryList toInquiryResponseList(Page<Inquiry> inquiryPages, List<InquiryResponseDTO> inquiryList) {
@@ -64,11 +76,12 @@ public class InquiryResponseDTO {
                 .inquiryTitle(inquiry.getInquiryTitle())
                 .inquiryContent(inquiry.getInquiryContent())
                 .inquiryAnswer(inquiry.getInquiryAnswer())
+                .createDt(inquiry.getCreateDt())
                 .build();
     }
 
-    public static InquiryResponseDTO toRespondSuccess(Inquiry inquiry) {
-        return InquiryResponseDTO.builder()
+    public static saveInquirySuccess toRespondSuccess(Inquiry inquiry) {
+        return saveInquirySuccess.builder()
                 .inquiryId(inquiry.getInquiryId())
                 .userId(inquiry.getUserId())
                 .build();
