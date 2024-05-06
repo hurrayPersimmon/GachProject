@@ -25,13 +25,8 @@ public class InquiryServiceImpl implements InquiryService{
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<InquiryResponseDTO.InquiryList> getInquiryList(Integer page, Long userId){
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
-        Page<Inquiry> inquiryPage = inquiryRepository.findAllByUserId(userId, pageable);
-
-        List<InquiryResponseDTO> InquiryResponseDTOList = inquiryPage.getContent().stream()
-                .map(InquiryResponseDTO::toInquiryListResponseDTO).toList();
-
+    public ResponseEntity<List<Inquiry>> getInquiryList(Long userId){
+        List<Inquiry> inquiryPage = inquiryRepository.findAllByUserId(userId);
         if(inquiryPage.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);
@@ -40,8 +35,14 @@ public class InquiryServiceImpl implements InquiryService{
                 return ResponseEntity.notFound(null);
             }
         }else{
-            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryPage, InquiryResponseDTOList));
+            return ResponseEntity.requestSuccess(inquiryPage);
         }
+    }
+
+    @Override
+    public ResponseEntity<InquiryResponseDTO> createInquiry(InquiryRequestDTO inquiryRequestDTO) {
+        Inquiry inquiry = inquiryRepository.save(InquiryRequestDTO.toEntity(inquiryRequestDTO));
+        return ResponseEntity.saveSuccess(InquiryResponseDTO.toRespondSuccess(inquiry));
     }
 
     @Override
@@ -55,9 +56,26 @@ public class InquiryServiceImpl implements InquiryService{
         }
     }
 
-    @Override
-    public ResponseEntity<InquiryResponseDTO> createInquiry(InquiryRequestDTO inquiryRequestDTO) {
-        Inquiry inquiry = inquiryRepository.save(InquiryRequestDTO.toEntity(inquiryRequestDTO));
-        return ResponseEntity.saveSuccess(InquiryResponseDTO.toRespondSuccess(inquiry));
-    }
+
+
+//    @Override
+//    public ResponseEntity<InquiryResponseDTO.InquiryList> getInquiryList(Integer page, Long userId){
+//        Pageable pageable = Pageable.ofSize(10).withPage(page);
+//        Page<Inquiry> inquiryPage = inquiryRepository.findAllByUserId(userId, pageable);
+//
+//        List<InquiryResponseDTO> InquiryResponseDTOList = inquiryPage.getContent().stream()
+//                .map(InquiryResponseDTO::toInquiryListResponseDTO).toList();
+//
+//        if(inquiryPage.isEmpty()){
+//            if(userRepository.existsByUserId(userId)){
+//                return ResponseEntity.saveButNoContent(null);
+//            }
+//            else{
+//                return ResponseEntity.notFound(null);
+//            }
+//        }else{
+//            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryPage, InquiryResponseDTOList));
+//        }
+//    }
+
 }
