@@ -1,7 +1,7 @@
 package com.f2z.gach.Event.DTO;
 
 public class EventLocationResponseDTO {
-    private Integer eventInfoId;
+    private Integer eventLocationId;
     private Integer eventCode;
     private String eventName;
     private String eventPlaceName;

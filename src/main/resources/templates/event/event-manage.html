@@ -62,7 +62,7 @@
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li class="page-item" style="cursor: pointer" th:each="pageNumber : ${#numbers.sequence(1,eventList.totalPage)}"
+                                        <li class="page-item" style="cursor: pointer" th:each="pageNumber : ${#numbers.sequence(1, eventList.totalPage)}"
                                             th:onclick="|location.href='@{/admin/event/list/{pageNumber}(pageNumber= ${pageNumber} -1)}'|"
                                             ><a class="page-link" th:text="${pageNumber}">1</a></li>
                                         <li class="page-item">

@@ -61,7 +61,7 @@ public class EventResponseDTO {
     @NoArgsConstructor
     @Getter
     public static class EventLocationResponse {
-        private Integer eventInfoId;
+        private Integer eventLocationId;
         private String eventName;
         private Double eventLatitude;
         private Double eventLongitude;
@@ -72,7 +72,7 @@ public class EventResponseDTO {
 
     public static EventLocationResponse toEventLocationResponse(EventLocation eventLocation) {
         return EventLocationResponse.builder()
-                .eventInfoId(eventLocation.getEventLocationId())
+                .eventLocationId(eventLocation.getEventLocationId())
                 .eventName(eventLocation.getEventName())
                 .eventLatitude(eventLocation.getEventLatitude())
                 .eventLongitude(eventLocation.getEventLongitude())

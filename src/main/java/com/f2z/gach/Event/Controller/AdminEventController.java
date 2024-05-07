@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -41,6 +42,7 @@ public class AdminEventController {
         Pageable pageable = Pageable.ofSize(10).withPage(page);
         Page<Event> eventPage = eventRepository.findAllBy(pageable);
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
+                        .sorted(Comparator.comparing(Event::getEventId).reversed())
                         .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
         model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));
 
@@ -80,7 +82,7 @@ public class AdminEventController {
 
         Event event = requestDTO.getEventDTO().toEntity();
         eventRepository.save(event);
-        requestDTO.getLocations().stream().forEach(i -> {
+        requestDTO.getLocations().forEach(i -> {
             eventLocationRepository.save(EventLocationDTO.toEventLocation(i, event));
         });
         return "redirect:/admin/event/list/0";
