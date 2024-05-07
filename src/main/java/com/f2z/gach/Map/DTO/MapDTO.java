@@ -140,4 +140,42 @@ public class MapDTO {
                 .build();
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MapNodeListStructure {
+        private Integer nodeId;
+        private String nodeName;
+        private Double nodeLatitude;
+        private Double nodeLongitude;
+        private Double nodeAltitude;
+
+        public static MapNodeListStructure toMapNodeListStructure(MapNode mapNode) {
+            return MapNodeListStructure.builder()
+                    .nodeId(mapNode.getNodeId())
+                    .nodeName(mapNode.getNodeName())
+                    .nodeLatitude(mapNode.getNodeLatitude())
+                    .nodeLongitude(mapNode.getNodeLongitude())
+                    .nodeAltitude(mapNode.getNodeAltitude())
+                    .build();
+        }
+    }
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MapNodeList {
+        List<MapNodeListStructure> nodeList;
+        Integer totalPage;
+        Long totalElements;
+    }
+
+    public static MapNodeList toMapNodeList(Page<MapNode> nodePage, List<MapNodeListStructure> nodeList){
+        return MapNodeList.builder()
+                .nodeList(nodeList)
+                .totalPage(nodePage.getTotalPages())
+                .totalElements(nodePage.getTotalElements())
+                .build();
+    }
 }

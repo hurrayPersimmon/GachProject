@@ -9,12 +9,15 @@ import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -33,11 +36,14 @@ public class AdminNodeController {
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
     }
 
-    @GetMapping("/node")
-    public String nodeListPage(Model model){
-        List<MapNode> nodeList = mapNodeRepository.findAll();
-        Collections.reverse(nodeList);
-        model.addAttribute("nodeList", nodeList);
+    @GetMapping("/node/list/{page}")
+    public String nodeListPage(Model model, @PathVariable Integer page){
+        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Page<MapNode> nodePage = mapNodeRepository.findAll(pageable);
+        List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
+                .sorted(Comparator.comparing(MapNode::getNodeId, Comparator.reverseOrder()))
+                .map(MapDTO.MapNodeListStructure::toMapNodeListStructure).toList();
+        model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         return "node/node-manage";
     }
 

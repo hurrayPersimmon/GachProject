@@ -101,7 +101,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr style="max-height : 3vh; cursor:pointer" th:each="node : ${nodeList}" th:onclick="|location.href='@{/admin/node/{nodeId}(nodeId=${node.getNodeId()})}'|">
+                                <tr style="max-height : 3vh; cursor:pointer" th:each="node : ${nodeList.getNodeList()}" th:onclick="|location.href='@{/admin/node/{nodeId}(nodeId=${node.getNodeId()})}'|">
                                         <td class="ps-5 ms-3" th:text="${node.getNodeName()}">Mark</td>
                                         <td class="ps-4 ms-4" th:text="${node.getNodeLatitude()}">Otto</td>
                                         <td class="ps-2" th:text="${node.getNodeLongitude()}">@mdo</td>
@@ -119,9 +119,9 @@
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item" style="cursor: pointer" th:each="pageNumber : ${#numbers.sequence(1, nodeList.totalPage)}"
+                                            th:onclick="|location.href='@{/admin/node/list/{pageNumber}(pageNumber= ${pageNumber} -1)}'|"
+                                        ><a class="page-link" th:text="${pageNumber}">1</a></li>
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
