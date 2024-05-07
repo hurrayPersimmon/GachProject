@@ -2,9 +2,9 @@ package com.f2z.gach.Event.Controller;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
-import com.f2z.gach.Event.DTO.EventDTO;
-import com.f2z.gach.Event.DTO.EventResponseDTO;
+import com.f2z.gach.Event.DTO.*;
 import com.f2z.gach.Event.Entity.Event;
+import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
 import jakarta.validation.Valid;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,7 +49,7 @@ public class AdminEventController {
 
     @GetMapping("/event/add")
     public String addEventPage(Model model){
-        model.addAttribute("eventDto", new EventDTO());
+        model.addAttribute("eventDto", new AdminEventRequestDTO());
         return "event/event-add";
     }
 
@@ -63,24 +64,26 @@ public class AdminEventController {
     }
 
     @PostMapping("/event")
-    public String addEvent(@Valid @ModelAttribute("eventDto") EventDTO eventDTO, @RequestParam("file") MultipartFile file,
+    public String addEvent(@Valid @ModelAttribute AdminEventRequestDTO requestDTO,
                            BindingResult result){
         try{
-            File dest = new File(fdir+"/"+file.getOriginalFilename());
-            file.transferTo(dest);
-            eventDTO.setEventImageName(dest.getName());
-            eventDTO.setEventImagePath("/img/"+dest.getName());
+            File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
+            requestDTO.getFile().transferTo(dest);
+            requestDTO.getEventDTO().setEventImageName(dest.getName());
+            requestDTO.getEventDTO().setEventImagePath("/image/"+dest.getName());
         } catch (Exception e){
             e.printStackTrace();
-            log.info("이미지 저장 오류 발생");
         }
-        log.info(eventDTO.toString());
         if(result.hasErrors()) {
             return "event/event-add";
         }
 
-        eventRepository.save(eventDTO.toEntity());
-        return "redirect:/admin/event";
+        Event event = requestDTO.getEventDTO().toEntity();
+        eventRepository.save(event);
+        requestDTO.getLocations().stream().forEach(i -> {
+            eventLocationRepository.save(EventLocationDTO.toEventLocation(i, event));
+        });
+        return "redirect:/admin/event/list/0";
     }
 
     @ModelAttribute

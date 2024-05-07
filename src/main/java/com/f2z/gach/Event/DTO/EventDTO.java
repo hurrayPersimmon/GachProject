@@ -28,8 +28,6 @@ public class EventDTO {
     private String eventInfo;
     private String eventImageName;
     private String eventImagePath;
-    private List<EventLocationDTO> locations;
-    private MultipartFile file;
 
     public Event toEntity() {
         return Event.builder()

@@ -35,33 +35,33 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 이름</p>
                                                 <hr>
-                                                <input th:field="*{eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventDTO.eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <p class="fs-4 nodeHeader">시작 날짜</p>
                                                 <hr>
-                                                <input th:field="*{eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventDTO.eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                             <div class="col">
                                                 <p class="fs-4 nodeHeader">종료 날짜</p>
                                                 <hr>
-                                                <input th:field="*{eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventDTO.eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 설명 멘트</p>
                                                 <hr>
-                                                <textarea th:field="*{eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                                <textarea th:field="*{eventDTO.eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 URL</p>
                                                 <hr>
-                                                <input th:field="*{eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventDTO.eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -69,10 +69,9 @@
                                                 <div class="row">
                                                     <div class="col text-start fs-4 nodeHeader">행사 장소</div>
                                                     <div class="col text-end">
-                                                        <i id="deleteInput" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
-                                                        <i id="addInput" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
+                                                        <span id="deleteInput" class="btn btn-primary delete fs-6 me-3 sidebarItem">선택 삭제</span>
+                                                        <span id="addInput" class="btn btn-primary add fs-6 sidebarItem">추가</span>
                                                     </div>
-
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
@@ -81,7 +80,6 @@
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body" id="map" style="height:50vh;">
-
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -96,22 +94,14 @@
                                                     <table class="table">
                                                         <thead class="text-center rounded pt-2 fontReg">
                                                         <tr>
+                                                            <th scope="col"><i class="bi bi-ui-checks-grid"></i></th>
                                                             <th scope="col">행사 장소 이름</th>
                                                             <th scope="col">고도</th>
                                                             <th scope="col">위도</th>
                                                             <th scope="col">경도</th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody class="text-center">
-
-                                                        <tr th:each="location : ${eventLocationList}">
-                                                            <td th:text="${location.eventPlaceName}">1</td>
-                                                            <td th:text="${location.eventAltitude}">Mark</td>
-                                                            <td th:text="${location.eventLatitude}">Otto</td>
-                                                            <td th:text="${location.eventLongitude}">@mdo</td>
-                                                            <td style="display: none;" th:text="${location.eventInfoId}">@mdo</td>
-
-                                                        </tr>
+                                                        <tbody class="text-center" id="locations">
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -140,6 +130,7 @@
 <script>
     let tempLat = 37.45088195800781;
     let tempLng = 127.12886810302734;
+    let tempAlti = 0;
     let locationIndex = 0;
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
@@ -169,6 +160,22 @@
             const position = newMarkerView.position;
             tempLat = position.lat;
             tempLng = position.lng;
+            elevator
+                .getElevationForLocations({
+                    locations: [position],
+                })
+                .then(({ results }) => {
+                    // Retrieve the first result
+                    if (results[0]) {
+                        // Open the infowindow indicating the elevation at the clicked position.
+                        tempAlti = results[0].elevation;
+                    } else {
+                        alert("오류");
+                    }
+                })
+                .catch((e) =>
+                    alert("오류원인 : " + e)
+                );
         });
     }
 
@@ -188,75 +195,45 @@
     }
 
     function readXY(){
-        let newDiv = document.createElement('div');
-        newDiv.classList.add('row');
-        newDiv.classList.add('border');
-        newDiv.classList.add('mx-4');
-        newDiv.classList.add('px-3');
-        newDiv.classList.add('eventPlace');
-        let header = document.createElement('p');
-        header.classList.add('fs-5');
-        header.classList.add('nodeHeader');
-        header.innerText = `장소 이름`;
-        let inputName = document.createElement('input');
-        inputName.classList.add('form-control');
-        inputName.classList.add('form-input');
-        inputName.classList.add('py-0');
-        inputName.type='text';
-        inputName.name = 'locations[' + locationIndex + '].' + 'eventPlaceName';
-        let column = document.createElement('div');
-        column.classList.add('mb-1');
-        column.classList.add('form-floating');
-        column.classList.add('px-5');
-        let column2 = document.createElement('div');
-        column2.classList.add('mb-1');
-        column2.classList.add('ms-1');
-        column2.classList.add('form-floating');
-        column2.classList.add('px-5');
-        column2.classList.add('row');
-        let column3 = document.createElement('div');
-        column3.classList.add('mb-1');
-        column3.classList.add('form-floating');
-        column3.classList.add('px-3');
-        column3.classList.add('col');
-        let column4 = document.createElement('div');
-        column4.classList.add('mb-1');
-        column4.classList.add('form-floating');
-        column4.classList.add('px-3');
-        column4.classList.add('col');
-        let latHeader = document.createElement('p');
-        latHeader.classList.add('fs-5');
-        latHeader.classList.add('nodeHeader');
-        latHeader.innerText = `위도`;
-        let inputLat = document.createElement('input');
-        inputLat.classList.add('form-control');
-        inputLat.classList.add('form-input');
-        inputLat.classList.add('py-0');
-        inputLat.type='text';
-        inputLat.value = tempLat;
-        inputLat.name = 'locations[' + locationIndex + '].' + 'eventLatitude';
-        let LngHeader = document.createElement('p');
-        LngHeader.classList.add('fs-5');
-        LngHeader.classList.add('nodeHeader');
-        LngHeader.innerText = `경도`;
-        let inputLng = document.createElement('input');
-        inputLng.classList.add('form-control');
-        inputLng.classList.add('font-input');
-        inputLng.classList.add('py-0');
-        inputLng.type='text';
-        inputLng.value = tempLng;
-        inputLng.name = 'locations[' + locationIndex + '].' + 'eventLatitude';
-        column3.appendChild(latHeader);
-        column3.appendChild(inputLat);
-        column4.appendChild(LngHeader);
-        column4.appendChild(inputLng);
-        column2.appendChild(column3);
-        column2.appendChild(column4);
-        column.appendChild(header);
-        column.appendChild(inputName);
-        newDiv.appendChild(column);
-        newDiv.appendChild(column2);
-        document.getElementById('inputContainer').appendChild(newDiv);
+        let locationsTbody = document.getElementById("locations");
+        let locationsTr = document.createElement("tr");
+        let nameTd = document.createElement("td");
+        let nameInput = document.createElement("input");
+        nameInput.className = "form-control sidebarItem";
+        nameTd.appendChild(nameInput);
+        nameInput.name = 'locations[' + locationIndex + '].eventPlaceName';
+        let latTd = document.createElement("td");
+        let latInput = document.createElement("input");
+        latInput.className = "form-control sidebarItem";
+        latInput.value = tempLat;
+        latTd.appendChild(latInput);
+        latInput.name = 'locations[' + locationIndex + '].eventLatitude';
+        let lngTd = document.createElement("td");
+        let lngInput = document.createElement("input");
+        lngInput.className = "form-control sidebarItem";
+        lngInput.value = tempLng;
+        lngTd.appendChild(lngInput);
+        lngInput.name = 'locations[' + locationIndex + '].eventLongitude';
+        let altiTd = document.createElement("td");
+        let altiInput = document.createElement("input");
+        altiInput.value = tempAlti;
+        altiInput.className = "form-control sidebarItem";
+        altiTd.appendChild(altiInput);
+        altiInput.name = 'locations[' + locationIndex + '].eventAltitude';
+        let checkTd = document.createElement("td");
+        let inputCheck = document.createElement("input");
+        inputCheck.type = "checkbox";
+        inputCheck.style.width = '1.5rem';
+        inputCheck.style.height = '1.5rem';
+        inputCheck.id = `${locationIndex}`;
+        inputCheck.className = "mt-1";
+        checkTd.appendChild(inputCheck);
+        locationsTr.appendChild(checkTd);
+        locationsTr.appendChild(nameTd);
+        locationsTr.appendChild(altiTd);
+        locationsTr.appendChild(latTd);
+        locationsTr.appendChild(lngTd);
+        locationsTbody.appendChild(locationsTr);
         locationIndex++;
     }
 
