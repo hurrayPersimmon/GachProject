@@ -2,16 +2,18 @@ package com.f2z.gach.Event.DTO;
 
 import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
+import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventResponseDTO {
-
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -86,5 +88,57 @@ public class EventResponseDTO {
                 .map(EventResponseDTO::toEventLocationResponse)
                 .collect(Collectors.toList());
     }
+
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class AdminEventListStructure {
+        private Integer eventId;
+        private String eventName;
+        private LocalDate eventStartDate;
+        private LocalDate eventEndDate;
+        private String eventLink;
+        private String eventImageName;
+
+        public static AdminEventListStructure toAdminEventListStructure(Event event) {
+            return AdminEventListStructure.builder()
+                    .eventId(event.getEventId())
+                    .eventName(event.getEventName())
+                    .eventStartDate(event.getEventStartDate())
+                    .eventEndDate(event.getEventEndDate())
+                    .eventLink(event.getEventLink())
+                    .eventImageName(event.getEventImageName())
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class AdminEventList {
+        List<AdminEventListStructure> adminEventList;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean firstPage;
+        Boolean lastPage;
+    }
+
+    public static AdminEventList toAdminEventList(Page<Event> events, List<AdminEventListStructure> eventList) {
+        return AdminEventList.builder()
+                .adminEventList(eventList)
+                .listSize(eventList.size())
+                .totalPage(events.getTotalPages())
+                .totalElements(events.getTotalElements())
+                .firstPage(events.isFirst())
+                .lastPage(events.isLast())
+                .build();
+    }
+
+
+
 
 }

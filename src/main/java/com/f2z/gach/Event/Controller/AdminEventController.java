@@ -3,11 +3,15 @@ package com.f2z.gach.Event.Controller;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Event.DTO.EventDTO;
+import com.f2z.gach.Event.DTO.EventResponseDTO;
+import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Repository.EventRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -28,9 +33,14 @@ public class AdminEventController {
     @Value("${gach.img.dir}")
     String fdir;
 
-    @GetMapping("/event")
-    public String eventListPage(Model model){
-        model.addAttribute("eventList", eventRepository.findAll());
+    @GetMapping("/event/list/{page}")
+    public String eventListPage(Model model, @PathVariable Integer page){
+        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Page<Event> eventPage = eventRepository.findAllBy(pageable);
+        List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
+                        .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
+        model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));
+
         return "event/event-manage";
     }
 
@@ -42,6 +52,8 @@ public class AdminEventController {
 
     @GetMapping("/event/{id}")
     public String addEventPage(@PathVariable Integer id, Model model){
+        model.addAttribute("eventDto", eventRepository.findByEventId(id));
+
         //Event객체 혹은 EventDto객체를 전송해야함.
         // 만약 Dto객체를 사용한다면 EventDto => Event로 변경사항을 반영하는 메소드도 필요
         return "event/event-add";

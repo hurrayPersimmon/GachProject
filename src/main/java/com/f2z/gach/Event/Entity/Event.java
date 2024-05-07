@@ -1,5 +1,6 @@
 package com.f2z.gach.Event.Entity;
 
+import com.f2z.gach.Event.DTO.EventResponseDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,4 +27,5 @@ public class Event {
     private String eventInfo;
     private String eventImageName;
     private String eventImagePath;
+
 }

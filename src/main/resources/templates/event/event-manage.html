@@ -42,7 +42,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                <tr th:each="event : ${eventList}" style="max-height: 6vh; cursor:pointer" th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
+                                <tr th:each="event : ${eventList.adminEventList}" style="max-height: 6vh; cursor:pointer" th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
                                     <td th:text="${event.eventName}">1</td>
                                     <td th:text="${event.eventStartDate}">Mark</td>
                                     <td th:text="${event.eventEndDate}">Otto</td>
@@ -61,9 +61,9 @@
                                                 <span aria-hidden="true">&laquo;</span>
                                             </a>
                                         </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a th:each="pageNumber : ${#numbers.sequence(1,eventList.totalPage)}"
+                                                                 th:onclick="|location.href='@{/admin/event/list/{pageNumber}(pageNumber= ${pageNumber} -1)}'|"
+                                                                 th:text="${pageNumber}" class="page-link"></a></li>
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
@@ -72,7 +72,6 @@
                                     </ul>
                                 </nav>
                             </div>
-
                         </div>
                     </div>
                 </div>
