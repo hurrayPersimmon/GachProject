@@ -2,6 +2,7 @@ package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
@@ -24,6 +25,13 @@ import java.util.List;
 public class AdminNodeController {
     private final MapNodeRepository mapNodeRepository;
     private final AdminRepository adminRepository;
+    private final InquiryRepository inquiryRepository;
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+    }
 
     @GetMapping("/node")
     public String nodeListPage(Model model){
@@ -79,10 +87,5 @@ public class AdminNodeController {
             return "redirect:/admin/node";
         }
         throw new Exception();
-    }
-
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
     }
 }

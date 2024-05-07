@@ -14,5 +14,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Inquiry findByInquiryId(Integer inquiryId);
 
-    Integer countByInquiryAnswerIsFalse();
+    Integer countByInquiryProgressIsFalse();
+
 }

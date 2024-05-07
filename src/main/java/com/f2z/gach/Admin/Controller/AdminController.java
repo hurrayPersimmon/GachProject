@@ -6,6 +6,7 @@ import com.f2z.gach.Admin.DTO.loginDTO;
 import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @SessionAttributes
 public class AdminController {
     private final AdminRepository adminRepository;
+    private final InquiryRepository inquiryRepository;
 
     @GetMapping("/main-page")
     public String mainPage(){
@@ -167,6 +169,8 @@ public class AdminController {
     @ModelAttribute
     public void setAttributes(Model model){
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+
     }
 
 

@@ -7,6 +7,7 @@ import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,16 @@ public class AdminEventController {
     private final EventRepository eventRepository;
     private final AdminRepository adminRepository;
     private final EventLocationRepository eventLocationRepository;
+    private final InquiryRepository inquiryRepository;
 
     @Value("${gach.img.dir}")
     String fdir;
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+    }
 
     @GetMapping("/event/list/{page}")
     public String eventListPage(Model model, @PathVariable Integer page){
@@ -45,7 +53,6 @@ public class AdminEventController {
                         .sorted(Comparator.comparing(Event::getEventId).reversed())
                         .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
         model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));
-
         return "event/event-manage";
     }
 
@@ -88,10 +95,6 @@ public class AdminEventController {
         return "redirect:/admin/event/list/0";
     }
 
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
-    }
 
     // TODO : Update 메소드 필요.
     // TODO : Delete 메소드도 필요.
