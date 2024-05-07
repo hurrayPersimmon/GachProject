@@ -106,7 +106,7 @@ public class PlaceResponseDTO {
             private String placeName;
             private Double placeLatitude;
             private Double placeLongitude;
-            private Double placeAltitude;
+            private Integer placeId;
     }
 
     public static placeLocationDTO toPlaceLocationDTO(PlaceSource place) {
@@ -114,7 +114,7 @@ public class PlaceResponseDTO {
                 .placeName(place.getPlaceName())
                 .placeLatitude(place.getPlaceLatitude())
                 .placeLongitude(place.getPlaceLongitude())
-                .placeAltitude(place.getPlaceLongitude())
+                .placeId(place.getPlaceId())
                 .build();
     }
 

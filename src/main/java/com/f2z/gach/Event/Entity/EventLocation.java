@@ -13,7 +13,7 @@ import lombok.*;
 public class EventLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer eventInfoId;
+    private Integer eventLocationId;
     private String eventName;
     private String eventPlaceName;
     private Double eventAltitude;

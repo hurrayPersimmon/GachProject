@@ -12,9 +12,15 @@ public class dataService {
     private final nodeRepository nodeRepository;
 
     public dataEntity getData(dataDto datadto) {
+        log.info(datadto.toString());
         dataEntity data = datadto.toEntity();
+        log.info(data.getNode2());
+        log.info(data.getNode1());
+//        nodeEntity nodeOne = nodeRepository.findByNodeId(Integer.valueOf(data.getNode1()));
         nodeEntity nodeOne = nodeRepository.findByNodeName(data.getNode1());
+        log.info(" nodeOne "+nodeOne.getNodeName());
         nodeEntity nodeTwo = nodeRepository.findByNodeName(data.getNode2());
+        log.info(nodeTwo.getNodeName());
 
 
         double distance = getDistance(nodeTwo, nodeOne);
