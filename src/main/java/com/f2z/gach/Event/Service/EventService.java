@@ -9,5 +9,5 @@ import java.util.List;
 public interface EventService {
     ResponseEntity<EventResponseDTO.EventList> getEventList();
 
-    ResponseEntity<List<EventLocation>> getEventLocationByEventCode(Integer eventCode);
+    ResponseEntity<List<EventResponseDTO.EventLocationResponse>> getEventLocationByEventId(Integer eventCode);
 }

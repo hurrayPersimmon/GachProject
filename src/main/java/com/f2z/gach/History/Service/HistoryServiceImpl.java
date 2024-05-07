@@ -23,7 +23,7 @@ public class HistoryServiceImpl implements HistoryService{
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<List<UserHistory>> getHistoryList( Long userId) {
+    public ResponseEntity<List<HistoryResponseDTO.UserHistoryListStructure>> getHistoryList( Long userId) {
         List<UserHistory> userHistoryList= userHistoryRepository.findAllByUserId(userId);
         if(userHistoryList.isEmpty()){
             if(userRepository.existsByUserId(userId)){
@@ -33,7 +33,13 @@ public class HistoryServiceImpl implements HistoryService{
                 return ResponseEntity.notFound(null);
             }
         }else{
-            return ResponseEntity.requestSuccess(userHistoryList);
+            return ResponseEntity.requestSuccess(HistoryResponseDTO.toUserHistoryListResponseDTO(userHistoryList));
         }
+    }
+
+    @Override
+    public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(UserHistory userHistory) {
+        UserHistory user = userHistoryRepository.save(userHistory);
+        return ResponseEntity.saveSuccess(HistoryResponseDTO.toRespondSuccess(user));
     }
 }

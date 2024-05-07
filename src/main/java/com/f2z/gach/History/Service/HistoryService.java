@@ -7,5 +7,7 @@ import com.f2z.gach.Response.ResponseEntity;
 import java.util.List;
 
 public interface HistoryService {
-    ResponseEntity<List<UserHistory>> getHistoryList(Long userId);
+    ResponseEntity<List<HistoryResponseDTO.UserHistoryListStructure>> getHistoryList(Long userId);
+
+    ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(UserHistory userHistory);
 }

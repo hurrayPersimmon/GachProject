@@ -1,5 +1,6 @@
 package com.f2z.gach.Event.Service;
 
+import com.f2z.gach.Event.DTO.EventLocationDTO;
 import com.f2z.gach.Event.DTO.EventResponseDTO;
 import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
@@ -35,13 +36,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ResponseEntity<List<EventLocation>> getEventLocationByEventCode(Integer eventCode) {
-        List<EventLocation> eventLocationList = eventLocationRepository.findAllByEventCode(eventCode);
+    public ResponseEntity<List<EventResponseDTO.EventLocationResponse>> getEventLocationByEventId(Integer eventId) {
+
+        List<EventLocation> eventLocationList = eventLocationRepository.findAllByEvent_EventId(eventId);
+
         if(eventLocationList.isEmpty()){
             return ResponseEntity.notFound(null);
         }
         else {
-            return ResponseEntity.requestSuccess(eventLocationList);
+            return ResponseEntity.requestSuccess(EventResponseDTO.toEventLocationList(eventLocationList));
         }
     }
 }

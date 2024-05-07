@@ -28,5 +28,4 @@ public class UserHistory extends BaseTimeEntity {
     private String arrivals;
     private Satisfaction satisfactionRoute;
     private Satisfaction satisfactionTime;
-
 }

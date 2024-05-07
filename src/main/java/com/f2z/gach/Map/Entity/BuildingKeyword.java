@@ -15,8 +15,8 @@ public class BuildingKeyword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer keywordId;
-    private Integer buildingCode;
-    private String buildingName;
+    private Integer placeId;
+    private String placeName;
     @Enumerated(EnumType.STRING)
     private College college;
     @Enumerated(EnumType.STRING)

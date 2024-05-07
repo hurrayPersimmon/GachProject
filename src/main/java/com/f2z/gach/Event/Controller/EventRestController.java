@@ -25,8 +25,8 @@ public class EventRestController {
         return eventService.getEventList();
     }
 
-    @GetMapping("/{eventCode}")
-    public ResponseEntity<List<EventLocation>> getEventLocationByEventCode(@PathVariable Integer eventCode) {
-        return eventService.getEventLocationByEventCode(eventCode);
+    @GetMapping("/{eventId}")
+    public ResponseEntity<List<EventResponseDTO.EventLocationResponse>> getEventLocationByEventId(@PathVariable Integer eventId) {
+        return eventService.getEventLocationByEventId(eventId);
     }
 }

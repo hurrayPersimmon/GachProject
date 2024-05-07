@@ -13,10 +13,13 @@ public class EventLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventInfoId;
-    private Integer eventCode;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Event eventName;
+    private String eventName;
     private String eventPlaceName;
+    private Double eventAltitude;
     private Double eventLatitude;
     private Double eventLongitude;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private Event event;
 }

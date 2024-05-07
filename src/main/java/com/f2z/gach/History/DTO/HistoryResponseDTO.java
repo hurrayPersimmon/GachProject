@@ -32,42 +32,78 @@ public class HistoryResponseDTO {
     private LocalDateTime createDt;
 
 
+
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class UserHistoryList {
-        List<HistoryResponseDTO> HistoryList;
-        Integer listSize;
-        Integer totalPage;
-        Long totalElements;
-        Boolean firstPage;
-        Boolean lastPage;
+    public static class UserHistoryListStructure {
+        Integer historyId;
+        Long userId;
+        Time totalTime;
+        LocalDateTime createDt;
+        String arrivals;
+        String departures;
+        Satisfaction satisfactionRoute;
+        Satisfaction satisfactionTime;
     }
 
-    public static UserHistoryList toUserHistoryResponseList(Page<UserHistory> historyPages, List<HistoryResponseDTO> historyList) {
-        return UserHistoryList.builder()
-                .HistoryList(historyList)
-                .listSize(historyList.size())
-                .totalPage(historyPages.getTotalPages())
-                .totalElements(historyPages.getTotalElements())
-                .firstPage(historyPages.isFirst())
-                .lastPage(historyPages.isLast())
-                .build();
-    }
-
-    public static HistoryResponseDTO toUserHistoryListResponseDTO(UserHistory history) {
-        return HistoryResponseDTO.builder()
+    public static UserHistoryListStructure toUserHistoryList(UserHistory history) {
+        return UserHistoryListStructure.builder()
                 .historyId(history.getHistoryId())
                 .userId(history.getUserId())
                 .totalTime(history.getTotalTime())
-                .departures(history.getDepartures())
                 .createDt(history.getCreateDt())
+                .departures(history.getDepartures())
                 .arrivals(history.getArrivals())
                 .satisfactionRoute(history.getSatisfactionRoute())
                 .satisfactionTime(history.getSatisfactionTime())
                 .build();
     }
+
+    public static List<UserHistoryListStructure> toUserHistoryListResponseDTO(List<UserHistory> historyList) {
+        return historyList.stream().map(HistoryResponseDTO::toUserHistoryList).toList();
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class respondSuccess {
+        Integer historyId;
+        Long userId;
+    }
+
+    public static respondSuccess toRespondSuccess(UserHistory history) {
+        return respondSuccess.builder()
+                .historyId(history.getHistoryId())
+                .userId(history.getUserId())
+                .build();
+    }
+
+//    @Builder
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    @Getter
+//    public static class UserHistoryList {
+//        List<HistoryResponseDTO> HistoryList;
+//        Integer listSize;
+//        Integer totalPage;
+//        Long totalElements;
+//        Boolean firstPage;
+//        Boolean lastPage;
+//    }
+//
+//    public static UserHistoryList toUserHistoryResponseList(Page<UserHistory> historyPages, List<HistoryResponseDTO> historyList) {
+//        return UserHistoryList.builder()
+//                .HistoryList(historyList)
+//                .listSize(historyList.size())
+//                .totalPage(historyPages.getTotalPages())
+//                .totalElements(historyPages.getTotalElements())
+//                .firstPage(historyPages.isFirst())
+//                .lastPage(historyPages.isLast())
+//                .build();
+//    }
 
 
 }

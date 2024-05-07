@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface EventLocationRepository extends JpaRepository<EventLocation, Integer> {
-    List<EventLocation> findAllByEventCode(Integer eventCode);
+    List<EventLocation> findAllByEvent_EventId(Integer eventId);
 }

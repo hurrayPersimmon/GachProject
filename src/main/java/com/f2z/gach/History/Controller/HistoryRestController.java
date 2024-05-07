@@ -18,8 +18,13 @@ public class HistoryRestController {
     private final HistoryService historyService;
 
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<UserHistory>> getHistoryList(@PathVariable Long userId) throws Exception {
+    public ResponseEntity<List<HistoryResponseDTO.UserHistoryListStructure>> getHistoryList(@PathVariable Long userId) throws Exception {
         return historyService.getHistoryList(userId);
+    }
+
+    @PostMapping()
+    public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(@RequestBody UserHistory userHistory) {
+        return historyService.createHistory(userHistory);
     }
 
 
