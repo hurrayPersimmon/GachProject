@@ -10,12 +10,15 @@ import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -36,11 +39,14 @@ public class AdminLineController {
 
     }
 
-    @GetMapping("/line")
-    public String lineListPage(Model model){
-        List<MapLine> lineList = mapLineRepository.findAll();
-        Collections.reverse(lineList);
-        model.addAttribute("lineList", lineList);
+    @GetMapping("/line/list/{page}")
+    public String lineListPage(Model model, @PathVariable Integer page){
+        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Page<MapLine> linePage = mapLineRepository.findAll(pageable);
+        List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
+                .sorted(Comparator.comparing(MapLine::getLineId).reversed())
+                .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
+        model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         return "line/line-manage";
     }
 

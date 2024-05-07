@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 
 public class MapDTO {
@@ -93,6 +96,48 @@ public class MapDTO {
         }
 
 
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MapLineListStructure {
+        private Integer lineId;
+        private String lineName;
+        private String nodeNameFirst;
+        private String nodeNameSecond;
+        private Double weightShortest;
+        private Double weightOptimal;
+
+        public static MapLineListStructure toMapLineListStructure(MapLine mapLine) {
+            return MapLineListStructure.builder()
+                    .lineId(mapLine.getLineId())
+                    .lineName(mapLine.getLineName())
+                    .nodeNameFirst(mapLine.getNodeNameFirst())
+                    .nodeNameSecond(mapLine.getNodeNameSecond())
+                    .weightShortest(mapLine.getWeightShortest())
+                    .weightOptimal(mapLine.getWeightOptimal())
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MapLineList {
+        List<MapLineListStructure> lineList;
+        Integer totalPage;
+        Long totalElements;
+    }
+
+    public static MapLineList toMapLineList(Page<MapLine> linePage, List<MapLineListStructure> lineList){
+        return MapLineList.builder()
+                .lineList(lineList)
+                .totalPage(linePage.getTotalPages())
+                .totalElements(linePage.getTotalElements())
+                .build();
     }
 
 }
