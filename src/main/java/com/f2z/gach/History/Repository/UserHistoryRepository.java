@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> {
 
-    List<UserHistory> findAllByUserId(Long userId);
+    List<UserHistory> findAllByUser_userId(Long userId);
 }

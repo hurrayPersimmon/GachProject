@@ -8,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class EventLocationDTO {
+    private Integer eventInfoId;
     private String eventPlaceName;
+    private Double eventAltitude;
     private Double eventLatitude;
     private Double eventLongitude;
 }

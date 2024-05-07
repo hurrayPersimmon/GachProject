@@ -5,6 +5,7 @@ import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Event.DTO.EventDTO;
 import com.f2z.gach.Event.DTO.EventResponseDTO;
 import com.f2z.gach.Event.Entity.Event;
+import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.List;
 public class AdminEventController {
     private final EventRepository eventRepository;
     private final AdminRepository adminRepository;
+    private final EventLocationRepository eventLocationRepository;
 
     @Value("${gach.img.dir}")
     String fdir;
@@ -50,13 +52,14 @@ public class AdminEventController {
         return "event/event-add";
     }
 
-    @GetMapping("/event/{id}")
-    public String addEventPage(@PathVariable Integer id, Model model){
-        model.addAttribute("eventDto", eventRepository.findByEventId(id));
+    @GetMapping("/event/{eventId}")
+    public String addEventPage(@PathVariable Integer eventId, Model model){
+        model.addAttribute("eventDto", eventRepository.findByEventId(eventId));
+        model.addAttribute("eventLocationList", eventLocationRepository.findAllByEvent_EventId(eventId));
 
         //Event객체 혹은 EventDto객체를 전송해야함.
         // 만약 Dto객체를 사용한다면 EventDto => Event로 변경사항을 반영하는 메소드도 필요
-        return "event/event-add";
+        return "event/event-detail";
     }
 
     @PostMapping("/event")

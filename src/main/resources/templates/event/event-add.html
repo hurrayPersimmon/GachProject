@@ -14,16 +14,17 @@
         <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
             <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
                 <div class="row ms-5 mb-3 mt-2 nodeHeader">
-                    관리자 > 행사 관리 > 행사 추가 및 수정
+                    관리자 > 행사 관리 > 행사 추가
                 </div>
                 <div class="row ms-1">
                     <div class="col-11 ms-5" style="width:88%;">
-                        <div class="row mb-3 fs-1 fontHv">
-                            행사 추가 및 수정
-                        </div>
+
                         <div class="row p-4">
                             <form enctype="multipart/form-data" th:action="@{/admin/event}" th:object="${eventDto}" method="post">
                                 <div class="row">
+                                    <div class="row mb-3 fs-1 fontHv">
+                                        행사 추가
+                                    </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <button class="btn btn-primary">추가</button>
                                     </div>
@@ -71,6 +72,7 @@
                                                         <i id="deleteInput" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
                                                         <i id="addInput" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
                                                     </div>
+
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
@@ -90,6 +92,29 @@
                                                     </div>
                                                 </div>
                                                 <hr>
+                                                <div class="row">
+                                                    <table class="table">
+                                                        <thead class="text-center rounded pt-2 fontReg">
+                                                        <tr>
+                                                            <th scope="col">행사 장소 이름</th>
+                                                            <th scope="col">고도</th>
+                                                            <th scope="col">위도</th>
+                                                            <th scope="col">경도</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="text-center">
+
+                                                        <tr th:each="location : ${eventLocationList}">
+                                                            <td th:text="${location.eventPlaceName}">1</td>
+                                                            <td th:text="${location.eventAltitude}">Mark</td>
+                                                            <td th:text="${location.eventLatitude}">Otto</td>
+                                                            <td th:text="${location.eventLongitude}">@mdo</td>
+                                                            <td style="display: none;" th:text="${location.eventInfoId}">@mdo</td>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

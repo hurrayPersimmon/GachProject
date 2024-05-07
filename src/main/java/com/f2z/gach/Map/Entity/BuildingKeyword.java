@@ -15,7 +15,6 @@ public class BuildingKeyword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer keywordId;
-    private Integer placeId;
     private String placeName;
     @Enumerated(EnumType.STRING)
     private College college;
@@ -23,6 +22,10 @@ public class BuildingKeyword {
     private Departments department;
     private String professorName;
     private String professorClass;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "placeId", insertable = false, updatable = false)
+    private PlaceSource placeSource;
 
 
 

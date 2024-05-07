@@ -24,7 +24,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public ResponseEntity<List<HistoryResponseDTO.UserHistoryListStructure>> getHistoryList( Long userId) {
-        List<UserHistory> userHistoryList= userHistoryRepository.findAllByUserId(userId);
+        List<UserHistory> userHistoryList= userHistoryRepository.findAllByUser_userId(userId);
         if(userHistoryList.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);

@@ -51,7 +51,7 @@ public class HistoryResponseDTO {
     public static UserHistoryListStructure toUserHistoryList(UserHistory history) {
         return UserHistoryListStructure.builder()
                 .historyId(history.getHistoryId())
-                .userId(history.getUserId())
+                .userId(history.getUser().getUserId())
                 .totalTime(history.getTotalTime())
                 .createDt(history.getCreateDt())
                 .departures(history.getDepartures())
@@ -77,7 +77,7 @@ public class HistoryResponseDTO {
     public static respondSuccess toRespondSuccess(UserHistory history) {
         return respondSuccess.builder()
                 .historyId(history.getHistoryId())
-                .userId(history.getUserId())
+                .userId(history.getUser().getUserId())
                 .build();
     }
 

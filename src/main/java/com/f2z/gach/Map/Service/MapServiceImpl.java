@@ -75,7 +75,7 @@ public class MapServiceImpl implements MapService{
         // 2-1. 학과로 검색
         try {
             BuildingKeyword keyword = buildingKeywordRepository.findByDepartmentContaining(Departments.valueOf(target));
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceId());
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
         } catch (IllegalArgumentException e){
             log.info("Not a department");
@@ -83,7 +83,7 @@ public class MapServiceImpl implements MapService{
         // 2-2. 단과대학으로 검색
         try{
             BuildingKeyword keyword = buildingKeywordRepository.findByCollegeContaining(College.valueOf(target));
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceId());
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
         } catch (IllegalArgumentException e){
             log.info("Not a college");
@@ -92,7 +92,7 @@ public class MapServiceImpl implements MapService{
         // 2-3. 교수님 성함으로 검색
         if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
             BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceId());
+            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
             return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
         }
         else {

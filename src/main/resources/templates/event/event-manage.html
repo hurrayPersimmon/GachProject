@@ -42,7 +42,8 @@
                                 </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                <tr th:each="event : ${eventList.adminEventList}" style="max-height: 6vh; cursor:pointer" th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
+                                <tr th:each="event : ${eventList.adminEventList}" style="max-height: 6vh; cursor:pointer"
+                                    th:onclick="|location.href='@{/admin/event/{eventId}(eventId=${event.getEventId()})}'|">
                                     <td th:text="${event.eventName}">1</td>
                                     <td th:text="${event.eventStartDate}">Mark</td>
                                     <td th:text="${event.eventEndDate}">Otto</td>
@@ -105,6 +106,8 @@
             });
         });
     });
+
+
 
     function check(){
         Array.from(rows).forEach(function(row, index){

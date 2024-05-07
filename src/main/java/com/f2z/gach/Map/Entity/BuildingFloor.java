@@ -1,9 +1,6 @@
 package com.f2z.gach.Map.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -21,5 +18,9 @@ public class BuildingFloor {
     private String buildingName;
     private String buildingFloor;
     private String buildingFloorInfo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "placeId", insertable = false, updatable = false)
+    private PlaceSource placeSource;
 
 }

@@ -18,14 +18,15 @@
                 </div>
                 <div class="row ms-1">
                     <div class="col-11 ms-5" style="width:88%;">
-                        <div class="row mb-3 fs-1 fontHv">
-                            행사 수정
-                        </div>
+
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{}" th:object="${}" method="post">
+                            <form enctype="multipart/form-data" th:action="@{/admin/event}" th:object="${eventDto}" method="post">
                                 <div class="row">
+                                    <div class="row mb-3 fs-1 fontHv">
+                                        행사 수정
+                                    </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary">전송</button>
+                                        <button class="btn btn-primary">추가</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -34,43 +35,44 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 이름</p>
                                                 <hr>
-                                                <input th:field="*{}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <p class="fs-4 nodeHeader">시작 시간</p>
+                                                <p class="fs-4 nodeHeader">시작 날짜</p>
                                                 <hr>
-                                                <input th:field="*{}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                             <div class="col">
-                                                <p class="fs-4 nodeHeader">종료 시간</p>
+                                                <p class="fs-4 nodeHeader">종료 날짜</p>
                                                 <hr>
-                                                <input th:field="*{}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 설명 멘트</p>
                                                 <hr>
-                                                <textarea th:field="*{}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                                <textarea th:field="*{eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 URL</p>
                                                 <hr>
-                                                <input th:field="*{}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3" id="inputContainer">
                                                 <div class="row">
-                                                    <div class="col text-start fs-4 nodeHeader">행사 장소 수정</div>
+                                                    <div class="col text-start fs-4 nodeHeader">행사 장소</div>
                                                     <div class="col text-end">
                                                         <i id="deleteInput" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
                                                         <i id="addInput" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
                                                     </div>
+
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
@@ -90,6 +92,29 @@
                                                     </div>
                                                 </div>
                                                 <hr>
+                                                <div class="row">
+                                                    <table class="table">
+                                                        <thead class="text-center rounded pt-2 fontReg">
+                                                        <tr>
+                                                            <th scope="col">행사 장소 이름</th>
+                                                            <th scope="col">고도</th>
+                                                            <th scope="col">위도</th>
+                                                            <th scope="col">경도</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="text-center">
+
+                                                        <tr th:each="location : ${eventLocationList}">
+                                                            <td th:text="${location.eventPlaceName}">1</td>
+                                                            <td th:text="${location.eventAltitude}">Mark</td>
+                                                            <td th:text="${location.eventLatitude}">Otto</td>
+                                                            <td th:text="${location.eventLongitude}">@mdo</td>
+                                                            <td style="display: none;" th:text="${location.eventInfoId}">@mdo</td>
+
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -1,9 +1,9 @@
 package com.f2z.gach.History.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.f2z.gach.Map.Entity.MapLine;
+import com.f2z.gach.User.Entity.User;
+import com.f2z.gach.User.Entity.UserGuest;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
@@ -18,13 +18,26 @@ public class HistoryLineTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer lineHistoryId;
-    private Integer HistoryCode;
-    private Long userCode;
-    private Integer guestCode;
     private Integer lineIndex;
-    private Integer lineCode;
     private Time lineTime;
     private Double lineVelocity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "historyId")
+    private UserHistory userHistory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guestId")
+    private UserGuest guest;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lineId")
+    private MapLine mapLine;
+
 
 
 }
