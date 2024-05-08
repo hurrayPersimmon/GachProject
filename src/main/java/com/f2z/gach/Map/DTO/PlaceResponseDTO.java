@@ -106,6 +106,8 @@ public class PlaceResponseDTO {
             private String placeName;
             private Double placeLatitude;
             private Double placeLongitude;
+            private String placeSummary;
+            private String mainImagePath;
             private Integer placeId;
     }
 
@@ -115,6 +117,8 @@ public class PlaceResponseDTO {
                 .placeLatitude(place.getPlaceLatitude())
                 .placeLongitude(place.getPlaceLongitude())
                 .placeId(place.getPlaceId())
+                .placeSummary(place.getPlaceSummary())
+                .mainImagePath(place.getMainImagePath())
                 .build();
     }
 
