@@ -26,7 +26,7 @@
                                         행사 추가
                                     </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary">추가</button>
+                                        <button type="submit" class="btn btn-primary">추가</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -132,6 +132,7 @@
     let tempLng = 127.12886810302734;
     let tempAlti = 0;
     let locationIndex = 0;
+    let checkedCount = 0;
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 37.45088195800781, lng: 127.12886810302734},
@@ -225,29 +226,30 @@
         inputCheck.type = "checkbox";
         inputCheck.style.width = '1.5rem';
         inputCheck.style.height = '1.5rem';
-        inputCheck.id = `${locationIndex}`;
-        inputCheck.className = "mt-1";
+        inputCheck.className = "mt-1 checkBoxList";
         checkTd.appendChild(inputCheck);
         locationsTr.appendChild(checkTd);
         locationsTr.appendChild(nameTd);
         locationsTr.appendChild(altiTd);
         locationsTr.appendChild(latTd);
         locationsTr.appendChild(lngTd);
+        locationsTr.className = "locationData"
         locationsTbody.appendChild(locationsTr);
         locationIndex++;
     }
 
-    document.getElementById("file").addEventListener("change", function(){
-        readURL(this);
+    document.getElementById('deleteInput').addEventListener('click', function() {
+        let list = document.getElementsByClassName("checkBoxList");
+        let checkboxes = Array.from(list);
+        for (let i = checkboxes.length - 1; i >= 0; i--) {
+            if (checkboxes[i].checked) {
+                checkboxes[i].closest('.locationData').remove();
+            }
+        }
     });
 
-    document.getElementById('deleteInput').addEventListener('click', function() {
-        let inputContainer = document.getElementById('inputContainer');
-        let inputElements = inputContainer.getElementsByClassName('eventPlace');
-
-        if (inputElements.length > 0) {
-            inputElements[inputElements.length - 1].remove();
-        }
+    document.getElementById("file").addEventListener("change", function(){
+        readURL(this);
     });
 
     document.getElementById('addInput').addEventListener('click', function() {
