@@ -7,7 +7,6 @@ import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
-import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -34,25 +32,18 @@ public class AdminEventController {
     private final EventRepository eventRepository;
     private final AdminRepository adminRepository;
     private final EventLocationRepository eventLocationRepository;
-    private final InquiryRepository inquiryRepository;
 
     @Value("${gach.img.dir}")
     String fdir;
-
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
-        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
-    }
 
     @GetMapping("/event/list/{page}")
     public String eventListPage(Model model, @PathVariable Integer page){
         Pageable pageable = Pageable.ofSize(10).withPage(page);
         Page<Event> eventPage = eventRepository.findAllBy(pageable);
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
-                        .sorted(Comparator.comparing(Event::getEventId).reversed())
-                        .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
+                .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
         model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));
+
         return "event/event-manage";
     }
 
@@ -89,12 +80,19 @@ public class AdminEventController {
 
         Event event = requestDTO.getEventDTO().toEntity();
         eventRepository.save(event);
-        requestDTO.getLocations().forEach(i -> {
-            eventLocationRepository.save(EventLocationDTO.toEventLocation(i, event));
+        requestDTO.getLocations().stream().forEach(i -> {
+            if(i.getEventLatitude() != null){
+                eventLocationRepository.save(EventLocationDTO.toEventLocation(i, event));
+            }
+            log.info(i.toString());
         });
         return "redirect:/admin/event/list/0";
     }
 
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+    }
 
     // TODO : Update 메소드 필요.
     // TODO : Delete 메소드도 필요.
