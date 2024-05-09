@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -41,8 +42,10 @@ public class AdminNodeController {
         Pageable pageable = Pageable.ofSize(10).withPage(page);
         Page<MapNode> nodePage = mapNodeRepository.findAll(pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
-                .sorted(Comparator.comparing(MapNode::getNodeId, Comparator.reverseOrder()))
-                .map(MapDTO.MapNodeListStructure::toMapNodeListStructure).toList();
+//                .sorted(Comparator.comparing(MapNode::getNodeId, Comparator.reverseOrder()))
+                .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
+                .collect(Collectors.toList());
+        Collections.reverse(nodeList);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         return "node/node-manage";
     }
@@ -61,7 +64,7 @@ public class AdminNodeController {
             return "node/node-add";
         }
         mapNodeRepository.save(mapNodeDTO.toEntity());
-        return "redirect:/admin/node";
+        return "redirect:/admin/node/list/0";
     }
 
     @GetMapping("/node/{nodeId}")
@@ -82,7 +85,7 @@ public class AdminNodeController {
         MapNode mapNode = mapNodeRepository.findByNodeId(mapDTO.toEntity().getNodeId());
         mapNode.update(mapDTO.toEntity());
         mapNodeRepository.save(mapNode);
-        return "redirect:/admin/node";
+        return "redirect:/admin/node/list/0";
     }
 
     @GetMapping("/node/delete/{nodeId}")
@@ -90,7 +93,7 @@ public class AdminNodeController {
         if(mapNodeRepository.existsByNodeId(nodeId)) {
             MapNode node = mapNodeRepository.findByNodeId(nodeId);
             mapNodeRepository.delete(node);
-            return "redirect:/admin/node";
+            return "redirect:/admin/node/list/0";
         }
         throw new Exception();
     }

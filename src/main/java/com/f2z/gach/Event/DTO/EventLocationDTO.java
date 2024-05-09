@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 @Builder
 public class EventLocationDTO {
+    private Integer eventLocationId;
     private String eventPlaceName;
     private Double eventAltitude;
     private Double eventLatitude;
@@ -20,6 +21,7 @@ public class EventLocationDTO {
 
     public static EventLocation toEventLocation(EventLocationDTO eventLocationDTO, Event event) {
         return EventLocation.builder()
+                .eventLocationId(eventLocationDTO.getEventLocationId())
                 .eventPlaceName(eventLocationDTO.getEventPlaceName())
                 .eventAltitude(eventLocationDTO.getEventAltitude())
                 .eventLatitude(eventLocationDTO.getEventLatitude())
@@ -29,4 +31,6 @@ public class EventLocationDTO {
                 .build();
 
     }
+
+
 }

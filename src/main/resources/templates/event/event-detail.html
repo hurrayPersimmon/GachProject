@@ -20,13 +20,19 @@
                     <div class="col-11 ms-5" style="width:88%;">
 
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{/admin/event}" th:object="${eventDto}" method="post">
+                            <form enctype="multipart/form-data" th:action="@{/admin/event/update}" th:object="${eventDto}" method="post">
                                 <div class="row">
                                     <div class="row mb-3 fs-1 fontHv">
                                         행사 수정
                                     </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <button class="btn btn-primary" type="submit">수정</button>
+                                    </div>
+                                    <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
+                                        <a type="button" class="btn btn-danger"
+                                           th:onclick="|location.href='@{/admin/event/delete/{eventId}(eventId=${eventDto.getEventId()})}'|">
+                                            삭제</a>
+<!--                                        th:href="@{/admin/event/delete/{eventId}(eventId=${eventDto.getEventId()})}">   삭제</a>-->
                                     </div>
                                 </div>
                                 <div class="row">
@@ -108,6 +114,8 @@
                                                         <tbody class="text-center" id="locations">
                                                         <tr th:each="location : ${eventLocationList}" class="locationData">
                                                             <td>
+                                                                <input type="hidden" class="form-control sidebarItem" th:value="${location.eventLocationId}">
+
                                                                 <input type="checkbox" style="width : 1.5rem; height : 1.5rem;" class="mt-1 checkBoxList">
                                                             </td>
                                                             <td>

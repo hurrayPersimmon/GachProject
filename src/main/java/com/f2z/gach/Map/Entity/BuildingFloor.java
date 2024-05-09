@@ -20,7 +20,7 @@ public class BuildingFloor {
     private String buildingFloorInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "placeId", insertable = false, updatable = false)
+    @JoinColumn(name = "placeId", updatable = false)
     private PlaceSource placeSource;
 
 }

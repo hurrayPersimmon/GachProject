@@ -14,18 +14,19 @@
         <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
             <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
                 <div class="row ms-5 mb-3 mt-2 nodeHeader">
-                    관리자 > 건물 관리 > 건물 추가
+                    관리자 > 장소 관리 > 장소 정보 수정
                 </div>
                 <div class="row ms-1">
                     <div class="col-11 ms-5" style="width:88%;">
                         <div class="row mb-3 fs-1 fontHv">
-                            건물 추가
+                            장소 정보 수정
                         </div>
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{/admin/building}" th:object="${building}" method="post">
+                            <form enctype="multipart/form-data" th:action="@{/admin/place}" th:object="${placeDto}" method="post">
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary">추가</button>
+                                        <button class="btn btn-primary">수정</button>
+                                        <button class="btn btn-danger">삭제</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -33,17 +34,17 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-floating mb-3">
-                                                    <p class="fs-4 nodeHeader">건물 이름</p>
+                                                    <p class="fs-4 nodeHeader">장소 이름</p>
                                                     <hr>
-                                                    <input th:field="*{buildingName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                    <input th:field="*{placeName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating mb-3">
-                                                    <p class="fs-4 nodeHeader">건물 종류</p>
+                                                    <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
                                                     <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
-                                                        <option th:each="b : ${building}" th:value="${b}" th:text="${b}"></option>
+                                                        <option th:each="b : ${placeDto.placeCategory}" th:value="${b}" th:text="${b}"></option>
                                                     </select>                                                    </div>
                                             </div>
                                         </div>
@@ -51,25 +52,25 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">요약 정보</p>
                                                 <hr>
-                                                <input th:field="*{buildingInfo}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">건물 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput">구글 맵으로 좌표 선택</span></p>
+                                                <p class="fs-4 nodeHeader">장소 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput">구글 맵으로 좌표 선택</span></p>
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon1">위도</span>
-                                                        <input th:field="*{buildingLat}" type="text"  class="form-control fontHv mt-0 py-2 fs-6">
+                                                        <input th:field="*{placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon2">경도</span>
-                                                        <input th:field="*{buildingLng}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <input th:field="*{placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon3">고도</span>
-                                                        <input th:field="*{buildingAlt}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <input th:field="*{placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
                                                     </div>
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
@@ -97,9 +98,19 @@
                                                     <span class="ms-3">
                                                             <i id="deleteFloor" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
                                                             <i id="addFloor" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
-                                                        </span>
+                                                    </span>
                                                 </p>
                                                 <hr>
+                                                <div th:each="floor : ${placeDto.buildingFloors}" class="floorList row my-2">
+                                                    <div class="col-4 input-group" style="width : 33.33333333%">
+                                                        <span class="input-group-text fs-5 sidebarItem">층수</span>
+                                                        <input type="text" class="form-control fontHv mt-0 py-2 fs-4" th:field="*{buildingFloor}">
+                                                    </div>
+                                                    <div class="col-8 input-group" style="width : 66.66666666%">
+                                                        <span class="input-group-text fs-5 sidebarItem">정보</span>
+                                                        <input type="text" class="form-control fontHv mt-0 py-2 fs-4" th:field="*{buildingFloorInfo}">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -110,13 +121,13 @@
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-3">
-                                                        <img id="thumbnail-image" src="#" style="height:13rem; width:13rem" onerror="this.style.visibility='hidden';">
+                                                        <img id="thumbnail-image" th:src="${}" style="height:13rem; width:13rem" onerror="this.style.visibility='hidden';">
                                                     </div>
                                                     <div class="col-2 sidebarItem fs-3">
                                                         썸네일용
                                                     </div>
                                                     <div class="col-5 text-end">
-                                                        <img id="ar-image" src="#" style="height:13rem; width:23rem" onerror="this.style.visibility='hidden';">
+                                                        <img id="ar-image" th:src="${}" style="height:13rem; width:23rem" onerror="this.style.visibility='hidden';">
                                                     </div>
                                                     <div class="col-2 sidebarItem fs-3">
                                                         AR 이미지

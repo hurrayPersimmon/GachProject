@@ -71,7 +71,7 @@ public class AdminLineController {
         mapLineRepository.save(mapLineDTO.toSaveEntity("B",
                 mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameSecond()),
                 mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameFirst())));
-        return "redirect:/admin/line";
+        return "redirect:/admin/line/list/0";
     }
 
     @GetMapping("/line/{lineId}")
@@ -84,7 +84,7 @@ public class AdminLineController {
             mapLineRepository.deleteById(lineId);
             model.addAttribute("message", "간선이 삭제되었습니다.");
             model.addAttribute("lineList", mapLineRepository.findAll());
-            return "redirect:/admin/line";
+            return "redirect:/admin/line/list/0";
         }
         throw new Exception();
     }

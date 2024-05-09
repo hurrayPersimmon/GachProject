@@ -1,7 +1,10 @@
 package com.f2z.gach.Map.DTO;
 
+import com.f2z.gach.EnumType.PlaceCategory;
+import com.f2z.gach.Map.Entity.BuildingFloor;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
+import com.f2z.gach.Map.Entity.PlaceSource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -178,4 +181,50 @@ public class MapDTO {
                 .totalElements(nodePage.getTotalElements())
                 .build();
     }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class PlaceSourceDTO {
+        private Integer placeId;
+        private String placeName;
+        private String placeCategory;
+        private Double placeLatitude;
+        private Double placeLongitude;
+        private Double placeAltitude;
+        private String placeSummary;
+        private Double buildingHeight;
+        private List<BuildingFloor> buildingFloors;
+        private String mainImageName;
+        private String mainImagePath;
+        private String thumbnailImageName;
+        private String thumbnailImagePath;
+        private String arImageName;
+        private String arImagePath;
+
+        public static PlaceSource toEntity(MapDTO.PlaceSourceDTO placeSourceDTO) {
+            return PlaceSource.builder()
+                    .placeId(placeSourceDTO.getPlaceId())
+                    .placeName(placeSourceDTO.getPlaceName())
+                    .placeCategory(PlaceCategory.valueOf(placeSourceDTO.getPlaceCategory()))
+                    .placeLatitude(placeSourceDTO.getPlaceLatitude())
+                    .placeLongitude(placeSourceDTO.getPlaceLongitude())
+                    .placeAltitude(placeSourceDTO.getPlaceAltitude())
+                    .placeSummary(placeSourceDTO.getPlaceSummary())
+                    .buildingHeight(placeSourceDTO.getBuildingHeight())
+                    .buildingFloors(placeSourceDTO.getBuildingFloors())
+                    .mainImageName(placeSourceDTO.getMainImageName())
+                    .mainImagePath(placeSourceDTO.getMainImagePath())
+                    .thumbnailImageName(placeSourceDTO.getThumbnailImageName())
+                    .thumbnailImagePath(placeSourceDTO.getThumbnailImagePath())
+                    .arImageName(placeSourceDTO.getArImageName())
+                    .arImagePath(placeSourceDTO.getArImagePath())
+                    .build();
+        }
+    }
+
+
+
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
-    List<Inquiry> findAllByUserId(Long userId);
+    List<Inquiry> findAllByUser_userId(Long userId);
 
     Inquiry findByInquiryId(Integer inquiryId);
 

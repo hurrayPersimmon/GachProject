@@ -20,7 +20,7 @@ public class InquiryRestController {
     private final InquiryService inquiryService;
 
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<InquiryResponseDTO.InquiryListStructure>> getInquiryList(@PathVariable Long userId) throws Exception {
+    public ResponseEntity<List<InquiryResponseDTO.InquiryListStructureForClient>> getInquiryList(@PathVariable Long userId) throws Exception {
         return inquiryService.getInquiryList(userId);
     }
 

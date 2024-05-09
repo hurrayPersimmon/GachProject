@@ -20,7 +20,17 @@ public class EventLocation {
     private Double eventLatitude;
     private Double eventLongitude;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "event_id")
     private Event event;
+
+    public void update(EventLocation eventLocation) {
+        this.eventName = eventLocation.getEventName();
+        this.eventPlaceName = eventLocation.getEventPlaceName();
+        this.eventAltitude = eventLocation.getEventAltitude();
+        this.eventLatitude = eventLocation.getEventLatitude();
+        this.eventLongitude = eventLocation.getEventLongitude();
+    }
+
+
 }

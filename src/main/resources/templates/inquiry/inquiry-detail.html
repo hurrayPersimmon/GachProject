@@ -21,11 +21,12 @@
                             문의 응답
                         </div>
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{/admin/question}" th:object="${inquiry}" method="post">
+                            <form th:action="@{/admin/inquiry}" th:object="${inquiry}" method="post">
+                                <input type="hidden" th:field="*{inquiryId}" class="form-control fontHv mt-0 pt-0 fs-6" name="inquiryId" placeholder="name@example.com" readonly>
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary" id="answer">답변 추가하기</button>
-                                        <a class="btn btn-secondary">답변 보내기</a>
+                                        <button type = "submit" class="btn btn-primary" id="answer">답변 추가하기</button>
+<!--                                        <a class="btn btn-secondary">답변 보내기</a>-->
                                     </div>
                                 </div>
                                 <div class="row">
@@ -35,43 +36,44 @@
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">문의 구분</p>
                                                     <hr>
-                                                    <input th:field="*{inquiry.status}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                    <input th:field="*{inquiryCategory}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">닉네임</p>
                                                     <hr>
-                                                    <input th:field="*{inquiry.getUser().getUserName()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                    <input th:field="*{user.userNickname}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">시간</p>
                                                     <hr>
-                                                    <input th:field="*{inquiry.getTime()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
+                                                    <input th:field="*{createDt}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">제목</p>
+                                                <p class="fs-4 nodeHeader">문의 제목</p>
                                                 <hr>
-                                                <input th:field="*{inquiry.getName()}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{inquiryTitle}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">문의 내용</p>
                                                 <hr>
-                                                <textarea th:field="*{inquiry.getContent()}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                                <textarea th:field="*{inquiryContent}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">답변 내용</p>
                                                 <hr>
-                                                <textarea th:field="*{inquiry.answer}" class="form-control sidebarItem" style="visibility: hidden" id="sendAns"></textarea>
+                                                <input th:field="*{inquiryAnswer}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+<!--                                                <textarea th:field="*{inquiryAnswer}" class="form-control sidebarItem" style="visibility: hidden" id="sendAns"></textarea>-->
                                             </div>
                                         </div>
                                     </div>

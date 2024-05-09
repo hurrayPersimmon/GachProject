@@ -7,6 +7,7 @@ import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +27,25 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/event")
 @SessionAttributes
 public class AdminEventController {
     private final EventRepository eventRepository;
     private final AdminRepository adminRepository;
     private final EventLocationRepository eventLocationRepository;
+    private final InquiryRepository inquiryRepository;
 
     @Value("${gach.img.dir}")
     String fdir;
 
-    @GetMapping("/event/list/{page}")
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+
+    }
+
+    @GetMapping("/list/{page}")
     public String eventListPage(Model model, @PathVariable Integer page){
         Pageable pageable = Pageable.ofSize(10).withPage(page);
         Page<Event> eventPage = eventRepository.findAllBy(pageable);
@@ -47,13 +56,13 @@ public class AdminEventController {
         return "event/event-manage";
     }
 
-    @GetMapping("/event/add")
+    @GetMapping("/add")
     public String addEventPage(Model model){
         model.addAttribute("eventDto", new AdminEventRequestDTO());
         return "event/event-add";
     }
 
-    @GetMapping("/event/{eventId}")
+    @GetMapping("/{eventId}")
     public String addEventPage(@PathVariable Integer eventId, Model model){
         model.addAttribute("eventDto", eventRepository.findByEventId(eventId));
         model.addAttribute("eventLocationList", eventLocationRepository.findAllByEvent_EventId(eventId));
@@ -63,7 +72,7 @@ public class AdminEventController {
         return "event/event-detail";
     }
 
-    @PostMapping("/event")
+    @PostMapping()
     public String addEvent(@Valid @ModelAttribute AdminEventRequestDTO requestDTO,
                            BindingResult result){
         try{
@@ -79,6 +88,7 @@ public class AdminEventController {
         }
 
         Event event = requestDTO.getEventDTO().toEntity();
+
         eventRepository.save(event);
         requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
@@ -89,10 +99,38 @@ public class AdminEventController {
         return "redirect:/admin/event/list/0";
     }
 
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+    @PostMapping("/update")
+    public String updateEvent(@Valid @ModelAttribute("eventDto") AdminEventRequestDTO adminEventRequestDTO,
+                              BindingResult result){
+        if(result.hasErrors()){
+            return "event/event-detail";
+        }
+        Event event = eventRepository.findByEventId(adminEventRequestDTO.getEventDTO().getEventId());
+        event.update(adminEventRequestDTO.getEventDTO().toEntity());
+        Event updatedEvent = eventRepository.save(event);
+        adminEventRequestDTO.getLocations().stream().forEach(i -> {
+            if(i.getEventLatitude() != null){
+                if(i.getEventLocationId() == null){
+                    eventLocationRepository.save(EventLocationDTO.toEventLocation(i, updatedEvent));
+                }else{
+                    EventLocation eventLocation = eventLocationRepository.findByEventLocationId(i.getEventLocationId());
+                    eventLocation.update(i.toEventLocation(i, updatedEvent));
+                    eventLocationRepository.save(eventLocation);
+                }
+            }
+            log.info(i.toString());
+        });
+        return "redirect:/admin/event/list/0";
     }
+
+    @GetMapping("/delete/{eventId}")
+    public String deleteEvent(@PathVariable Integer eventId){
+        Event event = eventRepository.findByEventId(eventId);
+        eventRepository.delete(event);
+        return "redirect:/admin/event/list/0";
+    }
+
+
 
     // TODO : Update 메소드 필요.
     // TODO : Delete 메소드도 필요.

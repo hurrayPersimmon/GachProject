@@ -58,7 +58,7 @@
                 AI 관리
             </div>
         </a>
-        <a href="/admin/building" th:href="@{/admin/building}"  class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'building' ? 'link' : 'white'">
+        <a href="/admin/place/list" th:href="@{/admin/place/list}"  class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'building' ? 'link' : 'white'">
             <div class="col-3 ms-4 mt-2 ps-3">
                 <i class="fa-solid fa-building fs-4"></i>
             </div>
@@ -82,7 +82,7 @@
                 사용자 관리
             </div>
         </a>
-        <a href="/admin/question" th:href="@{/admin/question}" class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'question' ? 'link' : 'white'">
+        <a href="/admin/inquiry/list/0" th:href="@{/admin/inquiry/list/0}" class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'inquiry' ? 'link' : 'white'">
             <div class="col-3 ms-4 mt-2 ps-3">
                 <i class="fa-solid fa-person-circle-question fs-2 ps-1"></i>
             </div>

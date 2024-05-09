@@ -26,9 +26,9 @@
                                         <input type="text" class="form-control form-input" placeholder="Search anything...">
                                     </div>
                                 </div>
-                                <div class="col-3 offset-4 align-items-center text-end">
-                                    <a href="/admin/event/add" class="btn btn-primary add mt-2 sidebarItem fs-6">건물 등록</a>
-                                </div>
+    <!--                                <div class="col-3 offset-4 align-items-center text-end">-->
+    <!--                                    <a href="/admin/event/add" class="btn btn-primary add mt-2 sidebarItem fs-6">문의 등록</a>-->
+    <!--                                </div>-->
                             </div>
                             <div class="row" style="height : 70vh">
                                 <table class="table">
@@ -36,18 +36,19 @@
                                         <tr>
                                             <th scope="col">문의 구분</th>
                                             <th scope="col">문의 종류</th>
-                                            <th scope="col">건물 제목</th>
+                                            <th scope="col">문의 제목</th>
                                             <th scope="col">닉네임</th>
                                             <th scope="col">일시</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
-                                    <tr th:each="question : ${questionList}" th:onclick="|location.href='@{/admin/question/{questionId}(questionId=${question.getId()})}'|">
-                                        <td th:text="${question}">1</td>
-                                        <td th:text="${question}">Mark</td>
-                                        <td th:text="${question}">Otto</td>
-                                        <td th:text="${question}">@mdo</td>
-                                        <td th:text="${question}">@mdo</td>
+                                    <tr th:each="inquiry : ${inquiryList.inquiryList}"
+                                        th:onclick="|location.href='@{/admin/inquiry/{inquiryId}(inquiryId=${inquiry.getInquiryId()})}'|">
+                                        <td th:text="${inquiry.inquiryProgress}">1</td>
+                                        <td th:text="${inquiry.inquiryCategory}">Mark</td>
+                                        <td th:text="${inquiry.inquiryTitle}">Otto</td>
+                                        <td th:text="${inquiry.user.getUserNickname()}">@mdo</td>
+                                        <td th:text="${inquiry.createDt}">@mdo</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -61,9 +62,9 @@
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item" style="cursor: pointer" th:each="pageNumber : ${#numbers.sequence(1, inquiryList.totalPage)}"
+                                                th:onclick="|location.href='@{/admin/inquiry/list/{pageNumber}(pageNumber= ${pageNumber} -1)}'|"
+                                            ><a class="page-link" th:text="${pageNumber}">1</a></li>
                                             <li class="page-item">
                                                 <a class="page-link" href="#" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
@@ -76,6 +77,68 @@
                             </div>
                         </div>
                     </div>
+<!--                    <div class="row ms-1">-->
+<!--                        <div class="col-11 ms-5" style="width:88%;">-->
+<!--                            <div class="row mb-3 fs-1 fontHv">-->
+<!--                                문의 목록-->
+<!--                            </div>-->
+<!--                            <div class="row bg-white">-->
+<!--                                <div class="col-5 align-items-center">-->
+<!--                                    <div class="search mt-2 mb-2">-->
+<!--                                        <input type="text" class="form-control form-input" placeholder="Search anything...">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-3 offset-4 align-items-center text-end">-->
+<!--                                    <a href="/admin/event/add" class="btn btn-primary add mt-2 sidebarItem fs-6">건물 등록</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row" style="height : 70vh">-->
+<!--                                <table class="table">-->
+<!--                                    <thead class="text-center">-->
+<!--                                    <tr>-->
+<!--                                        <th scope="col">문의 구분</th>-->
+<!--                                        <th scope="col">문의 종류</th>-->
+<!--                                        <th scope="col">건물 제목</th>-->
+<!--                                        <th scope="col">닉네임</th>-->
+<!--                                        <th scope="col">일시</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody class="text-center">-->
+<!--                                    <tr th:each="inquiry : ${inquiryList.inquiryList}"-->
+<!--                                        th:onclick="|location.href='@{/admin/inquiry/{inquiryId}(inquiryId=${inquiry.getInquiryId()})}'|">-->
+<!--                                        <td th:text="${inquiry.inquiryProgress}">1</td>-->
+<!--                                        <td th:text="${inquiry.inquiryCategory}">Mark</td>-->
+<!--                                        <td th:text="${inquiry.inquiryTitle}">Otto</td>-->
+<!--                                        <td th:text="${inquiry.user.userNickname}">@mdo</td>-->
+<!--                                        <td th:text="${inquiry.createDt}">@mdo</td>-->
+<!--                                    </tr>-->
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                            </div>-->
+<!--                            <div class="row mt-4">-->
+<!--                                <div class="col offset-5">-->
+<!--                                    <nav aria-label="Page navigation example">-->
+<!--                                        <ul class="pagination">-->
+<!--                                            <li class="page-item">-->
+<!--                                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                            <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--                                            <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                                            <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                                            <li class="page-item">-->
+<!--                                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                                </a>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </nav>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
 

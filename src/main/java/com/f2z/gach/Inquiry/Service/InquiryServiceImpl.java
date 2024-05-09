@@ -25,8 +25,8 @@ public class InquiryServiceImpl implements InquiryService{
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<List<InquiryResponseDTO.InquiryListStructure>> getInquiryList(Long userId){
-        List<Inquiry> inquiryList = inquiryRepository.findAllByUserId(userId);
+    public ResponseEntity<List<InquiryResponseDTO.InquiryListStructureForClient>> getInquiryList(Long userId){
+        List<Inquiry> inquiryList = inquiryRepository.findAllByUser_userId(userId);
         if(inquiryList.isEmpty()){
             if(userRepository.existsByUserId(userId)){
                 return ResponseEntity.saveButNoContent(null);
@@ -35,13 +35,17 @@ public class InquiryServiceImpl implements InquiryService{
                 return ResponseEntity.notFound(null);
             }
         }else{
-            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseList(inquiryList));
+            return ResponseEntity.requestSuccess(InquiryResponseDTO.toInquiryResponseListForClient(inquiryList));
         }
     }
 
     @Override
     public ResponseEntity<InquiryResponseDTO.saveInquirySuccess> createInquiry(InquiryRequestDTO inquiryRequestDTO) {
-        Inquiry inquiry = inquiryRepository.save(InquiryRequestDTO.toEntity(inquiryRequestDTO));
+        if(!userRepository.existsByUserId(inquiryRequestDTO.getUserId())){
+            log.info("User Not Found");
+            return ResponseEntity.notFound(null);
+        }
+        Inquiry inquiry = inquiryRepository.save(InquiryRequestDTO.toEntity(inquiryRequestDTO, userRepository.findByUserId(inquiryRequestDTO.getUserId())));
         return ResponseEntity.saveSuccess(InquiryResponseDTO.toRespondSuccess(inquiry));
     }
 
