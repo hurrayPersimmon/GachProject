@@ -105,6 +105,7 @@ public class AdminEventController {
         if(result.hasErrors()){
             return "event/event-detail";
         }
+        log.info(adminEventRequestDTO.toString());
         Event event = eventRepository.findByEventId(adminEventRequestDTO.getEventDTO().getEventId());
         event.update(adminEventRequestDTO.getEventDTO().toEntity());
         Event updatedEvent = eventRepository.save(event);

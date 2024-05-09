@@ -44,8 +44,8 @@ public class HistoryResponseDTO {
         LocalDateTime createDt;
         String arrivals;
         String departures;
-        Satisfaction satisfactionRoute;
-        Satisfaction satisfactionTime;
+        Integer satisfactionRoute;
+        Integer satisfactionTime;
     }
 
     public static UserHistoryListStructure toUserHistoryList(UserHistory history) {
@@ -56,8 +56,8 @@ public class HistoryResponseDTO {
                 .createDt(history.getCreateDt())
                 .departures(history.getDepartures())
                 .arrivals(history.getArrivals())
-                .satisfactionRoute(history.getSatisfactionRoute())
-                .satisfactionTime(history.getSatisfactionTime())
+                .satisfactionRoute(history.getSatisfactionRoute().ordinal()+1)
+                .satisfactionTime(history.getSatisfactionTime().ordinal()+1)
                 .build();
     }
 

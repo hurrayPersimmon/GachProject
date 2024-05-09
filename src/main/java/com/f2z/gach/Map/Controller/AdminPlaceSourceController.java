@@ -57,6 +57,7 @@ public class AdminPlaceSourceController {
     @PostMapping("/{placeId}")
     public String updatePlace(@ModelAttribute("placeDto") MapDTO.PlaceSourceDTO placeDTO,
                           @PathVariable Integer placeId){
+        log.info(placeDTO.toString());
         PlaceSource target = placeSourceRepository.findByPlaceId(placeId);
         target.update(MapDTO.PlaceSourceDTO.toEntity(placeDTO));
         placeSourceRepository.save(target);
