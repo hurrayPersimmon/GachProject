@@ -22,8 +22,11 @@
                         </div>
                         <div class="row bg-white">
                             <div class="col-5 align-items-center">
-                                <div class="search mt-2 mb-2">
-                                    <input type="text" class="form-control form-input" placeholder="Search anything...">
+                                <div class="row mt-2">
+                                    <div class="col pe-0" style="position : relative">
+                                        <input type="text" style="border-radius: 0" class="form-control form-input" placeholder="이름 검색" id="word">
+                                        <i class="bi bi-search fs-5" style="position : absolute; top: 11%; left : 95%; cursor: pointer" onclick="searchConnect()"></i>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-3 offset-4 align-items-center text-end">
@@ -54,9 +57,9 @@
                             </table>
                         </div>
                         <div class="row mt-4">
-                            <div class="col offset-5">
+                            <div class="col">
                                 <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
+                                    <ul class="pagination justify-content-center">
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
@@ -80,6 +83,8 @@
         </div>
     </div>
 </div>
+<script th:replace="fragment::search"></script>
+
 <script>
     let rows = document.getElementsByClassName('row menu');
     let cnt = 0;
@@ -114,8 +119,13 @@
             if(index===cnt) row.classList.add('link');
         });
     }
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    function searchConnect(){
+        let wordBox = document.getElementById("word");
+        window.self.location.href = 'http://localhost:60002/admin/node/search/' + wordBox.value;
+    }
 </script>
 </body>
 </html>

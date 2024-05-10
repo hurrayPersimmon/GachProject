@@ -58,8 +58,8 @@
                                                             정말 삭제하시겠습니까?
                                                         </div>
                                                         <div class="text-center mb-3">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <a th:href="@{'/admin/delete/'+${waiter.getAdminId()}}" class="btn btn-danger">대기자 삭제</a>
+                                                            <button type="button" class="btn btn-secondary sidebarItem" data-bs-dismiss="modal">닫기</button>
+                                                            <a class="btn btn-danger sidebarItem" th:href="@{'/admin/delete/'+${waiter.getAdminId()}}">대기자 삭제</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -71,9 +71,9 @@
                             </table>
                         </div>
                         <div class="row mt-4">
-                            <div class="col offset-5">
+                            <div class="col">
                                 <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
+                                    <ul class="pagination justify-content-center">
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
@@ -96,42 +96,23 @@
                 </div>
                 <div class="row ms-1">
                     <div class="col-11 ms-5" style="width:88%;">
-                        <form action="/admin/update" method="post">
                         <div class="row mb-3 fs-1 fontHv">
                             게스트목록
                         </div>
                         <div class="row bg-white">
-                            <div class="col-5 align-items-center">
-                                <div class="search mt-3 mb-2">
-                                    <input type="text" class="form-control form-input" placeholder="Search anything...">
-                                </div>
-                            </div>
-                            <div class="col-3 offset-4 align-items-center text-end pt-2">
-                                <button type="submit" class="fs-5 btn btn-primary update fontHv">관리자 정보 수정</button>
-                                <a class="fs-5 btn btn-primary delete fontHv" data-bs-toggle="modal" data-bs-target="#exampleModal">관리자 삭제</a>
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5 fontHv" id="exampleModalLabel">관리자 삭제</h1>
-                                                <button type="button" class="btn-close delete" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body text-center">
-                                                정말 삭제하시겠습니까?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <a onclick="deleteGuest()" class="btn btn-danger delete">관리자 삭제</a>
-                                            </div>
-                                        </div>
+                            <div class="col-5 align-items-center mb-2">
+                                <div class="row mt-2">
+                                    <div class="col pe-0" style="position : relative">
+                                        <input type="text" style="border-radius: 0" class="form-control form-input" placeholder="이름 검색" id="word">
+                                        <i class="bi bi-search fs-5" style="position : absolute; top: 11%; left : 95%; cursor: pointer" onclick="searchConnect()"></i>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                         </div>
                         <div class="row">
-                            <div class="col-8 ps-0 pe-0">
-                                <table class="table table-hover text-center rounded" style="overflow-y: auto;">
+                            <div class="col ps-0 pe-0">
+                                <table class="table table-hover text-center rounded">
                                     <thead style="position: sticky; top:0;">
                                     <tr>
                                         <th scope="col">아이디</th>
@@ -141,66 +122,76 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr style="height:3vh; cursor: pointer;" th:each="admin : ${adminList}" class="admin-row" th:data-admin-num="${admin.getAdminNum()}" onclick="checkClick(this)">
+                                        <tr style="height:3vh; cursor: pointer;" th:each="admin : ${adminList}" class="admin-row"
+                                            th:data-admin-id="${admin.adminId}" th:data-admin-name="${admin.adminName}" th:data-admin-birth="${admin.adminBirthday}"
+                                            th:data-admin-auth="${admin.adminAuthorization}" onclick="detailAdmin(this)">
                                             <td th:text="${admin.getAdminId()}">Mark</td>
                                             <td th:text="${admin.getAdminName()}">@mdo</td>
                                             <td th:text="${admin.getAdminBirthday()}">@mdo</td>
                                             <td>
                                                 <span th:text="${admin.adminAuthorization}" th:classappend="${admin.adminAuthorization eq authAdmin ? 'badge text-bg-primary' : 'badge text-bg-secondary'}"></span>
                                             </td>
-
+                                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5 sidebarItem" id="exampleModalLabel2">관리자 상세정보</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form method="post" action="/admin/update">
+                                                        <div class="modal-body p-2">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-floating mb-3">
+                                                                        <p class="fs-5 nodeHeader">관리자 아이디</p>
+                                                                        <hr>
+                                                                        <input type="text" class="form-control fontHv mt-0 pt-0 fs-6" id="adminId" name="adminId">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="form-floating mb-3">
+                                                                        <p class="fs-5 nodeHeader">관리자 권한</p>
+                                                                        <hr>
+                                                                        <select class="form-control fontHv mt-0 pt-2 fs-6" name="adminAuthorization" id="adminAuth" style="color:rgb(17,160,248)">
+                                                                            <option th:each="a : ${authList}" th:value="${a}" th:text="${a}"></option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="form-floating mb-3">
+                                                                        <p class="fs-5 nodeHeader">관리자 이름</p>
+                                                                        <hr>
+                                                                        <input type="text" class="form-control fontHv mt-0 pt-0 fs-6" id="adminName" name="adminName">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="form-floating mb-3">
+                                                                        <p class="fs-5 nodeHeader">관리자 생년월일</p>
+                                                                        <hr>
+                                                                        <input type="date" class="form-control fontHv mt-0 pt-0 fs-6" id="adminDate" name="adminBirthday">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center text-center">
+                                                            <a type="button" onclick="deleteGuest()" class="btn btn-primary delete fontHv">관리자 삭제</a>
+                                                            <button type="submit" class="btn btn-primary update fontHv">관리자 수정</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-4 bg-white ms-0 ps-3" style="border-left : 0.1rem solid darkgrey; overflow: hidden; height: 60vh;">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <div class="form-floating">
-                                                <p class="fs-4 nodeHeader">아이디</p>
-                                                <hr>
-                                                <input type="text" id="adminId" name="adminId" class="form-control fontHv mt-0 pt-0">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <div class="form-floating">
-                                                <p class="fs-4 nodeHeader">권한</p>
-                                                <hr>
-                                                <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
-                                                    <option th:each="a : ${authList}" th:value="${a}" th:text="${a}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <div class="form-floating">
-                                                <p class="fs-4 nodeHeader">이름</p>
-                                                <hr>
-                                                <input type="text" id="adminName" name="adminName" class="form-control fontHv mt-0 pt-0">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                <div class="row mt-3">
-                                    <div class="col">
-                                        <div class="form-floating">
-                                            <p class="fs-4 nodeHeader">생년월일</p>
-                                            <hr>
-                                            <input type="date" id="adminBirthday" name="adminBirthday" class="form-control fontHv mt-0 pt-0">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
                     <div class="row mt-2">
-                            <div class="col-3 offset-3">
+                            <div class="col">
                                 <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
+                                    <ul class="pagination justify-content-center">
                                         <li class="page-item">
                                             <a class="page-link" href="#" aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
@@ -218,44 +209,40 @@
                                 </nav>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    function checkClick(element){
-        const adminNumPure = element.getAttribute('data-admin-num');
-        let admin = null;
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://localhost:60002/admin/json/" + adminNumPure, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    admin = JSON.parse(xhr.responseText);
-                    document.getElementById("adminName").value = admin.adminName;
-                    document.getElementById("adminAuthorization").value = admin.adminAuthorization;
-                    document.getElementById("adminId").value = admin.adminId;
-                    document.getElementById("adminBirthday").value = admin.adminBirthday;
-                } else {
-                    alert("Failed to fetch admin details:" + xhr.status);
-                }
-            }
-        };
-        xhr.send();
-    }
+<script th:replace="fragment::search"></script>
 
+<script th:inline="javascript">
     function deleteGuest(){
         let adminId = document.getElementById("adminId").value;
         let url = "/admin/delete/" + adminId;
         window.location.href=url;
     }
+
+    const myModal2 = new bootstrap.Modal(document.getElementById('exampleModal2'));
+
+    // 클릭시 객체 정보를 modal로 전달하고,
+    // modal 창은 form의 기능을 수행할 수 있어야 한다.
+    function detailAdmin(element){
+        let adminId = element.getAttribute('data-admin-id');
+        let adminName = element.getAttribute('data-admin-name');
+        let adminBirthday = element.getAttribute('data-admin-birth');
+        let adminAuth = element.getAttribute('data-admin-auth')
+        myModal2.show(myModal2);
+        document.getElementById("adminId").value = adminId;
+        document.getElementById("adminAuth").value = adminAuth;
+        document.getElementById("adminName").value = adminName;
+        document.getElementById("adminDate").value = adminBirthday;
+    }
 </script>
 <script>
     let rows = document.getElementsByClassName('row menu');
     let cnt = 0;
-    let temp = 0;
     Array.from(rows).forEach(function(row, index) {
 
         if (row.classList.contains('link')) {
@@ -283,6 +270,11 @@
         Array.from(rows).forEach(function(row, index){
             if(index===cnt) row.classList.add('link');
         });
+    }
+
+    function searchConnect(){
+        let wordBox = document.getElementById("word");
+        window.self.location.href = 'http://localhost:60002/admin/search/' + wordBox.value;
     }
 </script>
 </body>

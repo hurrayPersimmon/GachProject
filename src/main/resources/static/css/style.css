@@ -145,6 +145,14 @@ input[type="text"] {
     color : rgb(17,160,248);
 }
 
+input[type="date"] {
+    border: none;
+    border-radius: 1rem; /* 라운드된 테두리 */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 그림자 */
+    transition: box-shadow 0.3s, transform 0.3s; /* 변화 시 부드럽게 */
+    color : rgb(17,160,248);
+}
+
 select {
     border: none;
     border-radius: 1.5rem; /* 라운드된 테두리 */
@@ -184,6 +192,12 @@ input[type="text"]:disabled {
     background-color: white;
     border-color:gray;
 }
+
+input[type="date"]:disabled {
+    background-color: white;
+    border-color:gray;
+}
+
 @font-face {
     font-family: 'SokchoBadaDotum';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/SokchoBadaDotum.woff2') format('woff2');
@@ -240,4 +254,18 @@ a{
 input[type=file] {
     border : 0.1rem solid grey;
     width : 20rem;
+}
+
+.searchButton {
+    border : 0.1rem solid rgb(100 116 139);
+    background-color : white;
+    color : rgb(100 116 139);
+    height : 2.5rem;
+    width : 5rem;
+}
+
+.searchButton:hover {
+    border : 0.1rem solid white;
+    background-color : rgb(100 116 139);
+    color : white;
 }

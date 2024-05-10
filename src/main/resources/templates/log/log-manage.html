@@ -22,8 +22,11 @@
                             </div>
                             <div class="row bg-white">
                                 <div class="col-5 align-items-center">
-                                    <div class="search mt-3 mb-2">
-                                        <input type="text" class="form-control form-input" placeholder="Search anything...">
+                                    <div class="row mt-2">
+                                        <div class="col pe-0" style="position : relative">
+                                            <input type="text" style="border-radius: 0" class="form-control form-input" placeholder="이름 검색" id="word">
+                                            <i class="bi bi-search fs-5" style="position : absolute; top: 11%; left : 95%; cursor: pointer" onclick="searchConnect()"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,5 +84,12 @@
             </div>
         </div>
     </div>
+    <script th:replace="fragment::search"></script>
+    <script>
+        function searchConnect(){
+            let wordBox = document.getElementById("word");
+            window.self.location.href = 'http://localhost:60002/admin/node/search/' + wordBox.value;
+        }
+    </script>
 </body>
 </html>
