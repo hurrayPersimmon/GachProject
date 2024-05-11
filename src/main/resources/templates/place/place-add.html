@@ -25,7 +25,7 @@
                             <form enctype="multipart/form-data" th:action="@{/admin/place/add}" th:object="${placeDto}" method="post">
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary">추가</button>
+                                        <button class="btn btn-primary sidebarItem">추가</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -44,32 +44,33 @@
                                                     <hr>
                                                     <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
                                                         <option th:each="b : ${placeDto.placeCategory}" th:value="${b}" th:text="${b}"></option>
-                                                    </select>                                                    </div>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">요약 정보</p>
                                                 <hr>
-                                                <input th:field="*{placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <textarea th:field="*{placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">장소 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput">구글 맵으로 좌표 선택</span></p>
+                                                <p class="fs-4 nodeHeader">장소 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary add" id="addInput" data-bs-toggle="modal" data-bs-target="#exampleModal">구글 맵으로 좌표 선택</span></p>
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon1">위도</span>
-                                                        <input th:field="*{placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6">
+                                                        <input th:field="*{placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6" id="lat">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon2">경도</span>
-                                                        <input th:field="*{placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <input th:field="*{placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="lng">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon3">고도</span>
-                                                        <input th:field="*{placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <input th:field="*{placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="alti">
                                                     </div>
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
@@ -83,7 +84,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                                    <button type="button" class="btn btn-primary" onclick="readXYZ()" data-bs-dismiss="modal">좌표 저장</button>
+                                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">좌표 저장</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -95,11 +96,24 @@
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">층별 안내
                                                     <span class="ms-3">
-                                                            <i id="deleteFloor" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
-                                                            <i id="addFloor" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
-                                                        </span>
+                                                        <span id="deleteFloor" class="btn btn-primary delete sidebarItem">선택 삭제</span>
+                                                        <span id="addFloor" class="btn btn-primary add sidebarItem">추가</span>
+                                                    </span>
                                                 </p>
                                                 <hr>
+                                                <div class="row px-3">
+                                                    <table class="table">
+                                                        <thead class="text-center rounded pt-2 fontReg">
+                                                        <tr>
+                                                            <th scope="col"><i class="bi bi-ui-checks-grid"></i></th>
+                                                            <th scope="col">층수</th>
+                                                            <th scope="col" style="width:80%">설명</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="text-center" id="floors">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -124,12 +138,12 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-3">
-                                                        <input name="thumbnail" id="thumbnail" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
-                                                        <label class="btn btn-primary fs-6 ms-1" for="thumbnail">이미지 업로드</label>
+                                                        <input name="thumbnail" id="thumbnail" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
+                                                        <label class="btn btn-primary add fs-6 ms-1" for="thumbnail">이미지 업로드</label>
                                                     </div>
                                                     <div class="col-6 offset-2">
-                                                        <input name="ar" id="ar" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
-                                                        <label class="btn btn-primary fs-6 ms-1" for="ar">이미지 업로드</label>
+                                                        <input name="ar" id="ar" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
+                                                        <label class="btn btn-primary add fs-6 ms-1" for="ar">이미지 업로드</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -172,27 +186,29 @@
             mapId: 'DEMO_MAP_ID',
         });
 
-        const pinViewScaled = new google.maps.marker.PinView({
-            scale: 0.4,
-        });
-
         const pinViewBackground = new google.maps.marker.PinView({
             background: "#046ffb",
         });
 
         const elevator = new google.maps.ElevationService();
 
+        const newTag = document.createElement("div");
+        newTag.className = "price-tag";
+        newTag.textContent = "좌표 지정";
+
         const newMarkerView = new google.maps.marker.AdvancedMarkerView({
             map,
             position: {lat: 37.45088195800781, lng: 127.12886810302734},
             gmpDraggable: true,
-            content : pinViewBackground.element
+            content : newTag
         });
 
         newMarkerView.addListener("dragend", (event) => {
             const position = newMarkerView.position;
             tempLat = position.lat;
             tempLng = position.lng;
+            document.getElementById("lat").value = tempLat;
+            document.getElementById("lng").value = tempLng;
             elevator
                 .getElevationForLocations({
                     locations: [position],
@@ -202,6 +218,7 @@
                     if (results[0]) {
                         // Open the infowindow indicating the elevation at the clicked position.
                         tempAlt = results[0].elevation;
+                        document.getElementById("alti").value = tempAlt;
                     } else {
                         alert("오류");
                     }
@@ -218,78 +235,44 @@
         myModal.show(myModal);
     });
 
-    function readXYZ(){
-        let lat = document.getElementById("basic-addon1");
-        let lng = document.getElementById("basic-addon2");
-        let alt = document.getElementById("basic-addon3");
-        lat.value = tempLat;
-        lng.value = tempLng;
-        alt.value = tempAlt;
+    function readXY(){
+        let floorsTbody = document.getElementById("floors");
+        let floorsTr = document.createElement("tr");
+        let nameTd = document.createElement("td");
+        let nameInput = document.createElement("input");
+        nameInput.className = "form-control sidebarItem";
+        nameTd.appendChild(nameInput);
+        nameInput.name = 'floors[' + floorIndex + '].floorName';
+        let textTd = document.createElement("td");
+        textTd.style.width = '80%';
+        let textInput = document.createElement("input");
+        textInput.className = "form-control sidebarItem";
+        textInput.name = 'floors[' + floorIndex + '].floorDesc';
+        textTd.appendChild(textInput);
+        let checkTd = document.createElement("td");
+        let inputCheck = document.createElement("input");
+        inputCheck.type = "checkbox";
+        inputCheck.style.width = '1.5rem';
+        inputCheck.style.height = '1.5rem';
+        inputCheck.className = "mt-1 checkBoxList";
+        checkTd.appendChild(inputCheck);
+        floorsTr.appendChild(checkTd);
+        floorsTr.appendChild(nameTd);
+        floorsTr.appendChild(textTd);
+        floorsTr.className = "locationData"
+        floorsTbody.appendChild(floorsTr);
+        floorIndex++;
     }
 
-    document.getElementById("addFloor").addEventListener("click", function(){
-        let newRow = document.createElement('div');
-        newRow.classList.add('row');
-        newRow.classList.add('floorList');
-        newRow.classList.add('my-2');
-        let col4 = document.createElement('div');
-        col4.classList.add('col-3');
-        col4.classList.add('input-group');
-        let col8 = document.createElement('div');
-        col8.classList.add('col-8');
-        col8.classList.add('input-group');
-
-        let labelFloorNum = document.createElement('span');
-        labelFloorNum.classList.add('input-group-text');
-        labelFloorNum.classList.add('fs-5');
-        labelFloorNum.classList.add('sidebarItem');
-        labelFloorNum.innerText = '층 수'
-
-        let inputFloorNum = document.createElement('input');
-        inputFloorNum.type='text';
-        inputFloorNum.classList.add('form-control');
-        inputFloorNum.classList.add('fontHv');
-        inputFloorNum.classList.add('mt-0');
-        inputFloorNum.classList.add('py-2');
-        inputFloorNum.classList.add('fs-4');
-        inputFloorNum.name = 'floor[' + floorIndex + '].num';
-
-        col4.appendChild(labelFloorNum);
-        col4.appendChild(inputFloorNum);
-        col4.style.width = '33%';
-
-        let labelFloorInfo = document.createElement('span');
-        labelFloorInfo.classList.add('input-group-text');
-        labelFloorInfo.classList.add('fs-5');
-        labelFloorInfo.classList.add('sidebarItem');
-        labelFloorInfo.innerText = '정보'
-
-        let inputFloorInfo = document.createElement('input');
-        inputFloorInfo.type='text';
-        inputFloorInfo.classList.add('form-control');
-        inputFloorInfo.classList.add('fontHv');
-        inputFloorInfo.classList.add('mt-0');
-        inputFloorInfo.classList.add('py-2');
-        inputFloorInfo.classList.add('fs-4');
-        inputFloorInfo.name = 'floor[' + floorIndex + '].info';
-
-        col8.appendChild(labelFloorInfo);
-        col8.appendChild(inputFloorInfo);
-        col8.style.width='66.6666%';
-
-        newRow.appendChild(col4);
-        newRow.appendChild(col8);
-
-        document.getElementById('floor').appendChild(newRow);
-        floorIndex++;
-    });
+    document.getElementById("addFloor").addEventListener("click", readXY);
 
     document.getElementById('deleteFloor').addEventListener("click", function(){
-        let inputContainer = document.getElementById('floor');
-        let inputElements = inputContainer.getElementsByClassName('floorList');
-
-        if (inputElements.length > 0) {
-            inputElements[inputElements.length - 1].remove();
+        let list = document.getElementsByClassName("checkBoxList");
+        let checkboxes = Array.from(list);
+        for (let i = checkboxes.length - 1; i >= 0; i--) {
+            if (checkboxes[i].checked) {
+                checkboxes[i].closest('.locationData').remove();
+            }
         }
     });
 
@@ -312,7 +295,7 @@
 
                 reader.onload = function(e){
                     document.getElementById('ar-image').src = e.target.result;
-                    document.getElementById('ar-image').style.display = 'visible';
+                    document.getElementById('ar-image').style.visibility = 'visible';
                 }
                 reader.readAsDataURL(input.files[0]);
             }

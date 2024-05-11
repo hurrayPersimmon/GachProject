@@ -138,28 +138,26 @@
             mapId: 'DEMO_MAP_ID',
         });
 
-        const pinViewScaled = new google.maps.marker.PinView({
-            scale: 0.4,
-        });
-
-        const pinViewBackground1 = new google.maps.marker.PinView({
-            background: "#046ffb",
-        });
-
-        const pinViewBackground2 = new google.maps.marker.PinView({
-            background: "#04fb6f",
-        });
+        let start = null;
+        let end = null;
+        let cnt = 0;
 
         const infoWindow = new google.maps.InfoWindow();
         let nodeList = [[${nodeList}]];
 
         nodeList.forEach(function(data){
+            const updateTag = document.createElement("div");
+            updateTag.className = "price-tag";
+            updateTag.textContent = data.nodeName;
+            const tag = document.createElement("div");
+            tag.className = "exist-tag";
+            tag.textContent = data.nodeName;
             const markerView = new google.maps.marker.AdvancedMarkerView({
                 map,
                 position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
                 draggable : true,
                 title: data.nodeName,
-                content : pinViewScaled.element
+                content : tag
             });
             markerView.nodeAltitude = data.nodeAltitude;
 
@@ -175,31 +173,31 @@
                 const { target } = domEvent;
 
                 if(inputFocused1) {
-                    infoWindow.close();
-                    infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h5>지점 1 선택' + "</h5></div>"
-                        + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
-                        + '<div id="bodyContent">' + "<span></span>"
-                        + "<span></span>"
-                         + "<span></span>"
-                        + "</div>" + "</div>");
-                    infoWindow.open(markerView.map, markerView);
-                    markerView.content = pinViewBackground1.element;
+                    markerView.content = updateTag;
                     document.getElementById("node1").value = markerView.title;
                     inputFocused1=false;
+                    start = markerView.position;
+                    cnt++;
                 }
 
                 if(inputFocused2) {
-                    infoWindow.close();
-                    infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h5>지점 2 선택' + "</h5></div>"
-                        + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
-                        + '<div id="bodyContent">' + "<span></span>"
-                        + "<span></span>"
-                        + "<span></span>"
-                        + "</div>" + "</div>");
-                    infoWindow.open(markerView.map, markerView);
-                    markerView.content = pinViewBackground2.element;
+                    markerView.content = updateTag;
                     document.getElementById("node2").value = markerView.title;
-                    inputFocused2=false;
+                    inputFocused2=false
+                    end = markerView.position;
+                    cnt++;
+                }
+
+                if(cnt===2){
+                    const flightPath = new google.maps.Polyline({
+                        path: [start, end],
+                        geodesic: true,
+                        strokeColor: "#009dff",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                    });
+
+                    flightPath.setMap(map);
                 }
             });
         });

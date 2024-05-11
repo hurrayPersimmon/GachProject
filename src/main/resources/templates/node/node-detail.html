@@ -173,12 +173,16 @@
         nodeList.forEach(function(data, index){
 
             if((targetNode.nodeId-1) === index){
+                const updateTag = document.createElement("div");
+                updateTag.className = "price-tag";
+                updateTag.textContent = data.nodeName;
+
                 const markerView = new google.maps.marker.AdvancedMarkerView({
                     map,
                     position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
                     title: data.nodeName,
                     gmpDraggable: true,
-                    content : pinViewBackground.element
+                    content : updateTag
                 });
                 markerView.nodeAltitude = data.nodeAltitude;
 
@@ -236,11 +240,14 @@
                     infoWindow.open(markerView.map, markerView);
                 });
             } else {
+                const tag = document.createElement("div");
+                tag.className = "exist-tag";
+                tag.textContent = data.nodeName;
                 const thisMarkerView = new google.maps.marker.AdvancedMarkerView({
                     map,
                     position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
                     title: data.nodeName,
-                    content : pinViewScaled.element
+                    content : tag
                 });
                 thisMarkerView.nodeAltitude = data.nodeAltitude;
 

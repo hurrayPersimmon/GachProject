@@ -38,6 +38,7 @@ public class AdminPlaceSourceController {
     @GetMapping("/add")
     public String addPlacePage(Model model){
         model.addAttribute("placeDto", new MapDTO.PlaceSourceDTO());
+        //Category Enum 클래스를 따로 model로 전달해야함. 영어로 되어 있던데, 문의 Enum처럼 하면 좋을 것 같음
         return "place/place-add";
     }
 

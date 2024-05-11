@@ -269,3 +269,47 @@ input[type=file] {
     background-color : rgb(100 116 139);
     color : white;
 }
+
+.price-tag {
+    background-color: #4285F4;
+    border-radius: 0.6rem;
+    color: #FFFFFF;
+    font-size: 1rem;
+    padding: 0.7rem 0.7rem;
+    position: relative;
+}
+
+.price-tag::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 0.6rem solid transparent;
+    border-right: 0.6rem solid transparent;
+    border-top: 0.6rem solid #4285F4;
+}
+
+.exist-tag {
+    background-color: #3c3c3c;
+    border-radius: 0.6rem;
+    color: #FFFFFF;
+    font-size: 1rem;
+    padding: 0.7rem 0.7rem;
+    position: relative;
+}
+
+.exist-tag::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 0.6rem solid transparent;
+    border-right: 0.6rem solid transparent;
+    border-top: 0.6rem solid #3c3c3c;
+}

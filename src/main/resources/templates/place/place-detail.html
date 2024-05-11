@@ -45,7 +45,8 @@
                                                     <hr>
                                                     <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
                                                         <option th:each="b : ${placeDto.placeCategory}" th:value="${b}" th:text="${b}"></option>
-                                                    </select>                                                    </div>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -181,14 +182,6 @@
             center: {lat: 37.45088195800781, lng: 127.12886810302734},
             zoom: 19,
             mapId: 'DEMO_MAP_ID',
-        });
-
-        const pinViewScaled = new google.maps.marker.PinView({
-            scale: 0.4,
-        });
-
-        const pinViewBackground = new google.maps.marker.PinView({
-            background: "#046ffb",
         });
 
         const elevator = new google.maps.ElevationService();

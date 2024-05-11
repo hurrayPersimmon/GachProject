@@ -152,12 +152,17 @@
         let nodeList = [[${nodeList}]];
 
         nodeList.forEach(function(data){
+
+            const tag = document.createElement("div");
+            tag.className = "exist-tag";
+            tag.textContent = data.nodeName;
+
             const markerView = new google.maps.marker.AdvancedMarkerView({
                 map,
                 position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
                 draggable : true,
                 title: data.nodeName,
-                content : pinViewScaled.element
+                content : tag
             });
             markerView.nodeAltitude = data.nodeAltitude;
 
@@ -175,11 +180,14 @@
             });
         });
 
+        const newTag = document.createElement("div");
+        newTag.className = "price-tag";
+        newTag.textContent = "새 지점";
         const newMarkerView = new google.maps.marker.AdvancedMarkerView({
             map,
             position: {lat: 37.45088195800781, lng: 127.12886810302734},
             gmpDraggable: true,
-            content : pinViewBackground.element
+            content : newTag
         });
 
         newMarkerView.addListener("dragend", (event) => {
