@@ -5,16 +5,23 @@ import com.f2z.gach.Map.Entity.BuildingFloor;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Entity.PlaceSource;
+import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 
+@Slf4j
+@ToString
+@Builder
+@AllArgsConstructor
 public class MapDTO {
+
 
     @Getter
     @AllArgsConstructor
@@ -55,35 +62,34 @@ public class MapDTO {
         private Integer lineId;
         @NotBlank(message = "간선 이름을 입력해주세요.")
         private String lineName;
-        private Integer nodeCodeFirst;
         @NotBlank(message = "노드를 지정해주세요.")
         private String nodeNameFirst;
-        private Integer nodeCodeSecond;
         @NotBlank(message = "노드를 지정해주세요.")
         private String nodeNameSecond;
-        private Double weightShortest;
-        private Double weightOptimal;
 
-        public MapLine toEntity() {
-            return MapLine.builder()
-                    .lineName(lineName)
-                    .nodeNameFirst(nodeNameFirst)
-                    .nodeNameSecond(nodeNameSecond)
+        private Integer nodeFirstId;
+        private Integer nodeSecondId;
+
+        private MapNode nodeFirst;
+        private MapNode nodeSecond;
+
+        public MapLineDTO toEntity(MapLineDTO mapLineDTO) {
+            return MapLineDTO.builder()
+                    .lineName(mapLineDTO.getLineName())
+                    .nodeFirstId(mapLineDTO.getNodeFirstId())
+                    .nodeSecondId(mapLineDTO.getNodeSecondId())
                     .build();
         }
 
         public MapLine toSaveEntity(String division, MapNode nodeFirst, MapNode nodeSecond) {
             Double weightShortest = getDistance(nodeFirst, nodeSecond);
             double deltaAltitude = (nodeSecond.getNodeAltitude() - nodeFirst.getNodeAltitude());
-
             Double weightOptimal = Math.toDegrees(Math.atan2(deltaAltitude, weightShortest));
 
             return MapLine.builder()
                     .lineName(lineName + division)
-                    .nodeNameFirst(nodeFirst.getNodeName())
-                    .nodeCodeFirst(nodeFirst.getNodeId())
-                    .nodeNameSecond(nodeSecond.getNodeName())
-                    .nodeCodeSecond(nodeSecond.getNodeId())
+                    .nodeFirst(nodeFirst)
+                    .nodeSecond(nodeSecond)
                     .weightShortest(weightShortest)
                     .weightOptimal(weightOptimal)
                     .build();
@@ -117,8 +123,8 @@ public class MapDTO {
             return MapLineListStructure.builder()
                     .lineId(mapLine.getLineId())
                     .lineName(mapLine.getLineName())
-                    .nodeNameFirst(mapLine.getNodeNameFirst())
-                    .nodeNameSecond(mapLine.getNodeNameSecond())
+                    .nodeNameFirst(mapLine.getNodeFirst().getNodeName())
+                    .nodeNameSecond(mapLine.getNodeSecond().getNodeName())
                     .weightShortest(mapLine.getWeightShortest())
                     .weightOptimal(mapLine.getWeightOptimal())
                     .build();

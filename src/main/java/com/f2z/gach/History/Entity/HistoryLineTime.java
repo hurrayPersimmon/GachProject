@@ -22,6 +22,8 @@ public class HistoryLineTime {
     private Time lineTime;
     private Double lineVelocity;
 
+    //shortest, optimal 넣기.
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "historyId")
     private UserHistory userHistory;

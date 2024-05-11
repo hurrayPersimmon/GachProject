@@ -1,9 +1,6 @@
 package com.f2z.gach.Map.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -18,12 +15,16 @@ public class MapLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer lineId;
     private String lineName;
-    private Integer nodeCodeFirst;
-    private String nodeNameFirst;
-    private Integer nodeCodeSecond;
-    private String nodeNameSecond;
     private Double weightShortest;
     private Double weightOptimal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nodeIdFirst", updatable = false, referencedColumnName = "nodeId")
+    private MapNode nodeFirst;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nodeIdSecond", updatable = false, referencedColumnName = "nodeId")
+    private MapNode nodeSecond;
 
 
 }

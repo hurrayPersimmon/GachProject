@@ -1,7 +1,10 @@
 package com.f2z.gach.Response;
 
 import com.f2z.gach.EnumType.Properties;
+import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @Getter
@@ -52,5 +55,10 @@ public class ResponseEntity<T> {
 
     public static <T> ResponseEntity<T> fail(T data){
         return new ResponseEntity<>(false, Properties.BAD_REQUEST.getCode(), Properties.BAD_REQUEST.getMessage(), data);
+    }
+
+    public static <T> ResponseEntity<T> requestListSuccess(List<T> data) {
+        return (ResponseEntity<T>) new ResponseEntity<>(true, Properties.OK.getCode(), Properties.OK.getMessage(), data.toArray());
+
     }
 }

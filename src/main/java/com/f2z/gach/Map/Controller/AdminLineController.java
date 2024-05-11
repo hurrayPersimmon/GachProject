@@ -7,6 +7,7 @@ import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 @SessionAttributes
+@Transactional
 public class AdminLineController {
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
@@ -36,7 +37,7 @@ public class AdminLineController {
     public void setAttributes(Model model){
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
-
+        model.addAttribute("lineSize", mapLineRepository.count());
     }
 
     @GetMapping("/line/list/{page}")
@@ -63,25 +64,23 @@ public class AdminLineController {
         if(result.hasErrors()){
             return "line/line-add";
         }
-        log.info(mapLineDTO.toString());
+        mapLineDTO.setNodeFirst(mapNodeRepository.findByNodeId(mapLineDTO.getNodeFirstId()));
+        mapLineDTO.setNodeSecond(mapNodeRepository.findByNodeId(mapLineDTO.getNodeSecondId()));
         mapLineRepository.save(mapLineDTO.toSaveEntity("A",
-                mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameFirst()),
-                mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameSecond())));
-
+                mapLineDTO.getNodeFirst(), mapLineDTO.getNodeSecond()));
         mapLineRepository.save(mapLineDTO.toSaveEntity("B",
-                mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameSecond()),
-                mapNodeRepository.findByNodeName(mapLineDTO.toEntity().getNodeNameFirst())));
+                mapLineDTO.getNodeSecond(), mapLineDTO.getNodeFirst()));
         return "redirect:/admin/line/list/0";
     }
 
     @GetMapping("/line/{lineId}")
     public String deleteLine(@PathVariable Integer lineId,
                              Model model)throws Exception{
-        if(mapLineRepository.existsById(lineId)){
-            mapLineRepository.deleteById(lineId);
+        if(mapLineRepository.existsByLineId(lineId)){
+            mapLineRepository.deleteByLineId(lineId);
             if(lineId%2==0) lineId-=1;
             else lineId+=1;
-            mapLineRepository.deleteById(lineId);
+            mapLineRepository.deleteByLineId(lineId);
             model.addAttribute("message", "간선이 삭제되었습니다.");
             model.addAttribute("lineList", mapLineRepository.findAll());
             return "redirect:/admin/line/list/0";

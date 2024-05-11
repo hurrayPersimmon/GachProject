@@ -14,6 +14,8 @@ public enum Properties {
 
     BAD_REQUEST(400, "비정상적인 요청"),
     DUPLICATE_ID(400, "아이디가 중복됩니다."),
+    WRONG_REQUEST(400, "출발지와 도착지가 같습니다."),
+    ID_NOT_FOUND(400, "근처 노드가 없습니다."),
     UNAUTHORIZED(401, "권한 없음"),
     FORBIDDEN(403, "금지된 접근"),
     NOT_FOUND(404, "찾을 수 없음"),

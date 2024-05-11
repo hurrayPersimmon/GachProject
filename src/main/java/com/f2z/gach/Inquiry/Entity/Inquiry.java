@@ -20,6 +20,7 @@ public class Inquiry extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "userId", updatable = false)
     private User user;
+
     private boolean inquiryProgress;
     private String inquiryTitle;
     private String inquiryContent;

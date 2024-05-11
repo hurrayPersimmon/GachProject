@@ -37,6 +37,8 @@
                                                 <p class="fs-4 nodeHeader">연결노드1 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameFirst}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1" placeholder="name@example.com">
+                                                <input type="hidden" th:field="*{nodeFirstId}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1Id" placeholder="name@example.com">
+
                                             </div>
                                         </div>
                                     </div>
@@ -46,6 +48,8 @@
                                                 <p class="fs-4 nodeHeader">연결노드2 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameSecond}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2" placeholder="name@example.com">
+                                                <input type="hidden" th:field="*{nodeSecondId}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2Id" placeholder="name@example.com">
+
                                             </div>
                                         </div>
                                     </div>
@@ -175,6 +179,7 @@
                 if(inputFocused1) {
                     markerView.content = updateTag;
                     document.getElementById("node1").value = markerView.title;
+                    document.getElementById("node1Id").value = markerView.nodeId;
                     inputFocused1=false;
                     start = markerView.position;
                     cnt++;
@@ -183,6 +188,8 @@
                 if(inputFocused2) {
                     markerView.content = updateTag;
                     document.getElementById("node2").value = markerView.title;
+                    document.getElementById("node2Id").value = markerView.nodeId;
+                    inputFocused2=false;
                     inputFocused2=false
                     end = markerView.position;
                     cnt++;

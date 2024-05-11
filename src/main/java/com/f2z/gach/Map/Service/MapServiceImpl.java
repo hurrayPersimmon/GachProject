@@ -3,21 +3,18 @@ package com.f2z.gach.Map.Service;
 import com.f2z.gach.EnumType.College;
 import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.EnumType.PlaceCategory;
+import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
-import com.f2z.gach.Map.Entity.BuildingFloor;
-import com.f2z.gach.Map.Entity.BuildingKeyword;
-import com.f2z.gach.Map.Entity.PlaceSource;
-import com.f2z.gach.Map.Repository.BuildingFloorRepository;
-import com.f2z.gach.Map.Repository.BuildingKeywordRepository;
-import com.f2z.gach.Map.Repository.PlaceSourceRepository;
+import com.f2z.gach.Map.Entity.*;
+import com.f2z.gach.Map.Repository.*;
 import com.f2z.gach.Response.ResponseEntity;
+import com.f2z.gach.Response.ResponseListEntity;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -27,8 +24,11 @@ public class MapServiceImpl implements MapService{
     private final PlaceSourceRepository placeSourceRepository;
     private final BuildingFloorRepository buildingFloorRepository;
     private final BuildingKeywordRepository buildingKeywordRepository;
+    private final MapLineRepository mapLineRepository;
+    private final MapNodeRepository mapNodeRepository;
 
-
+    private final String routeTypeShortest = "SHORTEST";
+    private final String routeTypeOptimal = "OPTIMAL";
 
 
     @Override
@@ -121,5 +121,130 @@ public class MapServiceImpl implements MapService{
         }
     }
 
+    @Override
+    public ResponseListEntity<NavigationResponseDTO> getNowRoute(Integer placeId, Double latitude, Double longitude, Double altitude) {
+        Integer departureId = getNearestNodeId(latitude, longitude, altitude);
+        PlaceSource arrivalPlace = placeSourceRepository.findByPlaceId(placeId);
+        Integer arrivalId = getNearestNodeId(arrivalPlace.getPlaceLatitude(),
+                                arrivalPlace.getPlaceLongitude(),
+                                arrivalPlace.getPlaceAltitude());
 
+        return getNavigationResponseDTOResponseListEntity(departureId, arrivalId);
+    }
+
+
+
+    @Override
+    public ResponseListEntity<NavigationResponseDTO> getRoute(Integer departure, Integer arrival) {
+        PlaceSource departurePlace = placeSourceRepository.findByPlaceId(departure);
+        departure = getNearestNodeId(departurePlace.getPlaceLatitude(),
+                departurePlace.getPlaceLongitude(),
+                departurePlace.getPlaceAltitude());
+
+        PlaceSource arrivalPlace = placeSourceRepository.findByPlaceId(arrival);
+        arrival = getNearestNodeId(arrivalPlace.getPlaceLatitude(),
+                arrivalPlace.getPlaceLongitude(),
+                arrivalPlace.getPlaceAltitude());
+
+        return getNavigationResponseDTOResponseListEntity(departure, arrival);
+    }
+
+    private ResponseListEntity<NavigationResponseDTO> getNavigationResponseDTOResponseListEntity(Integer departure, Integer arrival) {
+        if(departure == 0 || arrival == 0 || departure == null || arrival == null){
+            return ResponseListEntity.notFound(null);
+        }
+        if(Objects.equals(departure, arrival)){
+            return ResponseListEntity.sameNode(null);
+        }
+
+        NavigationResponseDTO shortestRoute  = calculateRoute(routeTypeShortest, departure, arrival);
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departure, arrival);
+        List<NavigationResponseDTO> routes = Arrays.asList(shortestRoute, optimalRoute);
+
+        return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
+    }
+
+
+    private Integer getNearestNodeId(Double placeLatitude, Double placeLongitude, Double placeAltitude) {
+        int resultId = 0;
+        double minDistance= Double.MAX_VALUE;
+        List<MapNode> nodeList = mapLineRepository.findAll().stream().map(MapLine::getNodeFirst).toList();
+        for(MapNode node : nodeList){
+            Double distance = Math.sqrt(Math.pow(node.getNodeLatitude()-placeLatitude, 2)
+                        + Math.pow(node.getNodeLongitude()-placeLongitude, 2)
+                        + Math.pow(node.getNodeAltitude()-placeAltitude, 2));
+            if(minDistance > distance){
+                minDistance = distance;
+                resultId = node.getNodeId();
+            }
+        }
+        return resultId;
+    }
+
+    private NavigationResponseDTO calculateRoute(String routeType, Integer departureId, Integer arrivalId) {
+        List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
+        Map<Integer, Double> distances = new HashMap<>();
+        Map<Integer, Integer> previousNodes = new HashMap<>();
+        Set<Integer> visited = new HashSet<>();
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(distances::get));
+
+        distances.put(departureId, 0.0);
+        priorityQueue.offer(departureId);
+
+        while (!priorityQueue.isEmpty()) {
+            int currentNodeId = priorityQueue.poll();
+
+            if (currentNodeId == arrivalId) {
+                break;
+            }
+
+            if (visited.contains(currentNodeId)) {
+                continue;
+            }
+
+            visited.add(currentNodeId);
+
+            for (MapLine edge : mapLineRepository.findAllByNodeFirst_NodeId(currentNodeId)) {
+                double weight = routeType.equals(routeTypeShortest) ? edge.getWeightShortest() : edge.getWeightOptimal() + 180;
+                int neighborNodeId = edge.getNodeFirst().getNodeId() == currentNodeId ? edge.getNodeSecond().getNodeId() : edge.getNodeFirst().getNodeId();
+                double distanceThroughCurrent = distances.getOrDefault(currentNodeId, Double.MAX_VALUE) + weight;
+
+                if (distanceThroughCurrent < distances.getOrDefault(neighborNodeId, Double.MAX_VALUE)) {
+                    distances.put(neighborNodeId, distanceThroughCurrent);
+                    previousNodes.put(neighborNodeId, currentNodeId);
+                    priorityQueue.offer(neighborNodeId);
+                }
+            }
+        }
+
+        // 경로 역추적
+        int currentNodeId = arrivalId;
+        while (previousNodes.containsKey(currentNodeId)) {
+            MapNode node = mapNodeRepository.findById(currentNodeId).orElseThrow(() -> new NoSuchElementException("Node not found"));
+            nodeList.add(NavigationResponseDTO.NodeDTO.builder()
+                    .nodeId(node.getNodeId())
+                    .latitude(node.getNodeLatitude())
+                    .longitude(node.getNodeLongitude())
+                    .altitude(node.getNodeAltitude())
+                    .build());
+            currentNodeId = previousNodes.get(currentNodeId);
+        }
+        nodeList.add(NavigationResponseDTO.NodeDTO.builder()
+                .nodeId(departureId)
+                .latitude(mapNodeRepository.findByNodeId(departureId).getNodeLatitude())
+                .longitude(mapNodeRepository.findByNodeId(departureId).getNodeLongitude())
+                .altitude(mapNodeRepository.findByNodeId(departureId).getNodeAltitude())
+                .build());
+        Collections.reverse(nodeList);
+
+        return NavigationResponseDTO.toNavigationResponseDTO(routeType, 0, nodeList);
+    }
 }
+
+
+
+
+
+
+
+
