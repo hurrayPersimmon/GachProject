@@ -8,9 +8,7 @@ import java.util.List;
 public interface MapNodeRepository extends JpaRepository<MapNode, Integer> {
     boolean existsByNodeName(String nodeName);
     MapNode findByNodeId(Integer nodeId);
-
     boolean existsByNodeId(Integer nodeId);
-
     MapNode findByNodeName(String nodeNameFirst);
 
 

@@ -28,8 +28,8 @@ public class HistoryRequestDTO {
     public static class UserHistoryRequestDTO{
         private Long userId;
         private Integer guestId;
-        private Integer departure;
-        private Integer arrival;
+        private Integer departures;
+        private Integer arrivals;
         private Satisfaction satisfactionRoute;
         private Satisfaction satisfactionTime;
         private Double temperature;
@@ -46,8 +46,8 @@ public class HistoryRequestDTO {
                     .guest(dto.getGuestId() != null ? userGuestRepository.findByGuestId(dto.getGuestId()) : null)
                     .route(dto.getTimeList().stream().map(time -> time.getFirstNodeId() + " -> " + time.getSecondNodeId()).reduce((a, b) -> a + " -> " + b).orElse(null))
                     .totalTime(dto.getTimeList().stream().mapToInt(HistoryLineTimeRequestDTO::getTime).sum())
-                    .departures(mapNodeRepository.findByNodeId(dto.getDeparture()))
-                    .arrivals(mapNodeRepository.findByNodeId(dto.getArrival()))
+                    .departures(mapNodeRepository.findByNodeId(dto.getDepartures()))
+                    .arrivals(mapNodeRepository.findByNodeId(dto.getArrivals()))
                     .satisfactionRoute(dto.getSatisfactionRoute())
                     .satisfactionTime(dto.getSatisfactionTime())
                     .temperature(dto.getTemperature())
