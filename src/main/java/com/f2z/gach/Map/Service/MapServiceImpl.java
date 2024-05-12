@@ -167,18 +167,30 @@ public class MapServiceImpl implements MapService{
 
     private Integer getNearestNodeId(Double placeLatitude, Double placeLongitude, Double placeAltitude) {
         int resultId = 0;
+        final int R = 6371; // 지구의 반지름 (킬로미터)
+        
         double minDistance= Double.MAX_VALUE;
         List<MapNode> nodeList = mapLineRepository.findAll().stream().map(MapLine::getNodeFirst).toList();
         for(MapNode node : nodeList){
-            Double distance = Math.sqrt(Math.pow(node.getNodeLatitude()-placeLatitude, 2)
-                        + Math.pow(node.getNodeLongitude()-placeLongitude, 2)
-                        + Math.pow(node.getNodeAltitude()-placeAltitude, 2));
-            if(minDistance > distance){
+            double c = getHaversine(placeLatitude, placeLongitude, node);
+            double distance = R * c; // 거리 (킬로미터)
+
+            if (minDistance > distance) {
                 minDistance = distance;
                 resultId = node.getNodeId();
             }
         }
         return resultId;
+    }
+
+    private static double getHaversine(Double placeLatitude, Double placeLongitude, MapNode node) {
+        double latDistance = Math.toRadians(node.getNodeLatitude() - placeLatitude);
+        double lonDistance = Math.toRadians(node.getNodeLongitude() - placeLongitude);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(placeLatitude)) * Math.cos(Math.toRadians(node.getNodeLatitude()))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return c;
     }
 
     private NavigationResponseDTO calculateRoute(String routeType, Integer departureId, Integer arrivalId) {
