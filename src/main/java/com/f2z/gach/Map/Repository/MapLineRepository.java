@@ -10,7 +10,6 @@ public interface MapLineRepository extends JpaRepository<MapLine,Integer>{
     boolean existsByLineId(Integer lineId);
     void deleteByLineId(Integer lineId);
     List<MapLine> findAllByNodeFirst_NodeId(Integer nodeId);
-
-    Integer findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(Integer nodeFirstId, Integer nodeSecondId);
+    MapLine findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(Integer nodeFirstId, Integer nodeSecondId);
 
 }

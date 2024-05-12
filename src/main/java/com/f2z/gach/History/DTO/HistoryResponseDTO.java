@@ -40,7 +40,7 @@ public class HistoryResponseDTO {
     public static class UserHistoryListStructure {
         Integer historyId;
         Long userId;
-        Time totalTime;
+        Integer totalTime;
         LocalDateTime createDt;
         String arrivals;
         String departures;
@@ -54,8 +54,8 @@ public class HistoryResponseDTO {
                 .userId(history.getUser().getUserId())
                 .totalTime(history.getTotalTime())
                 .createDt(history.getCreateDt())
-                .departures(history.getDepartures())
-                .arrivals(history.getArrivals())
+                .departures(history.getDepartures().getNodeName())
+                .arrivals(history.getArrivals().getNodeName())
                 .satisfactionRoute(history.getSatisfactionRoute().ordinal()+1)
                 .satisfactionTime(history.getSatisfactionTime().ordinal()+1)
                 .build();

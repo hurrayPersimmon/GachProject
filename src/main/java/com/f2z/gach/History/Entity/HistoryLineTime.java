@@ -14,27 +14,17 @@ import java.sql.Time;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class HistoryLineTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer lineHistoryId;
-    private Integer lineIndex;
-    private Time lineTime;
+    private Integer lineTime;
     private Double lineVelocity;
-
-    //shortest, optimal 넣기.
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "historyId")
     private UserHistory userHistory;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guestId")
-    private UserGuest guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lineId")

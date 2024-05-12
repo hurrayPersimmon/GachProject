@@ -1,5 +1,6 @@
 package com.f2z.gach.History.Controller;
 
+import com.f2z.gach.History.DTO.HistoryRequestDTO;
 import com.f2z.gach.History.DTO.HistoryResponseDTO;
 import com.f2z.gach.History.Entity.UserHistory;
 import com.f2z.gach.History.Service.HistoryService;
@@ -23,8 +24,8 @@ public class HistoryRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(@RequestBody UserHistory userHistory) {
-        return historyService.createHistory(userHistory);
+    public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(@RequestBody HistoryRequestDTO.UserHistoryRequestDTO lineHistory) {
+        return historyService.createHistory(lineHistory);
     }
 
 
