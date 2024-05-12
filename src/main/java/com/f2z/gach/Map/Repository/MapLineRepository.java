@@ -7,18 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MapLineRepository extends JpaRepository<MapLine,Integer>{
-    Boolean existsByLineName(String lineName);
-
-    MapLine findByLineId(Integer lineId);
-
-    boolean existsByNodeFirst_NodeNameAndNodeSecond_NodeName(String nodeNameFirst, String nodeNameSecond);
-
     boolean existsByLineId(Integer lineId);
-
     void deleteByLineId(Integer lineId);
-
-    boolean existsByNodeFirst_NodeId(Integer placeId);
-
     List<MapLine> findAllByNodeFirst_NodeId(Integer nodeId);
+
+    Integer findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(Integer nodeFirstId, Integer nodeSecondId);
 
 }

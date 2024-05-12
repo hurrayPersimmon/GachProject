@@ -52,8 +52,8 @@ public class MapRestController {
     }
 
     @GetMapping("/route")
-    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestParam Integer departure, @RequestParam Integer arrival){
-        return mapService.getRoute(departure, arrival);
+    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestParam Integer departures, @RequestParam Integer arrivals){
+        return mapService.getRoute(departures, arrivals);
     }
 
 
