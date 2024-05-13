@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('edgeTest')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    경로테스트
+                </div>
+                <div class="row ms-1">
+                    <div class="col-11 ms-5" style="width:88%;">
+                        <div class="row mb-3 fs-1 fontHv">
+                            관리자 > 경로 테스트
+                        </div>
+                        <div class="row mb-3 text-center justify-content-center">
+                                <div class="col-2">
+                                    <div class="nodeHeader"><span style="width:1rem; height:1rem; background-color: red; display:inline-block" class="mt-1"></span> : 최적경로</div>
+                                    <div class="nodeHeader"><span style="width:1rem; height:1rem; background-color: blue; display: inline-block" class="mt-1"></span> : 최단경로</div>
+                                </div>
+                                <div class="col-3 offset-1">
+                                    <span class="form-control fontHv mt-0 pt-2 fs-6" th:text="${arrivals.nodeName}" style="color:rgb(17,160,248)">
+                                        출발지
+                                    </span>
+                                </div>
+                                <div class="col-3">
+                                    <span class="form-control fontHv mt-0 pt-2 fs-6" th:text="${departures.nodeName}" style="color:rgb(17,160,248)">
+                                        도착지
+                                    </span>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <a href="/admin/map/test" class="btn btn-secondary">초기화</a>
+                                </div>
+                        </div>
+                        <div class="row" style="max-height : 75vh">
+                            <div id="map" style="width : 100%; height : 73vh;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            }); //remove link
+        }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+<script th:inline="javascript">
+
+    const map = null;
+    const mapData = {
+        lat : 0,
+        lng : 0,
+
+        setLat : (value) => {
+            mapData.lat = value;
+        },
+        setLng : (value) => {
+            mapData.lng = value;
+        },
+        getLat : (value) => {
+            return mapData.lat;
+        },
+        getLng : (value) => {
+            return mapData.lng;
+        }
+    }
+    // Google Map 용 Script 태그
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+
+        let shortNodeList = [[${nodeList.shortestList}]];
+        let optimalNodeList = [[${nodeList.optimalList}]];
+
+
+        let flightPlanCoordinates1 = [];
+        let flightPlanCoordinates2 = [];
+
+        optimalNodeList.forEach(function(data){
+            const pinViewScaled = new google.maps.marker.PinView({
+                scale: 0.5,
+            });
+            flightPlanCoordinates1.push({ lat: data.latitude, lng: data.longitude });
+            const markerView = new google.maps.marker.AdvancedMarkerView({
+                map,
+                position: {lat: data.latitude, lng: data.longitude},
+                content : pinViewScaled.element,
+            });
+        });
+
+
+
+        shortNodeList.forEach(function(data){
+            const pinViewScaled = new google.maps.marker.PinView({
+                scale: 0.5,
+                background : "#0077ff",
+                glyphColor: "#003cff",
+            });
+            flightPlanCoordinates2.push({lat:data.latitude, lng: data.longitude});
+            const markerView2 = new google.maps.marker.AdvancedMarkerView({
+                map,
+                position : {lat: data.latitude, lng: data.longitude},
+                content : pinViewScaled.element,
+            })
+        })
+
+        const flightPath1 = new google.maps.Polyline({
+            path: flightPlanCoordinates1,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+        });
+
+        const flightPath2 = new google.maps.Polyline({
+            path: flightPlanCoordinates2,
+            geodesic: true,
+            strokeColor: "#0077ff",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+        });
+
+        flightPath1.setMap(map);
+        flightPath2.setMap(map);
+    }
+    window.initMap = initMap;
+</script>
+</body>
+</html>

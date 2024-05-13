@@ -21,18 +21,23 @@
                                 경로 테스트
                             </div>
                             <div class="row mb-3 text-center justify-content-center">
-                                <div class="col-4">
-                                    <select>
-                                        <!-- nodeList -->
-                                        <option></option>
-                                    </select>
-                                </div>
-                                <div class="col-4">
-                                    <select>
-                                        <!-- nodeList -->
-                                        <option></option>
-                                    </select>
-                                </div>
+                                <form class="row" th:action="@{/admin/map/test/result}" method="get">
+                                    <div class="col-3 offset-3">
+                                        <select class="form-select fontHv mt-0 pt-2 fs-6" name="arrivals" style="color:rgb(17,160,248)">
+                                            <option value="">출발지</option>
+                                            <option th:each="node : ${MapNodeList}" th:value="${node.nodeId}" th:text="${node?.nodeName}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <select class="form-select fontHv mt-0 pt-2 fs-6" name="departures" style="color:rgb(17,160,248)">
+                                            <option value="">도착지</option>
+                                            <option th:each="node : ${MapNodeList}" th:value="${node.nodeId}" th:text="${node?.nodeName}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2 text-end">
+                                        <button type="submit" class="btn btn-primary">경로테스트</button>
+                                    </div>
+                                </form>
                             </div>
                             <div class="row" style="max-height : 75vh">
                                 <div id="map" style="width : 100%; height : 73vh;"></div>
@@ -109,7 +114,7 @@
 
         const infoWindow = new google.maps.InfoWindow();
 
-        // 최적경로 노드 요청 받아야 함.
+        let nodeList = [[${MapNodeList}]];
 
         nodeList.forEach(function(data){
 

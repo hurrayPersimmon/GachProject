@@ -1,5 +1,8 @@
 package com.f2z.gach.Map.Controller;
 
+import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
@@ -26,38 +29,48 @@ public class AdminTestController {
     private final PlaceSourceRepository placeSourceRepository;
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
+    private final AdminRepository adminRepository;
+    private final InquiryRepository inquiryRepository;
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+        model.addAttribute("lineSize", mapLineRepository.count());
+    }
 
     @GetMapping("/test")
     public String testPage(Model model) {
         model.addAttribute("MapNodeList", mapNodeRepository.findAll());
         model.addAttribute("nodeDto", new NavigationResponseDTO.AdminMapNode());
         model.addAttribute("nodeList", new NavigationResponseDTO.AdminNodeList());
-        //nodeList
         return "test/pathTest";
     }
 
 
-    @GetMapping("/test")
-    public String getTestRoute(@RequestParam Integer departures, @RequestParam Integer arrivals,
+    @GetMapping("/test/result")
+    public String getTestRoute(@RequestParam Integer arrivals, @RequestParam Integer departures,
                                Model model){
-        PlaceSource departuresPlace = placeSourceRepository.findByPlaceId(departures);
-        departures = getNearestNodeId(departuresPlace.getPlaceLatitude(),
-                departuresPlace.getPlaceLongitude(),
-                departuresPlace.getPlaceAltitude());
+        log.info("getTestRoute");
+        MapNode departuresPlace = mapNodeRepository.findByNodeId(departures);
+        departures = getNearestNodeId(departuresPlace.getNodeLatitude(),
+                departuresPlace.getNodeLongitude(),
+                departuresPlace.getNodeAltitude());
 
-        PlaceSource arrivalsPlace = placeSourceRepository.findByPlaceId(arrivals);
-        arrivals = getNearestNodeId(arrivalsPlace.getPlaceLatitude(),
-                arrivalsPlace.getPlaceLongitude(),
-                arrivalsPlace.getPlaceAltitude());
+        MapNode arrivalsPlace = mapNodeRepository.findByNodeId(arrivals);
+        arrivals = getNearestNodeId(arrivalsPlace.getNodeLatitude(),
+                arrivalsPlace.getNodeLongitude(),
+                arrivalsPlace.getNodeAltitude());
         List<NavigationResponseDTO.NodeDTO> shortestRoute  = calculateRoute(routeTypeShortest, departures, arrivals);
         List<NavigationResponseDTO.NodeDTO> optimalRoute = calculateRoute(routeTypeOptimal, departures, arrivals);
 
-        model.addAttribute("MapNodeList", mapNodeRepository.findAll());
+        model.addAttribute("arrivals", mapNodeRepository.findByNodeId(arrivals));
+        model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
-        return "redirect:/test/pathTest";
+        return "test/pathTestResult";
     }
 
 
