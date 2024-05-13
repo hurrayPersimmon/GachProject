@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+    <div class="container-fluid">
+        <header th:replace="~{/fragment :: header}"></header>
+        <div class="row">
+            <div th:replace="~{fragment :: sidebar('edgeTest')}"></div>
+            <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+                <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                    <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                        경로테스트
+                    </div>
+                    <div class="row ms-1">
+                        <div class="col-11 ms-5" style="width:88%;">
+                            <div class="row mb-3 fs-1 fontHv">
+                                경로 테스트
+                            </div>
+                            <div class="row mb-3 text-center justify-content-center">
+                                <div class="col-4">
+                                    <select>
+                                        <!-- nodeList -->
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <select>
+                                        <!-- nodeList -->
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="max-height : 75vh">
+                                <div id="map" style="width : 100%; height : 73vh;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            }); //remove link
+        }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+<script th:inline="javascript">
+
+    const map = null;
+    const mapData = {
+        lat : 0,
+        lng : 0,
+
+        setLat : (value) => {
+            mapData.lat = value;
+        },
+        setLng : (value) => {
+            mapData.lng = value;
+        },
+        getLat : (value) => {
+            return mapData.lat;
+        },
+        getLng : (value) => {
+            return mapData.lng;
+        }
+    }
+    // Google Map 용 Script 태그
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.45088195800781, lng: 127.12886810302734},
+            zoom: 19,
+            mapId: 'DEMO_MAP_ID',
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+
+        // 최적경로 노드 요청 받아야 함.
+
+        nodeList.forEach(function(data){
+
+            const tag = document.createElement("div");
+            tag.className = "exist-tag";
+            tag.textContent = data.nodeName;
+
+            const markerView = new google.maps.marker.AdvancedMarkerView({
+                map,
+                position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
+                draggable : true,
+                title: data.nodeName,
+                content : tag
+            });
+            markerView.nodeAltitude = data.nodeAltitude;
+
+            markerView.addListener('click', ({ domEvent, latLng }) => {
+                const { target } = domEvent;
+                infoWindow.close();
+                infoWindow.setContent('<div id="content">' + '<div id="siteNotice"><h3>' + markerView.title + "</h3></div>"
+                    + '<h1 id="firstHeading" class="firstHeading">' + '</h1>'
+                    + '<div id="bodyContent">' + "<span>지점 위도 : </span>"
+                    + markerView.position.lat + "<br><span>지점 경도 : </span>"
+                    + markerView.position.lng + "<br><span>노드 고도 : </span>"
+                    + markerView.nodeAltitude
+                    + "</div>" + "</div>");
+                infoWindow.open(markerView.map, markerView);
+            });
+        });
+    }
+    window.initMap = initMap;
+</script>
+</body>
+</html>

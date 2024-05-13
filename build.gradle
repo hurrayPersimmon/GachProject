@@ -35,6 +35,9 @@ dependencies {
     implementation 'org.json:json:20210307'
     implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.7.3'
     implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
+    compileOnly group: 'org.pytorch', name: 'pytorch_java_only', version: '2.1.0'
+    runtimeOnly group: 'com.facebook.soloader', name: 'nativeloader', version: '0.10.1'
+    implementation group: 'com.facebook.fbjni', name: 'fbjni-java-only', version: '0.2.2'
 }
 
 tasks.named('test') {

@@ -157,22 +157,12 @@
             mapId: 'DEMO_MAP_ID',
         });
 
-        const pinViewScaled = new google.maps.marker.PinView({
-            scale: 0.4,
-        });
-
-        const pinViewBackground = new google.maps.marker.PinView({
-            background: "#046ffb",
-        });
-
         const infoWindow = new google.maps.InfoWindow();
         const elevator = new google.maps.ElevationService();
 
         let nodeList = [[${nodeList}]];
-
         nodeList.forEach(function(data, index){
-
-            if((targetNode.nodeId-1) === index){
+            if(targetNode.nodeId === index + 181){
                 const updateTag = document.createElement("div");
                 updateTag.className = "price-tag";
                 updateTag.textContent = data.nodeName;

@@ -56,7 +56,7 @@
                                     </tr>
                                     </thead>
                                     <tbody class="text-center">
-                                    <tr th:each="place : ${placeList}" th:onclick="|location.href='@{/admin/place/{placeId}(placeId=${place.getPlaceId()})}'|">
+                                    <tr th:each="place : ${placeList}" th:onclick="|location.href='@{/admin/place/{placeId}(placeId=${place.getPlaceId()})}'|" style="max-height:3vh;">
                                         <td th:text="${place.placeCategory}">Mark</td>
                                         <td th:text="${place.placeName}">1</td>
                                         <td th:text="${place.placeSummary}">Otto</td>
@@ -67,7 +67,7 @@
                             <div class="row mt-4">
                                 <div class="col justify-content-center">
                                     <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
+                                        <ul class="pagination justify-content-center">
                                             <li class="page-item">
                                                 <a class="page-link" href="#" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
