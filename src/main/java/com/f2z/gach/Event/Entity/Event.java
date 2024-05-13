@@ -7,6 +7,8 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +30,10 @@ public class Event {
     private String eventInfo;
     private String eventImageName;
     private String eventImagePath;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private List<EventLocation> eventLocationList = new ArrayList<>();
+
 
     public void update(Event event) {
         this.eventName = event.getEventName();

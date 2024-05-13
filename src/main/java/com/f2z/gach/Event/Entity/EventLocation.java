@@ -20,7 +20,7 @@ public class EventLocation {
     private Double eventLatitude;
     private Double eventLongitude;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 

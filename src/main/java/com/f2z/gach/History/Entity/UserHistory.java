@@ -38,11 +38,11 @@ public class UserHistory extends BaseTimeEntity {
     private UserGuest guest;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "Departures", referencedColumnName = "nodeName")
+    @JoinColumn(name = "Departures", referencedColumnName = "nodeId")
     private MapNode departures;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "Arrivals", referencedColumnName = "nodeName")
+    @JoinColumn(name = "Arrivals", referencedColumnName = "nodeId")
     private MapNode arrivals;
 
 
