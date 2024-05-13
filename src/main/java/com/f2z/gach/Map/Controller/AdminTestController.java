@@ -33,7 +33,7 @@ public class AdminTestController {
     public String testPage(Model model) {
         model.addAttribute("nodeDto", new NavigationResponseDTO.AdminMapNode());
         model.addAttribute("nodeList", new NavigationResponseDTO.AdminNodeList());
-        return "test/test.html";
+        return "test/pathTest";
     }
 
 
@@ -54,7 +54,7 @@ public class AdminTestController {
 
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
-        return "redirect:/test/test.html";
+        return "redirect:/test/pathTest";
     }
 
 
