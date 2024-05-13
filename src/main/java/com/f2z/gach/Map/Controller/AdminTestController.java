@@ -31,8 +31,10 @@ public class AdminTestController {
 
     @GetMapping("/test")
     public String testPage(Model model) {
+        model.addAttribute("MapNodeList", mapNodeRepository.findAll());
         model.addAttribute("nodeDto", new NavigationResponseDTO.AdminMapNode());
         model.addAttribute("nodeList", new NavigationResponseDTO.AdminNodeList());
+        //nodeList
         return "test/pathTest";
     }
 
@@ -52,6 +54,7 @@ public class AdminTestController {
         List<NavigationResponseDTO.NodeDTO> shortestRoute  = calculateRoute(routeTypeShortest, departures, arrivals);
         List<NavigationResponseDTO.NodeDTO> optimalRoute = calculateRoute(routeTypeOptimal, departures, arrivals);
 
+        model.addAttribute("MapNodeList", mapNodeRepository.findAll());
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
         return "redirect:/test/pathTest";
