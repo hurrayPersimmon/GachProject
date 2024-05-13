@@ -21,6 +21,38 @@ public class NavigationResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class AdminMapNode{
+        private MapNode departures;
+        private MapNode arrivals;
+    }
+
+    public static AdminMapNode toAdminMapNode(MapNode departures, MapNode arrivals){
+        return AdminMapNode.builder()
+                .departures(departures)
+                .arrivals(arrivals)
+                .build();
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class AdminNodeList{
+        private List<NodeDTO> shortestList;
+        private List<NodeDTO> optimalList;
+    }
+
+    public static AdminNodeList toAdminNodeList(List<NodeDTO> shortestList, List<NodeDTO> optimalList){
+        return AdminNodeList.builder()
+                .shortestList(shortestList)
+                .optimalList(optimalList)
+                .build();
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class NodeDTO{
         private Integer nodeId;
         private Double latitude;
