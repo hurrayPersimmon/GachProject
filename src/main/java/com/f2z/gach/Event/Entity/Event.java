@@ -31,10 +31,6 @@ public class Event {
     private String eventImageName;
     private String eventImagePath;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
-    private List<EventLocation> eventLocationList = new ArrayList<>();
-
-
     public void update(Event event) {
         this.eventName = event.getEventName();
         this.eventLink = event.getEventLink();

@@ -11,4 +11,6 @@ public interface EventLocationRepository extends JpaRepository<EventLocation, In
     List<EventLocation> findAllByEvent_EventId(Integer eventId);
     EventLocation findByEventLocationId(Integer eventLocationId);
 
+    void deleteEventLocationsByEvent_EventId(Integer eventId);
+
 }
