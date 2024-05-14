@@ -35,33 +35,33 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 이름</p>
                                                 <hr>
-                                                <input th:field="*{eventDTO.eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{event.eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <p class="fs-4 nodeHeader">시작 날짜</p>
                                                 <hr>
-                                                <input th:field="*{eventDTO.eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{event.eventStartDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                             <div class="col">
                                                 <p class="fs-4 nodeHeader">종료 날짜</p>
                                                 <hr>
-                                                <input th:field="*{eventDTO.eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{event.eventEndDate}" type="date" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 설명 멘트</p>
                                                 <hr>
-                                                <textarea th:field="*{eventDTO.eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                                <textarea th:field="*{event.eventInfo}" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">행사 URL</p>
                                                 <hr>
-                                                <input th:field="*{eventDTO.eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{event.eventLink}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -76,7 +76,7 @@
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                                                    <h1 class="modal-title fs-5 sidebarItem" id="exampleModalLabel">행사 장소 추가</h1>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body" id="map" style="height:50vh;">

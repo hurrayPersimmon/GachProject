@@ -58,16 +58,18 @@ public class AdminEventController {
 
     @GetMapping("/add")
     public String addEventPage(Model model){
-        model.addAttribute("eventDto", new AdminEventRequestDTO());
+        model.addAttribute("eventDto", new AdminEventRequestDTO(new Event()));
         return "event/event-add";
     }
 
     @GetMapping("/{eventId}")
     public String updateEventPage(@PathVariable Integer eventId, Model model){
-
         model.addAttribute("eventDto", AdminEventRequestDTO
                 .toEventRequestDTO(eventRepository.findByEventId(eventId),
                 eventLocationRepository.findAllByEvent_EventId(eventId)));
+        // 확인해보니, 여기서 순회로 인한 StackOverflow 발생함.
+        // FIXME 여기서 객체가 전달되어야, location이 전송되는지 확인 가능함.
+        // 전송하는 객체의 log.info가 정상적으로 나오면 푸시해줘. html 안 만져도 돼ㅠㅠ 고맙다.
         return "event/event-detail";
     }
 
