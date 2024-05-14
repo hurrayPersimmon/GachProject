@@ -1,5 +1,6 @@
 package com.f2z.gach.Event.Entity;
 
+import com.f2z.gach.Event.DTO.EventLocationDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,19 @@ public class EventLocation {
         this.eventAltitude = eventLocation.getEventAltitude();
         this.eventLatitude = eventLocation.getEventLatitude();
         this.eventLongitude = eventLocation.getEventLongitude();
+    }
+
+    public static EventLocation updateEventLocation(EventLocation eventLocation, Event event) {
+        return EventLocation.builder()
+                .eventLocationId(eventLocation.getEventLocationId() != null ? eventLocation.getEventLocationId() : null)
+                .eventPlaceName(eventLocation.getEventPlaceName())
+                .eventAltitude(eventLocation.getEventAltitude())
+                .eventLatitude(eventLocation.getEventLatitude())
+                .eventLongitude(eventLocation.getEventLongitude())
+                .eventName(event.getEventName())
+                .event(event)
+                .build();
+
     }
 
 

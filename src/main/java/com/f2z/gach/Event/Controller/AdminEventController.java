@@ -63,12 +63,11 @@ public class AdminEventController {
     }
 
     @GetMapping("/{eventId}")
-    public String addEventPage(@PathVariable Integer eventId, Model model){
-        model.addAttribute("eventDto", eventRepository.findByEventId(eventId));
-        model.addAttribute("eventLocationList", eventLocationRepository.findAllByEvent_EventId(eventId));
+    public String updateEventPage(@PathVariable Integer eventId, Model model){
 
-        //Event객체 혹은 EventDto객체를 전송해야함.
-        // 만약 Dto객체를 사용한다면 EventDto => Event로 변경사항을 반영하는 메소드도 필요
+        model.addAttribute("eventDto", AdminEventRequestDTO
+                .toEventRequestDTO(eventRepository.findByEventId(eventId),
+                eventLocationRepository.findAllByEvent_EventId(eventId)));
         return "event/event-detail";
     }
 
@@ -78,8 +77,8 @@ public class AdminEventController {
         try{
             File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
             requestDTO.getFile().transferTo(dest);
-            requestDTO.getEventDTO().setEventImageName(dest.getName());
-            requestDTO.getEventDTO().setEventImagePath("/image/"+dest.getName());
+            requestDTO.getEvent().setEventImageName(dest.getName());
+            requestDTO.getEvent().setEventImagePath("/image/"+dest.getName());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -87,12 +86,12 @@ public class AdminEventController {
             return "event/event-add";
         }
 
-        Event event = requestDTO.getEventDTO().toEntity();
+        Event event = requestDTO.getEvent();
 
         eventRepository.save(event);
         requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
-                eventLocationRepository.save(EventLocationDTO.toEventLocation(i, event));
+                eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
             }
             log.info(i.toString());
         });
@@ -100,22 +99,22 @@ public class AdminEventController {
     }
 
     @PostMapping("/update")
-    public String updateEvent(@Valid @ModelAttribute("eventDto") AdminEventRequestDTO adminEventRequestDTO,
+    public String updateEvent(@Valid @ModelAttribute("eventDto") AdminEventRequestDTO requestDTO,
                               BindingResult result){
         if(result.hasErrors()){
             return "event/event-detail";
         }
-        log.info(adminEventRequestDTO.toString());
-        Event event = eventRepository.findByEventId(adminEventRequestDTO.getEventDTO().getEventId());
-        event.update(adminEventRequestDTO.getEventDTO().toEntity());
+        log.info(requestDTO.toString());
+        Event event = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
+        event.update(requestDTO.getEvent());
         Event updatedEvent = eventRepository.save(event);
-        adminEventRequestDTO.getLocations().stream().forEach(i -> {
+        requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
                 if(i.getEventLocationId() == null){
-                    eventLocationRepository.save(EventLocationDTO.toEventLocation(i, updatedEvent));
+                    eventLocationRepository.save(EventLocation.updateEventLocation(i, updatedEvent));
                 }else{
                     EventLocation eventLocation = eventLocationRepository.findByEventLocationId(i.getEventLocationId());
-                    eventLocation.update(i.toEventLocation(i, updatedEvent));
+                    eventLocation.update(i.updateEventLocation(i, updatedEvent));
                     eventLocationRepository.save(eventLocation);
                 }
             }

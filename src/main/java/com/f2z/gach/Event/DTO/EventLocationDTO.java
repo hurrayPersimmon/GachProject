@@ -19,18 +19,5 @@ public class EventLocationDTO {
     private Double eventLatitude;
     private Double eventLongitude;
 
-    public static EventLocation toEventLocation(EventLocationDTO eventLocationDTO, Event event) {
-        return EventLocation.builder()
-                .eventLocationId(eventLocationDTO.getEventLocationId())
-                .eventPlaceName(eventLocationDTO.getEventPlaceName())
-                .eventAltitude(eventLocationDTO.getEventAltitude())
-                .eventLatitude(eventLocationDTO.getEventLatitude())
-                .eventLongitude(eventLocationDTO.getEventLongitude())
-                .eventName(event.getEventName())
-                .event(event)
-                .build();
-
-    }
-
 
 }

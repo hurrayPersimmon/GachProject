@@ -1,18 +1,28 @@
 package com.f2z.gach.Event.DTO;
 
+import com.f2z.gach.Event.Entity.Event;
 import com.f2z.gach.Event.Entity.EventLocation;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@Setter
-@ToString
 public class AdminEventRequestDTO {
-    private EventDTO eventDTO;
-    private List<EventLocationDTO> locations;
-    private MultipartFile file;
-}
+        private Event event;
+        private List<EventLocation> locations;
+        private MultipartFile file;
+
+        public static AdminEventRequestDTO toEventRequestDTO(Event event, List<EventLocation> locations){
+            return AdminEventRequestDTO.builder()
+                    .event(event)
+                    .locations(locations)
+                    .build();
+        }
+    }
+
+
+
