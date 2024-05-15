@@ -79,6 +79,7 @@ public class AdminEventController {
                            BindingResult result){
         try{
             File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
+            log.info(dest.toString());
             requestDTO.getFile().transferTo(dest);
             requestDTO.getEvent().setEventImageName(dest.getName());
             requestDTO.getEvent().setEventImagePath("/image/"+dest.getName());
@@ -95,7 +96,6 @@ public class AdminEventController {
         requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
                 eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
-                log.info(i.toString());
             }
         });
         return "redirect:/admin/event/list/0";
@@ -107,8 +107,15 @@ public class AdminEventController {
         if(result.hasErrors()){
             return "event/event-detail";
         }
-        log.info(requestDTO.getEvent().getEventId().toString());
         Event event = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
+        try{
+            File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
+            requestDTO.getFile().transferTo(dest);
+            requestDTO.getEvent().setEventImageName(dest.getName());
+            requestDTO.getEvent().setEventImagePath("/image/"+dest.getName());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         event.update(requestDTO.getEvent());
         Event updatedEvent = eventRepository.save(event);
         eventLocationRepository.deleteEventLocationsByEvent_EventId(requestDTO.getEvent().getEventId());
@@ -116,7 +123,6 @@ public class AdminEventController {
             if(i.getEventLatitude() != null){
                 if(i.getEventLocationId() == null){
                     eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
-                    log.info(i.toString());
                 }
             }
         });
@@ -126,8 +132,6 @@ public class AdminEventController {
     @GetMapping("/delete/{eventId}")
     public String deleteEvent(@PathVariable Integer eventId){
         Event event = eventRepository.findByEventId(eventId);
-        // Event삭제 시 연관된 EventLocation을 모두 삭제해야 .delete메소드가 작동할 거 같음.
-        // 그래서 일단 지금은 삭제가 안됨
         if(event != null){
             eventLocationRepository.deleteEventLocationsByEvent_EventId(eventId);
             eventRepository.delete(event);
