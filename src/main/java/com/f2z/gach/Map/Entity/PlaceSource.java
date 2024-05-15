@@ -4,6 +4,7 @@ import com.f2z.gach.EnumType.PlaceCategory;
 import com.f2z.gach.Map.DTO.MapDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @ToString
 @Entity
 @Builder
+@Slf4j
 public class PlaceSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,7 @@ public class PlaceSource {
     private String arImagePath;
 
     public void update(PlaceSource placeSource) {
+        log.info("update placeSource: {}", placeSource.toString());
         this.placeName = placeSource.getPlaceName();
         this.placeCategory = placeSource.getPlaceCategory();
         this.placeLatitude = placeSource.getPlaceLatitude();
@@ -43,12 +46,12 @@ public class PlaceSource {
         this.placeAltitude = placeSource.getPlaceAltitude();
         this.placeSummary = placeSource.getPlaceSummary();
         this.buildingHeight = placeSource.getBuildingHeight();
-        if(mainImageName !=null)this.mainImageName = placeSource.getMainImageName();
-        if(mainImagePath !=null) this.mainImagePath = placeSource.getMainImagePath();
-        if(thumbnailImageName !=null) this.thumbnailImageName = placeSource.getThumbnailImageName();
-        if(thumbnailImagePath !=null) this.thumbnailImagePath = placeSource.getThumbnailImagePath();
-        if(arImageName !=null) this.arImageName = placeSource.getArImageName();
-        if(arImagePath !=null) this.arImagePath = placeSource.getArImagePath();
+        if(placeSource.getMainImageName() !=null) this.mainImageName = placeSource.getMainImageName();
+        if(placeSource.getMainImagePath() !=null) this.mainImagePath = placeSource.getMainImagePath();
+        if(placeSource.getThumbnailImageName() !=null) this.thumbnailImageName = placeSource.getThumbnailImageName();
+        if(placeSource.getThumbnailImagePath() !=null) this.thumbnailImagePath = placeSource.getThumbnailImagePath();
+        if(placeSource.getArImageName() !=null) this.arImageName = placeSource.getArImageName();
+        if(placeSource.getArImagePath() !=null) this.arImagePath = placeSource.getArImagePath();
     }
 
 

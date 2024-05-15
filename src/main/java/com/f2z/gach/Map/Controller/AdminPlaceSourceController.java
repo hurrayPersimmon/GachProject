@@ -77,6 +77,7 @@ public class AdminPlaceSourceController {
         log.info(placeDTO.toString());
 
         PlaceSource placeSource = fileUpdatedPlaceDTO.getPlace();
+
         PlaceSource updatedPlaceSource = placeSourceRepository.save(placeSource);
 
         if(placeDTO.getBuildingFloors() != null){
@@ -91,8 +92,7 @@ public class AdminPlaceSourceController {
 
     @PostMapping("/update")
     public String updatePlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDto, BindingResult result){
-        log.info("장소 수정호출");
-        log.info(placeDto.toString());
+
         PlaceSource target = placeSourceRepository.findByPlaceId(placeDto.getPlace().getPlaceId());
         AdminPlaceRequestDTO fileUpdatedPlaceDTO = fileSave(placeDto);
 
@@ -142,8 +142,6 @@ public class AdminPlaceSourceController {
         } catch (Exception e){
             e.printStackTrace();
         }
-        log.info("file save arg(1)");
-        log.info(placeDTO.getPlace().toString());
         return placeDTO;
     }
 }
