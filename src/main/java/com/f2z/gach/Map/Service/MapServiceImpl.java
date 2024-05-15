@@ -169,12 +169,13 @@ public class MapServiceImpl implements MapService{
     private Integer getNearestNodeId(Double placeLatitude, Double placeLongitude, Double placeAltitude) {
         int resultId = 0;
         final int R = 6371; // 지구의 반지름 (킬로미터)
-        
+
         double minDistance= Double.MAX_VALUE;
         List<MapNode> nodeList = mapLineRepository.findAll().stream().map(MapLine::getNodeFirst).toList();
         for(MapNode node : nodeList){
-            double c = getHaversine(placeLatitude, placeLongitude, node);
-            double distance = R * c; // 거리 (킬로미터)
+            double distance = getVincenty(placeLatitude, placeLongitude, placeAltitude, node);
+//            double c = getHaversine(placeLatitude, placeLongitude, node);
+//            double distance = R * c; // 거리 (킬로미터)
 
             if (minDistance > distance) {
                 minDistance = distance;
@@ -182,6 +183,19 @@ public class MapServiceImpl implements MapService{
             }
         }
         return resultId;
+    }
+
+    private static double getVincenty(Double placeLatitude, Double placeLongitude, Double placeAltitude, MapNode node) {
+        final int R = 6371; // 지구의 반지름 (킬로미터)
+        double lat1 = Math.toRadians(placeLatitude);
+        double lon1 = Math.toRadians(placeLongitude);
+        double lat2 = Math.toRadians(node.getNodeLatitude());
+        double lon2 = Math.toRadians(node.getNodeLongitude());
+        double dLat = lat2 - lat1;
+        double dLon = lon2 - lon1;
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return c * R + Math.abs(placeAltitude - node.getNodeAltitude());
     }
 
     private static double getHaversine(Double placeLatitude, Double placeLongitude, MapNode node) {
