@@ -111,7 +111,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="user : ${userList}" th:onclick="|location.href='@{/admin/users/{id}(id=${user.getUsername()})}'|">
+                                    <tr th:each="user : ${userList.userList}" th:onclick="|location.href='@{/admin/users/{userId}(userId=${user.getUserId()})}'|">
                                         <td th:text="${user.getUsername()}">Mark</td>
                                         <td th:text="${user.getUserNickname()}">Otto</td>
                                         <td th:text="${user.getUserGender()}">@mdo</td>
