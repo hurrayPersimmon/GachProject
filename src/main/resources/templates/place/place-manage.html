@@ -34,14 +34,15 @@
                                 </div>
                                 <hr>
                             </div>
-                            <div class="row" style="height : 70vh">
-                                <table class="table">
-                                    <thead class="text-center">
+                            <div class="row">
+                                <table class="table table-hover text-center rounded fontReg">
+                                    <thead class="text-center fontReg">
                                     <tr>
-                                        <th scope="col"> 장소 유형
-                                            <select id="categoryFilter">
+                                        <th scope="col" style="width:10%; padding-left:2.5%;">
+                                            <select id="categoryFilter" class="form-select sidebarItem ps-2" onchange="category()">
+                                                <option value="ALL" selected>카테고리</option>
                                                 <option value="ALL">모두</option>
-                                                <option value="BUILDING" selected>건물</option>
+                                                <option value="BUILDING">건물</option>
                                                 <option value="SMOKING">흡연구역</option>
                                                 <option value="FOOD">음식점</option>
                                                 <option value="CAFE">카페</option>
@@ -53,38 +54,22 @@
                                         </th>
                                         <th scope="col">장소 이름</th>
                                         <th scope="col">장소 요약 정보</th>
+                                        <th scope="col">고도</th>
+                                        <th scope="col">위도</th>
+                                        <th scope="col">경도</th>
                                     </tr>
                                     </thead>
-                                    <tbody class="text-center">
+                                    <tbody class="text-center" id="placeData">
                                     <tr th:each="place : ${placeList}" th:onclick="|location.href='@{/admin/place/{placeId}(placeId=${place.getPlaceId()})}'|" style="max-height:3vh;">
-                                        <td th:text="${place.placeCategory}">Mark</td>
-                                        <td th:text="${place.placeName}">1</td>
-                                        <td th:text="${place.placeSummary}">Otto</td>
+                                        <td th:text="${place.placeCategory}">카테고리</td>
+                                        <td th:text="${place.placeName}">이름</td>
+                                        <td th:text="${place.placeSummary}">요약정보</td>
+                                        <td th:text="${place.placeAltitude}">고도</td>
+                                        <td th:text="${place.placeLatitude}">위도</td>
+                                        <td th:text="${place.placeLongitude}">경도</td>
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col justify-content-center">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -93,30 +78,121 @@
         </div>
     </div>
     <script th:replace="fragment::search"></script>
-
     <script>
-        // 페이지 로드 후 실행되는 함수
-        window.onload = function() {
-            // 드롭다운 메뉴 변경 시 호출되는 함수
-            document.getElementById("categoryFilter").addEventListener("change", function() {
-                var category = this.value;
-                var placeTableRows = document.querySelectorAll("#placeTable tr");
-                placeTableRows.forEach(function(row) {
-                    var placeCategory = row.cells[0].textContent;
-                    if (category === "all" || placeCategory === category) {
-                        row.style.display = "table-row";
-                    } else {
-                        row.style.display = "none";
+        let rows = document.getElementsByClassName('row menu');
+        let cnt = 0;
+        Array.from(rows).forEach(function(row, index) {
+
+            if (row.classList.contains('link')) {
+                cnt = index; // 인덱스 저장
+            }
+
+            row.addEventListener('mouseenter', function() {
+                this.classList.add('link');
+
+                document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                    if (otherRow !== row) {
+                        otherRow.classList.remove('link');
                     }
                 });
             });
-        };
+
+            row.addEventListener('mouseleave', function() {
+                document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                    otherRow.classList.remove('link');
+                });
+            });
+        });
+
+        function check(){
+            Array.from(rows).forEach(function(row, index){
+                if(index===cnt) row.classList.add('link');
+            });
+        }
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
-<script>
-    function searchConnect(){
-        let wordBox = document.getElementById("word");
-        window.self.location.href = 'http://localhost:60002/admin/node/search/' + wordBox.value;
-    }
-</script>
+    <script>
+        function searchConnect(){
+            let wordBox = document.getElementById("word");
+            window.self.location.href = 'http://localhost:60002/admin/node/search/' + wordBox.value;
+        }
+    </script>
+    <script th:inline="javascript">
+        let placeList = [[${placeList}]];
+        let buildingPlaceList = [];
+        let smokingPlaceList = [];
+        let foodPlaceList = [];
+        let cafePlaceList = [];
+        let convPlaceList = [];
+        let welfarePlaceList = [];
+        let printPlaceList = [];
+        let busstopPlaceList = [];
+        placeList.forEach(place => {
+            if(place.placeCategory === "BUILDING") buildingPlaceList.push(place);
+            else if(place.placeCategory === "SMOKING") smokingPlaceList.push(place);
+            else if(place.placeCategory === "FOOD") foodPlaceList.push(place);
+            else if(place.placeCategory === "CAFE") cafePlaceList.push(place);
+            else if(place.placeCategory === "CONV") convPlaceList.push(place);
+            else if(place.placeCategory === "WELFARE") welfarePlaceList.push(place);
+            else if(place.placeCategory === "PRINT") printPlaceList.push(place);
+            else busstopPlaceList.push(place);
+        });
+        function category(){
+            let id = document.getElementById("categoryFilter");
+            let category = id.value;
+            let thisList = [];
+            let tbody = document.getElementById('placeData');
+            tbody.innerHTML = '';
+
+            if(category === "BUILDING") thisList = buildingPlaceList;
+            else if(category === "SMOKING") thisList = smokingPlaceList;
+            else if(category === "FOOD") thisList = foodPlaceList;
+            else if(category === "CAFE") thisList = cafePlaceList;
+            else if(category === "CONV") thisList = convPlaceList;
+            else if(category === "WELFARE") thisList = welfarePlaceList;
+            else if(category === "PRINT") thisList = printPlaceList;
+            else if(category === "BUSSTOP") thisList = busstopPlaceList;
+            else thisList = placeList;
+
+            thisList.forEach(place => {
+                const tr = document.createElement("tr");
+                tr.style.height = "3vh";
+
+                tr.addEventListener('click', function() {
+                    // 특정 URL로 이동합니다.
+                    window.location.href = '/admin/place/'+place.placeId;
+                });
+
+                // 각 열(td)을 생성하고 데이터를 설정합니다.
+                const categoryTd = document.createElement("td");
+                categoryTd.textContent = place.placeCategory;
+                tr.appendChild(categoryTd);
+
+                const nameTd = document.createElement("td");
+                nameTd.textContent = place.placeName;
+                tr.appendChild(nameTd);
+
+                const summaryTd = document.createElement("td");
+                summaryTd.textContent = place.placeSummary;
+                tr.appendChild(summaryTd);
+
+                const altitudeTd = document.createElement("td");
+                altitudeTd.textContent = place.placeAltitude;
+                tr.appendChild(altitudeTd);
+
+                const latitudeTd = document.createElement("td");
+                latitudeTd.textContent = place.placeLatitude;
+                tr.appendChild(latitudeTd);
+
+                const longitudeTd = document.createElement("td");
+                longitudeTd.textContent = place.placeLongitude;
+                tr.appendChild(longitudeTd);
+
+                // tr을 tbody에 추가합니다.
+                tbody.appendChild(tr);
+            })
+        }
+    </script>
 </body>
 </html>

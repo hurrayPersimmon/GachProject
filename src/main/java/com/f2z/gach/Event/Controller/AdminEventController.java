@@ -47,7 +47,6 @@ public class AdminEventController {
     public void setAttributes(Model model){
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
-
     }
 
     @GetMapping("/list/{page}")
