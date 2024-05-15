@@ -17,8 +17,8 @@ spring:
     password : dbpass241
 #   username : root
 #   password : rlaalstj1!
-#   username : root
-#   password : mj3269
+#    username : root
+#    password : mj3269
 
 
   jpa:
@@ -51,8 +51,8 @@ gach:
   # kms local
   #  img.dir: /Users/hurray/Desktop/2023년도 자료/학교 수업/2024 프로젝트/gach/src/main/resources/static/image
 # nmj local
-  img.dir: /Users/nomyeongjun/Documents/2024-1/Project/GachProject/src/main/resources/static/image
-  path: http://localhost:60002
+#  img.dir: /Users/nomyeongjun/Documents/2024-1/Project/GachProject/src/main/resources/static/image
+#  path: http://localhost:60002
 # server
-#  img.dir: /home/t24102/GachProject/src/main/resources/static/image
-#  path: http://ceprj.gachon.ac.kr:60002
+  img.dir: /home/t24102/GachProject/src/main/resources/static/image
+  path: http://ceprj.gachon.ac.kr:60002
