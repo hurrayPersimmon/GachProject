@@ -8,6 +8,7 @@ import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Event.Repository.EventLocationRepository;
 import com.f2z.gach.Event.Repository.EventRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin/event")
 @SessionAttributes
+@Transactional
 public class AdminEventController {
     private final EventRepository eventRepository;
     private final AdminRepository adminRepository;
@@ -109,18 +111,14 @@ public class AdminEventController {
         Event event = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
         event.update(requestDTO.getEvent());
         Event updatedEvent = eventRepository.save(event);
+        eventLocationRepository.deleteEventLocationsByEvent_EventId(requestDTO.getEvent().getEventId());
         requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
                 if(i.getEventLocationId() == null){
-                    eventLocationRepository.save(EventLocation.updateEventLocation(i, updatedEvent));
-                }else{
-                    EventLocation eventLocation = eventLocationRepository.findByEventLocationId(i.getEventLocationId());
-                    eventLocation.update(i.updateEventLocation(i, updatedEvent));
-                    eventLocationRepository.save(eventLocation);
-                    //업데이트 시 기존에 Event와 EventLocation이 연관되어 있을 텐데, 기존의 EventLocation 모두를 삭제해야함.
+                    eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
+                    log.info(i.toString());
                 }
             }
-            log.info(i.toString());
         });
         return "redirect:/admin/event/list/0";
     }
