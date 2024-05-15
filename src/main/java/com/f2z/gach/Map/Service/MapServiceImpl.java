@@ -29,6 +29,7 @@ public class MapServiceImpl implements MapService{
 
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
+    private final String routeBus = "busRoute";
 
 
     @Override
@@ -250,6 +251,13 @@ public class MapServiceImpl implements MapService{
         Collections.reverse(nodeList);
 
         return NavigationResponseDTO.toNavigationResponseDTO(routeType, 0, nodeList);
+    }
+
+    private NavigationResponseDTO getBusRoute(Integer departuresId, Integer arrivalsId){
+        List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
+
+
+        return NavigationResponseDTO.toNavigationResponseDTO(routeBus,0,nodeList);
     }
 }
 
