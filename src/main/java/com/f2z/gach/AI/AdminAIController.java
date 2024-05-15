@@ -5,16 +5,13 @@ import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -42,9 +39,9 @@ public class AdminAIController {
 
     @GetMapping("/{min}/{max}/{mapping}")
     @ResponseBody
-    public String list(@PathVariable int min, @PathVariable int max, @PathVariable boolean mapping) {
+    public List<dataEntity> list(@PathVariable int min, @PathVariable int max, @PathVariable boolean mapping) {
         log.info("호출");
-        return aiService.filterData(min, max, mapping).toString();
+        return aiService.filterData(min, max);
     }
 
 
