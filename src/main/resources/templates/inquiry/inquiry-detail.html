@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <header th:replace="~{/fragment :: header}"></header>
     <div class="row">
-        <div th:replace="~{fragment :: sidebar('question')}"></div>
+        <div th:replace="~{fragment :: sidebar('inquiry')}"></div>
         <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
             <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
                 <div class="row ms-5 mb-3 mt-2 nodeHeader">
@@ -58,7 +58,7 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">문의 제목</p>
                                                 <hr>
-                                                <input th:field="*{inquiryTitle}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{inquiryTitle}" type="text" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
@@ -72,8 +72,7 @@
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">답변 내용</p>
                                                 <hr>
-                                                <input th:field="*{inquiryAnswer}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
-<!--                                                <textarea th:field="*{inquiryAnswer}" class="form-control sidebarItem" style="visibility: hidden" id="sendAns"></textarea>-->
+                                                <textarea style="width : 100%" class="sidebarItem fs-4" name="inquiryAnswer" class="small sidebarItem" placeholder="답변내용을 적어주세요" id="sendAns"></textarea>
                                             </div>
                                         </div>
                                     </div>

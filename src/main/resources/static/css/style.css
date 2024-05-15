@@ -145,6 +145,12 @@ input[type="text"] {
     color : rgb(17,160,248);
 }
 
+textarea {
+    border: none;
+    border-radius: 1rem; /* 라운드된 테두리 */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+
 input[type="date"] {
     border: none;
     border-radius: 1rem; /* 라운드된 테두리 */

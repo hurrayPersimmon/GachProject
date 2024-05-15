@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <header th:replace="~{/fragment :: header}"></header>
         <div class="row">
-            <div th:replace="~{fragment :: sidebar('question')}"></div>
+            <div th:replace="~{fragment :: sidebar('inquiry')}"></div>
             <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
                 <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
                     <div class="row ms-5 mb-3 mt-2 nodeHeader">
@@ -33,7 +33,7 @@
     <!--                                    <a href="/admin/event/add" class="btn btn-primary add mt-2 sidebarItem fs-6">문의 등록</a>-->
     <!--                                </div>-->
                             </div>
-                            <div class="row" style="height : 70vh">
+                            <div class="row">
                                 <table class="table">
                                     <thead class="text-center">
                                         <tr>
@@ -45,7 +45,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
-                                    <tr th:each="inquiry : ${inquiryList.inquiryList}"
+                                    <tr th:each="inquiry : ${inquiryList.inquiryList}" style="max-height: 3vh"
                                         th:onclick="|location.href='@{/admin/inquiry/{inquiryId}(inquiryId=${inquiry.getInquiryId()})}'|">
                                         <td th:text="${inquiry.inquiryProgress}">1</td>
                                         <td th:text="${inquiry.inquiryCategory}">Mark</td>
@@ -151,7 +151,84 @@
     <script>
         function searchConnect(){
             let wordBox = document.getElementById("word");
-            window.self.location.href = 'http://localhost:60002/admin/node/search/' + wordBox.value;
+            window.self.location.href = 'http://localhost:60002/admin/inquiry/search/' + wordBox.value;
+        }
+    </script>
+    <script>
+        let rows = document.getElementsByClassName('row menu');
+        let cnt = 0;
+        let temp = 0;
+        Array.from(rows).forEach(function(row, index) {
+
+            if (row.classList.contains('link')) {
+                cnt = index; // 인덱스 저장
+            }
+
+            row.addEventListener('mouseenter', function() {
+                this.classList.add('link');
+
+                document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                    if (otherRow !== row) {
+                        otherRow.classList.remove('link');
+                    }
+                });
+            });
+
+            row.addEventListener('mouseleave', function() {
+                document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                    otherRow.classList.remove('link');
+                });
+            });
+        });
+
+        function check(){
+            Array.from(rows).forEach(function(row, index){
+                if(index===cnt) row.classList.add('link');
+            });
+        }
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    <script th:inline="javascript">
+        const url = window.location.href;
+        const lastSlashIndex = url.lastIndexOf("/");
+        const currentPage = Number(url.substring(lastSlashIndex + 1)) + 1;
+        const totalPage = [[${inquiryList.totalPage}]];
+        let paginationHtml = '';
+
+        const totalGroup = Math.ceil(totalPage / 10); // 총 그룹 수 계산
+        let currentGroup = Math.ceil(currentPage / 10); // 현재 페이지의 그룹 번호 계산
+
+        if (currentGroup > 1) {
+            paginationHtml += '<li class="page-item">';
+            paginationHtml += '<a class="page-link" href="#" onclick="changePage(' + ((currentGroup - 1) * 10) + ')">&laquo;</a>';
+            paginationHtml += '</li>';
+        }
+
+        // 현재 그룹의 페이지 링크 생성
+        let startPage = (currentGroup - 1) * 10 + 1;
+        let endPage = Math.min(currentGroup * 10, totalPage);
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHtml += '<li aria-current="page" class="page-item';
+            if (i == currentPage) {
+                paginationHtml += ' active';
+            }
+            paginationHtml += '">';
+            paginationHtml += '<a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a>';
+            paginationHtml += '</li>';
+        }
+
+        // 다음 페이지 그룹 링크 생성
+        if (currentGroup < totalGroup) {
+            paginationHtml += '<li class="page-item">';
+            paginationHtml += '<a class="page-link" href="#" onclick="changePage(' + (currentGroup * 10 + 1) + ')">&raquo;</a>';
+            paginationHtml += '</li>';
+        }
+
+        document.getElementById('pagination').innerHTML = paginationHtml;
+
+        function changePage(pageNumber) {
+            location.href = '/admin/user/list/' + (pageNumber - 1);
         }
     </script>
 </body>
