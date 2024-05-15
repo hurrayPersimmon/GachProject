@@ -35,14 +35,14 @@
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 이름</p>
                                                     <hr>
-                                                    <input th:field="*{placeName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                    <input th:field="*{place.placeName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
-                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="placeCategory" name="placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="placeCategory" name="place.placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
                                                         <option th:each="b : ${placeCategory}" th:value="${b}" th:text="${b}"></option>
                                                     </select>
                                                 </div>
@@ -52,7 +52,7 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">요약 정보</p>
                                                 <hr>
-                                                <textarea th:field="*{placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
+                                                <textarea th:field="*{place.placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
@@ -62,15 +62,15 @@
                                                 <div class="row">
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon1">위도</span>
-                                                        <input th:field="*{placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6" id="lat">
+                                                        <input th:field="*{place.placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6" id="lat">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon2">경도</span>
-                                                        <input th:field="*{placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="lng">
+                                                        <input th:field="*{place.placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="lng">
                                                     </div>
                                                     <div class="col input-group">
                                                         <span class="input-group-text fs-5 sidebarItem" id="basic-addon3">고도</span>
-                                                        <input th:field="*{placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="alti">
+                                                        <input th:field="*{place.placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="alti">
                                                     </div>
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
@@ -138,11 +138,11 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-3">
-                                                        <input name="thumbnail" id="thumbnail" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
+                                                        <input name="thumbnailFile" id="thumbnail" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
                                                         <label class="btn btn-primary add fs-6 ms-1" for="thumbnail">이미지 업로드</label>
                                                     </div>
                                                     <div class="col-6 offset-2">
-                                                        <input name="ar" id="ar" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
+                                                        <input name="ARFile" id="ar" type="file" accept="image/*" style="visibility: hidden" onchange="readURL(this)">
                                                         <label class="btn btn-primary add fs-6 ms-1" for="ar">이미지 업로드</label>
                                                     </div>
                                                 </div>
@@ -158,7 +158,7 @@
                                             </div>
                                             <input id="filename" class="p-2 mt-3" value="첨부파일" placeholder="첨부파일" style="border: 1px solid #dddddd; width: 78%; color: #999999; pointer-events: none;">
                                             <label class="p-2 mb-1 sidebarItem" for="file" style="color: #fff; vertical-align: middle; cursor: pointer; background-color: #999999;">파일찾기</label>
-                                            <input name="file" type="file" accept="image/*" id="file" style="visibility: hidden" onchange="readURL(this)">
+                                            <input name="mainFile" type="file" accept="image/*" id="file" style="visibility: hidden" onchange="readURL(this)">
                                         </div>
                                     </div>
                                 </div>
@@ -242,12 +242,12 @@
         let nameInput = document.createElement("input");
         nameInput.className = "form-control sidebarItem";
         nameTd.appendChild(nameInput);
-        nameInput.name = 'floors[' + floorIndex + '].floorName';
+        nameInput.name = 'buildingFloors[' + floorIndex + '].buildingFloor';
         let textTd = document.createElement("td");
         textTd.style.width = '80%';
         let textInput = document.createElement("input");
         textInput.className = "form-control sidebarItem";
-        textInput.name = 'floors[' + floorIndex + '].floorDesc';
+        textInput.name = 'buildingFloors[' + floorIndex + '].buildingFloorInfo';
         textTd.appendChild(textInput);
         let checkTd = document.createElement("td");
         let inputCheck = document.createElement("input");

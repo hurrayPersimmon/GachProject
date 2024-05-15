@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -194,6 +195,7 @@ public class MapDTO {
     @NoArgsConstructor
     @Getter
     @Setter
+    @ToString
     public static class PlaceSourceDTO {
         private Integer placeId;
         private String placeName;
@@ -203,17 +205,16 @@ public class MapDTO {
         private Double placeAltitude;
         private String placeSummary;
         private Double buildingHeight;
-        private List<BuildingFloor> buildingFloors;
+        private List<BuildingFloor> buildingFloors = new ArrayList<>();
         private String mainImageName;
         private String mainImagePath;
         private String thumbnailImageName;
         private String thumbnailImagePath;
         private String arImageName;
         private String arImagePath;
-        //TODO: mainFile로 이름 해놓음 주석 삭제 바람.
         private MultipartFile mainFile;
-        private MultipartFile ARFile;
         private MultipartFile thumbnailFile;
+        private MultipartFile ARFile;
 
         public static PlaceSource toEntity(MapDTO.PlaceSourceDTO placeSourceDTO) {
             return PlaceSource.builder()

@@ -79,7 +79,6 @@ public class AdminEventController {
     @PostMapping()
     public String addEvent(@Valid @ModelAttribute AdminEventRequestDTO requestDTO,
                            BindingResult result){
-        //FIXME : fileSave 메소드로 추가, 확인 후 삭제 바람.
         AdminEventRequestDTO fileUpdatedRequestDTO = fileSave(requestDTO);
         if(result.hasErrors()) {
             return "event/event-add";
@@ -102,7 +101,6 @@ public class AdminEventController {
         if(result.hasErrors()){
             return "event/event-detail";
         }
-        //FIXME : fileSave 메소드로 추가, 확인 후 삭제 바람.
         Event target = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
         AdminEventRequestDTO fileUpdatedEventDTO = fileSave(requestDTO);
 
@@ -110,7 +108,7 @@ public class AdminEventController {
         Event updatedEvent = eventRepository.save(target);
 
         eventLocationRepository.deleteEventLocationsByEvent_EventId(requestDTO.getEvent().getEventId());
-        requestDTO.getLocations().stream().forEach(eventLocation -> {
+        requestDTO.getLocations().forEach(eventLocation -> {
             if(eventLocation.getEventLatitude() != null){
                 if(eventLocation.getEventLocationId() == null){
                     eventLocationRepository.save(EventLocation.updateEventLocation(eventLocation, updatedEvent));

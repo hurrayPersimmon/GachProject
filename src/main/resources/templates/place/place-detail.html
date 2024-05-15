@@ -22,11 +22,11 @@
                             장소 정보 수정
                         </div>
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{/admin/place}" th:object="${placeDto}" method="post">
+                            <form enctype="multipart/form-data" th:action="@{/admin/place/update}" th:object="${placeDto}" method="post">
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary">수정</button>
-                                        <button class="btn btn-danger">삭제</button>
+                                        <button class="btn btn-primary" type="submit">수정</button>
+                                        <a class="btn btn-danger" th:onclick="|location.href='@{/admin/place/delete/{placeId}(placeId=${placeDto.place.placeId})}'|">삭제</a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -36,15 +36,16 @@
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 이름</p>
                                                     <hr>
-                                                    <input th:field="*{placeName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                    <input th:field="*{place.placeName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                    <input type="hidden" th:field="*{place.placeId}">
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
-                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
-                                                        <option th:each="b : ${placeDto.placeCategory}" th:value="${b}" th:text="${b}"></option>
+                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" th:field="*{place.placeCategory}" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                        <option th:each="p : ${placeCategory}" th:value="${p}" th:text="${p}" th:selected="${placeDto.place.placeCategory} == ${p}"></option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -53,25 +54,25 @@
                                             <div class="form-floating mb-3">
                                                 <p class="fs-4 nodeHeader">요약 정보</p>
                                                 <hr>
-                                                <input th:field="*{placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input th:field="*{place.placeSummary}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="form-floating mb-3">
-                                                <p class="fs-4 nodeHeader">장소 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput">구글 맵으로 좌표 선택</span></p>
+                                                <p class="fs-4 nodeHeader">장소 위치 정보 <span class="ms-4 nodeHeader fs-6 btn btn-primary" id="addInput" data-bs-toggle="modal" data-bs-target="#exampleModal">구글 맵으로 좌표 선택</span></p>
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col input-group">
-                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon1">위도</span>
-                                                        <input th:field="*{placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6">
+                                                        <span class="input-group-text fs-5 sidebarItem">위도</span>
+                                                        <input th:field="*{place.placeLatitude}" type="text"  class="form-control fontHv mt-0 py-2 fs-6" id="basic-addon1">
                                                     </div>
                                                     <div class="col input-group">
-                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon2">경도</span>
-                                                        <input th:field="*{placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <span class="input-group-text fs-5 sidebarItem">경도</span>
+                                                        <input th:field="*{place.placeLongitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="basic-addon2">
                                                     </div>
                                                     <div class="col input-group">
-                                                        <span class="input-group-text fs-5 sidebarItem" id="basic-addon3">고도</span>
-                                                        <input th:field="*{placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-4">
+                                                        <span class="input-group-text fs-5 sidebarItem">고도</span>
+                                                        <input th:field="*{place.placeAltitude}" type="text" class="form-control fontHv mt-0 py-2 fs-6" id="basic-addon3">
                                                     </div>
                                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
@@ -97,20 +98,23 @@
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">층별 안내
                                                     <span class="ms-3">
-                                                            <i id="deleteFloor" class="bi bi-dash-circle-fill fs-4 me-3" style="cursor:pointer"></i>
-                                                            <i id="addFloor" class="bi bi-plus-circle-fill fs-4" style="cursor:pointer"></i>
+                                                        <span id="deleteFloor" class="btn btn-primary delete sidebarItem">선택 삭제</span>
+                                                        <span id="addFloor" class="btn btn-primary add sidebarItem">추가</span>
                                                     </span>
                                                 </p>
                                                 <hr>
-                                                <div th:each="floor : ${placeDto.buildingFloors}" class="floorList row my-2">
-                                                    <div class="col-4 input-group" style="width : 33.33333333%">
-                                                        <span class="input-group-text fs-5 sidebarItem">층수</span>
-                                                        <input type="text" class="form-control fontHv mt-0 py-2 fs-4" th:field="*{buildingFloor}">
-                                                    </div>
-                                                    <div class="col-8 input-group" style="width : 66.66666666%">
-                                                        <span class="input-group-text fs-5 sidebarItem">정보</span>
-                                                        <input type="text" class="form-control fontHv mt-0 py-2 fs-4" th:field="*{buildingFloorInfo}">
-                                                    </div>
+                                                <div class="row px-3">
+                                                    <table class="table">
+                                                        <thead class="text-center rounded pt-2 fontReg">
+                                                        <tr>
+                                                            <th scope="col"><i class="bi bi-ui-checks-grid"></i></th>
+                                                            <th scope="col">층수</th>
+                                                            <th scope="col" style="width:80%">설명</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="text-center" id="floors">
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,13 +126,13 @@
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-3">
-                                                        <img id="thumbnail-image" th:src="${}" style="height:13rem; width:13rem" onerror="this.style.visibility='hidden';">
+                                                        <img id="thumbnail-image" th:src="${placeDto.place.thumbnailImagePath}" style="height:13rem; width:13rem">
                                                     </div>
                                                     <div class="col-2 sidebarItem fs-3">
                                                         썸네일용
                                                     </div>
                                                     <div class="col-5 text-end">
-                                                        <img id="ar-image" th:src="${}" style="height:13rem; width:23rem" onerror="this.style.visibility='hidden';">
+                                                        <img id="ar-image" th:src="${placeDto.place.arImagePath}" style="height:13rem; width:23rem">
                                                     </div>
                                                     <div class="col-2 sidebarItem fs-3">
                                                         AR 이미지
@@ -136,11 +140,11 @@
                                                 </div>
                                                 <div class="row mt-3">
                                                     <div class="col-3">
-                                                        <input name="thumbnail" id="thumbnail" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
+                                                        <input name="thumbnailFile" id="thumbnail" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
                                                         <label class="btn btn-primary fs-6 ms-1" for="thumbnail">이미지 업로드</label>
                                                     </div>
                                                     <div class="col-6 offset-2">
-                                                        <input name="ar" id="ar" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
+                                                        <input name="ARFile" id="ar" type="file" accept="image/*" style="display: none;" onchange="readURL(this)">
                                                         <label class="btn btn-primary fs-6 ms-1" for="ar">이미지 업로드</label>
                                                     </div>
                                                 </div>
@@ -152,11 +156,11 @@
                                             <p class="fs-4 nodeHeader text-start">메인 이미지</p>
                                             <hr>
                                             <div class="image-wrapper">
-                                                <img id="preview" src="#" style="height:37.8rem; width:24.3rem" onerror="this.style.visibility='hidden';">
+                                                <img id="preview" th:src="${placeDto.place.mainImagePath}" style="height:37.8rem; width:24.3rem">
                                             </div>
                                             <input id="filename" class="p-2 mt-3" value="첨부파일" placeholder="첨부파일" style="border: 1px solid #dddddd; width: 78%; color: #999999; pointer-events: none;">
                                             <label class="p-2 mb-1 sidebarItem" for="file" style="color: #fff; vertical-align: middle; cursor: pointer; background-color: #999999;">파일찾기</label>
-                                            <input name="file" type="file" accept="image/*" id="file" style="visibility: hidden" onchange="readURL(this)">
+                                            <input name="mainFile" type="file" accept="image/*" id="file" style="visibility: hidden" onchange="readURL(this)">
                                         </div>
                                     </div>
                                 </div>
@@ -170,12 +174,52 @@
 </div>
 <script th:replace="fragment::search"></script>
 
-<script>
+<script th:inline="javascript">
 
     let tempLat = 0;
     let tempLng = 0;
     let tempAlt = 0;
-    let floorIndex = 0;
+    let floors = [[${placeDto.buildingFloors}]];
+    let floorIndex = floors.length;
+
+    if(floors){
+        let table = document.getElementById("floors");
+        floors.forEach(function(floor, index){
+            let row = document.createElement("tr");
+
+            row.classList.add("locationData");
+
+            let tdName = document.createElement("td");
+            let inputName = document.createElement("input");
+            inputName.type="text";
+            inputName.className = "form-control sidebarItem";
+            inputName.name = 'buildingFloors[' + index + '].buildingFloor';
+            inputName.value = floor.buildingFloor;
+            tdName.appendChild(inputName);
+
+            let tdInfo = document.createElement("td");
+            let inputInfo = document.createElement("input");
+            inputInfo.type="text";
+            inputInfo.className = "form-control sidebarItem";
+            inputInfo.name = 'buildingFloors[' + index + '].buildingFloorInfo';
+            inputInfo.value = floor.buildingFloorInfo;
+            tdInfo.appendChild(inputInfo);
+
+            let checkTd = document.createElement("td");
+            let inputCheck = document.createElement("input");
+            inputCheck.type = "checkbox";
+            inputCheck.style.width = '1.5rem';
+            inputCheck.style.height = '1.5rem';
+            inputCheck.id = index;
+            inputCheck.className = "mt-1 checkBoxList";
+            checkTd.appendChild(inputCheck);
+
+            row.appendChild(checkTd);
+            row.appendChild(tdName);
+            row.appendChild(tdInfo);
+            table.appendChild(row);
+        });
+    }
 
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
@@ -186,11 +230,15 @@
 
         const elevator = new google.maps.ElevationService();
 
+        const newTag = document.createElement("div");
+        newTag.className = "price-tag";
+        newTag.textContent = "좌표 지정";
+
         const newMarkerView = new google.maps.marker.AdvancedMarkerView({
             map,
             position: {lat: 37.45088195800781, lng: 127.12886810302734},
             gmpDraggable: true,
-            content : pinViewBackground.element
+            content : newTag
         });
 
         newMarkerView.addListener("dragend", (event) => {
@@ -231,72 +279,46 @@
         alt.value = tempAlt;
     }
 
-    document.getElementById("addFloor").addEventListener("click", function(){
-        let newRow = document.createElement('div');
-        newRow.classList.add('row');
-        newRow.classList.add('floorList');
-        newRow.classList.add('my-2');
-        let col4 = document.createElement('div');
-        col4.classList.add('col-3');
-        col4.classList.add('input-group');
-        let col8 = document.createElement('div');
-        col8.classList.add('col-8');
-        col8.classList.add('input-group');
-
-        let labelFloorNum = document.createElement('span');
-        labelFloorNum.classList.add('input-group-text');
-        labelFloorNum.classList.add('fs-5');
-        labelFloorNum.classList.add('sidebarItem');
-        labelFloorNum.innerText = '층 수'
-
-        let inputFloorNum = document.createElement('input');
-        inputFloorNum.type='text';
-        inputFloorNum.classList.add('form-control');
-        inputFloorNum.classList.add('fontHv');
-        inputFloorNum.classList.add('mt-0');
-        inputFloorNum.classList.add('py-2');
-        inputFloorNum.classList.add('fs-4');
-        inputFloorNum.name = 'floor[' + floorIndex + '].num';
-
-        col4.appendChild(labelFloorNum);
-        col4.appendChild(inputFloorNum);
-        col4.style.width = '33%';
-
-        let labelFloorInfo = document.createElement('span');
-        labelFloorInfo.classList.add('input-group-text');
-        labelFloorInfo.classList.add('fs-5');
-        labelFloorInfo.classList.add('sidebarItem');
-        labelFloorInfo.innerText = '정보'
-
-        let inputFloorInfo = document.createElement('input');
-        inputFloorInfo.type='text';
-        inputFloorInfo.classList.add('form-control');
-        inputFloorInfo.classList.add('fontHv');
-        inputFloorInfo.classList.add('mt-0');
-        inputFloorInfo.classList.add('py-2');
-        inputFloorInfo.classList.add('fs-4');
-        inputFloorInfo.name = 'floor[' + floorIndex + '].info';
-
-        col8.appendChild(labelFloorInfo);
-        col8.appendChild(inputFloorInfo);
-        col8.style.width='66.6666%';
-
-        newRow.appendChild(col4);
-        newRow.appendChild(col8);
-
-        document.getElementById('floor').appendChild(newRow);
+    function readXY(){
+        let floorsTbody = document.getElementById("floors");
+        let floorsTr = document.createElement("tr");
+        let nameTd = document.createElement("td");
+        let nameInput = document.createElement("input");
+        nameInput.className = "form-control sidebarItem";
+        nameTd.appendChild(nameInput);
+        nameInput.name = 'buildingFloors[' + floorIndex + '].buildingFloor';
+        let textTd = document.createElement("td");
+        textTd.style.width = '80%';
+        let textInput = document.createElement("input");
+        textInput.className = "form-control sidebarItem";
+        textInput.name = 'buildingFloors[' + floorIndex + '].buildingFloorInfo';
+        textTd.appendChild(textInput);
+        let checkTd = document.createElement("td");
+        let inputCheck = document.createElement("input");
+        inputCheck.type = "checkbox";
+        inputCheck.style.width = '1.5rem';
+        inputCheck.style.height = '1.5rem';
+        inputCheck.className = "mt-1 checkBoxList";
+        checkTd.appendChild(inputCheck);
+        floorsTr.appendChild(checkTd);
+        floorsTr.appendChild(nameTd);
+        floorsTr.appendChild(textTd);
+        floorsTr.className = "locationData"
+        floorsTbody.appendChild(floorsTr);
         floorIndex++;
-    });
+    }
+
+    document.getElementById("addFloor").addEventListener("click", readXY);
 
     document.getElementById('deleteFloor').addEventListener("click", function(){
-        let inputContainer = document.getElementById('floor');
-        let inputElements = inputContainer.getElementsByClassName('floorList');
-
-        if (inputElements.length > 0) {
-            inputElements[inputElements.length - 1].remove();
+        let list = document.getElementsByClassName("checkBoxList");
+        let checkboxes = Array.from(list);
+        for (let i = checkboxes.length - 1; i >= 0; i--) {
+            if (checkboxes[i].checked) {
+                checkboxes[i].closest('.locationData').remove();
+            }
         }
     });
-
     function readURL(input){
         if(input.id === "thumbnail"){
             if(input.files && input.files[0]){

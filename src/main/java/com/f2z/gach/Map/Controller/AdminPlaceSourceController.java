@@ -4,21 +4,21 @@ package com.f2z.gach.Map.Controller;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.PlaceCategory;
+import com.f2z.gach.Event.Entity.EventLocation;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
-import com.f2z.gach.Map.DTO.MapDTO;
+import com.f2z.gach.Map.DTO.AdminPlaceRequestDTO;
 import com.f2z.gach.Map.Entity.PlaceSource;
 import com.f2z.gach.Map.Entity.BuildingFloor;
 import com.f2z.gach.Map.Repository.BuildingFloorRepository;
 import com.f2z.gach.Map.Repository.PlaceSourceRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
@@ -54,112 +54,105 @@ public class AdminPlaceSourceController {
 
     @GetMapping("/add")
     public String addPlacePage(Model model){
-        //FIXME : Category 작동 안함.
-        model.addAttribute("placeDto", new MapDTO.PlaceSourceDTO());
+        model.addAttribute("placeDto", new AdminPlaceRequestDTO(new PlaceSource()));
         model.addAttribute("placeCategory", PlaceCategory.values());
-        //Category Enum 클래스를 따로 model로 전달해야함. 영어로 되어 있던데, 문의 Enum처럼 하면 좋을 것 같음
         return "place/place-add";
     }
 
     @GetMapping("/{placeId}")
     public String placeDetailPage(Model model, @PathVariable Integer placeId){
-        model.addAttribute("placeDto", placeSourceRepository.findByPlaceId(placeId));
+        model.addAttribute("placeDto", AdminPlaceRequestDTO.toPlaceRequestDTO(placeSourceRepository.findByPlaceId(placeId)
+                ,buildingFloorRepository.findAllByPlaceSource_placeId(placeId)));
+        model.addAttribute("placeCategory", PlaceCategory.values());
         return "place/place-detail";
     }
 
     @PostMapping()
-    public String addPlace(@ModelAttribute("placeDto") MapDTO.PlaceSourceDTO placeDTO){
-        //FIXME : fileSave 메소드로 추가, 확인 후 삭제 바람.
+    public String addPlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDTO){
+        AdminPlaceRequestDTO fileUpdatedPlaceDTO = fileSave(placeDTO);
 
-
-        //placeName: test
-        //placeCategory: BUILDING
-        //placeSummary: test
-        //placeLatitude: 37.4509531826823
-        //placeLongitude: 127.12919053388762
-        //placeAltitude: 55.50868988037109
-        //floors[0].floorName: 1
-        //floors[0].floorDesc: 123
-        //thumbnail: (binary)
-        //ar: (binary)
-        //file: (binary)
-
-        MapDTO.PlaceSourceDTO fileUpdatedPlaceDTO = fileSave(placeDTO);
 //        if(result.hasErrors()) {
 //            return "place/place-add";
 //        }
+        log.info(placeDTO.toString());
 
-        log.info(placeDTO.getBuildingFloors().toString());
-
-        PlaceSource placeSource = MapDTO.PlaceSourceDTO.toEntity(fileUpdatedPlaceDTO);
+        PlaceSource placeSource = fileUpdatedPlaceDTO.getPlace();
         PlaceSource updatedPlaceSource = placeSourceRepository.save(placeSource);
 
-        placeDTO.getBuildingFloors().stream().forEach(floor -> {
-            buildingFloorRepository.save(BuildingFloor.updateBuildingFloor(floor, updatedPlaceSource));
-        });
+        if(placeDTO.getBuildingFloors() != null){
+            placeDTO.getBuildingFloors().forEach(floor -> {
+                if(floor.getBuildingFloor() != null){
+                    buildingFloorRepository.save(BuildingFloor.updateBuildingFloor(floor, updatedPlaceSource));
+                }
+            });
+        }
         return "redirect:/admin/place/list";
     }
 
-    @PostMapping("/{placeId}")
-    public String updatePlace(@ModelAttribute("placeDto") MapDTO.PlaceSourceDTO placeDTO,
-                          @PathVariable Integer placeId){
-        PlaceSource target = placeSourceRepository.findByPlaceId(placeId);
-        MapDTO.PlaceSourceDTO fileUpdatedPlaceDTO = fileSave(placeDTO);
+    @PostMapping("/update")
+    public String updatePlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDto, BindingResult result){
+        log.info("장소 수정호출");
+        log.info(placeDto.toString());
+        PlaceSource target = placeSourceRepository.findByPlaceId(placeDto.getPlace().getPlaceId());
+        AdminPlaceRequestDTO fileUpdatedPlaceDTO = fileSave(placeDto);
 
-        target.update(MapDTO.PlaceSourceDTO.toEntity(fileUpdatedPlaceDTO));
+        target.update(fileUpdatedPlaceDTO.getPlace());
         PlaceSource updatedPlaceSource = placeSourceRepository.save(target);
 
-        buildingFloorRepository.deleteAllByPlaceSource_PlaceId(placeId);
-        placeDTO.getBuildingFloors().stream().forEach(floor -> {
-            buildingFloorRepository.save(BuildingFloor.updateBuildingFloor(floor, updatedPlaceSource));
-        });
+        buildingFloorRepository.deleteAllByPlaceSource_PlaceId(placeDto.getPlace().getPlaceId());
+        if(placeDto.getBuildingFloors() != null){
+            placeDto.getBuildingFloors().forEach(floor -> {
+                if(floor.getBuildingFloor() != null){
+                    buildingFloorRepository.save(BuildingFloor.updateBuildingFloor(floor, updatedPlaceSource));
+                }
+            });
+        }
         return "redirect:/admin/place/list";
     }
 
     @GetMapping("/delete/{placeId}")
     public String deletePlace(@PathVariable Integer placeId){
+        log.info("Deleting place with id {}", placeId);
         PlaceSource placeSource = placeSourceRepository.findByPlaceId(placeId);
         buildingFloorRepository.deleteAllByPlaceSource_PlaceId(placeId);
         placeSourceRepository.delete(placeSource);
         return "redirect:/admin/place/list";
     }
 
-    public MapDTO.PlaceSourceDTO fileSave(MapDTO.PlaceSourceDTO placeDTO){
+    public AdminPlaceRequestDTO fileSave(AdminPlaceRequestDTO placeDTO){
         try{
             if (placeDTO.getMainFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getMainFile().getOriginalFilename());
                 placeDTO.getMainFile().transferTo(dest);
-                placeDTO.setMainImageName(dest.getName());
-                placeDTO.setMainImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setMainImageName(dest.getName());
+                placeDTO.getPlace().setMainImagePath(filePath + "/image/" + dest.getName());
             }else{
-                placeDTO.setMainImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getMainImageName());
-                placeDTO.setMainImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getMainImagePath());
+                placeDTO.getPlace().setMainImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getMainImageName());
+                placeDTO.getPlace().setMainImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getMainImagePath());
             }
             if(placeDTO.getARFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
-                placeDTO.setArImageName(dest.getName());
-                placeDTO.setArImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setArImageName(dest.getName());
+                placeDTO.getPlace().setArImagePath(filePath + "/image/" + dest.getName());
             }else{
-                placeDTO.setArImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getArImageName());
-                placeDTO.setArImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getArImagePath());
+                placeDTO.getPlace().setArImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getArImageName());
+                placeDTO.getPlace().setArImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getArImagePath());
             }
             if(placeDTO.getThumbnailFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getThumbnailFile().getOriginalFilename());
                 placeDTO.getThumbnailFile().transferTo(dest);
-                placeDTO.setThumbnailImageName(dest.getName());
-                placeDTO.setThumbnailImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setThumbnailImageName(dest.getName());
+                placeDTO.getPlace().setThumbnailImagePath(filePath + "/image/" + dest.getName());
             }else{
-                placeDTO.setThumbnailImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getThumbnailImageName());
-                placeDTO.setThumbnailImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getThumbnailImagePath());
+                placeDTO.getPlace().setThumbnailImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getThumbnailImageName());
+                placeDTO.getPlace().setThumbnailImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getThumbnailImagePath());
             }
         } catch (Exception e){
             e.printStackTrace();
         }
+        log.info("file save arg(1)");
+        log.info(placeDTO.getPlace().toString());
         return placeDTO;
     }
-
-
-
-
 }
