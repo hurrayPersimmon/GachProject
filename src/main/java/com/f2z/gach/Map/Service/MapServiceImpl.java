@@ -48,7 +48,7 @@ public class MapServiceImpl implements MapService{
     public ResponseEntity<PlaceResponseDTO.toRespondBuildingInfo> getBuildingInfo(Integer placeId) {
         PlaceSource buildingInfo = placeSourceRepository.findByPlaceId(placeId);
         if(buildingInfo != null){
-            List<BuildingFloor> buildingFloors= buildingFloorRepository.findAllByBuildingCode(placeId);
+            List<BuildingFloor> buildingFloors= buildingFloorRepository.findAllByPlaceSource_placeId(placeId);
             return ResponseEntity.requestSuccess(PlaceResponseDTO.toRespondBuildingInfo(
                     buildingInfo,PlaceResponseDTO.toBuildingInfoStructureList(buildingFloors)));
         }else {

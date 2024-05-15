@@ -14,7 +14,6 @@ public class BuildingFloor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer buildingFloorId;
-    private Integer buildingCode;
     private String buildingName;
     private String buildingFloor;
     private String buildingFloorInfo;
@@ -26,8 +25,7 @@ public class BuildingFloor {
     public static BuildingFloor updateBuildingFloor(BuildingFloor buildingFloor, PlaceSource placeSource) {
         return BuildingFloor.builder()
                 .buildingFloorId(buildingFloor.getBuildingFloorId() != null ? buildingFloor.getBuildingFloorId() : null)
-                .buildingCode(buildingFloor.getBuildingCode())
-                .buildingName(buildingFloor.getBuildingName())
+                .buildingName(placeSource.getPlaceName())
                 .buildingFloor(buildingFloor.getBuildingFloor())
                 .buildingFloorInfo(buildingFloor.getBuildingFloorInfo())
                 .placeSource(placeSource)
