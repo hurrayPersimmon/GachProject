@@ -5,10 +5,15 @@ import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.Gender;
 import com.f2z.gach.EnumType.Speed;
 import com.f2z.gach.User.DTO.UserForm;
+import com.f2z.gach.User.DTO.UserResponseDTO;
 import com.f2z.gach.User.Entity.User;
 import com.f2z.gach.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +30,19 @@ public class AdminUserController {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
 
-    @GetMapping("/users/list")
-    public String userList(Model model){
-        List<User> users = userRepository.findAll();
-        Collections.reverse(users);
-        model.addAttribute("userList", users);
+    @GetMapping("/users/list/{page}")
+    public String userList(Model model, @PathVariable Integer page){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("userId").descending());
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
+                .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
+        model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         return "user/user-manage";
     }
 
-    @GetMapping("/users/{id}")
-    public String userDetail(Model model, @PathVariable String id){
-        UserForm user = userRepository.findByUsername(id).getUserForm();
+    @GetMapping("/users/{userId}")
+    public String userDetail(Model model, @PathVariable Long userId){
+        UserForm user = userRepository.findByUserId(userId).getUserForm();
         log.info(user.toString());
         model.addAttribute("userForm", user);
         model.addAttribute("gender", Gender.values());
