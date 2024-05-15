@@ -6,6 +6,8 @@ import com.f2z.gach.Inquiry.DTO.InquiryRequestDTO;
 import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
 import com.f2z.gach.Inquiry.Entity.Inquiry;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.User.Entity.User;
+import com.f2z.gach.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,7 +28,7 @@ public class AdminInquiryController {
 
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
-
+    private final UserRepository userRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -57,7 +59,9 @@ public class AdminInquiryController {
     }
 
     @PostMapping()
-    public String inquiryAnswer(@ModelAttribute("inquiry") Inquiry inquiry){
+    public String inquiryAnswer(@ModelAttribute Inquiry inquiry){
+        log.info("답변 등록");
+        log.info(inquiry.toString());
         //formData
         //inquiryId: 2
         //inquiryCategory: Node

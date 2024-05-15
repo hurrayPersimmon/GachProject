@@ -23,6 +23,7 @@
                         <div class="row p-4">
                             <form th:action="@{/admin/inquiry}" th:object="${inquiry}" method="post">
                                 <input type="hidden" th:field="*{inquiryId}" class="form-control fontHv mt-0 pt-0 fs-6" name="inquiryId" placeholder="name@example.com" readonly>
+                                <input th:field="*{inquiryProgress}" type="hidden" class="form-control fontHv mt-0 pt-0 fs-6" readonly>
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <button type = "submit" class="btn btn-primary" id="answer">답변 추가하기</button>
@@ -72,7 +73,7 @@
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">답변 내용</p>
                                                 <hr>
-                                                <textarea style="width : 100%" class="sidebarItem fs-4" name="inquiryAnswer" class="small sidebarItem" placeholder="답변내용을 적어주세요" id="sendAns"></textarea>
+                                                <textarea style="width : 100%" class="sidebarItem fs-4" name="inquiryAnswer" placeholder="답변내용을 적어주세요" id="sendAns"></textarea>
                                             </div>
                                         </div>
                                     </div>

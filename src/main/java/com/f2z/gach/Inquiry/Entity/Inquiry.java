@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
+@Setter
 public class Inquiry extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
