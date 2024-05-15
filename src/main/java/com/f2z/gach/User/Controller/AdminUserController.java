@@ -4,6 +4,7 @@ import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.Gender;
 import com.f2z.gach.EnumType.Speed;
+import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.User.DTO.UserForm;
 import com.f2z.gach.User.DTO.UserResponseDTO;
 import com.f2z.gach.User.Entity.User;
@@ -29,6 +30,14 @@ import java.util.List;
 public class AdminUserController {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
+    private final InquiryRepository inquiryRepository;
+
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+    }
 
     @GetMapping("/users/list/{page}")
     public String userList(Model model, @PathVariable Integer page){
@@ -67,8 +76,5 @@ public class AdminUserController {
         return "redirect:/admin/users/list";
     }
 
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
-    }
+
 }
