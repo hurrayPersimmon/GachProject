@@ -40,6 +40,9 @@ public class AdminEventController {
     @Value("${gach.img.dir}")
     String fdir;
 
+    @Value("${gach.path}")
+    String filePath;
+
     @ModelAttribute
     public void setAttributes(Model model){
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
@@ -82,7 +85,7 @@ public class AdminEventController {
             log.info(dest.toString());
             requestDTO.getFile().transferTo(dest);
             requestDTO.getEvent().setEventImageName(dest.getName());
-            requestDTO.getEvent().setEventImagePath("/image/"+dest.getName());
+            requestDTO.getEvent().setEventImagePath(filePath+"/image/"+dest.getName());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -112,7 +115,8 @@ public class AdminEventController {
             File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
             requestDTO.getFile().transferTo(dest);
             requestDTO.getEvent().setEventImageName(dest.getName());
-            requestDTO.getEvent().setEventImagePath("/image/"+dest.getName());
+            requestDTO.getEvent().setEventImagePath(filePath+"/image/"+dest.getName());
+            log.info(requestDTO.getEvent().toString());
         } catch (Exception e){
             e.printStackTrace();
         }
