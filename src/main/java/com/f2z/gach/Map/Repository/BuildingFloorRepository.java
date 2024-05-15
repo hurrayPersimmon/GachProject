@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface BuildingFloorRepository extends JpaRepository<BuildingFloor, Integer> {
     List<BuildingFloor> findAllByBuildingCode(Integer buildingCode);
+
+    void deleteAllByPlaceSource_PlaceId(Integer placeId);
 }

@@ -23,4 +23,15 @@ public class BuildingFloor {
     @JoinColumn(name = "placeId", updatable = false)
     private PlaceSource placeSource;
 
+    public static BuildingFloor updateBuildingFloor(BuildingFloor buildingFloor, PlaceSource placeSource) {
+        return BuildingFloor.builder()
+                .buildingFloorId(buildingFloor.getBuildingFloorId() != null ? buildingFloor.getBuildingFloorId() : null)
+                .buildingCode(buildingFloor.getBuildingCode())
+                .buildingName(buildingFloor.getBuildingName())
+                .buildingFloor(buildingFloor.getBuildingFloor())
+                .buildingFloorInfo(buildingFloor.getBuildingFloorInfo())
+                .placeSource(placeSource)
+                .build();
+    }
+
 }

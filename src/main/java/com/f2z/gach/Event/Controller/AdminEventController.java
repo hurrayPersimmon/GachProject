@@ -79,25 +79,18 @@ public class AdminEventController {
     @PostMapping()
     public String addEvent(@Valid @ModelAttribute AdminEventRequestDTO requestDTO,
                            BindingResult result){
-        try{
-            File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
-            log.info(dest.toString());
-            requestDTO.getFile().transferTo(dest);
-            requestDTO.getEvent().setEventImageName(dest.getName());
-            requestDTO.getEvent().setEventImagePath(filePath+"/image/"+dest.getName());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        //FIXME : fileSave 메소드로 추가, 확인 후 삭제 바람.
+        AdminEventRequestDTO fileUpdatedRequestDTO = fileSave(requestDTO);
         if(result.hasErrors()) {
             return "event/event-add";
         }
 
-        Event event = requestDTO.getEvent();
-
+        Event event = fileUpdatedRequestDTO.getEvent();
         eventRepository.save(event);
-        requestDTO.getLocations().stream().forEach(i -> {
-            if(i.getEventLatitude() != null){
-                eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
+
+        fileUpdatedRequestDTO.getLocations().stream().forEach(eventLocation -> {
+            if(eventLocation.getEventLatitude() != null){
+                eventLocationRepository.save(EventLocation.updateEventLocation(eventLocation, event));
             }
         });
         return "redirect:/admin/event/list/0";
@@ -109,23 +102,18 @@ public class AdminEventController {
         if(result.hasErrors()){
             return "event/event-detail";
         }
-        Event event = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
-        try{
-            File dest = new File(fdir+"/"+requestDTO.getFile().getOriginalFilename());
-            requestDTO.getFile().transferTo(dest);
-            requestDTO.getEvent().setEventImageName(dest.getName());
-            requestDTO.getEvent().setEventImagePath(filePath+"/image/"+dest.getName());
-            log.info(requestDTO.getEvent().toString());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        event.update(requestDTO.getEvent());
-        Event updatedEvent = eventRepository.save(event);
+        //FIXME : fileSave 메소드로 추가, 확인 후 삭제 바람.
+        Event target = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
+        AdminEventRequestDTO fileUpdatedEventDTO = fileSave(requestDTO);
+
+        target.update(fileUpdatedEventDTO.getEvent());
+        Event updatedEvent = eventRepository.save(target);
+
         eventLocationRepository.deleteEventLocationsByEvent_EventId(requestDTO.getEvent().getEventId());
-        requestDTO.getLocations().stream().forEach(i -> {
-            if(i.getEventLatitude() != null){
-                if(i.getEventLocationId() == null){
-                    eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
+        requestDTO.getLocations().stream().forEach(eventLocation -> {
+            if(eventLocation.getEventLatitude() != null){
+                if(eventLocation.getEventLocationId() == null){
+                    eventLocationRepository.save(EventLocation.updateEventLocation(eventLocation, updatedEvent));
                 }
             }
         });
@@ -142,5 +130,19 @@ public class AdminEventController {
         }else{
             return "redirect:/admin/event/{eventId}";
         }
+    }
+
+    public AdminEventRequestDTO fileSave(AdminEventRequestDTO requestDTO) {
+        try {
+            if (requestDTO.getFile() != null) {
+                File dest = new File(fdir + "/" + requestDTO.getFile().getOriginalFilename());
+                requestDTO.getFile().transferTo(dest);
+                requestDTO.getEvent().setEventImageName(dest.getName());
+                requestDTO.getEvent().setEventImagePath(filePath + "/image/" + dest.getName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return requestDTO;
     }
 }

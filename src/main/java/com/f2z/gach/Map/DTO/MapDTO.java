@@ -12,6 +12,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -192,6 +193,7 @@ public class MapDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class PlaceSourceDTO {
         private Integer placeId;
         private String placeName;
@@ -208,10 +210,13 @@ public class MapDTO {
         private String thumbnailImagePath;
         private String arImageName;
         private String arImagePath;
+        //TODO: mainFile로 이름 해놓음 주석 삭제 바람.
+        private MultipartFile mainFile;
+        private MultipartFile ARFile;
 
         public static PlaceSource toEntity(MapDTO.PlaceSourceDTO placeSourceDTO) {
             return PlaceSource.builder()
-                    .placeId(placeSourceDTO.getPlaceId())
+                    .placeId(placeSourceDTO.getPlaceId()!=null? placeSourceDTO.getPlaceId() : null)
                     .placeName(placeSourceDTO.getPlaceName())
                     .placeCategory(PlaceCategory.valueOf(placeSourceDTO.getPlaceCategory()))
                     .placeLatitude(placeSourceDTO.getPlaceLatitude())
@@ -219,7 +224,6 @@ public class MapDTO {
                     .placeAltitude(placeSourceDTO.getPlaceAltitude())
                     .placeSummary(placeSourceDTO.getPlaceSummary())
                     .buildingHeight(placeSourceDTO.getBuildingHeight())
-                    .buildingFloors(placeSourceDTO.getBuildingFloors())
                     .mainImageName(placeSourceDTO.getMainImageName())
                     .mainImagePath(placeSourceDTO.getMainImagePath())
                     .thumbnailImageName(placeSourceDTO.getThumbnailImageName())

@@ -22,7 +22,7 @@
                             장소 추가
                         </div>
                         <div class="row p-4">
-                            <form enctype="multipart/form-data" th:action="@{/admin/place/add}" th:object="${placeDto}" method="post">
+                            <form enctype="multipart/form-data" th:action="@{/admin/place}" th:object="${placeDto}" method="post">
                                 <div class="row mb-3">
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <button class="btn btn-primary sidebarItem">추가</button>
@@ -42,8 +42,8 @@
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
-                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="adminAuthorization" name="adminAuthorization" style="color : rgb(17,160,248); border-radius : 1rem;">
-                                                        <option th:each="b : ${placeDto.placeCategory}" th:value="${b}" th:text="${b}"></option>
+                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="placeCategory" name="placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                        <option th:each="b : ${placeCategory}" th:value="${b}" th:text="${b}"></option>
                                                     </select>
                                                 </div>
                                             </div>
