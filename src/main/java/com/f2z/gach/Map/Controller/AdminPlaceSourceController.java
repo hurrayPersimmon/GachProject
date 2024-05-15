@@ -126,27 +126,18 @@ public class AdminPlaceSourceController {
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.getPlace().setMainImageName(dest.getName());
                 placeDTO.getPlace().setMainImagePath(filePath + "/image/" + dest.getName());
-            }else{
-                placeDTO.getPlace().setMainImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getMainImageName());
-                placeDTO.getPlace().setMainImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getMainImagePath());
             }
             if(placeDTO.getARFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.getPlace().setArImageName(dest.getName());
                 placeDTO.getPlace().setArImagePath(filePath + "/image/" + dest.getName());
-            }else{
-                placeDTO.getPlace().setArImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getArImageName());
-                placeDTO.getPlace().setArImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getArImagePath());
             }
             if(placeDTO.getThumbnailFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getThumbnailFile().getOriginalFilename());
                 placeDTO.getThumbnailFile().transferTo(dest);
                 placeDTO.getPlace().setThumbnailImageName(dest.getName());
                 placeDTO.getPlace().setThumbnailImagePath(filePath + "/image/" + dest.getName());
-            }else{
-                placeDTO.getPlace().setThumbnailImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getThumbnailImageName());
-                placeDTO.getPlace().setThumbnailImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlace().getPlaceId()).getThumbnailImagePath());
             }
         } catch (Exception e){
             e.printStackTrace();

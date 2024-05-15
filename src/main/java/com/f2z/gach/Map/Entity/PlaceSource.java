@@ -43,12 +43,12 @@ public class PlaceSource {
         this.placeAltitude = placeSource.getPlaceAltitude();
         this.placeSummary = placeSource.getPlaceSummary();
         this.buildingHeight = placeSource.getBuildingHeight();
-        this.mainImageName = placeSource.getMainImageName();
-        this.mainImagePath = placeSource.getMainImagePath();
-        this.thumbnailImageName = placeSource.getThumbnailImageName();
-        this.thumbnailImagePath = placeSource.getThumbnailImagePath();
-        this.arImageName = placeSource.getArImageName();
-        this.arImagePath = placeSource.getArImagePath();
+        if(mainImageName !=null)this.mainImageName = placeSource.getMainImageName();
+        if(mainImagePath !=null) this.mainImagePath = placeSource.getMainImagePath();
+        if(thumbnailImageName !=null) this.thumbnailImageName = placeSource.getThumbnailImageName();
+        if(thumbnailImagePath !=null) this.thumbnailImagePath = placeSource.getThumbnailImagePath();
+        if(arImageName !=null) this.arImageName = placeSource.getArImageName();
+        if(arImagePath !=null) this.arImagePath = placeSource.getArImagePath();
     }
 
 
