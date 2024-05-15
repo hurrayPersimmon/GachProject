@@ -213,6 +213,7 @@ public class MapDTO {
         //TODO: mainFile로 이름 해놓음 주석 삭제 바람.
         private MultipartFile mainFile;
         private MultipartFile ARFile;
+        private MultipartFile thumbnailFile;
 
         public static PlaceSource toEntity(MapDTO.PlaceSourceDTO placeSourceDTO) {
             return PlaceSource.builder()
@@ -224,12 +225,12 @@ public class MapDTO {
                     .placeAltitude(placeSourceDTO.getPlaceAltitude())
                     .placeSummary(placeSourceDTO.getPlaceSummary())
                     .buildingHeight(placeSourceDTO.getBuildingHeight())
-                    .mainImageName(placeSourceDTO.getMainImageName() !=null? placeSourceDTO.getMainImageName() : null)
-                    .mainImagePath(placeSourceDTO.getMainImagePath() !=null? placeSourceDTO.getMainImagePath() : null)
-                    .thumbnailImageName(placeSourceDTO.getThumbnailImageName() !=null? placeSourceDTO.getThumbnailImageName() : null)
-                    .thumbnailImagePath(placeSourceDTO.getThumbnailImagePath()!=null? placeSourceDTO.getThumbnailImagePath() : null)
-                    .arImageName(placeSourceDTO.getArImageName() !=null? placeSourceDTO.getArImageName(): null)
-                    .arImagePath(placeSourceDTO.getArImagePath() !=null? placeSourceDTO.getArImagePath(): null)
+                    .mainImageName(placeSourceDTO.getMainImageName())
+                    .mainImagePath(placeSourceDTO.getMainImagePath())
+                    .thumbnailImageName(placeSourceDTO.getThumbnailImageName())
+                    .thumbnailImagePath(placeSourceDTO.getThumbnailImagePath())
+                    .arImageName(placeSourceDTO.getArImageName())
+                    .arImagePath(placeSourceDTO.getArImagePath())
                     .build();
         }
     }

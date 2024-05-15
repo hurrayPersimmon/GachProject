@@ -131,12 +131,27 @@ public class AdminPlaceSourceController {
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.setMainImageName(dest.getName());
                 placeDTO.setMainImagePath(filePath + "/image/" + dest.getName());
+            }else{
+                placeDTO.setMainImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getMainImageName());
+                placeDTO.setMainImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getMainImagePath());
             }
             if(placeDTO.getARFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.setArImageName(dest.getName());
                 placeDTO.setArImagePath(filePath + "/image/" + dest.getName());
+            }else{
+                placeDTO.setArImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getArImageName());
+                placeDTO.setArImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getArImagePath());
+            }
+            if(placeDTO.getThumbnailFile() != null) {
+                File dest = new File(fdir + "/" + placeDTO.getThumbnailFile().getOriginalFilename());
+                placeDTO.getThumbnailFile().transferTo(dest);
+                placeDTO.setThumbnailImageName(dest.getName());
+                placeDTO.setThumbnailImagePath(filePath + "/image/" + dest.getName());
+            }else{
+                placeDTO.setThumbnailImageName(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getThumbnailImageName());
+                placeDTO.setThumbnailImagePath(placeSourceRepository.findByPlaceId(placeDTO.getPlaceId()).getThumbnailImagePath());
             }
         } catch (Exception e){
             e.printStackTrace();
