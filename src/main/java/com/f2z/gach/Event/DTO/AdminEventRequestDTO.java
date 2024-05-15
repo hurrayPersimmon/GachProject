@@ -22,6 +22,7 @@ public class AdminEventRequestDTO {
         public AdminEventRequestDTO(Event event) {
             this.event = event;
             this.locations = new ArrayList<>();
+            this.file = null;
         }
 
         public static AdminEventRequestDTO toEventRequestDTO(Event event, List<EventLocation> locations){

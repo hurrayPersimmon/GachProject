@@ -64,18 +64,11 @@ public class AdminEventController {
 
     @GetMapping("/{eventId}")
     public String updateEventPage(@PathVariable Integer eventId, Model model){
-        model.addAttribute("eventDto", AdminEventRequestDTO
+        AdminEventRequestDTO adminEventRequestDTO = AdminEventRequestDTO
                 .toEventRequestDTO(eventRepository.findByEventId(eventId),
-                eventLocationRepository.findAllByEvent_EventId(eventId)));
-
-        // AdminEventRequestDTO(event=Event(eventId=1, eventName=가천대학교 축구리그, eventLink=https://www.instagram.com/p/C4zwuIOv4ga/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==, eventStartDate=2024-04-11, eventEndDate=2024-05-29, eventInfo=새로운 에너지가 충만한 2024년, 우리의 열정이 폭발하는 이곳 [2024 가천대학교 축구리그: G-LEAGUE], eventImageName=SoccerEvent.png, eventImagePath=http://ceprj.gachon.ac.kr:60002/image/SoccerEvent.png),
-        // locations=[EventLocation(eventLocationId=1, eventName=가천대학교 축구 리그, eventPlaceName=경기장, eventAltitude=75.28107668, eventLatitude=37.455084, eventLongitude=127.135115, event=Event(eventId=1, eventName=가천대학교 축구리그, eventLink=https://www.instagram.com/p/C4zwuIOv4ga/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==, eventStartDate=2024-04-11, eventEndDate=2024-05-29, eventInfo=새로운 에너지가 충만한 2024년, 우리의 열정이 폭발하는 이곳 [2024 가천대학교 축구리그: G-LEAGUE], eventImageName=SoccerEvent.png, eventImagePath=http://ceprj.gachon.ac.kr:60002/image/SoccerEvent.png)),
-        // EventLocation(eventLocationId=2, eventName=가천대학교 축구 리그, eventPlaceName=유니폼 배부 장소, eventAltitude=83.5, eventLatitude=37.454586, eventLongitude=127.13504, event=Event(eventId=1, eventName=가천대학교 축구리그, eventLink=https://www.instagram.com/p/C4zwuIOv4ga/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==, eventStartDate=2024-04-11, eventEndDate=2024-05-29, eventInfo=새로운 에너지가 충만한 2024년, 우리의 열정이 폭발하는 이곳 [2024 가천대학교 축구리그: G-LEAGUE], eventImageName=SoccerEvent.png, eventImagePath=http://ceprj.gachon.ac.kr:60002/image/SoccerEvent.png)),
-        // EventLocation(eventLocationId=3, eventName=가천대학교 축구 리그, eventPlaceName=음료수 프로모션, eventAltitude=74.0, eventLatitude=37.454792, eventLongitude=127.135404, event=Event(eventId=1, eventName=가천대학교 축구리그, eventLink=https://www.instagram.com/p/C4zwuIOv4ga/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==, eventStartDate=2024-04-11, eventEndDate=2024-05-29, eventInfo=새로운 에너지가 충만한 2024년, 우리의 열정이 폭발하는 이곳 [2024 가천대학교 축구리그: G-LEAGUE], eventImageName=SoccerEvent.png, eventImagePath=http://ceprj.gachon.ac.kr:60002/image/SoccerEvent.png))],
-        // file=null)
-
-        // FIXME 여기서 객체가 전달되어야, location이 전송되는지 확인 가능함.
-        // 전송하는 객체의 log.info가 정상적으로 나오면 푸시해줘. html 안 만져도 돼ㅠㅠ 고맙다.
+                        eventLocationRepository.findAllByEvent_EventId(eventId));
+        model.addAttribute("eventDto", adminEventRequestDTO);
+        log.info(adminEventRequestDTO.toString());
         return "event/event-detail";
     }
 
@@ -100,19 +93,19 @@ public class AdminEventController {
         requestDTO.getLocations().stream().forEach(i -> {
             if(i.getEventLatitude() != null){
                 eventLocationRepository.save(EventLocation.updateEventLocation(i, event));
+                log.info(i.toString());
             }
-            log.info(i.toString());
         });
         return "redirect:/admin/event/list/0";
     }
 
     @PostMapping("/update")
-    public String updateEvent(@Valid @ModelAttribute("eventDto") AdminEventRequestDTO requestDTO,
+    public String updateEvent(@Valid @ModelAttribute AdminEventRequestDTO requestDTO,
                               BindingResult result){
         if(result.hasErrors()){
             return "event/event-detail";
         }
-        log.info(requestDTO.toString());
+        log.info(requestDTO.getEvent().getEventId().toString());
         Event event = eventRepository.findByEventId(requestDTO.getEvent().getEventId());
         event.update(requestDTO.getEvent());
         Event updatedEvent = eventRepository.save(event);
@@ -124,6 +117,7 @@ public class AdminEventController {
                     EventLocation eventLocation = eventLocationRepository.findByEventLocationId(i.getEventLocationId());
                     eventLocation.update(i.updateEventLocation(i, updatedEvent));
                     eventLocationRepository.save(eventLocation);
+                    //업데이트 시 기존에 Event와 EventLocation이 연관되어 있을 텐데, 기존의 EventLocation 모두를 삭제해야함.
                 }
             }
             log.info(i.toString());
@@ -134,6 +128,8 @@ public class AdminEventController {
     @GetMapping("/delete/{eventId}")
     public String deleteEvent(@PathVariable Integer eventId){
         Event event = eventRepository.findByEventId(eventId);
+        // Event삭제 시 연관된 EventLocation을 모두 삭제해야 .delete메소드가 작동할 거 같음.
+        // 그래서 일단 지금은 삭제가 안됨
         if(event != null){
             eventLocationRepository.deleteEventLocationsByEvent_EventId(eventId);
             eventRepository.delete(event);

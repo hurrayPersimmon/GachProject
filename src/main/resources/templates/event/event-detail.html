@@ -18,7 +18,6 @@
                 </div>
                 <div class="row ms-1">
                     <div class="col-11 ms-5" style="width:88%;">
-
                         <div class="row p-4">
                             <form enctype="multipart/form-data" th:action="@{/admin/event/update}" th:object="${eventDto}" method="post">
                                 <div class="row">
@@ -27,8 +26,6 @@
                                     </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <button class="btn btn-primary" type="submit">수정</button>
-                                    </div>
-                                    <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
                                         <a type="button" class="btn btn-danger"
                                            th:onclick="|location.href='@{/admin/event/delete/{eventId}(eventId=${eventDto.event.getEventId()})}'|">
                                             삭제</a>
@@ -42,6 +39,7 @@
                                                 <p class="fs-4 nodeHeader">행사 이름</p>
                                                 <hr>
                                                 <input th:field="*{event.eventName}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                <input type="text" style="display: none" th:field="*{event.eventId}">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -82,7 +80,7 @@
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">행사 장소 추가</h1>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body" id="map" style="height:50vh;">
@@ -112,24 +110,6 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody class="text-center" id="locations">
-                                                        <tr th:each="location : ${eventDto.locations}" class="locationData">
-                                                            <td>
-                                                                <input type="hidden" class="form-control sidebarItem" th:field="${location.eventLocationId}">
-                                                                <input type="checkbox" style="width : 1.5rem; height : 1.5rem;" class="mt-1 checkBoxList">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control sidebarItem" th:field="${location.eventPlaceName}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control sidebarItem" th:field="${location.eventAltitude}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control sidebarItem" th:field="${location.eventLatitude}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control sidebarItem" th:field="${location.eventLongitude}">
-                                                            </td>
-                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -161,7 +141,65 @@
     let tempLat = 37.45088195800781;
     let tempLng = 127.12886810302734;
     let tempAlti = 59.123123123;
-    let locations = [[${eventLocationList}]];
+    let locations = [[${eventDto.locations}]];
+
+    if(locations){
+        let table = document.getElementById("locations");
+        locations.forEach(function(location, index){
+            let row = document.createElement("tr");
+
+            row.classList.add("locationData");
+
+            let tdName = document.createElement("td");
+            let inputName = document.createElement("input");
+            inputName.type="text";
+            inputName.className = "form-control sidebarItem";
+            inputName.name = 'locations[' + index + '].eventPlaceName';
+            inputName.value = location.eventPlaceName;
+            tdName.appendChild(inputName);
+
+            let tdAlt = document.createElement("td");
+            let inputAlt = document.createElement("input");
+            inputAlt.type="text";
+            inputAlt.className = "form-control sidebarItem";
+            inputAlt.name = 'locations[' + index + '].eventAltitude';
+            inputAlt.value = location.eventAltitude;
+            tdAlt.appendChild(inputAlt);
+
+            let tdLat = document.createElement("td");
+            let inputLat = document.createElement("input");
+            inputLat.type="text";
+            inputLat.className = "form-control sidebarItem";
+            inputLat.name = 'locations[' + index + '].eventLatitude';
+            inputLat.value = location.eventLatitude;
+            tdLat.appendChild(inputLat);
+
+            let tdLng = document.createElement("td");
+            let inputLng = document.createElement("input");
+            inputLng.type="text";
+            inputLng.className = "form-control sidebarItem";
+            inputLng.name = 'locations[' + index + '].eventLongitude';
+            inputLng.value = location.eventLongitude;
+            tdLng.appendChild(inputLng);
+
+            let checkTd = document.createElement("td");
+            let inputCheck = document.createElement("input");
+            inputCheck.type = "checkbox";
+            inputCheck.style.width = '1.5rem';
+            inputCheck.style.height = '1.5rem';
+            inputCheck.id = index;
+            inputCheck.className = "mt-1 checkBoxList";
+            checkTd.appendChild(inputCheck);
+
+            row.appendChild(checkTd);
+            row.appendChild(tdName);
+            row.appendChild(tdAlt);
+            row.appendChild(tdLat);
+            row.appendChild(tdLng);
+            table.appendChild(row);
+        });
+    }
+
     let locationIndex = locations.length;
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
@@ -250,6 +288,7 @@
         altiInput.className = "form-control sidebarItem";
         altiTd.appendChild(altiInput);
         altiInput.name = 'locations[' + locationIndex + '].eventAltitude';
+
         let checkTd = document.createElement("td");
         let inputCheck = document.createElement("input");
         inputCheck.type = "checkbox";
