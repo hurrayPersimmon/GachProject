@@ -37,7 +37,7 @@ public class Event {
         this.eventStartDate = event.getEventStartDate();
         this.eventEndDate = event.getEventEndDate();
         this.eventInfo = event.getEventInfo();
-        this.eventImageName = event.getEventImageName();
-        this.eventImagePath = event.getEventImagePath();
+        if(event.getEventImageName() != null) this.eventImageName = event.getEventImageName();
+        if(event.getEventImagePath() != null) this.eventImagePath = event.getEventImagePath();
     }
 }

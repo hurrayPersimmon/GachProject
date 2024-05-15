@@ -224,12 +224,12 @@ public class MapDTO {
                     .placeAltitude(placeSourceDTO.getPlaceAltitude())
                     .placeSummary(placeSourceDTO.getPlaceSummary())
                     .buildingHeight(placeSourceDTO.getBuildingHeight())
-                    .mainImageName(placeSourceDTO.getMainImageName())
-                    .mainImagePath(placeSourceDTO.getMainImagePath())
-                    .thumbnailImageName(placeSourceDTO.getThumbnailImageName())
-                    .thumbnailImagePath(placeSourceDTO.getThumbnailImagePath())
-                    .arImageName(placeSourceDTO.getArImageName())
-                    .arImagePath(placeSourceDTO.getArImagePath())
+                    .mainImageName(placeSourceDTO.getMainImageName() !=null? placeSourceDTO.getMainImageName() : null)
+                    .mainImagePath(placeSourceDTO.getMainImagePath() !=null? placeSourceDTO.getMainImagePath() : null)
+                    .thumbnailImageName(placeSourceDTO.getThumbnailImageName() !=null? placeSourceDTO.getThumbnailImageName() : null)
+                    .thumbnailImagePath(placeSourceDTO.getThumbnailImagePath()!=null? placeSourceDTO.getThumbnailImagePath() : null)
+                    .arImageName(placeSourceDTO.getArImageName() !=null? placeSourceDTO.getArImageName(): null)
+                    .arImagePath(placeSourceDTO.getArImagePath() !=null? placeSourceDTO.getArImagePath(): null)
                     .build();
         }
     }
