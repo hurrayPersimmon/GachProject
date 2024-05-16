@@ -42,9 +42,8 @@
                                     <tr>
                                         <th scope="col" style="width:13%; padding-left:2.5%;">
                                             <select id="categoryFilter" class="form-select sidebarItem ps-2" onchange="category()">
-                                                <option value="ALL" selected>카테고리</option>
                                                 <option value="ALL">모두</option>
-                                                <option value="BUILDING">건물</option>
+                                                <option value="BUILDING" selected>건물</option>
                                                 <option value="SMOKING">흡연구역</option>
                                                 <option value="FOOD">음식점</option>
                                                 <option value="CAFE">카페</option>
@@ -140,6 +139,7 @@
             else if(place.placeCategory === "PRINT") printPlaceList.push(place);
             else busstopPlaceList.push(place);
         });
+        category();
         function category(){
             let id = document.getElementById("categoryFilter");
             let category = id.value;
