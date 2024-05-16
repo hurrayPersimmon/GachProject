@@ -72,7 +72,7 @@ public class AIService {
     }
 
     public void makeModel(int hidden, int epochs, int layers, double learningRate) throws Exception{
-        ProcessBuilder processBuilder = new ProcessBuilder("python", System.getProperty("user.home") +
+        ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/python", System.getProperty("user.home") +
                 "/0.9src/backend/",
                 Integer.toString(hidden),
                 Integer.toString(epochs),
