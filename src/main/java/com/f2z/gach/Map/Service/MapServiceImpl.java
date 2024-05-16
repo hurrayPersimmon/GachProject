@@ -148,6 +148,8 @@ public class MapServiceImpl implements MapService{
 
     @Override
     public ResponseListEntity<NavigationResponseDTO> getRoute(Integer departures, Integer arrivals) throws Exception {
+        log.info("departures: "+departures);
+        log.info("arrivals: "+arrivals);
         NavigationResponseDTO busRoute = getBusRoute(departures, arrivals, null);
 
         PlaceSource departuresPlace = placeSourceRepository.findByPlaceId(departures);
@@ -166,6 +168,7 @@ public class MapServiceImpl implements MapService{
 
     private NavigationResponseDTO getBusRoute(Integer departures, Integer arrivals, MapNode departuresNode) throws Exception {
         List<BusLine.Node> busLine;
+        log.info("departures: "+departures);
         if(departuresNode != null){
             busLine = BusLine.getBusLine(departuresNode, MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(arrivals)));
         }else{
@@ -187,12 +190,13 @@ public class MapServiceImpl implements MapService{
             log.info(busLine.toString());
             log.info(nodeList.toString());
             int tailIndex = nodeList.size() -1;
+            log.info("여기까지는 문제 없음");
             NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, departures, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
             NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null), arrivals);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
-            busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
-            busRouteMergedlist.addAll(nodeList);
-            busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
+            if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
+            if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
+            if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
             NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, 0, busRouteMergedlist);
             return busMergedRoute;
         }
@@ -315,6 +319,8 @@ public class MapServiceImpl implements MapService{
                     .build());
             currentNodeId = previousNodes.get(currentNodeId);
         }
+        if(nodeList.isEmpty()) return;
+
         nodeList.add(NavigationResponseDTO.NodeDTO.builder()
                 .nodeId(departuresId)
                 .latitude(mapNodeRepository.findByNodeId(departuresId).getNodeLatitude())
