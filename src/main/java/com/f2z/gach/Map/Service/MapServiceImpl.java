@@ -168,7 +168,6 @@ public class MapServiceImpl implements MapService{
 
     private NavigationResponseDTO getBusRoute(Integer departures, Integer arrivals, MapNode departuresNode) throws Exception {
         List<BusLine.Node> busLine;
-        log.info("departures: "+departures);
         if(departuresNode != null){
             busLine = BusLine.getBusLine(departuresNode, MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(arrivals)));
         }else{
@@ -188,9 +187,16 @@ public class MapServiceImpl implements MapService{
                         .build());
             }
             int tailIndex = nodeList.size() -1;
-            log.info("departures: "+departures);
-            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(placeSourceRepository.findByPlaceId(departures).getPlaceLatitude(), placeSourceRepository.findByPlaceId(departures).getPlaceLongitude(), null),
-                    getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
+            NavigationResponseDTO gettingOnRoute = new NavigationResponseDTO();
+            if(departuresNode !=null){
+                gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(departuresNode.getNodeLatitude(), departuresNode.getNodeLongitude(), null),
+                        getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
+
+            }else{
+                gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(placeSourceRepository.findByPlaceId(departures).getPlaceLatitude(), placeSourceRepository.findByPlaceId(departures).getPlaceLongitude(), null),
+                        getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
+            }
+
             NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),
                     getNearestNodeId(placeSourceRepository.findByPlaceId(arrivals).getPlaceLatitude(), placeSourceRepository.findByPlaceId(arrivals).getPlaceLongitude(), null));
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();

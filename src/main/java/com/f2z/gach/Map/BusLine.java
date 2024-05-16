@@ -54,8 +54,6 @@ public class BusLine {
         if(updatedPoints == null){
             return null;
         }
-        log.info("updatedPoints: "+updatedPoints.toString());
-
         return getNodeList(updatedPoints);
     }
 
@@ -71,7 +69,6 @@ public class BusLine {
 
             if(points.getDeparturesIndex() >= points.getArrivalsIndex()) return null;
         }
-        log.info("departuresIndex: "+points.getDeparturesIndex());
 
         return points;
     }
@@ -86,23 +83,17 @@ public class BusLine {
 
         for (CSVRecord record : csvParser) {
             if (record.get("Line").equals("STOP")) {
-                log.info("record: "+record.toString());
                 double distance = getDistance(longitude, latitude, Double.parseDouble(record.get("X")), Double.parseDouble(record.get("Y")));
-                log.info("distance: "+distance);
                 if (distance < minDistance) {
                     minDistance = distance;
                     resultIndex = index;
                     result = record.toString();
-                    log.info("minDistance: "+minDistance);
-                    log.info("resultIndex: "+resultIndex);
                 }
             }
             index++;
         }
         csvParser.close();
         reader.close();
-        log.info("result: "+result);
-        log.info("resultfinalIndex: "+resultIndex);
         return resultIndex;
     }
 
