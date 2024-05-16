@@ -21,7 +21,7 @@ public class HistoryResponseDTO {
     private Long userId;
     private Integer guestId;
     private String route;
-    private Time totalTime;
+    private Integer totalTime;
     private Double temperature;
     private Double rainPrecipitation;
     private Integer rainPrecipitationProbability;
