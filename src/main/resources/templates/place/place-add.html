@@ -43,6 +43,7 @@
                                                     <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
                                                     <select class="form-control fontHv mt-0 pt-0 fs-6" onchange="changeSideImg()" id="placeCategory" name="place.placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                        <option value="">장소 선택</option>
                                                         <option th:each="b : ${placeCategory}" th:value="${b}" th:text="${b}"></option>
                                                     </select>
                                                 </div>
@@ -231,7 +232,7 @@
 
     function changeSideImg(){
         let category = document.getElementById("placeCategory");
-        if(category.value==="BUILDING"){
+        if(category.value != "BUILDING"){
             document.getElementById("sideImage").style.visibility = 'hidden';
         } else {
             document.getElementById("sideImage").style.visibility = 'visible';
