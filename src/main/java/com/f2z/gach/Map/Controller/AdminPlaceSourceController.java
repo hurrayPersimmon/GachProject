@@ -144,6 +144,7 @@ public class AdminPlaceSourceController {
         } catch (Exception e){
             e.printStackTrace();
         }
+        log.info("placeDTO: {}", placeDTO.toString());
         return placeDTO;
     }
 }
