@@ -133,7 +133,7 @@ public class AdminController {
     @GetMapping("/approve/{adminNum}")
     public String approveAdmin(@PathVariable Integer adminNum){
         Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
-        admin.setAdminAuthorization(Authorization.ADMIN);
+        admin.setAdminAuthorization(Authorization.GUEST);
         adminRepository.save(admin);
         return "redirect:/admin/list";
     }

@@ -58,8 +58,8 @@
                                                             정말 삭제하시겠습니까?
                                                         </div>
                                                         <div class="text-center mb-3">
-                                                            <button type="button" class="btn btn-secondary sidebarItem" data-bs-dismiss="modal">닫기</button>
-                                                            <a class="btn btn-danger sidebarItem" th:href="@{'/admin/delete/'+${waiter.getAdminId()}}">대기자 삭제</a>
+                                                            <button type="button" class="btn btn-outline-secondary sidebarItem" data-bs-dismiss="modal">닫기</button>
+                                                            <a class="btn btn-danger delete sidebarItem" th:href="@{'/admin/delete/'+${waiter.getAdminId()}}">대기자 삭제</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -133,7 +133,8 @@
                                                                         <p class="fs-5 nodeHeader">관리자 권한</p>
                                                                         <hr>
                                                                         <select class="form-control fontHv mt-0 pt-2 fs-6" name="adminAuthorization" id="adminAuth" style="color:rgb(17,160,248)">
-                                                                            <option th:each="a : ${authList}" th:value="${a}" th:text="${a}"></option>
+                                                                            <option value="GUEST">게스트</option>
+                                                                            <option value="WAITER">대기자</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -235,5 +236,6 @@
         window.self.location.href = 'http://localhost:60002/admin/search/' + wordBox.value;
     }
 </script>
+</div>
 </body>
 </html>

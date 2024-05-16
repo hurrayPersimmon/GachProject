@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-floating mb-3" id="floor">
-                                                <p class="fs-4 nodeHeader">답변 내용</p>
+                                                <p class="fs-4 nodeHeader">답변 내용 <span th:if="${inquiry.inquiryProgress}" class="fs-5"><span style="color:red">*&nbsp;</span>답변이 완료되었습니다..</span></p>
                                                 <hr>
                                                 <div class="form-floating">
                                                     <textarea class="form-control" th:text="${inquiry.inquiryAnswer}" name="inquiryAnswer" placeholder="답변을 남겨주세요" style="height: 6vh" id="sendAns"></textarea>

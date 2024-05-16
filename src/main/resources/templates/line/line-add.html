@@ -34,7 +34,7 @@
                                     <div class="row mt-3">
                                         <div class="col">
                                             <div class="form-floating mb-4">
-                                                <p class="fs-4 nodeHeader">연결노드1 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
+                                                <p class="fs-4 nodeHeader">연결지점1 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameFirst}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1">
                                                 <input type="hidden" name="nodeFirstId" class="small form-control fontHv mt-0 pt-0 fs-6" id="node1Id">
@@ -44,7 +44,7 @@
                                     <div class="row mt-3 mb-5">
                                         <div class="col">
                                             <div class="form-floating mb-4">
-                                                <p class="fs-4 nodeHeader">연결노드2 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
+                                                <p class="fs-4 nodeHeader">연결지점2 <span class="nodeHeader fs-5"><span style="color:red">*&nbsp;</span>텍스트 입력 칸 클릭 후 마커를 선택하십시오.</span></p>
                                                 <hr>
                                                 <input type="text" th:field="*{nodeNameSecond}" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2">
                                                 <input type="hidden" name="nodeSecondId" class="small form-control fontHv mt-0 pt-0 fs-6" id="node2Id">
@@ -179,7 +179,6 @@
                     markerView.content = updateTag;
                     document.getElementById("node1").value = markerView.title;
                     document.getElementById("node1Id").value = markerView.nodeId;
-                    alert(markerView.nodeId);
                     inputFocused1=false;
                     start = markerView.position;
                     cnt++;

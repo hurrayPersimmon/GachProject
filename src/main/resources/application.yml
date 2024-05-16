@@ -13,10 +13,10 @@ spring:
   datasource:
     drivar-class-name: org.maridb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/db24102?characterEncoding=UTF-8&serverTimezone=UTC
-#    username : dbid241
-#    password : dbpass241
-    username : root
-    password : rlaalstj1!
+    username : dbid241
+    password : dbpass241
+#    username : root
+#    password : rlaalstj1!
 #    username : root
 #    password : mj3269
 
