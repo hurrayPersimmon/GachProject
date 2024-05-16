@@ -17,8 +17,8 @@ spring:
     password : dbpass241
 #    username : root
 #    password : rlaalstj1!
-#   username : root
-#   password : mj3269
+#    username : root
+#    password : mj3269
 
 
   jpa:

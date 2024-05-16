@@ -1,6 +1,8 @@
 package com.f2z.gach.Map.Controller;
 
+import com.f2z.gach.AI.AIService;
 import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
@@ -34,6 +36,7 @@ public class AdminTestController {
     private final InquiryRepository inquiryRepository;
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
+    private final AIService aiService;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -53,7 +56,7 @@ public class AdminTestController {
 
     @GetMapping("/test/result")
     public String getTestRoute(@RequestParam Integer arrivals, @RequestParam Integer departures,
-                               Model model){
+                               Model model) throws Exception {
         log.info("getTestRoute");
         MapNode departuresPlace = mapNodeRepository.findByNodeId(departures);
         departures = getNearestNodeId(departuresPlace.getNodeLatitude(),
@@ -67,10 +70,28 @@ public class AdminTestController {
         List<NavigationResponseDTO.NodeDTO> shortestRoute  = calculateRoute(routeTypeShortest, departures, arrivals);
         List<NavigationResponseDTO.NodeDTO> optimalRoute = calculateRoute(routeTypeOptimal, departures, arrivals);
 
+
+
         model.addAttribute("arrivals", mapNodeRepository.findByNodeId(arrivals));
         model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
+
+        dataEntity data = new dataEntity();
+        data.setGender(1);
+        data.setTemperature(19.4);
+        data.setPrecipitationProbability(10.0);
+        data.setPrecipitation(10.0);
+        data.setBirthYear(19991212);
+        data.setWeight(79.1);
+        data.setHeight(187.2);
+        data.setWalkSpeed(1);
+        MapLine line = mapLineRepository.findById(22).orElseThrow();
+
+
+
+        model.addAttribute("shortTakeTime", aiService.modelOutput(line, data));
+        //model.addAttribute("optimalTakeTime",)
         return "test/pathTestResult";
     }
 

@@ -82,6 +82,7 @@ class LSTMModel(nn.Module):
 
 # 하이퍼파라미터 설정
 input_size = X_train.shape[1]
+print(X_train.shape[1])
 hidden_size = int(sys.argv[1])
 num_layers = int(sys.argv[3])
 output_size = 1

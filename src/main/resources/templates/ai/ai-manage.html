@@ -105,7 +105,40 @@
                             </div>
                             <div class="row mb-5">
                                 <div class="col">
-                                    <a class="btn btn-primary" onclick="doModel()">필터링 시작하기</a>
+                                    <a class="btn btn-primary" onclick="doModel()">모델 학습</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
+                            <div class="row align-items-center">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">모델 재학습</p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    epochs 수
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="re_epochs">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    학습률
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="re_learning_rate">
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <a class="btn btn-primary" onclick="reModel()">재학습</a>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +155,7 @@
         let min = document.getElementById("min").value;
         let max = document.getElementById("max").value;
 
-        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
+        fetch(`http://localhost:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("filterLength").innerText = data;
@@ -140,7 +173,22 @@
         let hidden = document.getElementById("hidden").value;
 
 
-        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
+        fetch(`http://localhost:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
+            .then(response => response.json()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                document.getElementById("filterLength").innerText = data;
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    function reModel(){
+        let rate = document.getElementById("re_learning_rate").value;
+        let epoch = document.getElementById("re_epochs").value;
+
+        fetch(`http://localhost:60002/admin/ai/model/${epoch}/${rate}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("filterLength").innerText = data;

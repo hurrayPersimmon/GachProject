@@ -51,6 +51,19 @@ public class AdminAIController {
         return "success";
     }
 
+    @GetMapping("/model/{epoch}/{rate}")
+    @ResponseBody
+    public String getModel(@PathVariable int epoch, @PathVariable double rate) throws Exception {
+        aiService.doMakeModel(epoch, rate);
+        return "success";
+    }
+
+    @GetMapping("/model/result")
+    @ResponseBody
+    public double getModel() throws Exception {
+        //return aiService.modelOutput();
+    }
+
 
     @GetMapping("/test")
     public void test(String[] args) throws IOException, InterruptedException {
