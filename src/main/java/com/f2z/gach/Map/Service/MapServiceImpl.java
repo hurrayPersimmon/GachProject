@@ -296,7 +296,7 @@ public class MapServiceImpl implements MapService{
             visited.add(currentNodeId);
 
             for (MapLine edge : mapLineRepository.findAllByNodeFirst_NodeId(currentNodeId)) {
-                double weight = routeType.equals(routeTypeOptimal) ?  edge.getWeightOptimal() + 180 : edge.getWeightShortest();
+                double weight = routeType.equals(routeTypeOptimal) ?  edge.getWeightOptimal() + 100 : edge.getWeightShortest();
                 int neighborNodeId = edge.getNodeFirst().getNodeId() == currentNodeId ? edge.getNodeSecond().getNodeId() : edge.getNodeFirst().getNodeId();
                 double distanceThroughCurrent = distances.getOrDefault(currentNodeId, Double.MAX_VALUE) + weight;
 

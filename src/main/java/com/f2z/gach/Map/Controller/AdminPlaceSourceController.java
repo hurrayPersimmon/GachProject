@@ -77,7 +77,9 @@ public class AdminPlaceSourceController {
         log.info(placeDTO.toString());
 
         PlaceSource placeSource = fileUpdatedPlaceDTO.getPlace();
-
+        if (placeSource.getPlaceSummary() == null) {
+            placeSource.setPlaceSummary(" ");
+        }
         PlaceSource updatedPlaceSource = placeSourceRepository.save(placeSource);
 
         if(placeDTO.getBuildingFloors() != null){

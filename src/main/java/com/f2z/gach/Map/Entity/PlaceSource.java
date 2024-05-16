@@ -44,7 +44,9 @@ public class PlaceSource {
         this.placeLatitude = placeSource.getPlaceLatitude();
         this.placeLongitude = placeSource.getPlaceLongitude();
         this.placeAltitude = placeSource.getPlaceAltitude();
-        this.placeSummary = placeSource.getPlaceSummary();
+        if(placeSource.getPlaceSummary() == null) this.placeSummary = " ";
+        else this.placeSummary = placeSource.getPlaceSummary();
+
         this.buildingHeight = placeSource.getBuildingHeight();
         if(placeSource.getMainImageName() !=null) this.mainImageName = placeSource.getMainImageName();
         if(placeSource.getMainImagePath() !=null) this.mainImagePath = placeSource.getMainImagePath();
