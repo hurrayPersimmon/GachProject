@@ -5,7 +5,9 @@ import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
+import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +30,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 @SessionAttributes
+@Transactional
 public class AdminNodeController {
     private final MapNodeRepository mapNodeRepository;
+    private final MapLineRepository mapLineRepository;
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
 
@@ -91,6 +95,8 @@ public class AdminNodeController {
     @GetMapping("/node/delete/{nodeId}")
     public String deleteNode(@PathVariable Integer nodeId) throws Exception{
         if(mapNodeRepository.existsByNodeId(nodeId)) {
+            mapLineRepository.deleteAllByNodeFirst_NodeId(nodeId);
+            mapLineRepository.deleteAllByNodeSecond_NodeId(nodeId);
             MapNode node = mapNodeRepository.findByNodeId(nodeId);
             mapNodeRepository.delete(node);
             return "redirect:/admin/node/list/0";
