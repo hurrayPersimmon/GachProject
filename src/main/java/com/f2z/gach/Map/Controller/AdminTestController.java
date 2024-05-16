@@ -10,6 +10,7 @@ import com.f2z.gach.Map.Entity.PlaceSource;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
 import com.f2z.gach.Map.Repository.PlaceSourceRepository;
+import com.f2z.gach.Map.Service.MapServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -133,25 +134,9 @@ public class AdminTestController {
         }
 
         // 경로 역추적
-        int currentNodeId = arrivalsId;
-        while (previousNodes.containsKey(currentNodeId)) {
-            MapNode node = mapNodeRepository.findById(currentNodeId).orElseThrow(() -> new NoSuchElementException("Node not found"));
-            nodeList.add(NavigationResponseDTO.NodeDTO.builder()
-                    .nodeId(node.getNodeId())
-                    .latitude(node.getNodeLatitude())
-                    .longitude(node.getNodeLongitude())
-                    .altitude(node.getNodeAltitude())
-                    .build());
-            currentNodeId = previousNodes.get(currentNodeId);
-        }
-        nodeList.add(NavigationResponseDTO.NodeDTO.builder()
-                .nodeId(departuresId)
-                .latitude(mapNodeRepository.findByNodeId(departuresId).getNodeLatitude())
-                .longitude(mapNodeRepository.findByNodeId(departuresId).getNodeLongitude())
-                .altitude(mapNodeRepository.findByNodeId(departuresId).getNodeAltitude())
-                .build());
-        Collections.reverse(nodeList);
+        MapServiceImpl.routeBackTracking(departuresId, arrivalsId, nodeList, previousNodes, mapNodeRepository);
 
         return nodeList;
     }
+
 }

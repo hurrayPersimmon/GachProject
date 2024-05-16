@@ -18,7 +18,7 @@ public interface MapService {
 
     ResponseEntity<List<PlaceResponseDTO.placeLocationDTO>> getPlaceListByCategory(String placeCategory);
 
-    ResponseListEntity<NavigationResponseDTO> getNowRoute(Integer placeId, Double latitude, Double longitude, Double altitude);
+    ResponseListEntity<NavigationResponseDTO> getNowRoute(Integer placeId, Double latitude, Double longitude, Double altitude) throws Exception;
 
-    ResponseListEntity<NavigationResponseDTO> getRoute(Integer departure, Integer arrival);
+    ResponseListEntity<NavigationResponseDTO> getRoute(Integer departure, Integer arrival) throws Exception;
 }

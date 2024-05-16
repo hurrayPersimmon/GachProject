@@ -1,84 +1,123 @@
 package com.f2z.gach.Map;
 import com.f2z.gach.Map.Entity.MapNode;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+
+@Slf4j
 public class BusLine {
-    private static final String busUpPath = "src/main/resources/busLineUp.csv";
-    private static final String busDownPath = "src/main/resources/busLineDown.csv";
+    private static final String busUpPath = "src/main/resources/static/busLine/BusLineUP.csv";
+    private static final String busDownPath = "src/main/resources/static/busLine/BusLineDown.csv";
 
-//    List
-//
-//    public static Map<String, Double> getBusLine(MapNode departures, MapNode arrivals){
-//
-//        return busLine;
-//    }
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class Points {
+        private MapNode departures;
+        private MapNode arrivals;
+        private Integer departuresIndex;
+        private Integer arrivalsIndex;
+        private String csvPath;
 
-    public void getNearestNode(MapNode departures, MapNode arrivals, String csvFilePath) throws Exception {
-        Reader reader = new FileReader(csvFilePath);
-        CSVParser csvParser = CSVFormat.DEFAULT.withHeader().parse(reader);
-
-        // 상행선에서 가장 가까운 출발지와 도착지 정류장(STOP)을 저장할 맵
-        Map<String, Double> nearestDepartureNode = null;
-        Map<String, Double> nearestArrivalNode = null;
-        double minDepartureDistance = Double.MAX_VALUE;
-        double minArrivalDistance = Double.MAX_VALUE;
-        int departureIndex = 0;
-        int arrivalIndex = 0;
-
-        // 상행선에서 출발지와 도착지 근처의 정류장(STOP)을 찾음
-        for (CSVRecord record : csvParser) {
-            double longitude = Double.parseDouble(record.get("Y"));
-            double latitude = Double.parseDouble(record.get("X"));
-            String line = record.get("Line");
-
-            // 출발지 근처의 정류장(STOP) 찾기
-            if (line.equals("STOP")) {
-                double distance = getDistance(departures.getNodeLongitude(), departures.getNodeAltitude(), longitude, latitude);
-                if (distance < minDepartureDistance) {
-                    minDepartureDistance = distance;
-                    nearestDepartureNode = new HashMap<>();
-                    nearestDepartureNode.put("latitude", latitude);
-                    nearestDepartureNode.put("longitude", longitude);
-                    departureIndex++;
-                }
-            }
-
-            if (line.equals("STOP")) {
-                double distance = getDistance(arrivals.getNodeLongitude(), arrivals.getNodeLatitude(), longitude, latitude);
-                if (distance < minArrivalDistance) {
-                    minArrivalDistance = distance;
-                    nearestArrivalNode = new HashMap<>();
-                    nearestArrivalNode.put("latitude", latitude);
-                    nearestArrivalNode.put("longitude", longitude);
-                    arrivalIndex++;
-                }
-            }
+        public static Points toPoints(MapNode departures, MapNode arrivals) {
+            return Points.builder()
+                    .departures(departures)
+                    .arrivals(arrivals)
+                    .build();
         }
+    }
 
-        // 상행선 CSV 파일을 닫음
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class Node{
+        private Double latitude;
+        private Double longitude;
+    }
+
+    public static List<Node> getBusLine(MapNode departures, MapNode arrivals) throws Exception {
+        Points points = Points.toPoints(departures, arrivals);
+        Points updatedPoints = getNearestNode(points, busDownPath, busUpPath);
+        if(updatedPoints == null){
+            return null;
+        }
+        log.info("updatedPoints: "+updatedPoints.toString());
+
+        return getNodeList(updatedPoints);
+    }
+
+    private static Points getNearestNode(Points points, String busDownPath, String busUpPath) throws Exception {
+        points.setDeparturesIndex(compareDistance(points.getDepartures().getNodeLongitude(), points.getDepartures().getNodeLatitude(), busUpPath));
+        points.setArrivalsIndex(compareDistance(points.getArrivals().getNodeLongitude(), points.getArrivals().getNodeLatitude(), busUpPath));
+        points.setCsvPath(busUpPath);
+
+        if(points.getDeparturesIndex() >= points.getArrivalsIndex()) {
+            points.setDeparturesIndex(compareDistance(points.getDepartures().getNodeLongitude(), points.getDepartures().getNodeLatitude(), busDownPath));
+            points.setArrivalsIndex(compareDistance(points.getArrivals().getNodeLongitude(), points.getArrivals().getNodeLatitude(), busDownPath));
+            points.setCsvPath(busDownPath);
+
+            if(points.getDeparturesIndex() >= points.getArrivalsIndex()) return null;
+        }
+        log.info("departuresIndex: "+points.getDeparturesIndex());
+
+        return points;
+    }
+
+    private static Integer compareDistance(Double longitude, Double latitude, String csvPath) throws IOException {
+        Reader reader = new FileReader(csvPath);
+        CSVParser csvParser = CSVFormat.DEFAULT.withHeader().parse(reader);
+        double minDistance = Double.MAX_VALUE;
+        int index = 0;
+        int resultIndex = 0;
+
+        for (CSVRecord record : csvParser) {
+            if (record.get("Line").equals("STOP")) {
+                log.info("record: "+record.toString());
+                double distance = getDistance(longitude, latitude, Double.parseDouble(record.get("X")), Double.parseDouble(record.get("Y")));
+                log.info("distance: "+distance);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    resultIndex = index;
+                    log.info("minDistance: "+minDistance);
+                    log.info("resultIndex: "+resultIndex);
+                }
+            }
+            index++;
+        }
         csvParser.close();
         reader.close();
+        log.info("resultfinalIndex: "+resultIndex);
+        return resultIndex;
+    }
 
-
-        // 출발지와 도착지가 같은 경우 null 반환
-        if (nearestDepartureNode.equals(nearestArrivalNode) ||
-                nearestDepartureNode == null ||
-                nearestArrivalNode == null ||
-                departureIndex > arrivalIndex) {
-            return;
+    private static List<Node> getNodeList(Points points) throws IOException {
+        Reader reader = new FileReader(points.getCsvPath());
+        CSVParser csvParser = CSVFormat.DEFAULT.withHeader().parse(reader);
+        List<Node> busLine = new ArrayList<>();
+        int index = 0;
+        for (CSVRecord record : csvParser){
+            if(index >= points.getDeparturesIndex() && index <= points.getArrivalsIndex()){
+                Node node = Node.builder()
+                        .latitude(Double.parseDouble(record.get("Y")))
+                        .longitude(Double.parseDouble(record.get("X")))
+                        .build();
+                busLine.add(node);
+            }
         }
-
-        // 경로 탐색
-        List<Map<String, Double>> path = findPath(nearestDepartureNode, nearestArrivalNode, csvFilePath);
-//        return path;
+        return busLine;
     }
 
     private static double getDistance(double lon1, double lat1, double lon2, double lat2) {
@@ -92,46 +131,6 @@ public class BusLine {
         return R * c; // 거리 (킬로미터)
     }
 
-    private static List<Map<String, Double>> findPath(Map<String, Double> departure, Map<String, Double> arrival, String csvFilePath) throws Exception {
-        // 경로를 저장할 리스트
-        List<Map<String, Double>> path = new ArrayList<>();
 
-        // 상행선 CSV 파일을 Reader로 열기
-        Reader reader = new FileReader(csvFilePath);
-        CSVParser csvParser = CSVFormat.DEFAULT.withHeader().parse(reader);
-
-        // 출발지와 도착지 사이의 정류장(STOP)을 찾아 경로에 추가
-        boolean isDepartureFound = false;
-        boolean isArrivalFound = false;
-        for (CSVRecord record : csvParser) {
-            double longitude = Double.parseDouble(record.get("Y"));
-            double latitude = Double.parseDouble(record.get("X"));
-            String line = record.get("Line");
-
-            // 출발지 정류장(STOP)을 찾으면 출발지로 설정
-            if (!isDepartureFound && departure.get("latitude").equals(latitude) && departure.get("longitude").equals(longitude)) {
-                isDepartureFound = true;
-                path.add(departure);
-            }
-
-            // 출발지 이후 도착지까지의 정류장(STOP)을 경로에 추가
-            if (isDepartureFound && !isArrivalFound && line.equals("STOP")) {
-                path.add(Map.of("latitude", latitude, "longitude", longitude));
-            }
-
-            // 도착지 정류장(STOP)을 찾으면 도착지로 설정하고 경로 탐색 종료
-            if (!isArrivalFound && arrival.get("latitude").equals(latitude) && arrival.get("longitude").equals(longitude)) {
-                isArrivalFound = true;
-                path.add(arrival);
-                break;
-            }
-        }
-
-        // 상행선 CSV 파일을 닫음
-        csvParser.close();
-        reader.close();
-
-        return path;
-    }
 
 }

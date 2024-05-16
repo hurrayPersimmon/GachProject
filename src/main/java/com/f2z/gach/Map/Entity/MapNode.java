@@ -30,4 +30,11 @@ public class MapNode {
         this.nodeLongitude = node.getNodeLongitude();
         this.nodeAltitude = node.getNodeAltitude();
     }
+
+    public static MapNode toRouteEntity(PlaceSource placeSource) {
+        return MapNode.builder()
+                .nodeLatitude(placeSource.getPlaceLatitude())
+                .nodeLongitude(placeSource.getPlaceLongitude())
+                .build();
+    }
 }

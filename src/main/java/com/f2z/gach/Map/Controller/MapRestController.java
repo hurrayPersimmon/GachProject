@@ -52,7 +52,7 @@ public class MapRestController {
     }
 
     @GetMapping("/route")
-    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestParam Integer departures, @RequestParam Integer arrivals){
+    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestParam Integer departures, @RequestParam Integer arrivals) throws Exception {
         return mapService.getRoute(departures, arrivals);
     }
 
