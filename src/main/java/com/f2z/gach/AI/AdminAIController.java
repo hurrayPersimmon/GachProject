@@ -37,11 +37,18 @@ public class AdminAIController {
         return "ai/ai-manage";
     }
 
-    @GetMapping("/{min}/{max}/{mapping}")
+    @GetMapping("/{min}/{max}")
     @ResponseBody
-    public List<dataEntity> list(@PathVariable int min, @PathVariable int max, @PathVariable boolean mapping) {
+    public int list(@PathVariable int min, @PathVariable int max) {
         log.info("호출");
-        return aiService.filterData(min, max);
+        return aiService.filterData(min, max).size();
+    }
+
+    @GetMapping("/model/{hidden}/{epoch}/{rate}/{layer}")
+    @ResponseBody
+    public String getModel(@PathVariable int hidden, @PathVariable int epoch, @PathVariable double rate, @PathVariable int layer) throws Exception {
+        aiService.makeModel(hidden, epoch, layer, rate);
+        return "success";
     }
 
 

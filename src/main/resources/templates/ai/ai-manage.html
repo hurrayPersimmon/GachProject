@@ -62,42 +62,37 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script th:replace="fragment::search"></script>
-<!--
-
-                    <div class="col">
+                <div class="row">
+                    <div class="col-6 offset-2">
                         <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
                             <div class="row align-items-center">
-                            <div class="form-floating mb-4">
-                                <p class="fs-3 sidebarItem text-start ms-4">하이퍼파라미터 설정</p>
-                                <hr>
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">모델 생성하기</p>
+                                    <hr>
+                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col fs-6 sidebarItem">
                                     은닉층 개수
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6">
+                                    <input type="text" class="form-control fontHv fs-6" id="hidden">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col fs-6 sidebarItem">
-                                    EPOCHS 개수
+                                    epochs 수
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6">
+                                    <input type="text" class="form-control fontHv fs-6" id="epochs">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col fs-6 sidebarItem">
-                                    층 개수
+                                    Layer 수
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6">
+                                    <input type="text" class="form-control fontHv fs-6" id="Layers">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -105,30 +100,50 @@
                                     학습률
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6">
+                                    <input type="text" class="form-control fontHv fs-6" id="learning_rate">
                                 </div>
                             </div>
-                            <div class="row mt-2">
-                                <div><button class="btn btn-primary">학습 시작하기</button></div>
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <a class="btn btn-primary" onclick="doModel()">필터링 시작하기</a>
+                                </div>
                             </div>
-                            <div class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-</div>
-</div>
--->
+<script th:replace="fragment::search"></script>
 <script>
     function doFilter(){
 
         let min = document.getElementById("min").value;
         let max = document.getElementById("max").value;
 
-        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/${min}/${max}/${mapping}`) // 데이터를 받아올 URL
+        fetch(`http://localhost:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
-                // 응답 데이터를 처리
-                alert(data);
-                document.getElementById("filterLength").innerText = data.length;
+                document.getElementById("filterLength").innerText = data;
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    function doModel(){
+        let rate = document.getElementById("learning_rate").value;
+        let epoch = document.getElementById("epochs").value;
+        let layer = document.getElementById("Layers").value;
+        let hidden = document.getElementById("hidden").value;
+
+
+        fetch(`http://localhost:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
+            .then(response => response.json()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                document.getElementById("filterLength").innerText = data;
             })
             .catch(error => {
                 // 에러 처리
