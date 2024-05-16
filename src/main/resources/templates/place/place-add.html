@@ -42,7 +42,7 @@
                                                 <div class="form-floating mb-3">
                                                     <p class="fs-4 nodeHeader">장소 유형</p>
                                                     <hr>
-                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" id="placeCategory" name="place.placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
+                                                    <select class="form-control fontHv mt-0 pt-0 fs-6" onchange="changeSideImg()" id="placeCategory" name="place.placeCategory" style="color : rgb(17,160,248); border-radius : 1rem;">
                                                         <option th:each="b : ${placeCategory}" th:value="${b}" th:text="${b}"></option>
                                                     </select>
                                                 </div>
@@ -117,7 +117,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="form-floating mb-3">
+                                            <div class="form-floating mb-3" id="sideImage">
                                                 <div class="row">
                                                     <div class="col text-start fs-4 nodeHeader">부가 이미지</div>
                                                 </div>
@@ -228,6 +228,17 @@
                 );
         });
     }
+
+    function changeSideImg(){
+        let category = document.getElementById("placeCategory");
+        if(category.value==="BUILDING"){
+            document.getElementById("sideImage").style.visibility = 'hidden';
+        } else {
+            document.getElementById("sideImage").style.visibility = 'visible';
+        }
+    }
+
+    changeSideImg();
 
     document.getElementById('addInput').addEventListener('click', function() {
         // 새로운 input 요소 생성
