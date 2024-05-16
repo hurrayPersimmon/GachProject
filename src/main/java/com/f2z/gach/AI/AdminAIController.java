@@ -60,10 +60,9 @@ public class AdminAIController {
 
     @GetMapping("/model/result")
     @ResponseBody
-    public double getModel() throws Exception {
+    public void getModel() throws Exception {
         //return aiService.modelOutput();
     }
-
 
     @GetMapping("/test")
     public void test(String[] args) throws IOException, InterruptedException {
