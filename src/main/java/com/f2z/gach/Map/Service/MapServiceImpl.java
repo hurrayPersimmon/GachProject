@@ -187,13 +187,14 @@ public class MapServiceImpl implements MapService{
                         .altitude(0.0)
                         .build());
             }
-            log.info(busLine.toString());
-            log.info(nodeList.toString());
             int tailIndex = nodeList.size() -1;
-            log.info("여기까지는 문제 없음");
-            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, departures, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
-            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null), arrivals);
+            log.info("departures: "+departures);
+            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(placeSourceRepository.findByPlaceId(departures).getPlaceLatitude(), placeSourceRepository.findByPlaceId(departures).getPlaceLongitude(), null),
+                    getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
+            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),
+                    getNearestNodeId(placeSourceRepository.findByPlaceId(arrivals).getPlaceLatitude(), placeSourceRepository.findByPlaceId(arrivals).getPlaceLongitude(), null));
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
+
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
             if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());

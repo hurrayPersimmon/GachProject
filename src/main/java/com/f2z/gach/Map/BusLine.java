@@ -82,6 +82,7 @@ public class BusLine {
         double minDistance = Double.MAX_VALUE;
         int index = 0;
         int resultIndex = 0;
+        String result = "";
 
         for (CSVRecord record : csvParser) {
             if (record.get("Line").equals("STOP")) {
@@ -91,6 +92,7 @@ public class BusLine {
                 if (distance < minDistance) {
                     minDistance = distance;
                     resultIndex = index;
+                    result = record.toString();
                     log.info("minDistance: "+minDistance);
                     log.info("resultIndex: "+resultIndex);
                 }
@@ -99,6 +101,7 @@ public class BusLine {
         }
         csvParser.close();
         reader.close();
+        log.info("result: "+result);
         log.info("resultfinalIndex: "+resultIndex);
         return resultIndex;
     }
@@ -116,6 +119,7 @@ public class BusLine {
                         .build();
                 busLine.add(node);
             }
+            index++;
         }
         return busLine;
     }
