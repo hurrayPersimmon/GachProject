@@ -6,8 +6,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +22,7 @@ import java.time.LocalDate;
 @Entity
 @Builder
 @DynamicUpdate
-public class Admin {
+public class Admin implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer adminNum;
@@ -43,5 +48,40 @@ public class Admin {
         this.setAdminName(form.getAdminName());
         this.setAdminBirthday(form.getAdminBirthday());
         this.setAdminAuthorization(form.getAdminAuthorization());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.adminAuthorization.toString()));
+    }
+
+    @Override
+    public String getPassword() {
+        return adminPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return adminId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

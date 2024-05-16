@@ -9,12 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:/static/image/");
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("classPath:/static/image/");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/","/admin/node/list/0");
+        registry.addRedirectViewController("/","/admin/main-page");
     }
 }

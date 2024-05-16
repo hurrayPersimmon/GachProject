@@ -19,6 +19,7 @@ spring:
 #    password : rlaalstj1!
 #    username : root
 #    password : mj3269
+
   thymeleaf:
     cache: false
   devtools:

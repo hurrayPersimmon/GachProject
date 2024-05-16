@@ -69,7 +69,7 @@ public class AdminController {
             return "dashboard-guest";
         } else{
             log.info("관리자");
-            return "redirect:/admin/node";
+            return "redirect:/admin/node/list/0";
         }
     }
 
