@@ -37,7 +37,7 @@
                                         <hr>
                                         <div class="text-center mb-3">
                                             <button type="button" class="btn btn-secondary-subtle" data-bs-dismiss="modal">닫기</button>
-                                            <a class="btn btn-primary delete fontHv" th:href="@{'/admin/users/delete/'+${userForm.getUsername()}}">삭제</a>
+                                            <a class="btn btn-primary delete fontHv" th:href="@{'/admin/users/delete/'+${userForm.getUserId()}}">삭제</a>
                                         </div>
                                     </div>
                                 </div>
@@ -52,6 +52,7 @@
                                     <div class="form-floating mb-3">
                                         <p class="fs-4 nodeHeader">ID</p>
                                         <hr>
+                                        <input type="hidden" th:field="*{userId}">
                                         <input type="text" th:field="*{username}" class="form-control fontHv mt-0 pt-0 fs-6" style="color:black" readonly>
                                     </div>
                                 </div>

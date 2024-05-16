@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class UserForm {
+    private Long userId;
     private String username;
     private String userNickname;
     private Integer userBirth;

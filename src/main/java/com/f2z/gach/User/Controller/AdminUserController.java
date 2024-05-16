@@ -62,18 +62,20 @@ public class AdminUserController {
 
     @PostMapping("/users/update")
     public String userUpdate(@ModelAttribute("userForm") UserForm userForm){
-        User user = userRepository.findByUsername(userForm.getUsername());
+        User user = userRepository.findByUserId(userForm.getUserId());
+        log.info(userForm.toString());
         user.setUserForm(userForm);
+
         userRepository.save(user);
-        return "redirect:/admin/users/list";
+        return "redirect:/admin/users/list/0";
     }
 
     @GetMapping("/users/delete/{userId}")
-    public String userDelete(@PathVariable String userId){
-        User user = userRepository.findByUsername(userId);
+    public String userDelete(@PathVariable Long userId){
+        User user = userRepository.findByUserId(userId);
         userRepository.delete(user);
         log.info(user.toString());
-        return "redirect:/admin/users/list";
+        return "redirect:/admin/users/list/0";
     }
 
 

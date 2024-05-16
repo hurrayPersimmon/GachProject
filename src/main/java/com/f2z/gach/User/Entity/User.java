@@ -44,7 +44,7 @@ public class User {
     }
 
     public UserForm getUserForm(){
-        return new UserForm(this.username, this.userNickname, this.userBirth, this.userHeight,
+        return new UserForm(this.userId, this.username, this.userNickname, this.userBirth, this.userHeight,
                 this.userWeight, this.userSpeed, this.userGender);
     }
 
