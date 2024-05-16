@@ -25,11 +25,27 @@
                                         행사 수정
                                     </div>
                                     <div class="col-2 offset-10 text-center" style="padding-left : 5.8rem;">
-                                        <button class="btn btn-primary" type="submit">수정</button>
-                                        <a type="button" class="btn btn-danger"
-                                           th:onclick="|location.href='@{/admin/event/delete/{eventId}(eventId=${eventDto.event.getEventId()})}'|">
+                                        <button class="btn btn-primary add" type="submit">수정</button>
+                                        <a type="button" class="btn btn-danger delete"  data-bs-toggle="modal" data-bs-target="#exampleModal2">
                                             삭제</a>
-<!--                                        th:href="@{/admin/event/delete/{eventId}(eventId=${eventDto.getEventId()})}">   삭제</a>-->
+                                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content sidebarItem">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel2">행사 삭제</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        정말 삭제하시겠습니까?
+                                                    </div>
+                                                    <div class="modal-footer text-center justify-content-center">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <a type="button" class="btn btn-danger delete" th:onclick="|location.href='@{/admin/event/delete/{eventId}(eventId=${eventDto.event.getEventId()})}'|" data-bs-dismiss="modal">삭제</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="row">

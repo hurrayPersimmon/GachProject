@@ -36,10 +36,10 @@
     <!--                                </div>-->
                             </div>
                             <div class="row">
-                                <table class="table">
+                                <table class="table table-hover text-center rounded">
                                     <thead class="text-center">
                                         <tr>
-                                            <th scope="col">문의 구분</th>
+                                            <th scope="col">답변여부</th>
                                             <th scope="col">문의 종류</th>
                                             <th scope="col">문의 제목</th>
                                             <th scope="col">닉네임</th>
@@ -47,9 +47,12 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
-                                    <tr th:each="inquiry : ${inquiryList.inquiryList}" style="max-height: 3vh"
+                                    <tr th:each="inquiry : ${inquiryList.inquiryList}" style="max-height: 3vh; cursor: pointer"
                                         th:onclick="|location.href='@{/admin/inquiry/{inquiryId}(inquiryId=${inquiry.getInquiryId()})}'|">
-                                        <td th:text="${inquiry.inquiryProgress}">1</td>
+                                        <td>
+                                            <span th:if="${inquiry.inquiryProgress} != true" class="rounded-pill text-bg-warning p-1">Required</span>
+                                            <span th:if="${inquiry.inquiryProgress} == true" class="rounded-pill text-bg-success p-1">Success</span>
+                                        </td>
                                         <td th:text="${inquiry.inquiryCategory}">Mark</td>
                                         <td th:text="${inquiry.inquiryTitle}">Otto</td>
                                         <td th:text="${inquiry.user.getUserNickname()}">@mdo</td>
@@ -216,7 +219,7 @@
         document.getElementById('pagination').innerHTML = paginationHtml;
 
         function changePage(pageNumber) {
-            location.href = '/admin/user/list/' + (pageNumber - 1);
+            location.href = '/admin/inquiry/list/' + (pageNumber - 1);
         }
     </script>
 </body>

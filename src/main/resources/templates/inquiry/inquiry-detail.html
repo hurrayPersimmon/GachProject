@@ -73,7 +73,9 @@
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">답변 내용</p>
                                                 <hr>
-                                                <textarea style="width : 100%" class="sidebarItem fs-4" name="inquiryAnswer" placeholder="답변내용을 적어주세요" id="sendAns"></textarea>
+                                                <div class="form-floating">
+                                                    <textarea class="form-control" th:text="${inquiry.inquiryAnswer}" name="inquiryAnswer" placeholder="답변을 남겨주세요" style="height: 6vh" id="sendAns"></textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -88,12 +90,17 @@
 </div>
 <script th:replace="fragment::search"></script>
 
-<script>
+<script th:inline="javascript">
 
     document.getElementById("answer").addEventListener("click", function(){
         let box = document.getElementById("sendAns");
         box.style.visibility = 'visible';
     });
+
+    let progress = [[${inquiry.inquiryProgress}]];
+    if(progress){
+        document.getElementById("sendAns").readOnly = true;
+    }
 
 </script>
 <script>

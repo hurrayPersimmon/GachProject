@@ -62,7 +62,7 @@
                                     </tr>
                                     </thead>
                                     <tbody class="text-center" id="placeData">
-                                    <tr th:each="place : ${placeList}" th:onclick="|location.href='@{/admin/place/{placeId}(placeId=${place.getPlaceId()})}'|" style="max-height:3vh;">
+                                    <tr th:each="place : ${placeList}" th:onclick="|location.href='@{/admin/place/{placeId}(placeId=${place.getPlaceId()})}'|" style="max-height:3vh; cursor : pointer">
                                         <td th:text="${place.placeCategory}">카테고리</td>
                                         <td th:text="${place.placeName}">이름</td>
                                         <td th:text="${place.placeSummary}">요약정보</td>

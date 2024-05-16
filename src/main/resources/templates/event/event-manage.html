@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <table class="table">
+                            <table class="table table-hover">
                                 <thead class="text-center rounded pt-2 fontReg">
                                 <tr>
                                     <th scope="col">행사 이름</th>
@@ -155,7 +155,7 @@
     document.getElementById('pagination').innerHTML = paginationHtml;
 
     function changePage(pageNumber) {
-        location.href = '/admin/users/list/' + (pageNumber - 1);
+        location.href = '/admin/event/list/' + (pageNumber - 1);
     }
 </script>
 </body>

@@ -100,7 +100,7 @@
                                 </tr>
                                 </thead>
                                 <tbody class="align-middle text-center">
-                                <tr th:each="line : ${lineList.getLineList()}" style="max-height:3vh;">
+                                <tr th:each="line : ${lineList.getLineList()}" style="max-height:3vh; cursor : pointer">
                                     <td th:text="${line.getLineName()}">Mark</td>
                                     <td th:text="${line.getNodeNameFirst()}">Otto</td>
                                     <td th:text="${line.getNodeNameSecond()}">@mdo</td>
@@ -118,9 +118,9 @@
                                                     <div class="modal-body text-center">
                                                         정말 삭제하시겠습니까?
                                                     </div>
-                                                    <div class="text-center mb-3">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                        <a type="button" class="btn btn-danger" th:href="@{'/admin/line/'+${line.getLineId()}}">삭제</a>
+                                                    <div class="modal-footer text-center justify-content-center">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <a type="button" class="btn btn-danger delete" th:href="@{'/admin/line/'+${line.getLineId()}}">삭제</a>
                                                     </div>
                                                 </div>
                                             </div>
