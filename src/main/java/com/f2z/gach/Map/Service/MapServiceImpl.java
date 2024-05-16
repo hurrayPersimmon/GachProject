@@ -172,7 +172,8 @@ public class MapServiceImpl implements MapService{
             busLine = BusLine.getBusLine(MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(departures)),
                     MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(arrivals)));
         }
-        if(busLine == null|| busLine.isEmpty()) return null;
+        if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
+
         else{
             List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
             for(BusLine.Node node : busLine){
