@@ -187,8 +187,10 @@ public class MapServiceImpl implements MapService{
             log.info(busLine.toString());
             log.info(nodeList.toString());
             int tailIndex = nodeList.size() -1;
+            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, departures, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
             NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null), arrivals);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
+            busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             busRouteMergedlist.addAll(nodeList);
             busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
             NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, 0, busRouteMergedlist);
