@@ -155,7 +155,7 @@
         let min = document.getElementById("min").value;
         let max = document.getElementById("max").value;
 
-        fetch(`http://localhost:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
+        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("filterLength").innerText = data;
@@ -173,7 +173,7 @@
         let hidden = document.getElementById("hidden").value;
 
 
-        fetch(`http://localhost:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
+        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("filterLength").innerText = data;
@@ -188,7 +188,7 @@
         let rate = document.getElementById("re_learning_rate").value;
         let epoch = document.getElementById("re_epochs").value;
 
-        fetch(`http://localhost:60002/admin/ai/model/${epoch}/${rate}`) // 데이터를 받아올 URL
+        fetch(`http://ceprj.gachon.ac.kr:60002/admin/ai/model/${epoch}/${rate}`) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("filterLength").innerText = data;

@@ -145,11 +145,14 @@
         let keywordMapping = {
             "노드 관리": "/admin/node/list/0",
             "경로 관리": "/admin/line/list/0",
+            "경로 테스트" : "/admin/map/test",
+            "AI 관리" : "/admin/ai",
+            "건물 관리" : "/admin/place/list",
+            "행사 관리": "/admin/event/list/0",
             "사용자 관리": "/admin/user/list/0",
-            "관리자 설정": "/admin/list/0",
-            "이벤트 관리": "/admin/event/list/0",
             "문의 관리": "/admin/inquiry/list/0",
             "로그 관리": "/admin/log/list/0",
+            "관리자 설정": "/admin/list"
         };
 
         for (const [keyword, url] of Object.entries(keywordMapping)) {
@@ -166,18 +169,16 @@
     document.getElementById("search").addEventListener("keydown", searchList);
     document.getElementById("search").addEventListener("keyup", searchList);
     document.getElementById("search").addEventListener("keypress", searchList);
-    document.getElementById("search").addEventListener("focus", searchList);
-    document.getElementById("search").addEventListener("input", searchList);
-    document.getElementById("search").addEventListener("change", searchList);
 
-    document.getElementById("relatedDiv").addEventListener("blur", function(){
-        document.getElementById("relatedKeywords").style.visibility = 'hidden';
-        document.getElementById("relatedDiv").style.visibility = 'hidden';
-    });
     document.getElementById("search").addEventListener("mouseover", function(){
         document.getElementById("relatedDiv").style.visibility = 'visible';
         document.getElementById("relatedKeywords").style.visibility = 'visible';
     });
+    document.getElementById("relatedDiv").addEventListener("blur", function(){
+        document.getElementById("relatedKeywords").style.visibility = 'hidden';
+        document.getElementById("relatedDiv").style.visibility = 'hidden';
+    });
+
 </script>
 </body>
 </html>
