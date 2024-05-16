@@ -222,9 +222,10 @@ public class MapServiceImpl implements MapService{
         double minDistance= Double.MAX_VALUE;
         List<MapNode> nodeList = mapLineRepository.findAll().stream().map(MapLine::getNodeFirst).toList();
         for(MapNode node : nodeList){
-            double distance;
-            if(placeAltitude == null) distance = getHaversine(placeLatitude, placeLongitude, node);
-            else distance = getVincenty(placeLatitude, placeLongitude, placeAltitude, node);
+            double distance = getHaversine(placeLatitude, placeLongitude, node);
+//            double distance;
+//            if(placeAltitude == null) distance = getHaversine(placeLatitude, placeLongitude, node);
+//            else distance = getVincenty(placeLatitude, placeLongitude, placeAltitude, node);
 
             if (minDistance > distance) {
                 minDistance = distance;
