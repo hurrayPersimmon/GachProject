@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,7 +53,7 @@ public class AdminEventController {
 
     @GetMapping("/list/{page}")
     public String eventListPage(Model model, @PathVariable Integer page){
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "eventId").withPage(page);
         Page<Event> eventPage = eventRepository.findAllBy(pageable);
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
                 .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();

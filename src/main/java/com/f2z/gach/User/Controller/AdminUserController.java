@@ -41,7 +41,7 @@ public class AdminUserController {
 
     @GetMapping("/users/list/{page}")
     public String userList(Model model, @PathVariable Integer page){
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("userId").descending());
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
         Page<User> users = userRepository.findAll(pageable);
         List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();

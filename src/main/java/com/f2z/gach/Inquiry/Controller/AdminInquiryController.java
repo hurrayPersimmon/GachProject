@@ -11,7 +11,9 @@ import com.f2z.gach.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,7 @@ public class AdminInquiryController {
 
     @GetMapping("/list/{page}")
     public String inquiryListPage(Model model, @PathVariable Integer page){
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"inquiryId").withPage(page);
         Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
         List<InquiryResponseDTO.InquiryListStructureForAdmin> inquiryList = inquiryPage.getContent().stream()
                 .map(InquiryResponseDTO.InquiryListStructureForAdmin::toInquiryListResponseDTO).toList();

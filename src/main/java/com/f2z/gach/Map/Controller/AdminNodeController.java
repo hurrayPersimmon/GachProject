@@ -10,7 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,13 +41,11 @@ public class AdminNodeController {
 
     @GetMapping("/node/list/{page}")
     public String nodeListPage(Model model, @PathVariable Integer page){
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"nodeId").withPage(page);
         Page<MapNode> nodePage = mapNodeRepository.findAll(pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
-//                .sorted(Comparator.comparing(MapNode::getNodeId, Comparator.reverseOrder()))
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
-        Collections.reverse(nodeList);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         return "node/node-manage";
     }

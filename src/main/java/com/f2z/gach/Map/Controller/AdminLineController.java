@@ -12,7 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,10 +44,9 @@ public class AdminLineController {
 
     @GetMapping("/line/list/{page}")
     public String lineListPage(Model model, @PathVariable Integer page){
-        Pageable pageable = Pageable.ofSize(10).withPage(page);
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"lineId").withPage(page);
         Page<MapLine> linePage = mapLineRepository.findAll(pageable);
         List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
-                .sorted(Comparator.comparing(MapLine::getLineId).reversed())
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         return "line/line-manage";
