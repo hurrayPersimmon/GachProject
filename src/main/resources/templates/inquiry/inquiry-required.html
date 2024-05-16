@@ -55,10 +55,10 @@
                                 <tr th:each="inquiry : ${inquiryList.inquiryList}" style="max-height: 3vh; cursor: pointer"
                                     th:onclick="|location.href='@{/admin/inquiry/{inquiryId}(inquiryId=${inquiry.getInquiryId()})}'|">
                                     <td>
-                                        <span th:if="${inquiry.inquiryProgress} != true" class="rounded-pill text-bg-warning p-1">Required</span>
-                                        <span th:if="${inquiry.inquiryProgress} == true" class="rounded-pill text-bg-success p-1">Success</span>
+                                        <span th:if="${inquiry.inquiryProgress} != true" class="rounded-pill text-bg-warning p-1">미답변</span>
+                                        <span th:if="${inquiry.inquiryProgress} == true" class="rounded-pill text-bg-success p-1">답변완료</span>
                                     </td>
-                                    <td th:text="${inquiry.inquiryCategory}">Mark</td>
+                                    <td th:text="${inquiry.inquiryCategory.getTitle()}">Mark</td>
                                     <td th:text="${inquiry.inquiryTitle}">Otto</td>
                                     <td th:text="${inquiry.user.getUserNickname()}">@mdo</td>
                                     <td th:text="${inquiry.createDt}">@mdo</td>

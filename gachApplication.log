@@ -4862,3 +4862,345 @@ Caused by: java.sql.SQLException: (conn=9750) Cannot change column 'Departures':
 2024-05-16T17:24:31.237+09:00  INFO 31418 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-05-16T17:24:31.238+09:00  INFO 31418 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-05-16T17:24:31.240+09:00  INFO 31418 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-05-16T17:32:30.650+09:00  INFO 34599 --- [restartedMain] com.f2z.gach.GachApplication             : Starting GachApplication using Java 21.0.2 with PID 34599 (/Users/nomyeongjun/Documents/2024-1/Project/GachProject/build/classes/java/main started by nomyeongjun in /Users/nomyeongjun/Documents/2024-1/Project/GachProject)
+2024-05-16T17:32:30.651+09:00 DEBUG 34599 --- [restartedMain] com.f2z.gach.GachApplication             : Running with Spring Boot v3.2.4, Spring v6.1.5
+2024-05-16T17:32:30.651+09:00  INFO 34599 --- [restartedMain] com.f2z.gach.GachApplication             : No active profile set, falling back to 1 default profile: "default"
+2024-05-16T17:32:30.666+09:00  INFO 34599 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-16T17:32:30.666+09:00  INFO 34599 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-16T17:32:30.943+09:00  INFO 34599 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-16T17:32:30.979+09:00  INFO 34599 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 16 JPA repository interfaces.
+2024-05-16T17:32:31.281+09:00  INFO 34599 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 60002 (http)
+2024-05-16T17:32:31.286+09:00  INFO 34599 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-16T17:32:31.286+09:00  INFO 34599 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-05-16T17:32:31.302+09:00  INFO 34599 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-16T17:32:31.302+09:00  INFO 34599 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 635 ms
+2024-05-16T17:32:31.396+09:00  INFO 34599 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-16T17:32:31.416+09:00  INFO 34599 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-16T17:32:31.426+09:00  INFO 34599 --- [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-05-16T17:32:31.458+09:00  INFO 34599 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-05-16T17:32:31.489+09:00  INFO 34599 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@6178311f
+2024-05-16T17:32:31.490+09:00  INFO 34599 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-05-16T17:32:31.584+09:00  INFO 34599 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-16T17:32:32.019+09:00  INFO 34599 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-16T17:32:32.083+09:00  WARN 34599 --- [restartedMain] o.m.jdbc.message.server.ErrorPacket      : Error: 1832-HY000: Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k'
+2024-05-16T17:32:32.083+09:00  WARN 34599 --- [restartedMain] o.h.t.s.i.ExceptionHandlerLoggedImpl     : GenerationTarget encountered exception accepting command : Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Arrivals integer" via JDBC [(conn=9760) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k']
+
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Arrivals integer" via JDBC [(conn=9760) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:574) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:514) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:333) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:232) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:117) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:286) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.4.jar:3.2.4]
+	at com.f2z.gach.GachApplication.main(GachApplication.java:10) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.4.jar:3.2.4]
+Caused by: java.sql.SQLException: (conn=9760) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:306) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:378) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:172) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:915) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:854) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:773) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:697) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.executeInternal(Statement.java:1035) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:1165) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:493) ~[mariadb-java-client-3.3.3.jar:na]
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	... 41 common frames omitted
+
+2024-05-16T17:32:32.104+09:00  WARN 34599 --- [restartedMain] o.m.jdbc.message.server.ErrorPacket      : Error: 1832-HY000: Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa'
+2024-05-16T17:32:32.104+09:00  WARN 34599 --- [restartedMain] o.h.t.s.i.ExceptionHandlerLoggedImpl     : GenerationTarget encountered exception accepting command : Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Departures integer" via JDBC [(conn=9760) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa']
+
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Departures integer" via JDBC [(conn=9760) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:574) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:514) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:333) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:232) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:117) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:286) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.4.jar:3.2.4]
+	at com.f2z.gach.GachApplication.main(GachApplication.java:10) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.4.jar:3.2.4]
+Caused by: java.sql.SQLException: (conn=9760) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:306) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:378) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:172) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:915) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:854) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:773) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:697) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.executeInternal(Statement.java:1035) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:1165) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:493) ~[mariadb-java-client-3.3.3.jar:na]
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	... 41 common frames omitted
+
+2024-05-16T17:32:32.122+09:00  INFO 34599 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-16T17:32:32.496+09:00  INFO 34599 --- [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-16T17:32:33.120+09:00  WARN 34599 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-16T17:32:33.457+09:00  INFO 34599 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-16T17:32:33.478+09:00  INFO 34599 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 60002 (http) with context path ''
+2024-05-16T17:32:33.482+09:00  INFO 34599 --- [restartedMain] com.f2z.gach.GachApplication             : Started GachApplication in 2.991 seconds (process running for 3.244)
+2024-05-16T17:32:41.697+09:00  INFO 34599 --- [http-nio-60002-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-16T17:32:41.697+09:00  INFO 34599 --- [http-nio-60002-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-16T17:32:41.699+09:00  INFO 34599 --- [http-nio-60002-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-05-16T17:32:41.767+09:00  INFO 34599 --- [http-nio-60002-exec-1] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@5c2b41e9, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@7af01f41, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@417cb0b0, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@157af698, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@1358c9d7, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@69a8c6ea, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@4df5025f, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@f79e34f, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@5a3a9506, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@758a873d], totalPage=1, totalElements=10)
+2024-05-16T17:32:41.919+09:00  WARN 34599 --- [http-nio-60002-exec-1] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-1][inquiry/inquiry-required] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-required, line 146, col 9. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:44.696+09:00  INFO 34599 --- [http-nio-60002-exec-5] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@6d9d9dab, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2017aaa, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@e02f460, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@7aa70a5e, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@7b56a064, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@728b518e, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@6bb30a4b, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@29841899, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@671fc84d, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@4f30f201], totalPage=2, totalElements=14)
+2024-05-16T17:32:44.723+09:00  WARN 34599 --- [http-nio-60002-exec-5] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-5][inquiry/inquiry-manage] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-manage, line 146, col 13. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:46.106+09:00  INFO 34599 --- [http-nio-60002-exec-9] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@5d5ab2db, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@7f205c74, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@147bfbf8, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@495ff623], totalPage=2, totalElements=14)
+2024-05-16T17:32:46.128+09:00  WARN 34599 --- [http-nio-60002-exec-9] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-9][inquiry/inquiry-manage] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-manage, line 146, col 13. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:47.235+09:00  INFO 34599 --- [http-nio-60002-exec-4] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@32cc7428, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@3c2beb87, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@3facb49f, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@42f56c1d, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@13c92d5f, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@70dd9b72, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2a0fc1ba, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@43f3d562, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@198aab96, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@590b5de], totalPage=2, totalElements=14)
+2024-05-16T17:32:47.259+09:00  WARN 34599 --- [http-nio-60002-exec-4] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-4][inquiry/inquiry-manage] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-manage, line 146, col 13. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:47.865+09:00  INFO 34599 --- [http-nio-60002-exec-7] c.f.g.I.C.AdminInquiryController         : Inquiry(inquiryId=6, user=User(userId=1, username=nomyeongjun, password=1234, userNickname=mj991212, userSpeed=NORMAL, userGender=남, userBirth=19991212, userHeight=178.0, userWeight=71.0), inquiryProgress=false, inquiryTitle=123, inquiryContent=31, inquiryAnswer=null, inquiryCategory=Node)
+2024-05-16T17:32:47.903+09:00  WARN 34599 --- [http-nio-60002-exec-7] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-7][inquiry/inquiry-detail] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-detail, line 91, col 9. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:50.497+09:00  INFO 34599 --- [http-nio-60002-exec-9] c.f.g.I.C.AdminInquiryController         : 답변 등록
+2024-05-16T17:32:50.497+09:00  INFO 34599 --- [http-nio-60002-exec-9] c.f.g.I.C.AdminInquiryController         : Inquiry(inquiryId=6, user=User(userId=null, username=null, password=null, userNickname=null, userSpeed=null, userGender=null, userBirth=null, userHeight=null, userWeight=null), inquiryProgress=false, inquiryTitle=123, inquiryContent=31, inquiryAnswer=asdasd, inquiryCategory=Node)
+2024-05-16T17:32:50.555+09:00  INFO 34599 --- [http-nio-60002-exec-10] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@46a8e39a, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@5f4496c9, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@7aaaca05, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@51f09908, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@5045049f, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2b4c3280, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@79a2f0e, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@52f7ce2c, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2a6e5911, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@60fca6ee], totalPage=2, totalElements=14)
+2024-05-16T17:32:50.562+09:00  WARN 34599 --- [http-nio-60002-exec-10] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-10][inquiry/inquiry-manage] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-manage, line 146, col 13. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:32:52.135+09:00  INFO 34599 --- [http-nio-60002-exec-4] c.f.g.I.C.AdminInquiryController         : Inquiry(inquiryId=5, user=User(userId=1, username=nomyeongjun, password=1234, userNickname=mj991212, userSpeed=NORMAL, userGender=남, userBirth=19991212, userHeight=178.0, userWeight=71.0), inquiryProgress=false, inquiryTitle=23, inquiryContent=12, inquiryAnswer=null, inquiryCategory=Route)
+2024-05-16T17:32:52.145+09:00  WARN 34599 --- [http-nio-60002-exec-4] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-4][inquiry/inquiry-detail] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-detail, line 91, col 9. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:36:39.958+09:00  INFO 34599 --- [http-nio-60002-exec-6] c.f.g.I.C.AdminInquiryController         : InquiryResponseDTO.InquiryList(inquiryList=[com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2f8800b8, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@2b915004, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@19eb9a4b, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@20dfe4a, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@6d6fb373, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@4c5fcfaa, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@9232da8, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@64b16d68, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@74d5aea6, com.f2z.gach.Inquiry.DTO.InquiryResponseDTO$InquiryListStructureForAdmin@46c51d09], totalPage=2, totalElements=14)
+2024-05-16T17:36:39.975+09:00  WARN 34599 --- [http-nio-60002-exec-6] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-6][inquiry/inquiry-manage] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-manage, line 146, col 13. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:36:42.107+09:00  INFO 34599 --- [http-nio-60002-exec-5] c.f.g.I.C.AdminInquiryController         : Inquiry(inquiryId=8, user=User(userId=1, username=nomyeongjun, password=1234, userNickname=mj991212, userSpeed=NORMAL, userGender=남, userBirth=19991212, userHeight=178.0, userWeight=71.0), inquiryProgress=false, inquiryTitle=31, inquiryContent=124, inquiryAnswer=null, inquiryCategory=Node)
+2024-05-16T17:36:42.114+09:00  WARN 34599 --- [http-nio-60002-exec-5] actStandardFragmentInsertionTagProcessor : [THYMELEAF][http-nio-60002-exec-5][inquiry/inquiry-detail] Deprecated unwrapped fragment expression "fragment::search" found in template inquiry/inquiry-detail, line 91, col 9. Please use the complete syntax of fragment expressions instead ("~{fragment::search}"). The old, unwrapped syntax for fragment expressions will be removed in future versions of Thymeleaf.
+2024-05-16T17:37:44.497+09:00  INFO 34599 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-16T17:37:44.500+09:00  INFO 34599 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-05-16T17:37:44.503+09:00  INFO 34599 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-05-16T17:37:45.896+09:00  INFO 36380 --- [restartedMain] com.f2z.gach.GachApplication             : Starting GachApplication using Java 21.0.2 with PID 36380 (/Users/nomyeongjun/Documents/2024-1/Project/GachProject/build/classes/java/main started by nomyeongjun in /Users/nomyeongjun/Documents/2024-1/Project/GachProject)
+2024-05-16T17:37:45.896+09:00 DEBUG 36380 --- [restartedMain] com.f2z.gach.GachApplication             : Running with Spring Boot v3.2.4, Spring v6.1.5
+2024-05-16T17:37:45.896+09:00  INFO 36380 --- [restartedMain] com.f2z.gach.GachApplication             : No active profile set, falling back to 1 default profile: "default"
+2024-05-16T17:37:45.914+09:00  INFO 36380 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-16T17:37:45.915+09:00  INFO 36380 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-16T17:37:46.246+09:00  INFO 36380 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-16T17:37:46.282+09:00  INFO 36380 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 33 ms. Found 16 JPA repository interfaces.
+2024-05-16T17:37:46.615+09:00  INFO 36380 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 60002 (http)
+2024-05-16T17:37:46.620+09:00  INFO 36380 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-16T17:37:46.620+09:00  INFO 36380 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-05-16T17:37:46.637+09:00  INFO 36380 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-16T17:37:46.637+09:00  INFO 36380 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 722 ms
+2024-05-16T17:37:46.729+09:00  INFO 36380 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-16T17:37:46.751+09:00  INFO 36380 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-16T17:37:46.762+09:00  INFO 36380 --- [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-05-16T17:37:46.797+09:00  INFO 36380 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-05-16T17:37:46.827+09:00  INFO 36380 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@411b9967
+2024-05-16T17:37:46.828+09:00  INFO 36380 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-05-16T17:37:46.919+09:00  INFO 36380 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-16T17:37:47.391+09:00  INFO 36380 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-16T17:37:47.437+09:00  WARN 36380 --- [restartedMain] o.m.jdbc.message.server.ErrorPacket      : Error: 1832-HY000: Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k'
+2024-05-16T17:37:47.437+09:00  WARN 36380 --- [restartedMain] o.h.t.s.i.ExceptionHandlerLoggedImpl     : GenerationTarget encountered exception accepting command : Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Arrivals integer" via JDBC [(conn=9770) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k']
+
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Arrivals integer" via JDBC [(conn=9770) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:574) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:514) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:333) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:232) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:117) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:286) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.4.jar:3.2.4]
+	at com.f2z.gach.GachApplication.main(GachApplication.java:10) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.4.jar:3.2.4]
+Caused by: java.sql.SQLException: (conn=9770) Cannot change column 'Arrivals': used in a foreign key constraint 'FKiraupiaplrn8h21xchnvode6k'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:306) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:378) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:172) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:915) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:854) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:773) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:697) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.executeInternal(Statement.java:1035) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:1165) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:493) ~[mariadb-java-client-3.3.3.jar:na]
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	... 41 common frames omitted
+
+2024-05-16T17:37:47.459+09:00  WARN 36380 --- [restartedMain] o.m.jdbc.message.server.ErrorPacket      : Error: 1832-HY000: Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa'
+2024-05-16T17:37:47.459+09:00  WARN 36380 --- [restartedMain] o.h.t.s.i.ExceptionHandlerLoggedImpl     : GenerationTarget encountered exception accepting command : Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Departures integer" via JDBC [(conn=9770) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa']
+
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table if exists UserHistory 
+       modify column Departures integer" via JDBC [(conn=9770) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:574) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:514) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:333) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:232) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:117) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:286) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-3.2.4.jar:3.2.4]
+	at com.f2z.gach.GachApplication.main(GachApplication.java:10) ~[main/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.4.jar:3.2.4]
+Caused by: java.sql.SQLException: (conn=9770) Cannot change column 'Departures': used in a foreign key constraint 'FKddwyhiwo1ca6r48bd54r75vaa'
+	at org.mariadb.jdbc.export.ExceptionFactory.createException(ExceptionFactory.java:306) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.export.ExceptionFactory.create(ExceptionFactory.java:378) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.message.ClientMessage.readPacket(ClientMessage.java:172) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readPacket(StandardClient.java:915) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResults(StandardClient.java:854) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.readResponse(StandardClient.java:773) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.client.impl.StandardClient.execute(StandardClient.java:697) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.executeInternal(Statement.java:1035) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:1165) ~[mariadb-java-client-3.3.3.jar:na]
+	at org.mariadb.jdbc.Statement.execute(Statement.java:493) ~[mariadb-java-client-3.3.3.jar:na]
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94) ~[HikariCP-5.0.1.jar:na]
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java) ~[HikariCP-5.0.1.jar:na]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	... 41 common frames omitted
+
+2024-05-16T17:37:47.471+09:00  INFO 36380 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-16T17:37:47.860+09:00  INFO 36380 --- [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-16T17:37:48.492+09:00  WARN 36380 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-16T17:37:48.857+09:00  INFO 36380 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-16T17:37:48.880+09:00  INFO 36380 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 60002 (http) with context path ''
+2024-05-16T17:37:48.885+09:00  INFO 36380 --- [restartedMain] com.f2z.gach.GachApplication             : Started GachApplication in 3.228 seconds (process running for 3.505)
