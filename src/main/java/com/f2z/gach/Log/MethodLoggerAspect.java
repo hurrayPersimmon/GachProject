@@ -41,13 +41,13 @@ public class MethodLoggerAspect {
         String methodName = joinPoint.getSignature().getName();
         String uri = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();
         String httpMethod = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
-        Long userId = getUserIdFromResponse(responseEntity);
-        Properties property = getPropertyFromResponse(responseEntity);
+//        Long userId = getUserIdFromResponse(responseEntity);
+//        Properties property = getPropertyFromResponse(responseEntity);
 
         logger.info("Method {} with URI {} using HTTP method {} returned: {}", methodName, uri, httpMethod, result);
         Log log = new Log();
         log.setLogLevel(LogLevel.INFO);
-        log.setProperty("error_code");
+//        log.setProperty("error_code");
         log.setUserCode(123456L); // 사용자 코드 설정
         log.setMessage("Method " + methodName + " with URI " + uri + " using HTTP method " + httpMethod + " returned: " + result);
         log.setUrl(uri);
