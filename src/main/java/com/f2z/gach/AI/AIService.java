@@ -118,24 +118,28 @@ public class AIService {
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         log.info("결과 확인");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String printLine;
-        while ((printLine = reader.readLine()) != null) {
-            log.info(printLine); // 표준출력에 쓴다
-        }
+        double takeTime = 0;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String printLine;
+            while ((printLine = reader.readLine()) != null) {
+                log.info(printLine); // 표준출력에 쓴다
 
-        Pattern pattern = Pattern.compile("\\d+\\.\\d+");
+                Pattern pattern = Pattern.compile("\\d+\\.\\d+");
 
-        // 문자열에서 정규 표현식과 매치되는 부분을 찾기 위한 Matcher 생성
-        Matcher matcher = pattern.matcher(printLine);
-        String takeTime = null;
-        // 매치된 숫자 추출
-        while (matcher.find()) {
-            String number = matcher.group();
-            takeTime = number;
+                // 문자열에서 정규 표현식과 매치되는 부분을 찾기 위한 Matcher 생성
+                Matcher matcher = pattern.matcher(printLine);
+                // 매치된 숫자 추출
+                while (matcher.find()) {
+                    String number = matcher.group();
+                    takeTime = Double.parseDouble(number);
+                }
+
+                // takeTime을 사용하여 다른 작업 수행
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
-        return Double.parseDouble(takeTime);
+        return takeTime;
     }
 
 }

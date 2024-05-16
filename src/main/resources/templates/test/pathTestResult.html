@@ -22,8 +22,14 @@
                         </div>
                         <div class="row mb-3 text-center justify-content-center">
                                 <div class="col-2">
-                                    <div class="nodeHeader"><span style="width:1rem; height:1rem; background-color: red; display:inline-block" class="mt-1"></span> : 최적경로</div>
-                                    <div class="nodeHeader"><span style="width:1rem; height:1rem; background-color: blue; display: inline-block" class="mt-1"></span> : 최단경로</div>
+                                    <div class="nodeHeader">
+                                        <span style="width:1rem; height:1rem; background-color: red; display:inline-block" class="mt-1"></span> : 최적경로
+                                        <span th:text="${optimalTakeTime}">최적 시간(초)</span>(초)
+                                    </div>
+                                    <div class="nodeHeader">
+                                        <span style="width:1rem; height:1rem; background-color: blue; display: inline-block" class="mt-1"></span> : 최단경로
+                                        <span th:text="${shortTakeTime}">최단 시간(초)</span>(초)
+                                    </div>
                                 </div>
                                 <div class="col-3 offset-1">
                                     <span class="form-control fontHv mt-0 pt-2 fs-6" th:text="${arrivals.nodeName}" style="color:rgb(17,160,248)">
@@ -117,6 +123,8 @@
         let shortNodeList = [[${nodeList.shortestList}]];
         let optimalNodeList = [[${nodeList.optimalList}]];
 
+        let shortTakeTime = [[${shortTakeTime}]];
+        let optimalTakeTime = [[${optimalTakeTime}]];
 
         let flightPlanCoordinates1 = [];
         let flightPlanCoordinates2 = [];

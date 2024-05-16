@@ -86,12 +86,24 @@ public class AdminTestController {
         data.setWeight(79.1);
         data.setHeight(187.2);
         data.setWalkSpeed(1);
-        MapLine line = mapLineRepository.findById(22).orElseThrow();
 
+        var ref = new Object() {
+            double optimalTakeTime;
+            double shortestTakeTime;
+        };
 
+        for(int i = 0; i < shortestRoute.size()-1; i++) {
+            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i+1).getNodeId());
+            ref.shortestTakeTime += aiService.modelOutput(line, data);
+        }
 
-        model.addAttribute("shortTakeTime", aiService.modelOutput(line, data));
-        //model.addAttribute("optimalTakeTime",)
+        for(int i = 0; i < optimalRoute.size()-1; i++) {
+            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i+1).getNodeId());
+            ref.optimalTakeTime += aiService.modelOutput(line, data);
+        }
+
+        model.addAttribute("shortTakeTime", ref.shortestTakeTime);
+        model.addAttribute("optimalTakeTime", ref.optimalTakeTime);
         return "test/pathTestResult";
     }
 
