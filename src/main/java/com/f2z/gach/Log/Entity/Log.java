@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Log extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
