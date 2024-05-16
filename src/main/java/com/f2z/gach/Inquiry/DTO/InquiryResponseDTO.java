@@ -117,6 +117,7 @@ public class InquiryResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @ToString
     public static class InquiryList {
         List<InquiryListStructureForAdmin> inquiryList;
         Integer totalPage;

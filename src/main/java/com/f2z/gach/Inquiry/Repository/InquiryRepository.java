@@ -16,4 +16,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     Integer countByInquiryProgressIsFalse();
 
+    Page<Inquiry> findByInquiryProgressFalse(Pageable pageable);
+
 }
