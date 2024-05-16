@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.Log.Entity;
 
 import com.f2z.gach.Config.BaseTimeEntity;
 import com.f2z.gach.EnumType.LogLevel;

@@ -1,4 +1,4 @@
-package com.f2z.gach.Entity;
+package com.f2z.gach.AI;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
