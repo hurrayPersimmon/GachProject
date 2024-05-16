@@ -15,7 +15,7 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/","/admin/");
+        registry.addRedirectViewController("/","/admin/node/list/0");
     }
 
     @Override
