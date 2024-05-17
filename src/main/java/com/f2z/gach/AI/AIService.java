@@ -31,7 +31,7 @@ public class AIService {
     }
 
     // 현재의 데이터를 기반으로 필터링 작업 시작
-    public List<dataEntity> filterData(int min, int max) {
+    public int filterData(int min, int max) {
         List<dataEntity> originalList = dataRepo.findAll();
         List<dataEntity> filteredList = new ArrayList<>();
 
@@ -70,12 +70,15 @@ public class AIService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return filteredList;
+        return filteredList.size();
     }
 
-    public void makeModel(int hidden, int epochs, int layers, double learningRate) throws Exception{
+    // 현재 데이터와 학습 이후의 데이터를 어떻게 구분할 것인가?
+
+    // 이것은 학습 데이터
+    public int makeModel(int hidden, int epochs, int layers, double learningRate) throws Exception{
         ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
-                "lstm.py",
+                "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py",
                 Integer.toString(hidden),
                 Integer.toString(epochs),
                 Integer.toString(layers),
@@ -86,11 +89,16 @@ public class AIService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-            log.info(">>>  " + line); // 표준출력에 쓴다
+            log.info(">>>  " + line);
+            if(line.startsWith("Validation")) return 1;
         }
         reader.close();
+        return 0;
+
+        //학습완료 후 엔티티로 어떻게 다룰 것인지?
     }
 
+    // 재학습 모델
     public void doMakeModel(int epochs, double learningRate) throws Exception{
         ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
                 "re_learn.py",
@@ -107,6 +115,7 @@ public class AIService {
         reader.close();
     }
 
+    // 결과 확인
     public double modelOutput(MapLine line, dataEntity data) throws Exception{
         ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
                 "output.py", String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),

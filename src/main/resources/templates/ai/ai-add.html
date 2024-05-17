@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GachProject</title>
+</head>
+<body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
+<div class="container-fluid">
+    <div class="d-flex justify-content-center" style="position: absolute; top:50%; left:50%;">
+        <div class="spinner-border" role="status" id="spin" style="display:none;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row" id="main">
+        <div th:replace="~{fragment :: sidebar('ai')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > AI관리 > AI 모델 추가
+                </div>
+                <div class="row mb-4 ms-5 fs-1 fontHv">
+                    AI 모델 추가
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
+                            <div class="row align-items-center">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">필터링</p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    경로별 최소 시간(초)
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="min" value="1">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    경로별 최대 시간(초)
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="max" value="360">
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <a class="btn btn-primary" onclick="doFilter()">필터링 시작하기</a>
+                                </div>
+                            </div>
+                            <div class="row mb-3 mt-4">
+                                <div class="col">
+                                    <div class="">기존 데이터 개수</div>
+                                    <div class="fs-3 fontHv" th:text="${dataListLength}">224</div>
+                                </div>
+                                <div class="col">
+                                    <div>필터링된 데이터 개수</div>
+                                    <div class="fs-3 fontHv" style="color:cornflowerblue" id="filterLength">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
+                            <div class="row align-items-center">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">모델 생성하기</p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    은닉층 개수
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="hidden">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    epochs 수
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="epochs">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    Layer 수
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="Layers">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    학습률
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="learning_rate">
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <a class="btn btn-primary" onclick="doModel()" id="temp">
+                                        모델 학습
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="fragment::search"></script>
+<script>
+
+    function doFilter(){
+
+        let min = document.getElementById("min").value;
+        let max = document.getElementById("max").value;
+
+        fetch(`http://localhost:60002/admin/ai/model/add/filter/${min}/${max}`) // 데이터를 받아올 URL
+            .then(response => response.json()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                const result = parseInt(data);
+                document.getElementById("filterLength").innerText = result;
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    function doModel(){
+        document.getElementById("main").style.display = "none";
+        document.getElementById("spin").style.display = "block";
+        let rate = document.getElementById("learning_rate").value;
+        let epoch = document.getElementById("epochs").value;
+        let layer = document.getElementById("Layers").value;
+        let hidden = document.getElementById("hidden").value;
+
+        fetch(`http://localhost:60002/admin/ai/model/add/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
+            .then(response => response.json()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                document.getElementById("spin").style.display = "none";
+                document.getElementById("main").style.display = "flex";
+                document.getElementById("temp").innerText = "학습 완료";
+                document.getElementById("filterLength").innerText = data;
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('Error fetching data:', error);
+            });
+    }
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            }); //remove link
+        }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+</body>
+</html>

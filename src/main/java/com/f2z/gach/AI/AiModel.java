@@ -18,11 +18,14 @@ public class AiModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer aiModelId;
-    private Timestamp aiCreatedAt;
-    private Double aiModelVersion;
-    private Integer aiModelAccuracy;
+    private String aiModelVersion;
+    private int epochs;
+    private int hiddenLayer;
+    private int numLayer;
+    private double learningRate;
     private String aiModelName;
     private String aiModelPath;
-
-
+    private int mae;
+    private int mse;
+    private int averSatis;
 }

@@ -20,128 +20,194 @@
                     AI 모델 관리
                 </div>
                 <div class="row">
-                    <div class="col-6 offset-2">
-                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
-                            <div class="row align-items-center">
-                                <div class="form-floating mb-4">
-                                    <p class="fs-3 sidebarItem text-start ms-4">필터링</p>
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    최소 시간(초)
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="min">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    최대 시간(초)
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="max">
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col">
-                                    <a class="btn btn-primary" onclick="doFilter()">필터링 시작하기</a>
-                                </div>
-                            </div>
-                            <div class="row mb-3 mt-4">
-                                <div class="col">
-                                    <div class="">기존 데이터 개수</div>
-                                    <div class="fs-3 fontHv" th:text="${dataListLength}">224</div>
-                                </div>
-                                <div class="col">
-                                    <div>필터링된 데이터 개수</div>
-                                    <div class="fs-3 fontHv" style="color:cornflowerblue" id="filterLength">0</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col text-end me-5">
+                        <a href="/admin/ai/model/add" class="btn btn-primary add">모델 학습</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6 offset-2">
-                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
-                            <div class="row align-items-center">
-                                <div class="form-floating mb-4">
-                                    <p class="fs-3 sidebarItem text-start ms-4">모델 생성하기</p>
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    은닉층 개수
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="hidden">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    epochs 수
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="epochs">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    Layer 수
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="Layers">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    학습률
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="learning_rate">
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col">
-                                    <a class="btn btn-primary" onclick="doModel()">모델 학습</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="row p-5">
+                    <table class="table table-hover text-center rounded pt-2 fontReg align-middle">
+                        <thead style="position : sticky; top:0;">
+                        <tr class="fs-5">
+                            <th scope="col">
+                                <span class="">버전</span>
+                            </th>
+                            <th scope="col">
+                                <span class="">이름</span>
+                            </th>
+                            <th scope="col">
+                                <span>정확도</span>
+                            </th>
+                            <th scope="col">
+                                <span>MAE/MSE</span>
+                            </th>
+                            <th scope="col">
+                                <span>평균 만족도</span>
+                            </th>
+                            <th scope="col">
+                                <span>생성시간</span>
+                            </th>
+                            <th scope="col">
+                                <span>하이퍼파라미터</span>
+                            </th>
+                            <th scope="col">
+                                <span>설정</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="height:8vh">
+                                <td>v0.0.1</td>
+                                <td>초기 모델</td>
+                                <td>75%</td>
+                                <td>15%/13%</td>
+                                <td>3.2</td>
+                                <td>2024년 5월 17일 23:46</td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>에포크 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>은닉층 수 : <span>10</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>층의 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>학습률 : <span>0.01</span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                       <div class="col-3">
+                                           <i class="bi bi-gear-fill"></i>
+                                       </div>
+                                        <div class="col-3">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="height:8vh">
+                                <td>v0.0.1</td>
+                                <td>초기 모델</td>
+                                <td>75%</td>
+                                <td>15%/13%</td>
+                                <td>3.2</td>
+                                <td>2024년 5월 17일 23:46</td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>에포크 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>은닉층 수 : <span>10</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>층의 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>학습률 : <span>0.01</span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-3">
+                                            <i class="bi bi-gear-fill"></i>
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="height:8vh">
+                                <td>v0.0.1</td>
+                                <td>초기 모델</td>
+                                <td>75%</td>
+                                <td>15%/13%</td>
+                                <td>3.2</td>
+                                <td>2024년 5월 17일 23:46</td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>에포크 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>은닉층 수 : <span>10</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>층의 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>학습률 : <span>0.01</span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-3">
+                                            <i class="bi bi-gear-fill"></i>
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr style="height:8vh">
+                                <td>v0.0.1</td>
+                                <td>초기 모델</td>
+                                <td>75%</td>
+                                <td>15%/13%</td>
+                                <td>3.2</td>
+                                <td>2024년 5월 17일 23:46</td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>에포크 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>은닉층 수 : <span>10</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-4">
+                                            <span>층의 수 : <span>10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>학습률 : <span>0.01</span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row justify-content-center">
+                                        <div class="col-3">
+                                            <i class="bi bi-gear-fill"></i>
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="row">
-                    <div class="col-6 offset-2">
-                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
-                            <div class="row align-items-center">
-                                <div class="form-floating mb-4">
-                                    <p class="fs-3 sidebarItem text-start ms-4">모델 재학습</p>
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    epochs 수
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="re_epochs">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col fs-6 sidebarItem">
-                                    학습률
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="re_learning_rate">
-                                </div>
-                            </div>
-                            <div class="row mb-5">
-                                <div class="col">
-                                    <a class="btn btn-primary" onclick="reModel()">재학습</a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center" id="pagination">
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -149,56 +215,6 @@
     </div>
 </div>
 <script th:replace="fragment::search"></script>
-<script>
-    function doFilter(){
-
-        let min = document.getElementById("min").value;
-        let max = document.getElementById("max").value;
-
-        fetch(`http://localhost:60002/admin/ai/${min}/${max}`) // 데이터를 받아올 URL
-            .then(response => response.json()) // JSON 형식으로 응답을 파싱
-            .then(data => {
-                document.getElementById("filterLength").innerText = data;
-            })
-            .catch(error => {
-                // 에러 처리
-                console.error('Error fetching data:', error);
-            });
-    }
-
-    function doModel(){
-        let rate = document.getElementById("learning_rate").value;
-        let epoch = document.getElementById("epochs").value;
-        let layer = document.getElementById("Layers").value;
-        let hidden = document.getElementById("hidden").value;
-
-
-        fetch(`http://localhost:60002/admin/ai/model/${hidden}/${epoch}/${rate}/${layer}`) // 데이터를 받아올 URL
-            .then(response => response.json()) // JSON 형식으로 응답을 파싱
-            .then(data => {
-                document.getElementById("filterLength").innerText = data;
-            })
-            .catch(error => {
-                // 에러 처리
-                console.error('Error fetching data:', error);
-            });
-    }
-
-    function reModel(){
-        let rate = document.getElementById("re_learning_rate").value;
-        let epoch = document.getElementById("re_epochs").value;
-
-        fetch(`http://localhost:60002/admin/ai/model/${epoch}/${rate}`) // 데이터를 받아올 URL
-            .then(response => response.json()) // JSON 형식으로 응답을 파싱
-            .then(data => {
-                document.getElementById("filterLength").innerText = data;
-            })
-            .catch(error => {
-                // 에러 처리
-                console.error('Error fetching data:', error);
-            });
-    }
-</script>
 <script>
     let rows = document.getElementsByClassName('row menu');
     let cnt = 0;

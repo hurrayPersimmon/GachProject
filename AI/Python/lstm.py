@@ -22,7 +22,7 @@ def augment_data(row):
         augmented_rows.append(augmented_row)
     return augmented_rows
 
-data = pd.read_csv('data.csv', encoding='UTF-8')
+data = pd.read_csv('/Users/nomyeongjun/Documents/2024-1/Project/GachProject/data.csv', encoding='UTF-8')
 print("증식 성공", flush=True)
 augmented_data = []
 for index, row in data.iterrows():
@@ -147,4 +147,4 @@ val_mae = mean_absolute_error(targets_list, predictions)
 print(f'Validation MAE: {val_mae:.4f}')
 
 # 모델 저장
-torch.save(model.state_dict(), 'second_model.pt')
+torch.save(model.state_dict(), '/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/second_model.pt')
