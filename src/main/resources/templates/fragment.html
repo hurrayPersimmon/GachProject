@@ -112,7 +112,7 @@
         </div>
         <div class="col-2 mt-4">
             <div class="search">
-                <input type="text" class="form-control form-input mt-2 ms-4" style="border-radius: 0;" id="search" placeholder="Search anything...">
+                <input type="text" class="form-control form-input mt-2 ms-4" style="border-radius: 0; color:black;" id="search" placeholder="검색 이동">
                 <div class="ms-4 mt-1 text-start" style="background-color: white;" id="relatedDiv">
                     <ul style="list-style: none" class="ps-3" id="relatedKeywords">
                     </ul>
@@ -178,6 +178,15 @@
     document.getElementById("relatedDiv").addEventListener("blur", function(){
         document.getElementById("relatedKeywords").style.visibility = 'hidden';
         document.getElementById("relatedDiv").style.visibility = 'hidden';
+    });
+
+    document.getElementById("search").addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            document.getElementById("relatedKeywords").style.visibility = 'hidden';
+            document.getElementById("relatedDiv").style.visibility = 'hidden';
+        } else {
+            searchList();
+        }
     });
 
 </script>
