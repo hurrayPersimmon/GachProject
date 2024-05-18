@@ -1,6 +1,7 @@
 package com.f2z.gach.Map.Service;
 
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
+import com.f2z.gach.Map.DTO.PlaceRequestDTO;
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
 import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.Response.ResponseListEntity;
@@ -18,7 +19,10 @@ public interface MapService {
 
     ResponseEntity<List<PlaceResponseDTO.placeLocationDTO>> getPlaceListByCategory(String placeCategory);
 
-    ResponseListEntity<NavigationResponseDTO> getNowRoute(Integer placeId, Double latitude, Double longitude, Double altitude) throws Exception;
+    ResponseListEntity<NavigationResponseDTO> getNowRoute(PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                          Double latitude,
+                                                          Double longitude,
+                                                          Double altitude) throws Exception;
 
     ResponseListEntity<NavigationResponseDTO> getRoute(Integer departure, Integer arrival) throws Exception;
 }

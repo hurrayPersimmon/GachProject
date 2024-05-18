@@ -1,6 +1,7 @@
 package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
+import com.f2z.gach.Map.DTO.PlaceRequestDTO;
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
 import com.f2z.gach.Map.Service.MapService;
 import com.f2z.gach.Response.ResponseEntity;
@@ -43,12 +44,12 @@ public class MapRestController {
         return mapService.getPlaceListByCategory(placeCategory);
     }
 
-    @GetMapping("/route-now/{placeId}")
-    public ResponseListEntity<NavigationResponseDTO> getNowRoute(@PathVariable Integer placeId,
-                                                              @RequestParam Double latitude,
-                                                              @RequestParam Double longitude,
-                                                              @RequestParam Double altitude) throws Exception {
-        return mapService.getNowRoute(placeId, latitude, longitude, altitude);
+    @PostMapping("/route-now")
+    public ResponseListEntity<NavigationResponseDTO> getNowRoute(@RequestBody PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                                 @RequestParam Double latitude,
+                                                                 @RequestParam Double longitude,
+                                                                 @RequestParam Double altitude) throws Exception {
+        return mapService.getNowRoute(placeRequestDTO, latitude, longitude, altitude);
     }
 
     @GetMapping("/route")

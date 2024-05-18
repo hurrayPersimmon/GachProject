@@ -5,6 +5,7 @@ import com.f2z.gach.EnumType.Departments;
 import com.f2z.gach.EnumType.PlaceCategory;
 import com.f2z.gach.Map.BusLine;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
+import com.f2z.gach.Map.DTO.PlaceRequestDTO;
 import com.f2z.gach.Map.DTO.PlaceResponseDTO;
 import com.f2z.gach.Map.Entity.*;
 import com.f2z.gach.Map.Repository.*;
@@ -12,6 +13,7 @@ import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.Response.ResponseListEntity;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -126,54 +128,82 @@ public class MapServiceImpl implements MapService{
     }
 
     @Override
-    public ResponseListEntity<NavigationResponseDTO> getNowRoute(Integer placeId, Double latitude, Double longitude, Double altitude) throws Exception {
-        MapNode departures = MapNode.builder()
-                .nodeId(0)
-                .nodeLatitude(latitude)
-                .nodeLongitude(longitude)
-                .nodeAltitude(altitude)
-                .build();
-        log.info("restDep"+ departures.toString());
-        NavigationResponseDTO busRoute = getBusRoute(0, placeId, departures);
-        Integer departuresId = getNearestNodeId(latitude, longitude, altitude);
-        PlaceSource arrivalsPlace = placeSourceRepository.findByPlaceId(placeId);
-        Integer arrivalsId = getNearestNodeId(arrivalsPlace.getPlaceLatitude(),
-                                arrivalsPlace.getPlaceLongitude(),
-                                arrivalsPlace.getPlaceAltitude());
+    public ResponseListEntity<NavigationResponseDTO> getNowRoute(PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                                 Double latitude,
+                                                                 Double longitude,
+                                                                 Double altitude) throws Exception {
+        @Setter
+        class pointIds{
+            Integer departuresNodeId;
+            Integer arrivalsNodeId;
+        }
+        pointIds pointIds = new pointIds();
 
-        return getNavigationResponseDTOResponseListEntity(departuresId, arrivalsId, busRoute);
+        if(placeRequestDTO.isDepartures()) {
+            pointIds.setArrivalsNodeId(getNearestNodeId(latitude, longitude, altitude));
+            if(placeRequestDTO.isPlace()) {
+                PlaceSource placeSource = placeSourceRepository.findByPlaceId(placeRequestDTO.getPlaceId());
+                pointIds.setDeparturesNodeId(getNearestNodeId(placeSource.getPlaceLatitude(), placeSource.getPlaceLongitude(), placeSource.getPlaceAltitude()));
+            }else{
+                pointIds.setArrivalsNodeId(getNearestNodeId(placeRequestDTO.getLatitude(), placeRequestDTO.getLongitude(), placeRequestDTO.getAltitude()));
+            }
+        }else {
+            pointIds.setDeparturesNodeId(getNearestNodeId(latitude, longitude, altitude));
+            if(placeRequestDTO.isPlace()) {
+                PlaceSource placeSource = placeSourceRepository.findByPlaceId(placeRequestDTO.getPlaceId());
+                pointIds.setArrivalsNodeId(getNearestNodeId(placeSource.getPlaceLatitude(), placeSource.getPlaceLongitude(), placeSource.getPlaceAltitude()));
+            }else{
+                pointIds.setArrivalsNodeId(getNearestNodeId(placeRequestDTO.getLatitude(), placeRequestDTO.getLongitude(), placeRequestDTO.getAltitude()));
+            }
+        }
+
+        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, pointIds.departuresNodeId, pointIds.arrivalsNodeId);
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, pointIds.departuresNodeId, pointIds.arrivalsNodeId);
+
+        Integer shortestDepartureNodeId = shortestRoute.getNodeList().get(0).getNodeId();
+        Integer shortestArrivalsNodeId = shortestRoute.getNodeList().get(shortestRoute.getNodeList().size()-1).getNodeId();
+        if(shortestDepartureNodeId == 0 || shortestArrivalsNodeId == 0) return ResponseListEntity.notFound(null);
+        if(Objects.equals(shortestDepartureNodeId, shortestArrivalsNodeId)) return ResponseListEntity.sameNode(null);
+        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId);
+
+        List<NavigationResponseDTO> routes;
+        if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
+        else routes = Arrays.asList(shortestRoute, optimalRoute, busRoute);
+
+        return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
     }
-
-
 
     @Override
     public ResponseListEntity<NavigationResponseDTO> getRoute(Integer departures, Integer arrivals) throws Exception {
-        log.info("departures: "+departures);
-        log.info("arrivals: "+arrivals);
-        NavigationResponseDTO busRoute = getBusRoute(departures, arrivals, null);
-
         PlaceSource departuresPlace = placeSourceRepository.findByPlaceId(departures);
-        departures = getNearestNodeId(departuresPlace.getPlaceLatitude(),
+        Integer departuresNodeId = getNearestNodeId(departuresPlace.getPlaceLatitude(),
                 departuresPlace.getPlaceLongitude(),
                 departuresPlace.getPlaceAltitude());
 
         PlaceSource arrivalsPlace = placeSourceRepository.findByPlaceId(arrivals);
-        arrivals = getNearestNodeId(arrivalsPlace.getPlaceLatitude(),
+        Integer arrivalsNodeId = getNearestNodeId(arrivalsPlace.getPlaceLatitude(),
                 arrivalsPlace.getPlaceLongitude(),
                 arrivalsPlace.getPlaceAltitude());
 
+        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId);
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId);
 
-        return getNavigationResponseDTOResponseListEntity(departures, arrivals, busRoute);
+        Integer shortestDepartureNodeId = shortestRoute.getNodeList().get(0).getNodeId();
+        Integer shortestArrivalsNodeId = shortestRoute.getNodeList().get(shortestRoute.getNodeList().size()-1).getNodeId();
+        if(shortestDepartureNodeId == 0 || shortestArrivalsNodeId == 0) return ResponseListEntity.notFound(null);
+        if(Objects.equals(shortestDepartureNodeId, shortestArrivalsNodeId)) return ResponseListEntity.sameNode(null);
+        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId);
+
+        List<NavigationResponseDTO> routes;
+        if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
+        else routes = Arrays.asList(shortestRoute, optimalRoute, busRoute);
+
+        return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
     }
 
-    private NavigationResponseDTO getBusRoute(Integer departures, Integer arrivals, MapNode departuresNode) throws Exception {
+    private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId) throws Exception {
         List<BusLine.Node> busLine;
-        if(departuresNode != null){
-            busLine = BusLine.getBusLine(departuresNode, MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(arrivals)));
-        }else{
-            busLine = BusLine.getBusLine(MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(departures)),
-                    MapNode.toRouteEntity(placeSourceRepository.findByPlaceId(arrivals)));
-        }
+        busLine = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
         if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
 
         else{
@@ -187,38 +217,25 @@ public class MapServiceImpl implements MapService{
                         .build());
             }
             int tailIndex = nodeList.size() -1;
-            NavigationResponseDTO gettingOnRoute = new NavigationResponseDTO();
-            if(departuresNode !=null){
-                gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(departuresNode.getNodeLatitude(), departuresNode.getNodeLongitude(), null),
-                        getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
 
-            }else{
-                gettingOnRoute = calculateRoute(routeBus, getNearestNodeId(placeSourceRepository.findByPlaceId(departures).getPlaceLatitude(), placeSourceRepository.findByPlaceId(departures).getPlaceLongitude(), null),
-                        getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
-            }
-
-            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),
-                    getNearestNodeId(placeSourceRepository.findByPlaceId(arrivals).getPlaceLatitude(), placeSourceRepository.findByPlaceId(arrivals).getPlaceLongitude(), null));
+            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
+            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
 
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
             if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
             NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, 0, busRouteMergedlist);
+
             return busMergedRoute;
         }
     }
 
-    private ResponseListEntity<NavigationResponseDTO> getNavigationResponseDTOResponseListEntity(Integer departures, Integer arrivals, NavigationResponseDTO busRoute) {
-        if(departures == 0 || arrivals == 0 || departures == null || arrivals == null){
-            return ResponseListEntity.notFound(null);
-        }
-        if(Objects.equals(departures, arrivals)){
-            return ResponseListEntity.sameNode(null);
-        }
+    private ResponseListEntity<NavigationResponseDTO> getNavigationResponseDTOResponseListEntity(Integer departuresNodeId, Integer arrivalsNodeId, NavigationResponseDTO busRoute) {
 
-        NavigationResponseDTO shortestRoute  = calculateRoute(routeTypeShortest, departures, arrivals);
-        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departures, arrivals);
+
+        NavigationResponseDTO shortestRoute  = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId);
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId);
 
         List<NavigationResponseDTO> routes;
         if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
@@ -272,20 +289,20 @@ public class MapServiceImpl implements MapService{
         return c * R;
     }
 
-    private NavigationResponseDTO calculateRoute(String routeType, Integer departuresId, Integer arrivalsId) {
+    private NavigationResponseDTO calculateRoute(String routeType, Integer departuresNodeId, Integer arrivalsNodeId) {
         List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
         Map<Integer, Double> distances = new HashMap<>();
         Map<Integer, Integer> previousNodes = new HashMap<>();
         Set<Integer> visited = new HashSet<>();
         PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(distances::get));
 
-        distances.put(departuresId, 0.0);
-        priorityQueue.offer(departuresId);
+        distances.put(departuresNodeId, 0.0);
+        priorityQueue.offer(departuresNodeId);
 
         while (!priorityQueue.isEmpty()) {
             int currentNodeId = priorityQueue.poll();
 
-            if (currentNodeId == arrivalsId) {
+            if (currentNodeId == arrivalsNodeId) {
                 break;
             }
 
@@ -309,13 +326,13 @@ public class MapServiceImpl implements MapService{
         }
 
         // 경로 역추적
-        routeBackTracking(departuresId, arrivalsId, nodeList, previousNodes, mapNodeRepository);
+        routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
 
         return NavigationResponseDTO.toNavigationResponseDTO(routeType, 0, nodeList);
     }
 
-    public static void routeBackTracking(Integer departuresId, Integer arrivalsId, List<NavigationResponseDTO.NodeDTO> nodeList, Map<Integer, Integer> previousNodes, MapNodeRepository mapNodeRepository) {
-        int currentNodeId = arrivalsId;
+    public static void routeBackTracking(Integer departuresNodeId, Integer arrivalsNodeId, List<NavigationResponseDTO.NodeDTO> nodeList, Map<Integer, Integer> previousNodes, MapNodeRepository mapNodeRepository) {
+        int currentNodeId = arrivalsNodeId;
         while (previousNodes.containsKey(currentNodeId)) {
             MapNode node = mapNodeRepository.findById(currentNodeId).orElseThrow(() -> new NoSuchElementException("Node not found"));
             nodeList.add(NavigationResponseDTO.NodeDTO.builder()
@@ -329,10 +346,10 @@ public class MapServiceImpl implements MapService{
         if(nodeList.isEmpty()) return;
 
         nodeList.add(NavigationResponseDTO.NodeDTO.builder()
-                .nodeId(departuresId)
-                .latitude(mapNodeRepository.findByNodeId(departuresId).getNodeLatitude())
-                .longitude(mapNodeRepository.findByNodeId(departuresId).getNodeLongitude())
-                .altitude(mapNodeRepository.findByNodeId(departuresId).getNodeAltitude())
+                .nodeId(departuresNodeId)
+                .latitude(mapNodeRepository.findByNodeId(departuresNodeId).getNodeLatitude())
+                .longitude(mapNodeRepository.findByNodeId(departuresNodeId).getNodeLongitude())
+                .altitude(mapNodeRepository.findByNodeId(departuresNodeId).getNodeAltitude())
                 .build());
         Collections.reverse(nodeList);
     }
