@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# application-dev.yml, log file ignore
+application-dev.yml
+gachApplication.log
