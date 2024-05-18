@@ -23,13 +23,13 @@ class LSTMModel(nn.Module):
         return out
 
 input_size = 10
-hidden_size = 10
-num_layers = 10
-output_size = 1  # 출력 크기 (이 예제에서는 회귀 문제이므로 1)
+hidden_size = 30
+num_layers = 30
+output_size = 1
 
 # 모델 불러오기
 loaded_model = LSTMModel(input_size, hidden_size, num_layers, output_size)
-loaded_model.load_state_dict(torch.load('retrained_model.pt'))
+loaded_model.load_state_dict(torch.load('/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/second_model.pt'))
 loaded_model.eval()
 
 birthYear = float(sys.argv[1])

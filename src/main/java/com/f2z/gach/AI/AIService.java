@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 public class AIService {
     private final dataRepository dataRepo;
     private final MapLineRepository lineRepo;
+    private ProcessBuilder processBuilder;
 
     // 현재 모든 데이터
     public List<dataEntity> getData(){
@@ -77,7 +78,7 @@ public class AIService {
 
     // 이것은 학습 데이터
     public int makeModel(int hidden, int epochs, int layers, double learningRate) throws Exception{
-        ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
+        processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
                 "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py",
                 Integer.toString(hidden),
                 Integer.toString(epochs),
@@ -100,7 +101,7 @@ public class AIService {
 
     // 재학습 모델
     public void doMakeModel(int epochs, double learningRate) throws Exception{
-        ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
+        processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
                 "re_learn.py",
                 Integer.toString(epochs),
                 Double.toString(learningRate));
@@ -114,11 +115,12 @@ public class AIService {
         }
         reader.close();
     }
-
+    int i = 1;
     // 결과 확인
     public double modelOutput(MapLine line, dataEntity data) throws Exception{
-        ProcessBuilder processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
-                "output.py", String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
+        log.info("호출 횟수 : " + i++);
+        processBuilder = new ProcessBuilder("/opt/anaconda3/bin/python3",
+                "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py", String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
                 String.valueOf(data.getWalkSpeed()), String.valueOf(data.getTemperature()),
                 String.valueOf(data.getPrecipitationProbability()), String.valueOf(data.getPrecipitation()),
@@ -126,29 +128,26 @@ public class AIService {
                 String.valueOf(line.getWeightOptimal()));
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
-        log.info("결과 확인");
-        double takeTime = 0;
+        String takeTime = null;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String printLine;
             while ((printLine = reader.readLine()) != null) {
-                log.info(printLine); // 표준출력에 쓴다
-
-                Pattern pattern = Pattern.compile("\\d+\\.\\d+");
-
-                // 문자열에서 정규 표현식과 매치되는 부분을 찾기 위한 Matcher 생성
-                Matcher matcher = pattern.matcher(printLine);
-                // 매치된 숫자 추출
-                while (matcher.find()) {
-                    String number = matcher.group();
-                    takeTime = Double.parseDouble(number);
-                }
-
-                // takeTime을 사용하여 다른 작업 수행
+                takeTime = printLine;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return takeTime;
+        process.destroy();
+
+        int startIndex = takeTime.indexOf("[[") + 2;
+        // 숫자가 끝나는 인덱스 찾기
+        int endIndex = takeTime.indexOf("]]", startIndex);
+
+        // 숫자가 있는 부분 추출
+        String numberString = takeTime.substring(startIndex, endIndex);
+        log.info(numberString);
+        // 추출한 문자열을 double로 변환하여 반환
+        return Double.parseDouble(numberString);
     }
 
 }

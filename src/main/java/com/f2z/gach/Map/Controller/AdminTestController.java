@@ -20,7 +20,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Slf4j
 @Controller
@@ -70,36 +75,57 @@ public class AdminTestController {
         List<NavigationResponseDTO.NodeDTO> shortestRoute  = calculateRoute(routeTypeShortest, departures, arrivals);
         List<NavigationResponseDTO.NodeDTO> optimalRoute = calculateRoute(routeTypeOptimal, departures, arrivals);
 
-
-
         model.addAttribute("arrivals", mapNodeRepository.findByNodeId(arrivals));
         model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
 
         dataEntity data = new dataEntity();
-        data.setGender(1);
+        data.setGender(0);
         data.setTemperature(19.4);
         data.setPrecipitationProbability(10.0);
         data.setPrecipitation(10.0);
-        data.setBirthYear(19991212);
-        data.setWeight(79.1);
-        data.setHeight(187.2);
+        data.setBirthYear(2000);
+        data.setWeight(52.1);
+        data.setHeight(165.2);
         data.setWalkSpeed(1);
 
         var ref = new Object() {
             double optimalTakeTime;
             double shortestTakeTime;
         };
+        log.info(String.valueOf(shortestRoute.size()));
+        ExecutorService shortExecutor = Executors.newFixedThreadPool(shortestRoute.size());
+        ExecutorService optimalExecutor = Executors.newFixedThreadPool(optimalRoute.size());
+
+        List<Future<Double>> shortFutures = new ArrayList<>();
+        List<Future<Double>> optimalFutures = new ArrayList<>();
 
         for(int i = 0; i < shortestRoute.size()-1; i++) {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i+1).getNodeId());
-            ref.shortestTakeTime += aiService.modelOutput(line, data);
+            shortFutures.add(shortExecutor.submit( () -> aiService.modelOutput(line, data)));
         }
+
+        for (Future<Double> future : shortFutures) {
+            try {
+                ref.shortestTakeTime += future.get();
+            } catch (InterruptedException | ExecutionException e) {
+            }
+        }
+
+        shortExecutor.shutdown();
 
         for(int i = 0; i < optimalRoute.size()-1; i++) {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i+1).getNodeId());
-            ref.optimalTakeTime += aiService.modelOutput(line, data);
+            optimalFutures.add(optimalExecutor.submit( () -> aiService.modelOutput(line, data)));
+        }
+
+        for (Future<Double> future : optimalFutures) {
+            try {
+                ref.optimalTakeTime += future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                // 예외 처리
+            }
         }
 
         model.addAttribute("shortTakeTime", ref.shortestTakeTime);

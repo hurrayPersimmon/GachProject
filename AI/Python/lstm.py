@@ -105,9 +105,9 @@ y_val_tensor = torch.tensor(y_val, dtype=torch.float32).to(device)
 
 # Dataset 및 DataLoader 생성
 train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
 val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
-val_loader = DataLoader(val_dataset, batch_size=32)
+val_loader = DataLoader(val_dataset, batch_size=128)
 
 # 손실 함수 및 옵티마이저 설정
 criterion = nn.L1Loss()
