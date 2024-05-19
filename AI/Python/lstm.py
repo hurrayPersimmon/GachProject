@@ -23,7 +23,7 @@ def augment_data(row):
         augmented_rows.append(augmented_row)
     return augmented_rows
 
-data = pd.read_csv('/home/t24102/GachProject/AI/Model/temp.pt', encoding='UTF-8')
+data = pd.read_csv('/home/t24102/GachProject/AI/Data/data.csv', encoding='UTF-8')
 augmented_data = []
 for index, row in data.iterrows():
     augmented_data.extend(augment_data(row))
@@ -40,9 +40,9 @@ combined_df = pd.DataFrame(combined_data)
 columns_to_drop = ['dataId', 'node1', 'node2']
 combined_df.drop(columns_to_drop, axis=1, inplace=True)
 
-combined_df.to_csv('augment_data.csv', index=False)
+combined_df.to_csv('/home/t24102/GachProject/AI/Data/augment_data.csv', index=False)
 
-csv_file = 'augment_data.csv'
+csv_file = '/home/t24102/GachProject/AI/Data/augment_data.csv'
 
 # CSV 파일 열 이름 확인
 df = pd.read_csv(csv_file)
