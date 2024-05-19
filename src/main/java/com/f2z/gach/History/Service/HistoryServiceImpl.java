@@ -52,8 +52,14 @@ public class HistoryServiceImpl implements HistoryService{
     public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(HistoryRequestDTO.UserHistoryRequestDTO lineHistory) {
         UserHistory user = userHistoryRepository.save(HistoryRequestDTO.UserHistoryRequestDTO.toEntity(lineHistory, userRepository, userGuestRepository, mapNodeRepository));
         List<HistoryRequestDTO.HistoryLineTimeRequestDTO> lineTimeList = lineHistory.getTimeList();
+        log.info("lineTimeList : " + lineTimeList.toString());
+
+        if(lineTimeList.isEmpty()){
+            return ResponseEntity.notFound(null);
+        }
 
         for(HistoryRequestDTO.HistoryLineTimeRequestDTO lineTime : lineTimeList){
+            if(lineTime.getFirstNodeId() == 0)continue;
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(lineTime.getFirstNodeId(), lineTime.getSecondNodeId());
             Double Velocity = line.getWeightShortest()/lineTime.getTime();
             historyLineTimeRepository.save(HistoryRequestDTO.lineHistoryDTO.toEntity(user, line, lineTime.getTime(), Velocity));

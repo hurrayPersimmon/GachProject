@@ -154,5 +154,27 @@ public class PlaceResponseDTO {
                 .collect(Collectors.toList());
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class placeARImageDTO {
+        private Integer placeId;
+        private Double placeLatitude;
+        private Double placeLongitude;
+        private Double placeAltitude;
+        private Double buildingHeight;
+        private String arImagePath;
 
+        public static placeARImageDTO toPlaceARImageDTO(PlaceSource place) {
+            return placeARImageDTO.builder()
+                    .placeId(place.getPlaceId())
+                    .placeLatitude(place.getPlaceLatitude())
+                    .placeLongitude(place.getPlaceLongitude())
+                    .placeAltitude(place.getPlaceAltitude())
+                    .buildingHeight(place.getBuildingHeight())
+                    .arImagePath(place.getArImagePath())
+                    .build();
+        }
+    }
 }

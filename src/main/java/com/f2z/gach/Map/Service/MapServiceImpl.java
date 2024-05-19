@@ -201,6 +201,25 @@ public class MapServiceImpl implements MapService{
         return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
     }
 
+    @Override
+    public ResponseEntity<List<PlaceResponseDTO.placeARImageDTO>> getARImageList(Double latitude, Double longitude, Double altitude) {
+        List<PlaceSource> placeList = placeSourceRepository.findAllByPlaceCategory(PlaceCategory.BUILDING);
+        List<PlaceResponseDTO.placeARImageDTO> arImageList = new ArrayList<>();
+        int nearestNodeId = getNearestNodeId(latitude, longitude, altitude);
+        MapNode nearestNode = mapNodeRepository.findByNodeId(nearestNodeId);
+        arImageList.add(PlaceResponseDTO.placeARImageDTO.builder()
+                .placeId(0)
+                .placeLatitude(nearestNode.getNodeLatitude())
+                .placeLongitude(nearestNode.getNodeLongitude())
+                .placeAltitude(nearestNode.getNodeAltitude())
+                .buildingHeight(0.0)
+                .arImagePath("")
+                .build());
+
+        for(PlaceSource place : placeList) arImageList.add(PlaceResponseDTO.placeARImageDTO.toPlaceARImageDTO(place));
+        return ResponseEntity.requestSuccess(arImageList);
+    }
+
     private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId) throws Exception {
         List<BusLine.Node> busLine;
         busLine = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
@@ -229,19 +248,6 @@ public class MapServiceImpl implements MapService{
 
             return busMergedRoute;
         }
-    }
-
-    private ResponseListEntity<NavigationResponseDTO> getNavigationResponseDTOResponseListEntity(Integer departuresNodeId, Integer arrivalsNodeId, NavigationResponseDTO busRoute) {
-
-
-        NavigationResponseDTO shortestRoute  = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId);
-        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId);
-
-        List<NavigationResponseDTO> routes;
-        if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
-        else routes = Arrays.asList(shortestRoute, optimalRoute, busRoute);
-
-        return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
     }
 
 
@@ -301,19 +307,17 @@ public class MapServiceImpl implements MapService{
 
         while (!priorityQueue.isEmpty()) {
             int currentNodeId = priorityQueue.poll();
-
-            if (currentNodeId == arrivalsNodeId) {
-                break;
-            }
-
-            if (visited.contains(currentNodeId)) {
-                continue;
-            }
-
+            if (currentNodeId == arrivalsNodeId) break;
+            if (visited.contains(currentNodeId)) continue;
             visited.add(currentNodeId);
 
             for (MapLine edge : mapLineRepository.findAllByNodeFirst_NodeId(currentNodeId)) {
-                double weight = routeType.equals(routeTypeOptimal) ?  (edge.getWeightOptimal() + 90) / 10 : edge.getWeightShortest();
+                double weight = edge.getWeightShortest();
+                if(routeType.equals(routeTypeOptimal)){
+                    double setOptimalWeight = (edge.getWeightOptimal()+ 90) / 1000;
+                    weight += setOptimalWeight;
+                }
+
                 int neighborNodeId = edge.getNodeFirst().getNodeId() == currentNodeId ? edge.getNodeSecond().getNodeId() : edge.getNodeFirst().getNodeId();
                 double distanceThroughCurrent = distances.getOrDefault(currentNodeId, Double.MAX_VALUE) + weight;
 

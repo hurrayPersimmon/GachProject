@@ -57,6 +57,13 @@ public class MapRestController {
         return mapService.getRoute(departures, arrivals);
     }
 
+    @GetMapping("/ar")
+    public ResponseEntity<List<PlaceResponseDTO.placeARImageDTO>> getARImageList(@RequestParam Double latitude,
+                                                                                 @RequestParam Double longitude,
+                                                                                 @RequestParam Double altitude) throws Exception {
+        return mapService.getARImageList(latitude, longitude, altitude);
+    }
+
 
 
 }
