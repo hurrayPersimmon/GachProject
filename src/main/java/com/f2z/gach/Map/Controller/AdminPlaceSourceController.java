@@ -124,22 +124,22 @@ public class AdminPlaceSourceController {
     public AdminPlaceRequestDTO fileSave(AdminPlaceRequestDTO placeDTO){
         try{
             if (placeDTO.getMainFile() != null) {
-                File dest = new File(fdir + "/" + placeDTO.getMainFile().getOriginalFilename());
+                File dest = new File(fdir + "/placeImage/" + placeDTO.getMainFile().getOriginalFilename());
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.getPlace().setMainImageName(dest.getName());
-                placeDTO.getPlace().setMainImagePath(filePath + "/images/placeImage/" + dest.getName());
+                placeDTO.getPlace().setMainImagePath(filePath + "/images/" + dest.getName());
             }
             if(placeDTO.getARFile() != null) {
-                File dest = new File(fdir + "/" + placeDTO.getARFile().getOriginalFilename());
+                File dest = new File(fdir + "/arImage/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.getPlace().setArImageName(dest.getName());
-                placeDTO.getPlace().setArImagePath(filePath + "/images/arImage/" + dest.getName());
+                placeDTO.getPlace().setArImagePath(filePath + "/images/" + dest.getName());
             }
             if(placeDTO.getThumbnailFile() != null) {
-                File dest = new File(fdir + "/" + placeDTO.getThumbnailFile().getOriginalFilename());
+                File dest = new File(fdir + "/thumbnailImage/" + placeDTO.getThumbnailFile().getOriginalFilename());
                 placeDTO.getThumbnailFile().transferTo(dest);
                 placeDTO.getPlace().setThumbnailImageName(dest.getName());
-                placeDTO.getPlace().setThumbnailImagePath(filePath + "/images/thumbnailImage/" + dest.getName());
+                placeDTO.getPlace().setThumbnailImagePath(filePath + "/images/" + dest.getName());
             }
         } catch (Exception e){
             e.printStackTrace();
