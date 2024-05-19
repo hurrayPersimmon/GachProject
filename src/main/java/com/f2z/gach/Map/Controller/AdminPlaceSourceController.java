@@ -37,7 +37,7 @@ public class AdminPlaceSourceController {
     @Value("${gach.img.dir}")
     String fdir;
 
-    @Value("${gach.img.path}")
+    @Value("${gach.path}")
     String filePath;
 
     @ModelAttribute
