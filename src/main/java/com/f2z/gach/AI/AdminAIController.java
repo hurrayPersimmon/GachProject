@@ -3,6 +3,7 @@ package com.f2z.gach.AI;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class AdminAIController {
 
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final HistoryLineTimeRepository lineTimeRepository;
     private final dataRepository dataRepo;
     private final AIService aiService;
     private final AiModelRepository aiRepo;
@@ -32,13 +34,13 @@ public class AdminAIController {
 
     @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("dataListLength", dataRepo.count());
+        model.addAttribute("aiList", aiRepo.findAll());
         return "ai/ai-manage";
     }
 
     @GetMapping("/model/add")
     public String addModel(Model model) {
-        model.addAttribute("dataListLength", dataRepo.count());
+        model.addAttribute("dataListLength", dataRepo.count() + lineTimeRepository.count());
         return "ai/ai-add";
     }
 

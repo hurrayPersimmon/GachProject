@@ -35,16 +35,10 @@
                                 <span class="">이름</span>
                             </th>
                             <th scope="col">
-                                <span>정확도</span>
-                            </th>
-                            <th scope="col">
-                                <span>MAE/MSE</span>
+                                <span>MAE</span>
                             </th>
                             <th scope="col">
                                 <span>평균 만족도</span>
-                            </th>
-                            <th scope="col">
-                                <span>생성시간</span>
                             </th>
                             <th scope="col">
                                 <span>하이퍼파라미터</span>
@@ -55,28 +49,29 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr style="height:8vh">
-                                <td>v0.0.1</td>
-                                <td>초기 모델</td>
-                                <td>75%</td>
-                                <td>15%/13%</td>
-                                <td>3.2</td>
-                                <td>2024년 5월 17일 23:46</td>
+                            <tr style="height:8vh" th:each="ai : ${aiList}">
+                                <td th:text="${ai.getAiModelVersion()}">v0.0.1</td>
+                                <td th:text="${ai.getAiModelName()}">초기 모델</td>
+                                <td th:text="${ai.getMae()}">15%</td>
+                                <td th:text="${ai.getAverSatis()}">3.2</td>
                                 <td>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
-                                            <span>에포크 수 : <span>10</span></span>
+                                            <span>에포크 수 : <span th:text="${ai.getEpochs()}">10</span></span>
                                         </div>
                                         <div class="col-4">
-                                            <span>은닉층 수 : <span>10</span></span>
+                                            <span>은닉층 수 : <span th:text="${ai.getHiddenLayer()}">10</span></span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span>층 수 : <span th:text="${ai.getNumLayer()}">10</span></span>
                                         </div>
                                     </div>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
-                                            <span>층의 수 : <span>10</span></span>
+                                            <span>배치 사이즈 : <span th:text="${ai.getBatchSize()}">10</span></span>
                                         </div>
                                         <div class="col-4">
-                                            <span>학습률 : <span>0.01</span></span>
+                                            <span>학습률 : <span th:text="${ai.getLearningRate()}">0.01</span></span>
                                         </div>
                                     </div>
                                 </td>
@@ -85,114 +80,6 @@
                                        <div class="col-3">
                                            <i class="bi bi-gear-fill"></i>
                                        </div>
-                                        <div class="col-3">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr style="height:8vh">
-                                <td>v0.0.1</td>
-                                <td>초기 모델</td>
-                                <td>75%</td>
-                                <td>15%/13%</td>
-                                <td>3.2</td>
-                                <td>2024년 5월 17일 23:46</td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>에포크 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>은닉층 수 : <span>10</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>층의 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>학습률 : <span>0.01</span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-3">
-                                            <i class="bi bi-gear-fill"></i>
-                                        </div>
-                                        <div class="col-3">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr style="height:8vh">
-                                <td>v0.0.1</td>
-                                <td>초기 모델</td>
-                                <td>75%</td>
-                                <td>15%/13%</td>
-                                <td>3.2</td>
-                                <td>2024년 5월 17일 23:46</td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>에포크 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>은닉층 수 : <span>10</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>층의 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>학습률 : <span>0.01</span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-3">
-                                            <i class="bi bi-gear-fill"></i>
-                                        </div>
-                                        <div class="col-3">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr style="height:8vh">
-                                <td>v0.0.1</td>
-                                <td>초기 모델</td>
-                                <td>75%</td>
-                                <td>15%/13%</td>
-                                <td>3.2</td>
-                                <td>2024년 5월 17일 23:46</td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>에포크 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>은닉층 수 : <span>10</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-4">
-                                            <span>층의 수 : <span>10</span></span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span>학습률 : <span>0.01</span></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row justify-content-center">
-                                        <div class="col-3">
-                                            <i class="bi bi-gear-fill"></i>
-                                        </div>
                                         <div class="col-3">
                                             <i class="bi bi-trash-fill"></i>
                                         </div>
