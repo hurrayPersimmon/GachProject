@@ -127,13 +127,13 @@ public class AdminPlaceSourceController {
                 File dest = new File(fdir + "/placeImage/" + placeDTO.getMainFile().getOriginalFilename());
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.getPlace().setMainImageName(dest.getName());
-                placeDTO.getPlace().setMainImagePath(filePath + "/images//placeImage/" + dest.getName());
+                placeDTO.getPlace().setMainImagePath(filePath + "/images/placeImage/" + dest.getName());
             }
             if(placeDTO.getARFile() != null) {
                 File dest = new File(fdir + "/arImage/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.getPlace().setArImageName(dest.getName());
-                placeDTO.getPlace().setArImagePath(filePath + "/images//arImage/" + dest.getName());
+                placeDTO.getPlace().setArImagePath(filePath + "/images/arImage/" + dest.getName());
             }
             if(placeDTO.getThumbnailFile() != null) {
                 File dest = new File(fdir + "/thumbnailImage/" + placeDTO.getThumbnailFile().getOriginalFilename());
