@@ -1,26 +1,15 @@
 package com.f2z.gach.AI;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
-import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.EnumType.Authorization;
-import com.f2z.gach.EnumType.Gender;
-import com.f2z.gach.EnumType.Satisfaction;
-import com.f2z.gach.EnumType.Speed;
-import com.f2z.gach.History.Entity.UserHistory;
-import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
-import com.f2z.gach.Map.Repository.MapNodeRepository;
-import com.f2z.gach.User.Entity.User;
-import com.f2z.gach.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -32,6 +21,8 @@ public class AdminAIController {
     private final InquiryRepository inquiryRepository;
     private final dataRepository dataRepo;
     private final AIService aiService;
+    private final AiModelRepository aiRepo;
+    final String modelPath = "/home/t24102/GachProject/AI/Model";
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -57,11 +48,22 @@ public class AdminAIController {
         return aiService.filterData(min, max);
     }
 
-    @GetMapping("/model/add/{epochs}/{layer}/{rate}/{hidden}")
+    @GetMapping("/model/add/{hidden}/{epochs}/{rate}/{layer}/{batchSize}")
     @ResponseBody
-    public int getFilterNum(@PathVariable int epochs, @PathVariable int layer, @PathVariable int hidden, @PathVariable double rate) throws Exception {
-        return aiService.makeModel(hidden, epochs, layer, rate);
+    public String getFilterNum(@PathVariable int epochs, @PathVariable int layer, @PathVariable int hidden,
+                            @PathVariable double rate, @PathVariable int batchSize) throws Exception {
+        String value = aiService.makeModel(hidden, epochs, layer, rate, batchSize);
+        return value;
     }
-    // 각각의 Line을 쪼개서 나한테 보내줘야함.
 
+    @PostMapping("/model/add")
+    @ResponseBody
+    public int saveModel(@RequestBody ModelRequestDTO dto) {
+        AiModel aiModel = AiModel.setToDto(dto);
+        aiModel.setAverSatis(0);
+        aiService.saveModel(dto.getModelName());
+        aiModel.setAiModelPath(modelPath + "/" + dto.getModelName() + ".pt");
+        aiRepo.save(aiModel);
+        return 1;
+    }
 }

@@ -145,6 +145,10 @@ input[type="text"] {
     color : rgb(17,160,248);
 }
 
+input[type="text"]::placeholder {
+    color: rgba(17, 160, 248, 0.5); /* 플레이스홀더의 색상과 투명도 설정 */
+}
+
 textarea {
     border: none;
     border-radius: 1rem; /* 라운드된 테두리 */

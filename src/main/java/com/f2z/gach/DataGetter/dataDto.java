@@ -20,9 +20,9 @@ public class dataDto {
     private Double weight;
     private Integer walkSpeed;
     private Double temperature;
-    private Double precipitationProbability;
+    private Integer precipitationProbability;
     private Double precipitation;
-    private Double takeTime;
+    private Integer takeTime;
     private Double weightShortest;
     private Double weightOptimal;
 

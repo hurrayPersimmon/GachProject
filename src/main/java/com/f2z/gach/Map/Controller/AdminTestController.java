@@ -83,7 +83,7 @@ public class AdminTestController {
         dataEntity data = new dataEntity();
         data.setGender(0);
         data.setTemperature(19.4);
-        data.setPrecipitationProbability(10.0);
+        data.setPrecipitationProbability(10);
         data.setPrecipitation(10.0);
         data.setBirthYear(2000);
         data.setWeight(52.1);
