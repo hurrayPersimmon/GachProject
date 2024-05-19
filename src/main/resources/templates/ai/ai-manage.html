@@ -62,14 +62,16 @@
                                         <div class="col-4">
                                             <span>은닉층 수 : <span th:text="${ai.getHiddenLayer()}">10</span></span>
                                         </div>
-                                        <div class="col-4">
-                                            <span>층 수 : <span th:text="${ai.getNumLayer()}">10</span></span>
-                                        </div>
                                     </div>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
+                                            <span>층 수 : <span th:text="${ai.getNumLayer()}">10</span></span>
+                                        </div>
+                                        <div class="col-4">
                                             <span>배치 사이즈 : <span th:text="${ai.getBatchSize()}">10</span></span>
                                         </div>
+                                    </div>
+                                    <div class="row text-center justify-content-center">
                                         <div class="col-4">
                                             <span>학습률 : <span th:text="${ai.getLearningRate()}">0.01</span></span>
                                         </div>
