@@ -26,6 +26,8 @@ public class AiModel {
     private String aiModelPath;
     private double mae;
     private double averSatis;
+    private long dataLength;
+    private long lastDataIndex;
 
     public static AiModel setToDto(ModelRequestDTO dto){
         AiModel aiModel = new AiModel();

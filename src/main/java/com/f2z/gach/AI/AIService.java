@@ -31,6 +31,7 @@ public class AIService {
     final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
     final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
     final String localOutPath = "/home/t24102/GachProject/AI/Python/output.sh";
+    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
 
     // 현재 모든 데이터
     public List<dataEntity> getData(){
@@ -84,6 +85,54 @@ public class AIService {
         return filteredList.size();
     }
 
+    // 재학습 데이터 필터링
+    public int filterData(int min, int max, List<dataEntity> list) {
+        List<dataEntity> originalList = list;
+        List<dataEntity> filteredList = new ArrayList<>();
+        List<HistoryLineTime> lineTimeList = lineTimeRepo.findAll();
+
+        lineTimeList.forEach( i -> {
+            dataEntity data = dataEntity.parseHistory(i);
+            originalList.add(data);
+        });
+
+        originalList.stream()
+                .filter(data -> data.getTakeTime() != null && data.getTakeTime() > (double)min && data.getTakeTime() < (double)max)
+                .forEach(filteredList::add);
+
+        String csvFile = "/home/t24102/GachProject/AI/Data/re_data.csv";
+
+        try (FileWriter writer = new FileWriter(csvFile)) {
+            // CSV 파일 헤더 쓰기
+            writer.append("dataId,node1,node2,birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,takeTime,weightShortest,weightOptimal\n");
+
+            // 데이터 쓰기
+            for (dataEntity data : filteredList) {
+                writer.append(String.valueOf(data.getDataId())).append(",");
+                writer.append(data.getNode1()).append(",");
+                writer.append(data.getNode2()).append(",");
+                writer.append(String.valueOf(data.getBirthYear())).append(",");
+                writer.append(String.valueOf(data.getGender())).append(",");
+                writer.append(String.valueOf(data.getHeight())).append(",");
+                writer.append(String.valueOf(data.getWeight())).append(",");
+                writer.append(String.valueOf(data.getWalkSpeed())).append(",");
+                writer.append(String.valueOf(data.getTemperature())).append(",");
+                writer.append(String.valueOf(data.getPrecipitationProbability())).append(",");
+                writer.append(String.valueOf(data.getPrecipitation())).append(",");
+                writer.append(String.valueOf(data.getTakeTime())).append(",");
+                writer.append(String.valueOf(data.getWeightShortest())).append(",");
+                writer.append(String.valueOf(data.getWeightOptimal())).append("\n");
+            }
+
+            log.info("CSV 파일이 성공적으로 생성되었습니다.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return filteredList.size();
+    }
+
+
     // 이것은 학습 데이터
     public String makeModel(int hidden, int epochs, int layers, double learningRate, int batch_size) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, localModelPath,
@@ -122,20 +171,24 @@ public class AIService {
     }
 
     // 재학습 모델
-    public void doMakeModel(int epochs, double learningRate) throws Exception{
-        processBuilder = new ProcessBuilder(localPythonPath,
-                "re_learn.py",
-                Integer.toString(epochs),
-                Double.toString(learningRate));
+    public String doMakeModel(int epochs, double learningRate, String modelPath) throws Exception{
+        processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
+                Integer.toString(epochs), Double.toString(learningRate), modelPath);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
+        StringBuilder sb = new StringBuilder();
         log.info("재학습 시작");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-            log.info(">>>  " + line); // 표준출력에 쓴다
+            sb.append(line).append("\n");
+            if(line.startsWith("Validation")) {
+                reader.close();
+                return sb.toString();
+            }
         }
         reader.close();
+        return sb.toString();
     }
 
     public double modelOutput(MapLine line, dataEntity data) throws Exception{
