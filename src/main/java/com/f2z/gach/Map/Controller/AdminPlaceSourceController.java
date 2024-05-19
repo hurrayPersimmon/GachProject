@@ -37,7 +37,7 @@ public class AdminPlaceSourceController {
     @Value("${gach.img.dir}")
     String fdir;
 
-    @Value("${gach.path}")
+    @Value("${gach.img.path}")
     String filePath;
 
     @ModelAttribute
@@ -127,19 +127,19 @@ public class AdminPlaceSourceController {
                 File dest = new File(fdir + "/" + placeDTO.getMainFile().getOriginalFilename());
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.getPlace().setMainImageName(dest.getName());
-                placeDTO.getPlace().setMainImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setMainImagePath(filePath + "/images/placeImage/" + dest.getName());
             }
             if(placeDTO.getARFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.getPlace().setArImageName(dest.getName());
-                placeDTO.getPlace().setArImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setArImagePath(filePath + "/images/arImage/" + dest.getName());
             }
             if(placeDTO.getThumbnailFile() != null) {
                 File dest = new File(fdir + "/" + placeDTO.getThumbnailFile().getOriginalFilename());
                 placeDTO.getThumbnailFile().transferTo(dest);
                 placeDTO.getPlace().setThumbnailImageName(dest.getName());
-                placeDTO.getPlace().setThumbnailImagePath(filePath + "/image/" + dest.getName());
+                placeDTO.getPlace().setThumbnailImagePath(filePath + "/images/thumbnailImage/" + dest.getName());
             }
         } catch (Exception e){
             e.printStackTrace();
