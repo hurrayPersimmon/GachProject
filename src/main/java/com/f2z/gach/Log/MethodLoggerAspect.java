@@ -98,7 +98,7 @@ public class MethodLoggerAspect {
 
         Log logEntry = Log.builder()
                 .logLevel(LogLevel.getLogLevel(responseStatus.value()))
-                .httpMethod(HttpMethod.valueOf(httpRequest.getMethod()))
+                .httpMethod(httpRequest.getMethod())
                 .url(requestPath)
                 .message("HTTP Request [" + httpRequest.getMethod() + "] " + requestPath + " from " + httpRequest.getRemoteAddr() + " -> [" + responseStatus.value() + "] " + responseStatus.name() + " : " + gapString + " seconds")
                 .property(Properties.getMessage(responseStatus.value() != 0  ? responseStatus.value() : 500))
