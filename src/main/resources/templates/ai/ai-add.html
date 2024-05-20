@@ -173,7 +173,7 @@
         let max = document.getElementById("max").value;
 
         let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/${min}/${max}`;
-        let localUrl = 'http://localhost:60002/admin/ai/model/add/filter/${min}/${max}';
+        let localUrl = `http://localhost:60002/admin/ai/model/add/filter/${min}/${max}`;
 
         fetch(url) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱

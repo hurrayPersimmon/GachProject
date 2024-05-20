@@ -29,6 +29,7 @@ public class AdminAIController {
     private final AiModelRepository aiRepo;
     long dataLength;
     final String modelPath = "/home/t24102/GachProject/AI/Model";
+    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model";
 
     @ModelAttribute
     public void setAttributes(Model model){

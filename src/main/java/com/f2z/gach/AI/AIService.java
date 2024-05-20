@@ -26,12 +26,15 @@ public class AIService {
 //    final String localPythonPath = "/opt/anaconda3/bin/python3";
 //    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
 //    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
-
+//    final String localOutPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py";
+//    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
+//    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
     final String localPythonPath = "python3";
     final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
     final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
     final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
     final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
+    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
 
     // 현재 모든 데이터
     public List<dataEntity> getData(){
@@ -53,7 +56,7 @@ public class AIService {
                 .filter(data -> data.getTakeTime() != null && data.getTakeTime() > (double)min && data.getTakeTime() < (double)max)
                 .forEach(filteredList::add);
 
-        String csvFile = "/home/t24102/GachProject/AI/Data/data.csv";
+        String csvFile = csvFilePath;
 
         try (FileWriter writer = new FileWriter(csvFile)) {
             // CSV 파일 헤더 쓰기
@@ -207,6 +210,7 @@ public class AIService {
             String printLine;
             while ((printLine = reader.readLine()) != null) {
                 takeTime = printLine;
+                log.info(printLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
