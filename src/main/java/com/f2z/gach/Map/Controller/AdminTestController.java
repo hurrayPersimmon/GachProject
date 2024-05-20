@@ -10,10 +10,8 @@ import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
-import com.f2z.gach.Map.Entity.PlaceSource;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
-import com.f2z.gach.Map.Repository.PlaceSourceRepository;
 import com.f2z.gach.Map.Service.MapServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.Result;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 @Slf4j
 @Controller
@@ -36,7 +30,6 @@ import java.util.concurrent.Future;
 @SessionAttributes
 @Transactional
 public class AdminTestController {
-    private final PlaceSourceRepository placeSourceRepository;
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
     private final AdminRepository adminRepository;
@@ -65,7 +58,7 @@ public class AdminTestController {
 
     @GetMapping("/test/result")
     public String getTestRoute(@RequestParam Integer arrivals, @RequestParam Integer departures,
-                               Model model) throws Exception {
+                               Model model) throws Exception{
         MapNode departuresPlace = mapNodeRepository.findByNodeId(departures);
         departures = getNearestNodeId(departuresPlace.getNodeLatitude(),
                 departuresPlace.getNodeLongitude(),
@@ -93,47 +86,47 @@ public class AdminTestController {
         data.setHeight(165.2);
         data.setWalkSpeed(1);
 
-        var ref = new Object() {
-            double optimalTakeTime;
-            double shortestTakeTime;
-        };
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        ExecutorService shortExecutor = Executors.newFixedThreadPool(shortestRoute.size());
-        ExecutorService optimalExecutor = Executors.newFixedThreadPool(optimalRoute.size());
+        List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
+        List<CompletableFuture<Double>> optimalFutures = new ArrayList<>();
 
-        List<Future<Double>> shortFutures = new ArrayList<>();
-        List<Future<Double>> optimalFutures = new ArrayList<>();
-
-        for(int i = 0; i < shortestRoute.size()-1; i++) {
-            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i+1).getNodeId());
-            shortFutures.add(shortExecutor.submit( () -> aiService.modelOutput(aiModel, line, data)));
+        for (int i = 0; i < shortestRoute.size() - 1; i++) {
+            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i + 1).getNodeId());
+            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return aiService.modelOutput(aiModel, line, data);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }, executor);
+            shortFutures.add(future);
         }
 
-        for (Future<Double> future : shortFutures) {
-            try {
-                ref.shortestTakeTime += future.get();
-            } catch (InterruptedException | ExecutionException e) {
-            }
+        for (int i = 0; i < optimalRoute.size() - 1; i++) {
+            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i + 1).getNodeId());
+            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return aiService.modelOutput(aiModel, line, data);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }, executor);
+            optimalFutures.add(future);
         }
 
-        shortExecutor.shutdown();
+        double shortestTakeTime = shortFutures.stream()
+                .map(CompletableFuture::join)
+                .reduce(0.0, Double::sum);
 
-        for(int i = 0; i < optimalRoute.size()-1; i++) {
-            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i+1).getNodeId());
-            optimalFutures.add(optimalExecutor.submit( () -> aiService.modelOutput(aiModel, line, data)));
-        }
+        double optimalTakeTime = optimalFutures.stream()
+                .map(CompletableFuture::join)
+                .reduce(0.0, Double::sum);
 
-        for (Future<Double> future : optimalFutures) {
-            try {
-                ref.optimalTakeTime += future.get();
-            } catch (InterruptedException | ExecutionException e) {
-                // 예외 처리
-            }
-        }
-        log.info(String.valueOf(ref.optimalTakeTime));
-        log.info(String.valueOf(ref.shortestTakeTime));
-        model.addAttribute("shortTakeTime", ref.shortestTakeTime);
-        model.addAttribute("optimalTakeTime", ref.optimalTakeTime);
+        executor.shutdown();
+
+        model.addAttribute("shortTakeTime", shortestTakeTime);
+        model.addAttribute("optimalTakeTime", optimalTakeTime);
         return "test/pathTestResult";
     }
 
