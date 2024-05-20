@@ -58,6 +58,7 @@ public class AdminEventController {
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
                 .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
         model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));
+        model.addAttribute("eventChartData", eventRepository.findAll());
 
         return "event/event-manage";
     }

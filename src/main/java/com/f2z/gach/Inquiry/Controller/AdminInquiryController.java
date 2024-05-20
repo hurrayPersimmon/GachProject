@@ -47,6 +47,7 @@ public class AdminInquiryController {
                 .map(InquiryResponseDTO.InquiryListStructureForAdmin::toInquiryListResponseDTO).toList();
         log.info(InquiryResponseDTO.toInquiryResponseList(inquiryPage, inquiryList).toString());
         model.addAttribute("inquiryList", InquiryResponseDTO.toInquiryResponseList(inquiryPage, inquiryList));
+        model.addAttribute("inquiryChartData", inquiryRepository.findAll());
         return "inquiry/inquiry-manage";
     }
 

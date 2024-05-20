@@ -49,6 +49,7 @@ public class AdminLineController {
         List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
+        model.addAttribute("lineChartData", mapLineRepository.findAll());
         return "line/line-manage";
     }
 

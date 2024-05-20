@@ -46,6 +46,7 @@ public class AdminUserController {
         List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
+        model.addAttribute("userChartData", userRepository.findAll());
         return "user/user-manage";
     }
 

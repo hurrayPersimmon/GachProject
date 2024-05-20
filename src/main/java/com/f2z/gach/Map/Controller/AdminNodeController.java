@@ -51,6 +51,7 @@ public class AdminNodeController {
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
+        model.addAttribute("nodeChartData", mapNodeRepository.findAll());
         return "node/node-manage";
     }
 
