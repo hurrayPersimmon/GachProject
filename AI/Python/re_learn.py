@@ -53,7 +53,7 @@ for epoch in range(num_epochs_new):
         optimizer.step()
         epoch_loss += loss.item()
 
-    print(f'Epoch [{epoch+1}/{num_epochs_new}], Loss: {epoch_loss/len(loader):.4f}')
+    print(f'{epoch+1} {epoch_loss/len(loader):.4f}')
 
 # 모델 저장
 torch.save(model, model_path)

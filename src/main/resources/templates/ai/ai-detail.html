@@ -93,29 +93,29 @@
                 <div class="col">
                   <p class="fs-5 nodeHeader text-start">은닉층 개수</p>
                   <hr>
-                  <input type="text" class="form-control fontHv fs-6 second" id="hidden" disabled>
+                  <input type="text" class="form-control fontHv fs-6 second" id="hidden" readonly>
                 </div>
                 <div class="col">
                   <p class="fs-5 nodeHeader text-start">층의 수</p>
                   <hr>
-                  <input type="text" class="form-control fontHv fs-6 second" id="layer" disabled>
+                  <input type="text" class="form-control fontHv fs-6 second" id="layer" readonly>
                 </div>
                 <div class="col">
                   <p class="fs-5 nodeHeader text-start">에포크 수</p>
                   <hr>
-                  <input type="text" class="form-control fontHv fs-6 second" id="epochs" disabled>
+                  <input type="text" class="form-control fontHv fs-6 re-second" id="epochs" readonly>
                 </div>
               </div>
               <div class="row mt-3">
                 <div class="col">
                   <p class="fs-5 nodeHeader text-start">학습률</p>
                   <hr>
-                  <input type="text" class="form-control fontHv fs-6 second" id="rate" disabled>
+                  <input type="text" class="form-control fontHv fs-6 re-second" id="rate" readonly>
                 </div>
                 <div class="col">
                   <p class="fs-5 nodeHeader text-start">배치 사이즈</p>
                   <hr>
-                  <input type="text" class="form-control fontHv fs-6 second" id="batch" disabled>
+                  <input type="text" class="form-control fontHv fs-6 second" id="batch" readonly>
                 </div>
               </div>
               <div class="row mt-3">
@@ -173,8 +173,10 @@
   </div>
 </div>
 <script th:replace="fragment::search"></script>
-<script>
+<script th:inline="javascript">
 
+  let aiModel = [[${aiModel}]];
+  let modelId = aiModel.aiModelId;
   const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
   function doFilter(){
@@ -182,8 +184,8 @@
     let min = document.getElementById("min").value;
     let max = document.getElementById("max").value;
 
-    let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/${min}/${max}`;
-    let localUrl = 'http://localhost:60002/admin/ai/model/add/filter/${min}/${max}';
+    let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/re/filter/${modelId}/${min}/${max}`;
+    let localUrl = `http://localhost:60002/admin/ai/model/re/filter/${min}/${max}`;
 
     fetch(url) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
@@ -193,9 +195,9 @@
               document.getElementById("second-step").style.opacity = '100%';
               document.getElementById("second-step").style.cursor = 'auto';
               document.getElementById("doModelButton").style.cursor = 'pointer';
-              let secondInputs = document.querySelectorAll('input.second');
+              let secondInputs = document.querySelectorAll('input.re-second');
               secondInputs.forEach(function(input) {
-                input.removeAttribute('disabled');
+                input.removeAttribute('readonly');
               });
             })
             .catch(error => {
@@ -210,12 +212,9 @@
     document.getElementById("comment").style.display = "block";
     let rate = document.getElementById("rate").value;
     let epoch = document.getElementById("epochs").value;
-    let layer = document.getElementById("layer").value;
-    let hidden = document.getElementById("hidden").value;
-    let batch = document.getElementById("batch").value;
 
-    let localUrl = `http://localhost:60002/admin/ai/model/add/${hidden}/${epoch}/${rate}/${layer}/${batch}`;
-    let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/${hidden}/${epoch}/${rate}/${layer}/${batch}`;
+    let localUrl = `http://localhost:60002/admin/ai/model/add/${epoch}/${rate}/${modelId}`;
+    let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/${epoch}/${rate}/${modelId}`;
 
     let epochs = [];
     let validationLosses = [];
@@ -230,7 +229,7 @@
               document.getElementById("spin").style.display = "none";
               document.getElementById("main").style.opacity = "100%";
               document.getElementById("comment").style.display = 'none';
-              document.getElementById("doModelButton").innerText = "학습 완료";
+              document.getElementById("doModelButton").innerText = "재학습 완료";
 
               let dataArray = data.split(",");
               dataArray.forEach(function(data, index) {
