@@ -217,6 +217,7 @@ public class AIService {
         int endIndex = takeTime.indexOf("]]", startIndex);
 
         String numberString = takeTime.substring(startIndex, endIndex);
+        log.info(numberString);
         return Double.parseDouble(numberString);
     }
 

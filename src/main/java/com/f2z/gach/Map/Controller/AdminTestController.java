@@ -130,7 +130,8 @@ public class AdminTestController {
                 // 예외 처리
             }
         }
-
+        log.info(String.valueOf(ref.optimalTakeTime));
+        log.info(String.valueOf(ref.shortestTakeTime));
         model.addAttribute("shortTakeTime", ref.shortestTakeTime);
         model.addAttribute("optimalTakeTime", ref.optimalTakeTime);
         return "test/pathTestResult";
