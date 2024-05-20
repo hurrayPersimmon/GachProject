@@ -51,6 +51,17 @@ public class AdminInquiryController {
         return "inquiry/inquiry-manage";
     }
 
+    @GetMapping("sortedlist/{page}")
+    public String inquiryListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "inquiryId").withPage(page);
+        Page<Inquiry> inquiryPage = inquiryRepository.findAllByInquiryTitleContaining(sort, pageable);
+        List<InquiryResponseDTO.InquiryListStructureForAdmin> inquiryList = inquiryPage.getContent().stream()
+                .map(InquiryResponseDTO.InquiryListStructureForAdmin::toInquiryListResponseDTO).toList();
+        model.addAttribute("inquiryList", InquiryResponseDTO.toInquiryResponseList(inquiryPage, inquiryList));
+        model.addAttribute("inquiryChartData", inquiryRepository.findAll());
+        return "inquiry/inquiry-manage";
+    }
+
     @GetMapping("/required/{page}")
     public String inquiryRequiredPage(Model model, @PathVariable Integer page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "inquiryId");

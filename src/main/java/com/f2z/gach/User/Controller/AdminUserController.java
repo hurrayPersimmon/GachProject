@@ -50,6 +50,16 @@ public class AdminUserController {
         return "user/user-manage";
     }
 
+    @GetMapping("/users/sortedlist/{page}")
+    public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
+        Page<User> users = userRepository.findAllByUserNicknameContaining(sort, pageable);
+        List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
+                .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
+        model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
+        return "user/user-manage";
+    }
+
     @GetMapping("/users/{userId}")
     public String userDetail(Model model, @PathVariable Long userId){
         UserForm user = userRepository.findByUserId(userId).getUserForm();

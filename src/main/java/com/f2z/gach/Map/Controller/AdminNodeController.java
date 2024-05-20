@@ -55,6 +55,18 @@ public class AdminNodeController {
         return "node/node-manage";
     }
 
+    @GetMapping("/node/sortedlist/{page}")
+    public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.ASC, "nodeId").withPage(page);
+        Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sort, pageable);
+        List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
+                .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
+                .collect(Collectors.toList());
+        model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
+        model.addAttribute("nodeChartData", mapNodeRepository.findAll());
+        return "node/node-manage";
+    }
+
     @GetMapping("/node/add")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());

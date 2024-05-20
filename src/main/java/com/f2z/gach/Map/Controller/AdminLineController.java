@@ -53,6 +53,17 @@ public class AdminLineController {
         return "line/line-manage";
     }
 
+    @GetMapping("/line/sortedlist/{page}")
+    public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "lineId").withPage(page);
+        Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sort, pageable);
+        List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
+                .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
+        model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
+        model.addAttribute("lineChartData", mapLineRepository.findAll());
+        return "line/line-manage";
+    }
+
     @GetMapping("/line/add")
     public String addLinePage(Model model){
         model.addAttribute("lineDto", new MapDTO.MapLineDTO());
