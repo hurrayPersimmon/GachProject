@@ -105,4 +105,13 @@ public class AdminAIController {
         model.addAttribute("additionalDataLength", additionalDataLength);
         return "ai/ai-detail";
     }
+
+    @GetMapping("/delete/model/{id}")
+    public String deleteModel(@PathVariable int id, Model model) {
+        AiModel aiModel = aiRepo.findById(id).orElseThrow();
+        aiService.deleteModel(aiModel);
+        aiRepo.delete(aiModel);
+
+        return "redirect:/admin/ai";
+    }
 }

@@ -35,6 +35,7 @@ public class AIService {
     final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
     final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
     final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
+    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
 
     // 현재 모든 데이터
     public List<dataEntity> getData(){
@@ -225,4 +226,16 @@ public class AIService {
         return Double.parseDouble(numberString);
     }
 
+    public void deleteModel(AiModel aiModel) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(localDeleteSHPath, aiModel.getAiModelName());
+            Process process = processBuilder.start();
+
+            int exitCode = process.waitFor();
+            log.info("삭제 완료 코드 : " + exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
