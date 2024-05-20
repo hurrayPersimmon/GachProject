@@ -30,7 +30,7 @@ public class AIService {
     final String localPythonPath = "python3";
     final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
     final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
-    final String localOutPath = "/home/t24102/GachProject/AI/Python/output.sh";
+    final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
     final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
 
     // 현재 모든 데이터
@@ -191,14 +191,15 @@ public class AIService {
         return sb.toString();
     }
 
-    public double modelOutput(MapLine line, dataEntity data) throws Exception{
+    public double modelOutput(AiModel aiModel, MapLine line, dataEntity data) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath,
                 localOutPath, String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
                 String.valueOf(data.getWalkSpeed()), String.valueOf(data.getTemperature()),
                 String.valueOf(data.getPrecipitationProbability()), String.valueOf(data.getPrecipitation()),
-                String.valueOf(line.getWeightShortest()),
-                String.valueOf(line.getWeightOptimal()));
+                String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()),
+                aiModel.getAiModelPath(), String.valueOf(aiModel.getHiddenLayer()),
+                String.valueOf(aiModel.getNumLayer()));
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         String takeTime = null;

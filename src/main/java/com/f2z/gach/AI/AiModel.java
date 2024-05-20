@@ -28,6 +28,7 @@ public class AiModel {
     private double averSatis;
     private long dataLength;
     private long lastDataIndex;
+    public static int selectModelId;
 
     public static AiModel setToDto(ModelRequestDTO dto){
         AiModel aiModel = new AiModel();

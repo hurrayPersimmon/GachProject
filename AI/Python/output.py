@@ -23,13 +23,15 @@ class LSTMModel(nn.Module):
         return out
 
 input_size = 10
-hidden_size = 30
-num_layers = 30
+hidden_size = sys.argv[12]
+num_layers = sys.argv[13]
 output_size = 1
+
 
 # 모델 불러오기
 loaded_model = LSTMModel(input_size, hidden_size, num_layers, output_size)
-loaded_model.load_state_dict(torch.load('/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/second_model.pt'))
+modelPath = sys.argv[11]
+loaded_model.load_state_dict(torch.load(modelPath))
 loaded_model.eval()
 
 birthYear = float(sys.argv[1])

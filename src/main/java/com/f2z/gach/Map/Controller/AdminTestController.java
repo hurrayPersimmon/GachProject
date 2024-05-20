@@ -1,6 +1,8 @@
 package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.AI.AIService;
+import com.f2z.gach.AI.AiModel;
+import com.f2z.gach.AI.AiModelRepository;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.EnumType.Authorization;
@@ -39,9 +41,11 @@ public class AdminTestController {
     private final MapNodeRepository mapNodeRepository;
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final AiModelRepository aiRepo;
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
     private final AIService aiService;
+    AiModel aiModel;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -62,7 +66,6 @@ public class AdminTestController {
     @GetMapping("/test/result")
     public String getTestRoute(@RequestParam Integer arrivals, @RequestParam Integer departures,
                                Model model) throws Exception {
-        log.info("getTestRoute");
         MapNode departuresPlace = mapNodeRepository.findByNodeId(departures);
         departures = getNearestNodeId(departuresPlace.getNodeLatitude(),
                 departuresPlace.getNodeLongitude(),
@@ -79,7 +82,7 @@ public class AdminTestController {
         model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
-
+        aiModel = aiRepo.findById(2).orElseThrow();
         dataEntity data = new dataEntity();
         data.setGender(0);
         data.setTemperature(19.4);
@@ -94,7 +97,7 @@ public class AdminTestController {
             double optimalTakeTime;
             double shortestTakeTime;
         };
-        log.info(String.valueOf(shortestRoute.size()));
+
         ExecutorService shortExecutor = Executors.newFixedThreadPool(shortestRoute.size());
         ExecutorService optimalExecutor = Executors.newFixedThreadPool(optimalRoute.size());
 
@@ -103,7 +106,7 @@ public class AdminTestController {
 
         for(int i = 0; i < shortestRoute.size()-1; i++) {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i+1).getNodeId());
-            shortFutures.add(shortExecutor.submit( () -> aiService.modelOutput(line, data)));
+            shortFutures.add(shortExecutor.submit( () -> aiService.modelOutput(aiModel, line, data)));
         }
 
         for (Future<Double> future : shortFutures) {
@@ -117,7 +120,7 @@ public class AdminTestController {
 
         for(int i = 0; i < optimalRoute.size()-1; i++) {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i+1).getNodeId());
-            optimalFutures.add(optimalExecutor.submit( () -> aiService.modelOutput(line, data)));
+            optimalFutures.add(optimalExecutor.submit( () -> aiService.modelOutput(aiModel, line, data)));
         }
 
         for (Future<Double> future : optimalFutures) {
@@ -132,8 +135,6 @@ public class AdminTestController {
         model.addAttribute("optimalTakeTime", ref.optimalTakeTime);
         return "test/pathTestResult";
     }
-
-
 
     private Integer getNearestNodeId(Double placeLatitude, Double placeLongitude, Double placeAltitude) {
         int resultId = 0;
