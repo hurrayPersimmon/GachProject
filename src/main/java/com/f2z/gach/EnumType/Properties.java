@@ -30,4 +30,12 @@ public enum Properties {
     private final int code;
     private final String message;
 
+    public static Properties getMessage(Integer code) {
+        for (Properties properties : Properties.values()) {
+            if (properties.getCode() == code) {
+                return properties;
+            }
+        }
+        return null;
+    }
 }

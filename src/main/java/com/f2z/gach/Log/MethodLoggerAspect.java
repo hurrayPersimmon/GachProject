@@ -5,10 +5,7 @@ import com.f2z.gach.EnumType.Properties;
 import com.f2z.gach.Log.Entity.Log;
 import com.f2z.gach.Log.Repository.LogRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -33,17 +30,18 @@ import java.util.Objects;
 
 @Aspect
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class MethodLoggerAspect {
     private final LogRepository logRepository;
-    private static final Logger logger = LoggerFactory.getLogger(MethodLoggerAspect.class);
-    @Around("execution(* com.f2z.gach.Map.Controller.*.*(..))")
+
+    @Around("execution(* com.f2z.gach.*.Controller..*(..))")
     public Object logServiceController(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest httpRequest =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         String requestPath = httpRequest.getRequestURI();
+
         if (httpRequest.getQueryString() != null) {
             requestPath += "?" + httpRequest.getQueryString();
         }
@@ -63,7 +61,7 @@ public class MethodLoggerAspect {
     }
 
     private void logHttpRequest(HttpServletRequest httpRequest, String requestPath) {
-        logger.debug("HTTP Request [{}] {} from {}", httpRequest.getMethod(), requestPath, httpRequest.getRemoteAddr());
+        log.debug("HTTP Request [{}] {} from {}", httpRequest.getMethod(), requestPath, httpRequest.getRemoteAddr());
     }
 
     private void logHttpResponse(HttpServletRequest httpRequest, Object response) {
@@ -75,9 +73,9 @@ public class MethodLoggerAspect {
                 : response;
 
         if (responseBody != null) {
-            logger.debug("HTTP Response [{} {}] to {} : {}", responseStatus.value(), responseStatus.name(), httpRequest.getRemoteAddr(), responseBody);
+            log.debug("HTTP Response [{} {}] to {} : {}", responseStatus.value(), responseStatus.name(), httpRequest.getRemoteAddr(), responseBody);
         } else {
-            logger.debug("HTTP Response [{} {}] to {}", responseStatus.value(), responseStatus.name(), httpRequest.getRemoteAddr());
+            log.debug("HTTP Response [{} {}] to {}", responseStatus.value(), responseStatus.name(), httpRequest.getRemoteAddr());
         }
     }
 
@@ -88,7 +86,7 @@ public class MethodLoggerAspect {
         double gapSeconds = (double) (end - start) / 1000;
         String gapString = String.format("%.3f", gapSeconds);
 
-        logger.info("{} [{}] {} from {} -> [{}] {} : {} seconds",
+        log.info("{} [{}] {} from {} -> [{}] {} : {} seconds",
                 httpRequest.getProtocol(),
                 httpRequest.getMethod(),
                 requestPath,
@@ -99,11 +97,11 @@ public class MethodLoggerAspect {
         );
 
         Log logEntry = Log.builder()
-                .logLevel(LogLevel.INFO)
+                .logLevel(LogLevel.getLogLevel(responseStatus.value()))
                 .httpMethod(HttpMethod.valueOf(httpRequest.getMethod()))
                 .url(requestPath)
                 .message("HTTP Request [" + httpRequest.getMethod() + "] " + requestPath + " from " + httpRequest.getRemoteAddr() + " -> [" + responseStatus.value() + "] " + responseStatus.name() + " : " + gapString + " seconds")
-                .property(Properties.OK)
+                .property(Properties.getMessage(responseStatus.value() != 0  ? responseStatus.value() : 500))
                 .build();
 
         logRepository.save(logEntry);
