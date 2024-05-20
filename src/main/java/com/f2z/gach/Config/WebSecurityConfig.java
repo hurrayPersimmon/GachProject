@@ -19,6 +19,8 @@ public class WebSecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/image/**","/css/**").permitAll()
                         .requestMatchers("/user/login").permitAll()
+                        .requestMatchers("/admin/main-page").permitAll()
+                        .requestMatchers("/admin/signup").permitAll()
                         .requestMatchers("/user/signup?**").permitAll()
                         .requestMatchers("/user/signup").permitAll()
                         .requestMatchers("/user/guest").permitAll()
