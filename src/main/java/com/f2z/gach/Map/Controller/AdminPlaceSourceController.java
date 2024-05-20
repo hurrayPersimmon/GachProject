@@ -123,19 +123,21 @@ public class AdminPlaceSourceController {
 
     public AdminPlaceRequestDTO fileSave(AdminPlaceRequestDTO placeDTO){
         try{
-            if (placeDTO.getMainFile() != null) {
+            if (!placeDTO.getMainFile().getOriginalFilename().equals("")) {
+                log.info("여기를 거쳐요");
+                log.info("placeDTO.getMainFile().getOriginalFilename(): {}!", placeDTO.getMainFile().getOriginalFilename());
                 File dest = new File(fdir + "/placeImage/" + placeDTO.getMainFile().getOriginalFilename());
                 placeDTO.getMainFile().transferTo(dest);
                 placeDTO.getPlace().setMainImageName(dest.getName());
                 placeDTO.getPlace().setMainImagePath(filePath + "/images/placeImage/" + dest.getName());
             }
-            if(placeDTO.getARFile() != null) {
+            if(!placeDTO.getARFile().getOriginalFilename().equals("")) {
                 File dest = new File(fdir + "/arImage/" + placeDTO.getARFile().getOriginalFilename());
                 placeDTO.getARFile().transferTo(dest);
                 placeDTO.getPlace().setArImageName(dest.getName());
                 placeDTO.getPlace().setArImagePath(filePath + "/images/arImage/" + dest.getName());
             }
-            if(placeDTO.getThumbnailFile() != null) {
+            if(!placeDTO.getThumbnailFile().getOriginalFilename().equals("")) {
                 File dest = new File(fdir + "/thumbnailImage/" + placeDTO.getThumbnailFile().getOriginalFilename());
                 placeDTO.getThumbnailFile().transferTo(dest);
                 placeDTO.getPlace().setThumbnailImageName(dest.getName());
