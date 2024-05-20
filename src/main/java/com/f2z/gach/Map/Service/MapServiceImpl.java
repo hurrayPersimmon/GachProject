@@ -329,6 +329,8 @@ public class MapServiceImpl implements MapService{
             }
         }
 
+        log.info("Shortest Route : " + distances.get(arrivalsNodeId) + "m");
+
         // 경로 역추적
         routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
 
