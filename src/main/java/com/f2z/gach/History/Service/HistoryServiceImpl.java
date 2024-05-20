@@ -19,7 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -67,5 +69,13 @@ public class HistoryServiceImpl implements HistoryService{
 
 
         return ResponseEntity.saveSuccess(HistoryResponseDTO.toRespondSuccess(user));
+    }
+
+    @Override
+    public ResponseEntity<List<MapNode>> getTopThreeNode() {
+        List<Object[]> results = userHistoryRepository.findTopThreeMapNodes();
+        log.info("results : " + Arrays.toString(results.get(0)));
+        List<MapNode> topThreeNodes = results.stream().map(result -> mapNodeRepository.findByNodeId((Integer) result[0])).collect(Collectors.toList());
+        return ResponseEntity.requestSuccess(topThreeNodes);
     }
 }

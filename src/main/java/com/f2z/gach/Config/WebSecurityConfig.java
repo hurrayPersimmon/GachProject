@@ -39,6 +39,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/inquiry").permitAll()
                         .requestMatchers("/history/list/**").permitAll()
                         .requestMatchers("/history").permitAll()
+                        .requestMatchers("/history/top-nodes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

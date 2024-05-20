@@ -4,6 +4,7 @@ import com.f2z.gach.History.DTO.HistoryRequestDTO;
 import com.f2z.gach.History.DTO.HistoryResponseDTO;
 import com.f2z.gach.History.Entity.UserHistory;
 import com.f2z.gach.History.Service.HistoryService;
+import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Response.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,11 @@ public class HistoryRestController {
     @PostMapping()
     public ResponseEntity<HistoryResponseDTO.respondSuccess> createHistory(@RequestBody HistoryRequestDTO.UserHistoryRequestDTO lineHistory) {
         return historyService.createHistory(lineHistory);
+    }
+
+    @GetMapping("/top-nodes")
+    public ResponseEntity<List<MapNode>> getTopThreeNode() {
+        return historyService.getTopThreeNode();
     }
 
 
