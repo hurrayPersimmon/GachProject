@@ -134,11 +134,11 @@ public class AdminEventController {
 
     public AdminEventRequestDTO fileSave(AdminEventRequestDTO requestDTO) {
         try {
-            if (requestDTO.getFile() != null) {
-                File dest = new File(fdir + "/" + requestDTO.getFile().getOriginalFilename());
+            if (!requestDTO.getFile().getOriginalFilename().equals("")) {
+                File dest = new File(fdir + "/eventImage/" + requestDTO.getFile().getOriginalFilename());
                 requestDTO.getFile().transferTo(dest);
                 requestDTO.getEvent().setEventImageName(dest.getName());
-                requestDTO.getEvent().setEventImagePath(filePath + "/image/" + dest.getName());
+                requestDTO.getEvent().setEventImagePath(filePath + "/images/eventImage/" + dest.getName());
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -17,7 +17,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/image/**","/css/**").permitAll()
+                        .requestMatchers("/images/**","/css/**").permitAll()
                         .requestMatchers("/user/login").permitAll()
                         .requestMatchers("/admin/main-page").permitAll()
                         .requestMatchers("/admin/signup").permitAll()
