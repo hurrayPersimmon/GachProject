@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface dataRepository extends JpaRepository<dataEntity, Long> {
 
-    List<dataEntity> findByIdBetween(Long startIndex, Long endIndex);
+    List<dataEntity> findByDataIdBetween(Long startIndex, Long endIndex);
 
 }

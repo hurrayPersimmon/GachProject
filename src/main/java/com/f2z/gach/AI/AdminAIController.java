@@ -60,7 +60,7 @@ public class AdminAIController {
     @ResponseBody
     public long getFilterReNum(@PathVariable int modelId, @PathVariable int min, @PathVariable int max){
         AiModel aiModel = aiRepo.findById(modelId).orElseThrow();
-        List<dataEntity> dataEntityList = dataRepo.findByIdBetween(aiModel.getDataLength()-dataRepo.count(), lineTimeRepository.count());
+        List<dataEntity> dataEntityList = dataRepo.findByDataIdBetween(aiModel.getDataLength()-dataRepo.count(), lineTimeRepository.count());
         dataLength = aiService.filterData(min, max, dataEntityList);
         return dataLength;
     }
