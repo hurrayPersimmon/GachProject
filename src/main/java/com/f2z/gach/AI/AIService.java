@@ -89,7 +89,6 @@ public class AIService {
         return filteredList.size();
     }
 
-    // 재학습 데이터 필터링
     public int filterData(int min, int max, List<dataEntity> list) {
         List<dataEntity> originalList = list;
         List<dataEntity> filteredList = new ArrayList<>();
@@ -211,7 +210,6 @@ public class AIService {
             String printLine;
             while ((printLine = reader.readLine()) != null) {
                 takeTime = printLine;
-                log.info(printLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -222,7 +220,6 @@ public class AIService {
         int endIndex = takeTime.indexOf("]]", startIndex);
 
         String numberString = takeTime.substring(startIndex, endIndex);
-        log.info(numberString);
         return Double.parseDouble(numberString);
     }
 

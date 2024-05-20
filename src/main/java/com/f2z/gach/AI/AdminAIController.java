@@ -30,6 +30,7 @@ public class AdminAIController {
     long dataLength;
     final String modelPath = "/home/t24102/GachProject/AI/Model";
     final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model";
+    AiModel selectedAiModel;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -40,6 +41,8 @@ public class AdminAIController {
     @GetMapping("")
     public String list(Model model) {
         model.addAttribute("aiList", aiRepo.findAll());
+        selectedAiModel = aiRepo.findAll().get(2);
+        model.addAttribute("selectedAiModelId", selectedAiModel.getAiModelId());
         return "ai/ai-manage";
     }
 
