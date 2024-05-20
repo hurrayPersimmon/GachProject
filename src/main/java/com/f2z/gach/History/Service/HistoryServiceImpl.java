@@ -73,7 +73,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public ResponseEntity<List<MapNode>> getTopThreeNode() {
-        List<Object[]> results = userHistoryRepository.findTopThreeMapNodes();
+        List<Object[]> results = userHistoryRepository.findTopMapNodes(3);
         log.info("results : " + Arrays.toString(results.get(0)));
         List<MapNode> topThreeNodes = results.stream().map(result -> mapNodeRepository.findByNodeId((Integer) result[0])).collect(Collectors.toList());
         return ResponseEntity.requestSuccess(topThreeNodes);

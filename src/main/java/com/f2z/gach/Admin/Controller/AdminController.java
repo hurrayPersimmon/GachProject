@@ -6,7 +6,12 @@ import com.f2z.gach.Admin.DTO.loginDTO;
 import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.LogLevel;
+import com.f2z.gach.History.Entity.UserHistory;
+import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.Log.Repository.LogRepository;
+import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,6 +37,15 @@ import java.util.List;
 public class AdminController {
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final UserRepository userRepository;
+    private final UserHistoryRepository userHistoryRepository;
+    private final LogRepository logRepository;
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+    }
 
     @GetMapping("/main-page")
     public String mainPage(){
@@ -36,7 +53,21 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(){
+    public String dashboard(Model model) {
+        model.addAttribute("userCount", userRepository.count());
+        model.addAttribute("userTodaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("requestTodayCount", logRepository.countLogsCreatedToday(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)));
+        model.addAttribute("requestErrorTodayCount", logRepository.countByLogLevel(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                LogLevel.ERROR));
+
+        model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(10));
         return "main/dashboard";
     }
 
@@ -166,12 +197,7 @@ public class AdminController {
         return "redirect:/admin/list";
     }
 
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
-        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
 
-    }
 
 
     @ExceptionHandler(NoHandlerFoundException.class)
