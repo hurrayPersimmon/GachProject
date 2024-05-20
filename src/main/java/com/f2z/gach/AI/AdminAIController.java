@@ -84,6 +84,7 @@ public class AdminAIController {
     @PostMapping("/model/add")
     @ResponseBody
     public int saveModel(@RequestBody ModelRequestDTO dto) {
+        dataLength = dataRepo.count() + lineTimeRepository.count();
         AiModel aiModel = AiModel.setToDto(dto);
         aiModel.setAverSatis(0);
         aiModel.setDataLength(dataLength);
