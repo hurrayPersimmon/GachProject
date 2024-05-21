@@ -32,21 +32,21 @@ public class AIService {
     private final HistoryLineTimeRepository lineTimeRepo;
     private final MapLineRepository mapLineRepository;
     private ProcessBuilder processBuilder;
-    final String localPythonPath = "/opt/anaconda3/bin/python3";
+//    final String localPythonPath = "/opt/anaconda3/bin/python3";
     final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
-    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
+//    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
     final String localOutPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py";
-    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
-    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
-    final String localDeleteSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/delete.sh";
-    final String tempOutputPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/tree_output.py";
-//    final String localPythonPath = "python3";
+//    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
+//    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
+//    final String localDeleteSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/delete.sh";
+//    final String tempOutputPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/tree_output.py";
+    final String localPythonPath = "python3";
 //    final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
-//    final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
-//    final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
-//    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
-//    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
-//    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
+    final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
+    final String tempOutputPath = "/home/t24102/GachProject/AI/Python/tree_output.py";
+    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
+    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
+    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
 
     // 현재의 데이터를 기반으로 필터링 작업 시작
     public int filterData(int min, int max) {
@@ -142,9 +142,9 @@ public class AIService {
 
     public Integer modelOutput(MapLine line, MapServiceImpl.AIData data) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, tempOutputPath,
-                String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
+                String.valueOf(data.getBirthYear()), String.valueOf(data.getGender().ordinal()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
-                String.valueOf(data.getWalkSpeed()), String.valueOf(data.getTemperature()),
+                String.valueOf(data.getWalkSpeed().ordinal()), String.valueOf(data.getTemperature()),
                 String.valueOf(data.getPrecipitationProbability()), String.valueOf(data.getPrecipitation()),
                 String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()));
         processBuilder.redirectErrorStream(true);

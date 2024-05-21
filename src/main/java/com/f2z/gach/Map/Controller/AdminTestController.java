@@ -7,6 +7,8 @@ import com.f2z.gach.AI.AiModelRepository;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.Gender;
+import com.f2z.gach.EnumType.Speed;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
@@ -75,30 +77,13 @@ public class AdminTestController {
         model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
-        dataEntity data = new dataEntity();
-        data.setGender(0);
-        data.setTemperature(19.4);
-        data.setPrecipitationProbability(0);
-        data.setPrecipitation(0.0);
-        data.setBirthYear(2003);
-        data.setWeight(55.1);
-        data.setHeight(165.2);
-        data.setWalkSpeed(2);
+        MapServiceImpl.AIData data = MapServiceImpl.AIData.builder()
+                        .gender(Gender.여).temperature(17.0).birthYear(1999).precipitation(10.0).precipitationProbability(10)
+                        .weight(64.1).height(172.4).walkSpeed(Speed.NORMAL).build();
 
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
-        List<CompletableFuture<Double>> optimalFutures = new ArrayList<>();
-
-        double shortestTakeTime = shortFutures.stream()
-                .map(CompletableFuture::join)
-                .reduce(0.0, Double::sum);
-
-        double optimalTakeTime = optimalFutures.stream()
-                .map(CompletableFuture::join)
-                .reduce(0.0, Double::sum);
-
-        executor.shutdown();
+        int shortestTakeTime = aiService.calculateTime(shortestRoute, data);
+        int optimalTakeTime = aiService.calculateTime(optimalRoute, data);
 
         model.addAttribute("shortTakeTime", shortestTakeTime);
         model.addAttribute("optimalTakeTime", optimalTakeTime);

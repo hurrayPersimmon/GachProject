@@ -1,6 +1,7 @@
 package com.f2z.gach.Map.Service;
 
 import com.f2z.gach.AI.AIService;
+import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.EnumType.*;
 import com.f2z.gach.Map.BusLine;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
@@ -141,7 +142,6 @@ public class MapServiceImpl implements MapService{
     @Builder
     @Getter
     @Setter
-    @RequiredArgsConstructor
     public static class AIData{
         Integer birthYear;
         Double height;
@@ -151,8 +151,6 @@ public class MapServiceImpl implements MapService{
         Double temperature;
         Double precipitation;
         Integer precipitationProbability;
-
-
     }
 
     @Override
