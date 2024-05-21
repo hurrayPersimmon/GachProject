@@ -43,6 +43,7 @@ public class MapServiceImpl implements MapService{
     private final String routeBus = "busRoute";
 
 
+
     @Override
     public ResponseEntity<PlaceResponseDTO.respondPlaceList> getBuildingInfoList() {
         List<PlaceSource> buildingInfoList = placeSourceRepository.findAllByPlaceCategory(PlaceCategory.BUILDING);
@@ -382,7 +383,7 @@ public class MapServiceImpl implements MapService{
 
         // 경로 역추적
         routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
-        int totalTime = 0;
+        int totalTime = aiService.calculateTime(nodeList, aIData);
         return NavigationResponseDTO.toNavigationResponseDTO(routeType, totalTime, nodeList);
     }
 
