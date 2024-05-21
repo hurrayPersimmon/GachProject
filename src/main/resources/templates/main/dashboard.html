@@ -102,8 +102,7 @@
                                         <div class="col">
                                             <div class="card-title fs-5 noto-sans-100">총 회원가입자 수</div>
                                             <div>
-                                                <span class="card-text noto-sans-400 fs-3">5235명</span>
-                                                <span class="card-text text-primary fs-5 ms-4">+10%</span>
+                                                <span class="card-text noto-sans-400 fs-3"><span th:text="${userCount}">123</span>명</span>
                                             </div>
                                         </div>
                                         <div class="col-3 pt-3">
@@ -120,8 +119,7 @@
                                         <div class="col">
                                             <div class="card-title fs-5 noto-sans-100">일일 접속자 수</div>
                                             <div>
-                                                <span class="card-text noto-sans-400 fs-3">2320명</span>
-                                                <span class="card-text green-color fs-5 ms-4">+1%</span>
+                                                <span class="card-text noto-sans-400 fs-3"><span th:text="${userTodaySignUpCount}">2320</span>명</span>
                                             </div>
                                         </div>
                                         <div class="col-3 pt-3">
@@ -138,7 +136,7 @@
                                         <div class="col">
                                             <div class="card-title fs-5 noto-sans-100">일일 요청 수</div>
                                             <div>
-                                                <span class="card-text noto-sans-400 fs-3">3210건</span>
+                                                <span class="card-text noto-sans-400 fs-3"><span th:text="${requestTodayCount}">3210</span>건</span>
                                                 <span class="card-text text-warning fs-5 ms-4">+31%</span>
                                             </div>
                                         </div>
@@ -156,8 +154,7 @@
                                         <div class="col">
                                             <div class="card-title fs-5 noto-sans-100">일일 오류 발생 수</div>
                                             <div>
-                                                <span class="card-text noto-sans-400 fs-3">20건</span>
-                                                <span class="card-text text-danger fs-5 ms-4">-0.4%</span>
+                                                <span class="card-text noto-sans-400 fs-3"><span th:text="${requestErrorTodayCount}">20</span>건</span>
                                             </div>
                                         </div>
                                         <div class="col-3 pt-3">
@@ -304,7 +301,7 @@
 <script th:replace="fragment::search"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+<script th:inline="javascript">
     const ctx1 = document.getElementById('myChart1');
 
     const data1 = {

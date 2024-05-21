@@ -7,10 +7,12 @@ import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.InquiryCategory;
 import com.f2z.gach.EnumType.LogLevel;
 import com.f2z.gach.History.Entity.UserHistory;
 import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.User.Repository.UserRepository;
 import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.User.Repository.UserRepository;
@@ -29,6 +31,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -71,8 +74,14 @@ public class AdminController {
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
                 LogLevel.ERROR));
-
+        model.addAttribute("inquiryRequest", inquiryRepository.findAll());
+        model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
+        model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
         model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(10));
+        List<MapNode> nodeList = new ArrayList<>();
+
+        //log.info(userHistoryRepository.findTopMapNodes())
+
         return "main/dashboard";
     }
 

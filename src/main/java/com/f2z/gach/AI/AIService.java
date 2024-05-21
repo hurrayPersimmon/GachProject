@@ -5,6 +5,9 @@ import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.History.Entity.HistoryLineTime;
 import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Map.Entity.MapLine;
+import com.f2z.gach.Map.Entity.MapNode;
+import com.f2z.gach.Map.Repository.MapLineRepository;
+import com.f2z.gach.User.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -22,6 +28,7 @@ import java.util.List;
 public class AIService {
     private final AiModelRepository aiRepo;
     private final HistoryLineTimeRepository lineTimeRepo;
+    private final MapLineRepository mapLineRepository;
     private ProcessBuilder processBuilder;
     final String localPythonPath = "/opt/anaconda3/bin/python3";
     final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
@@ -108,6 +115,61 @@ public class AIService {
         }
         reader.close();
         return sb.toString();
+    }
+
+    public void calculateTime(List<MapNode> shortList, List<MapNode> optimList, List<MapNode> busList, User user){
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
+        List<CompletableFuture<Double>> optimalFutures = new ArrayList<>();
+        List<CompletableFuture<Double>> busFutures = new ArrayList<>();
+        for(int i = 0; i < shortList.size()-1; i++){
+            MapLine shortMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortList.get(i).getNodeId(), shortList.get(i+1).getNodeId());
+            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return modelOutput(shortMapLine, data);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }, executor);
+            shortFutures.add(future);
+        }
+        for(int i = 0; i < optimList.size()-1; i++){
+            MapLine optimMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimList.get(i).getNodeId(), optimList.get(i+1).getNodeId());
+            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return modelOutput(optimMapLine, data);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }, executor);
+            optimalFutures.add(future);
+        }
+        for(int i = 0; i < busList.size()-1; i++){
+            MapLine busMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(busList.get(i).getNodeId(), busList.get(i+1).getNodeId());
+            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    return modelOutput(busMapLine, data);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }, executor);
+            busFutures.add(future);
+        }
+
+        double shortestTakeTime = shortFutures.stream()
+                .map(CompletableFuture::join)
+                .reduce(0.0, Double::sum);
+
+        double optimalTakeTime = optimalFutures.stream()
+                .map(CompletableFuture::join)
+                .reduce(0.0, Double::sum);
+
+        double busTakeTime = busFutures.stream()
+                .map(CompletableFuture::join)
+                .reduce(0.0, Double::sum);
+
+
     }
 
     public double modelOutput(MapLine line, dataEntity data) throws Exception{
