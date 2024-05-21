@@ -21,12 +21,12 @@ public class ApplicationRunner implements org.springframework.boot.ApplicationRu
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Admin admin2 = new Admin();
-        admin2.setAdminPassword(passwordEncoder.encode("1234"));
-        admin2.setAdminBirthday(LocalDate.now());
-        admin2.setAdminName("admin");
-        admin2.setAdminAuthorization(Authorization.ADMIN);
-        admin2.setAdminId("admin");
-        adminRepository.save(admin2);
+        Admin admin = new Admin();
+        admin.setAdminPassword(passwordEncoder.encode("1234"));
+        admin.setAdminBirthday(LocalDate.now());
+        admin.setAdminName("admin");
+        admin.setAdminAuthorization(Authorization.ADMIN);
+        admin.setAdminId("admin");
+        adminRepository.save(admin);
     }
 }
