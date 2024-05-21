@@ -65,12 +65,12 @@ public class AdminUserController {
                 LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/signup"));
         model.addAttribute("3minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
+                LocalDateTime.now().minusDays(3).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(3).with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/signup"));
         model.addAttribute("4minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
+                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/signup"));
         return "user/user-manage";
     }

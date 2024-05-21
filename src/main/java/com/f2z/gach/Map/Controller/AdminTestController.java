@@ -90,30 +90,6 @@ public class AdminTestController {
         List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
         List<CompletableFuture<Double>> optimalFutures = new ArrayList<>();
 
-        for (int i = 0; i < shortestRoute.size() - 1; i++) {
-            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i + 1).getNodeId());
-            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return aiService.modelOutput(line, data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executor);
-            shortFutures.add(future);
-        }
-
-        for (int i = 0; i < optimalRoute.size() - 1; i++) {
-            MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i + 1).getNodeId());
-            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return aiService.modelOutput(line, data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executor);
-            optimalFutures.add(future);
-        }
-
         double shortestTakeTime = shortFutures.stream()
                 .map(CompletableFuture::join)
                 .reduce(0.0, Double::sum);

@@ -4,9 +4,11 @@ import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.History.Entity.HistoryLineTime;
 import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
+import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
+import com.f2z.gach.Map.Service.MapServiceImpl;
 import com.f2z.gach.User.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,12 +119,12 @@ public class AIService {
         return sb.toString();
     }
 
-    public int calculateTime(List<MapNode> list, User user){
+    public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/3);
 
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
         for(int i = 0; i < list.size()-1; i++){
-            MapLine shortMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortList.get(i).getNodeId(), shortList.get(i+1).getNodeId());
+            MapLine shortMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
             CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
                 try {
                     return modelOutput(shortMapLine, data);
@@ -138,7 +140,7 @@ public class AIService {
                 .reduce(0, Integer::sum);
     }
 
-    public Integer modelOutput(MapLine line, dataEntity data) throws Exception{
+    public Integer modelOutput(MapLine line, MapServiceImpl.AIData data) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, tempOutputPath,
                 String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),

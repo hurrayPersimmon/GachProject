@@ -35,6 +35,7 @@ public class MapServiceImpl implements MapService{
     private final MapNodeRepository mapNodeRepository;
     private final UserRepository userRepository;
     private final UserGuestRepository userGuestRepository;
+    private final AIService aiService;
 
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
@@ -208,14 +209,14 @@ public class MapServiceImpl implements MapService{
                 arrivalsPlace.getPlaceLongitude(),
                 arrivalsPlace.getPlaceAltitude());
 
-        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO););
-        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO););
+        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO));
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO));
 
         Integer shortestDepartureNodeId = shortestRoute.getNodeList().get(0).getNodeId();
         Integer shortestArrivalsNodeId = shortestRoute.getNodeList().get(shortestRoute.getNodeList().size()-1).getNodeId();
         if(shortestDepartureNodeId == 0 || shortestArrivalsNodeId == 0) return ResponseListEntity.notFound(null);
         if(Objects.equals(shortestDepartureNodeId, shortestArrivalsNodeId)) return ResponseListEntity.sameNode(null);
-        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId,setAIData(placeRequestDTO););
+        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId,setAIData(placeRequestDTO));
 
         List<NavigationResponseDTO> routes;
         if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
@@ -288,8 +289,8 @@ public class MapServiceImpl implements MapService{
             NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId, aiData);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
             Integer totalTime = 0;
-            totalTime += AIService.calculateTime(gettingOnRoute.getNodeList(), aiData);
-            totalTime += AIService.calculateTime(gettingOffRoute.getNodeList(), aiData);
+            totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
+            totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
 
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
