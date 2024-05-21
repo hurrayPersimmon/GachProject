@@ -384,7 +384,7 @@ public class MapServiceImpl implements MapService{
 
         // 경로 역추적
         routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
-        int totalTime = 0;
+        int totalTime = AIService.calculateTime(nodeList, aIData);
         return NavigationResponseDTO.toNavigationResponseDTO(routeType, totalTime, nodeList);
     }
 
