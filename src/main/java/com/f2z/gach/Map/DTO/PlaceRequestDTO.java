@@ -22,7 +22,9 @@ public class PlaceRequestDTO {
         private Long userId;
         private Integer guestId;
         Double temperature;
+        Double precipitation;
         Integer precipitationProbability;
+
         public boolean isPlace(){
             if(placeId != null) return true;
             else return false;

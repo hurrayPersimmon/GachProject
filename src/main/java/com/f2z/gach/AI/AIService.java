@@ -7,6 +7,7 @@ import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
+import com.f2z.gach.Map.Service.MapServiceImpl;
 import com.f2z.gach.User.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,7 +118,7 @@ public class AIService {
         return sb.toString();
     }
 
-    public void calculateTime(List<MapNode> shortList, List<MapNode> optimList, List<MapNode> busList, User user){
+    public void calculateTime(List<MapNode> shortList, List<MapNode> optimList, List<MapNode> busList, MapServiceImpl.AIData data){
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
@@ -172,7 +173,7 @@ public class AIService {
 
     }
 
-    public double modelOutput(MapLine line, dataEntity data) throws Exception{
+    public double modelOutput(MapLine line, MapServiceImpl.AIData data) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, tempOutputPath,
                 String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),

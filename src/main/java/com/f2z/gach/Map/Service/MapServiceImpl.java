@@ -141,14 +141,17 @@ public class MapServiceImpl implements MapService{
     @Getter
     @Setter
     @RequiredArgsConstructor
-    static class AIData{
+    public static class AIData{
         Integer birthYear;
         Double height;
         Double weight;
         Speed walkSpeed;
         Gender gender;
         Double temperature;
+        Double precipitation;
         Integer precipitationProbability;
+
+
     }
 
     @Override
@@ -229,6 +232,7 @@ public class MapServiceImpl implements MapService{
                     .weight(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserWeight())
                     .walkSpeed(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserSpeed())
                     .temperature(placeRequestDTO.getTemperature())
+                    .precipitation(placeRequestDTO.getPrecipitation())
                     .precipitationProbability(placeRequestDTO.getPrecipitationProbability())
                     .build();
         }else {
@@ -238,6 +242,7 @@ public class MapServiceImpl implements MapService{
                     .weight(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestWeight())
                     .walkSpeed(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestSpeed())
                     .temperature(placeRequestDTO.getTemperature())
+                    .precipitation(placeRequestDTO.getPrecipitation())
                     .precipitationProbability(placeRequestDTO.getPrecipitationProbability())
                     .build();
         }
