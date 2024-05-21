@@ -230,6 +230,7 @@ public class MapServiceImpl implements MapService{
                     .birthYear(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserBirth())
                     .height(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserHeight())
                     .weight(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserWeight())
+                    .gender(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserGender())
                     .walkSpeed(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserSpeed())
                     .temperature(placeRequestDTO.getTemperature())
                     .precipitation(placeRequestDTO.getPrecipitation())
@@ -240,6 +241,7 @@ public class MapServiceImpl implements MapService{
                     .birthYear(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestBirth())
                     .height(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestHeight())
                     .weight(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestWeight())
+                    .gender(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestGender() == null? Gender.남 : userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestGender())
                     .walkSpeed(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestSpeed())
                     .temperature(placeRequestDTO.getTemperature())
                     .precipitation(placeRequestDTO.getPrecipitation())
@@ -270,6 +272,7 @@ public class MapServiceImpl implements MapService{
     private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId, AIData aiData) throws Exception {
         List<BusLine.Node> busLine;
         busLine = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
+//        Integer busTime = BusLine.getBusTime(busLine);
         if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
 
         else{
@@ -290,7 +293,7 @@ public class MapServiceImpl implements MapService{
             Integer totalTime = 0;
             totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
             totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
-
+//            totalTime +=
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
             if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
