@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
@@ -23,5 +24,9 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
 
     @Query("SELECT COUNT(l) FROM Log l WHERE l.createDt >= :startOfDay AND l.createDt < :endOfDay AND l.logLevel = :logLevel")
     Integer countByLogLevel(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay, @Param("logLevel") LogLevel logLevel);
+
+//    @Query("SELECT COUNT(l) FROM Log l WHERE l.createDt >= :startOfDay AND l.createDt < :endOfDay AND l.logLevel = :logLevel")
+//    List<Integer> avarageSatisfactionScoreByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
+//
 
 }
