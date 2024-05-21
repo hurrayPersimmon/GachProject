@@ -31,10 +31,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -79,8 +76,6 @@ public class AdminController {
         model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
         model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(10));
         List<MapNode> nodeList = new ArrayList<>();
-
-        //log.info(userHistoryRepository.findTopMapNodes())
 
         return "main/dashboard";
     }

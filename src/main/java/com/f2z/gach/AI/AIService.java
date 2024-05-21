@@ -7,7 +7,6 @@ import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
-import com.f2z.gach.Map.Service.MapServiceImpl;
 import com.f2z.gach.User.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -118,62 +117,28 @@ public class AIService {
         return sb.toString();
     }
 
-    public void calculateTime(List<MapNode> shortList, List<MapNode> optimList, List<MapNode> busList, MapServiceImpl.AIData data){
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public int calculateTime(List<MapNode> list, User user){
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/3);
 
-        List<CompletableFuture<Double>> shortFutures = new ArrayList<>();
-        List<CompletableFuture<Double>> optimalFutures = new ArrayList<>();
-        List<CompletableFuture<Double>> busFutures = new ArrayList<>();
-        for(int i = 0; i < shortList.size()-1; i++){
+        List<CompletableFuture<Integer>> futures = new ArrayList<>();
+        for(int i = 0; i < list.size()-1; i++){
             MapLine shortMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortList.get(i).getNodeId(), shortList.get(i+1).getNodeId());
-            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
+            CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
                 try {
                     return modelOutput(shortMapLine, data);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }, executor);
-            shortFutures.add(future);
-        }
-        for(int i = 0; i < optimList.size()-1; i++){
-            MapLine optimMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimList.get(i).getNodeId(), optimList.get(i+1).getNodeId());
-            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return modelOutput(optimMapLine, data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executor);
-            optimalFutures.add(future);
-        }
-        for(int i = 0; i < busList.size()-1; i++){
-            MapLine busMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(busList.get(i).getNodeId(), busList.get(i+1).getNodeId());
-            CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return modelOutput(busMapLine, data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executor);
-            busFutures.add(future);
+            futures.add(future);
         }
 
-        double shortestTakeTime = shortFutures.stream()
+        return futures.stream()
                 .map(CompletableFuture::join)
-                .reduce(0.0, Double::sum);
-
-        double optimalTakeTime = optimalFutures.stream()
-                .map(CompletableFuture::join)
-                .reduce(0.0, Double::sum);
-
-        double busTakeTime = busFutures.stream()
-                .map(CompletableFuture::join)
-                .reduce(0.0, Double::sum);
-
-
+                .reduce(0, Integer::sum);
     }
 
-    public double modelOutput(MapLine line, MapServiceImpl.AIData data) throws Exception{
+    public Integer modelOutput(MapLine line, dataEntity data) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, tempOutputPath,
                 String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
@@ -196,7 +161,7 @@ public class AIService {
 
         takeTime = takeTime.substring(1, takeTime.length() - 1);
 
-        return Double.parseDouble(takeTime);
+        return Integer.parseInt(takeTime);
     }
 
     public void deleteModel(AiModel aiModel) {

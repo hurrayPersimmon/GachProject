@@ -3,8 +3,10 @@ package com.f2z.gach.User.Controller;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.Gender;
+import com.f2z.gach.EnumType.LogLevel;
 import com.f2z.gach.EnumType.Speed;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.User.DTO.UserForm;
 import com.f2z.gach.User.DTO.UserResponseDTO;
 import com.f2z.gach.User.Entity.User;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +36,7 @@ public class AdminUserController {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
-
+    private final LogRepository logRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -48,6 +52,26 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
+        model.addAttribute("userTodaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("1minusDaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().minusDays(1).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(1).with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("2minusDaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("3minusDaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("4minusDaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
         return "user/user-manage";
     }
 
