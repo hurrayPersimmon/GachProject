@@ -19,10 +19,19 @@ public class PlaceRequestDTO {
         private Double altitude;
         private Integer placeId;
         private boolean isDepartures;
+        private Long userId;
+        private Integer guestId;
+        Double temperature;
+        Integer precipitationProbability;
         public boolean isPlace(){
             if(placeId != null) return true;
             else return false;
         }
+        public boolean isUser(){
+            if(userId != null) return true;
+            else return false;
+        }
+
     }
 
 

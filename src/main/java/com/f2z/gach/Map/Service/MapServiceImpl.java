@@ -1,8 +1,7 @@
 package com.f2z.gach.Map.Service;
 
-import com.f2z.gach.EnumType.College;
-import com.f2z.gach.EnumType.Departments;
-import com.f2z.gach.EnumType.PlaceCategory;
+import com.f2z.gach.AI.AIService;
+import com.f2z.gach.EnumType.*;
 import com.f2z.gach.Map.BusLine;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.DTO.PlaceRequestDTO;
@@ -11,9 +10,12 @@ import com.f2z.gach.Map.Entity.*;
 import com.f2z.gach.Map.Repository.*;
 import com.f2z.gach.Response.ResponseEntity;
 import com.f2z.gach.Response.ResponseListEntity;
+import com.f2z.gach.User.Entity.User;
+import com.f2z.gach.User.Entity.UserGuest;
+import com.f2z.gach.User.Repository.UserGuestRepository;
+import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class MapServiceImpl implements MapService{
     private final BuildingKeywordRepository buildingKeywordRepository;
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
+    private final UserRepository userRepository;
+    private final UserGuestRepository userGuestRepository;
 
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
@@ -127,16 +131,31 @@ public class MapServiceImpl implements MapService{
         }
     }
 
+    @Setter
+    class pointIds{
+        Integer departuresNodeId;
+        Integer arrivalsNodeId;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    static class AIData{
+        Integer birthYear;
+        Double height;
+        Double weight;
+        Speed walkSpeed;
+        Gender gender;
+        Double temperature;
+        Integer precipitationProbability;
+    }
+
     @Override
     public ResponseListEntity<NavigationResponseDTO> getNowRoute(PlaceRequestDTO.requestLocation placeRequestDTO,
                                                                  Double latitude,
                                                                  Double longitude,
                                                                  Double altitude) throws Exception {
-        @Setter
-        class pointIds{
-            Integer departuresNodeId;
-            Integer arrivalsNodeId;
-        }
         pointIds pointIds = new pointIds();
 
         if(placeRequestDTO.isDepartures()) {
@@ -157,14 +176,14 @@ public class MapServiceImpl implements MapService{
             }
         }
 
-        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, pointIds.departuresNodeId, pointIds.arrivalsNodeId);
-        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, pointIds.departuresNodeId, pointIds.arrivalsNodeId);
+        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, pointIds.departuresNodeId, pointIds.arrivalsNodeId, setAIData(placeRequestDTO));
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, pointIds.departuresNodeId, pointIds.arrivalsNodeId, setAIData(placeRequestDTO));
 
         Integer shortestDepartureNodeId = shortestRoute.getNodeList().get(0).getNodeId();
         Integer shortestArrivalsNodeId = shortestRoute.getNodeList().get(shortestRoute.getNodeList().size()-1).getNodeId();
         if(shortestDepartureNodeId == 0 || shortestArrivalsNodeId == 0) return ResponseListEntity.notFound(null);
         if(Objects.equals(shortestDepartureNodeId, shortestArrivalsNodeId)) return ResponseListEntity.sameNode(null);
-        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId);
+        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId, setAIData(placeRequestDTO));
 
         List<NavigationResponseDTO> routes;
         if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
@@ -174,7 +193,8 @@ public class MapServiceImpl implements MapService{
     }
 
     @Override
-    public ResponseListEntity<NavigationResponseDTO> getRoute(Integer departures, Integer arrivals) throws Exception {
+    public ResponseListEntity<NavigationResponseDTO> getRoute(PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                              Integer departures, Integer arrivals) throws Exception {
         PlaceSource departuresPlace = placeSourceRepository.findByPlaceId(departures);
         Integer departuresNodeId = getNearestNodeId(departuresPlace.getPlaceLatitude(),
                 departuresPlace.getPlaceLongitude(),
@@ -185,20 +205,42 @@ public class MapServiceImpl implements MapService{
                 arrivalsPlace.getPlaceLongitude(),
                 arrivalsPlace.getPlaceAltitude());
 
-        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId);
-        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId);
+        NavigationResponseDTO shortestRoute = calculateRoute(routeTypeShortest, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO););
+        NavigationResponseDTO optimalRoute = calculateRoute(routeTypeOptimal, departuresNodeId, arrivalsNodeId,setAIData(placeRequestDTO););
 
         Integer shortestDepartureNodeId = shortestRoute.getNodeList().get(0).getNodeId();
         Integer shortestArrivalsNodeId = shortestRoute.getNodeList().get(shortestRoute.getNodeList().size()-1).getNodeId();
         if(shortestDepartureNodeId == 0 || shortestArrivalsNodeId == 0) return ResponseListEntity.notFound(null);
         if(Objects.equals(shortestDepartureNodeId, shortestArrivalsNodeId)) return ResponseListEntity.sameNode(null);
-        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId);
+        NavigationResponseDTO busRoute = getBusRoute(shortestDepartureNodeId,shortestArrivalsNodeId,setAIData(placeRequestDTO););
 
         List<NavigationResponseDTO> routes;
         if(busRoute == null) routes = Arrays.asList(shortestRoute, optimalRoute);
         else routes = Arrays.asList(shortestRoute, optimalRoute, busRoute);
 
         return ResponseListEntity.requestListSuccess(routes.toArray(new NavigationResponseDTO[0]));
+    }
+
+    private AIData setAIData(PlaceRequestDTO.requestLocation placeRequestDTO) {
+        if(placeRequestDTO.isUser()){
+            return AIData.builder()
+                    .birthYear(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserBirth())
+                    .height(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserHeight())
+                    .weight(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserWeight())
+                    .walkSpeed(userRepository.findByUserId(placeRequestDTO.getUserId()).getUserSpeed())
+                    .temperature(placeRequestDTO.getTemperature())
+                    .precipitationProbability(placeRequestDTO.getPrecipitationProbability())
+                    .build();
+        }else {
+            return AIData.builder()
+                    .birthYear(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestBirth())
+                    .height(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestHeight())
+                    .weight(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestWeight())
+                    .walkSpeed(userGuestRepository.findByGuestId(placeRequestDTO.getGuestId()).getGuestSpeed())
+                    .temperature(placeRequestDTO.getTemperature())
+                    .precipitationProbability(placeRequestDTO.getPrecipitationProbability())
+                    .build();
+        }
     }
 
     @Override
@@ -220,7 +262,7 @@ public class MapServiceImpl implements MapService{
         return ResponseEntity.requestSuccess(arImageList);
     }
 
-    private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId) throws Exception {
+    private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId, AIData aiData) throws Exception {
         List<BusLine.Node> busLine;
         busLine = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
         if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
@@ -237,14 +279,17 @@ public class MapServiceImpl implements MapService{
             }
             int tailIndex = nodeList.size() -1;
 
-            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null));
-            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId);
+            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null), aiData);
+            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId, aiData);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
+            Integer totalTime = 0;
+            totalTime += AIService.calculateTime(gettingOnRoute.getNodeList(), aiData);
+            totalTime += AIService.calculateTime(gettingOffRoute.getNodeList(), aiData);
 
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
             if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
-            NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, 0, busRouteMergedlist);
+            NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime, busRouteMergedlist);
 
             return busMergedRoute;
         }
@@ -295,7 +340,7 @@ public class MapServiceImpl implements MapService{
         return c * R;
     }
 
-    private NavigationResponseDTO calculateRoute(String routeType, Integer departuresNodeId, Integer arrivalsNodeId) {
+    private NavigationResponseDTO calculateRoute(String routeType, Integer departuresNodeId, Integer arrivalsNodeId, AIData aIData) {
         List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
         Map<Integer, Double> distances = new HashMap<>();
         Map<Integer, Integer> previousNodes = new HashMap<>();

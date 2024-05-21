@@ -24,7 +24,8 @@ public interface MapService {
                                                           Double longitude,
                                                           Double altitude) throws Exception;
 
-    ResponseListEntity<NavigationResponseDTO> getRoute(Integer departure, Integer arrival) throws Exception;
+    ResponseListEntity<NavigationResponseDTO> getRoute(PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                       Integer departure, Integer arrival) throws Exception;
 
     ResponseEntity<List<PlaceResponseDTO.placeARImageDTO>> getARImageList(Double latitude, Double longitude, Double altitude);
 }

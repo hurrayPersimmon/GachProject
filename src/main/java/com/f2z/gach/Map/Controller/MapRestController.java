@@ -52,9 +52,10 @@ public class MapRestController {
         return mapService.getNowRoute(placeRequestDTO, latitude, longitude, altitude);
     }
 
-    @GetMapping("/route")
-    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestParam Integer departures, @RequestParam Integer arrivals) throws Exception {
-        return mapService.getRoute(departures, arrivals);
+    @PostMapping("/route")
+    public ResponseListEntity<NavigationResponseDTO> getRoute(@RequestBody PlaceRequestDTO.requestLocation placeRequestDTO,
+                                                              @RequestParam Integer departures, @RequestParam Integer arrivals) throws Exception {
+        return mapService.getRoute(placeRequestDTO, departures, arrivals);
     }
 
     @GetMapping("/ar")
