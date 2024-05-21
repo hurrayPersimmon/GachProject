@@ -49,10 +49,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/images/**","/css/**", "/image/**", "/js/**" ,"/").permitAll()
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "GUEST")
                         .requestMatchers("/user/login").permitAll()
-                        .requestMatchers("/admin/main-page").permitAll()
-                        .requestMatchers("/admin/signup").permitAll()
                         .requestMatchers("/user/signup?**").permitAll()
                         .requestMatchers("/user/signup").permitAll()
                         .requestMatchers("/user/guest").permitAll()
@@ -73,6 +70,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/history").permitAll()
                         .requestMatchers("/history/top-nodes").permitAll()
                         .requestMatchers("/admin/list").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/admin/login")
@@ -85,11 +83,6 @@ public class WebSecurityConfig {
                 .logout(out -> out.logoutUrl("/"))
                 .userDetailsService(customUserDetailService)
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        http2 -> http2.requestMatchers("/").permitAll()
-                                .requestMatchers("/admin/main-page").permitAll()
-                                .anyRequest().authenticated()
-                )
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.accessDeniedHandler(accessDeniedHandler).accessDeniedPage("/admin/deny")
                 );
