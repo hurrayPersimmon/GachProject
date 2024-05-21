@@ -15,8 +15,8 @@ spring:
     url: jdbc:mariadb://localhost:3306/db24102?characterEncoding=UTF-8&serverTimezone=UTC
 
   profiles:
-    active: dev
-#    active: prod
+#    active: dev
+    active: prod
   thymeleaf:
     cache: false
   devtools:
