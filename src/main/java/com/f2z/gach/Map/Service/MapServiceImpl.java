@@ -40,6 +40,8 @@ public class MapServiceImpl implements MapService{
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
     private final String routeBus = "busRoute";
+    private final AIService aiService;
+
 
 
     @Override
