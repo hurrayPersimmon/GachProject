@@ -20,54 +20,42 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AIService {
-    private final dataRepository dataRepo;
+    private final AiModelRepository aiRepo;
     private final HistoryLineTimeRepository lineTimeRepo;
     private ProcessBuilder processBuilder;
-//    final String localPythonPath = "/opt/anaconda3/bin/python3";
-//    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
-//    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
-//    final String localOutPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py";
-//    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
-//    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
-    final String localPythonPath = "python3";
-    final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
-    final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
-    final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
-    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
-    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
-    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
-
-    // 현재 모든 데이터
-    public List<dataEntity> getData(){
-        return dataRepo.findAll();
-    }
+    final String localPythonPath = "/opt/anaconda3/bin/python3";
+    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
+    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
+    final String localOutPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py";
+    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
+    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
+    final String localDeleteSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/delete.sh";
+    final String tempOutputPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/tree_output.py";
+//    final String localPythonPath = "python3";
+//    final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
+//    final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
+//    final String localOutPath = "/home/t24102/GachProject/AI/Python/output.py";
+//    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
+//    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
+//    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
 
     // 현재의 데이터를 기반으로 필터링 작업 시작
     public int filterData(int min, int max) {
-        List<dataEntity> originalList = dataRepo.findAll();
+        List<HistoryLineTime> originalList = lineTimeRepo.findAll();
         List<dataEntity> filteredList = new ArrayList<>();
-        List<HistoryLineTime> lineTimeList = lineTimeRepo.findAll();
-
-        lineTimeList.forEach( i -> {
-            dataEntity data = dataEntity.parseHistory(i);
-            originalList.add(data);
-        });
 
         originalList.stream()
-                .filter(data -> data.getTakeTime() != null && data.getTakeTime() > (double)min && data.getTakeTime() < (double)max)
-                .forEach(filteredList::add);
+                .filter(data -> data.getLineTime() != null && data.getLineTime() > (double)min && data.getLineTime() < (double)max)
+                .forEach(data -> filteredList.add(dataEntity.parseHistory(data)));
 
         String csvFile = csvFilePath;
 
         try (FileWriter writer = new FileWriter(csvFile)) {
             // CSV 파일 헤더 쓰기
-            writer.append("dataId,node1,node2,birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,takeTime,weightShortest,weightOptimal\n");
+            writer.append("birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,weightShortest,weightOptimal,takeTime\n");
 
             // 데이터 쓰기
             for (dataEntity data : filteredList) {
-                writer.append(String.valueOf(data.getDataId())).append(",");
-                writer.append(data.getNode1()).append(",");
-                writer.append(data.getNode2()).append(",");
                 writer.append(String.valueOf(data.getBirthYear())).append(",");
                 writer.append(String.valueOf(data.getGender())).append(",");
                 writer.append(String.valueOf(data.getHeight())).append(",");
@@ -76,9 +64,9 @@ public class AIService {
                 writer.append(String.valueOf(data.getTemperature())).append(",");
                 writer.append(String.valueOf(data.getPrecipitationProbability())).append(",");
                 writer.append(String.valueOf(data.getPrecipitation())).append(",");
-                writer.append(String.valueOf(data.getTakeTime())).append(",");
+                writer.append(String.valueOf(data.getWeightOptimal())).append(",");
                 writer.append(String.valueOf(data.getWeightShortest())).append(",");
-                writer.append(String.valueOf(data.getWeightOptimal())).append("\n");
+                writer.append(String.valueOf(data.getTakeTime())).append("\n");
             }
 
             log.info("CSV 파일이 성공적으로 생성되었습니다.");
@@ -87,77 +75,6 @@ public class AIService {
             e.printStackTrace();
         }
         return filteredList.size();
-    }
-
-    public int filterData(int min, int max, List<dataEntity> list) {
-        List<dataEntity> originalList = list;
-        List<dataEntity> filteredList = new ArrayList<>();
-        List<HistoryLineTime> lineTimeList = lineTimeRepo.findAll();
-
-        lineTimeList.forEach( i -> {
-            dataEntity data = dataEntity.parseHistory(i);
-            originalList.add(data);
-        });
-
-        originalList.stream()
-                .filter(data -> data.getTakeTime() != null && data.getTakeTime() > (double)min && data.getTakeTime() < (double)max)
-                .forEach(filteredList::add);
-
-        String csvFile = "/home/t24102/GachProject/AI/Data/re_data.csv";
-
-        try (FileWriter writer = new FileWriter(csvFile)) {
-            // CSV 파일 헤더 쓰기
-            writer.append("dataId,node1,node2,birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,takeTime,weightShortest,weightOptimal\n");
-
-            // 데이터 쓰기
-            for (dataEntity data : filteredList) {
-                writer.append(String.valueOf(data.getDataId())).append(",");
-                writer.append(data.getNode1()).append(",");
-                writer.append(data.getNode2()).append(",");
-                writer.append(String.valueOf(data.getBirthYear())).append(",");
-                writer.append(String.valueOf(data.getGender())).append(",");
-                writer.append(String.valueOf(data.getHeight())).append(",");
-                writer.append(String.valueOf(data.getWeight())).append(",");
-                writer.append(String.valueOf(data.getWalkSpeed())).append(",");
-                writer.append(String.valueOf(data.getTemperature())).append(",");
-                writer.append(String.valueOf(data.getPrecipitationProbability())).append(",");
-                writer.append(String.valueOf(data.getPrecipitation())).append(",");
-                writer.append(String.valueOf(data.getTakeTime())).append(",");
-                writer.append(String.valueOf(data.getWeightShortest())).append(",");
-                writer.append(String.valueOf(data.getWeightOptimal())).append("\n");
-            }
-
-            log.info("CSV 파일이 성공적으로 생성되었습니다.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return filteredList.size();
-    }
-
-
-    // 이것은 학습 데이터
-    public String makeModel(int hidden, int epochs, int layers, double learningRate, int batch_size) throws Exception{
-        processBuilder = new ProcessBuilder(localPythonPath, localModelPath,
-                Integer.toString(hidden),
-                Integer.toString(epochs),
-                Integer.toString(layers),
-                Double.toString(learningRate),
-                Integer.toString(batch_size));
-        processBuilder.redirectErrorStream(true);
-        Process process = processBuilder.start();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
-            if(line.startsWith("Validation")) {
-                reader.close();
-                return sb.toString();
-            }
-        }
-        reader.close();
-        return sb.toString();
     }
 
     public void saveModel(String modelName){
@@ -173,10 +90,9 @@ public class AIService {
         }
     }
 
-    // 재학습 모델
-    public String doMakeModel(int epochs, double learningRate, String modelPath) throws Exception{
-        processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                Integer.toString(epochs), Double.toString(learningRate), modelPath);
+    // 재학습 모델 추가 데이터를 구분하는 작업만 하면 된다. 즉 인덱스 작업만 진행하면 됨.
+    public String reLearnModel() throws Exception{
+        processBuilder = new ProcessBuilder(localPythonPath, localReModelPath);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -194,15 +110,13 @@ public class AIService {
         return sb.toString();
     }
 
-    public double modelOutput(AiModel aiModel, MapLine line, dataEntity data) throws Exception{
-        processBuilder = new ProcessBuilder(localPythonPath,
-                localOutPath, String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
+    public double modelOutput(MapLine line, dataEntity data) throws Exception{
+        processBuilder = new ProcessBuilder(localPythonPath, tempOutputPath,
+                String.valueOf(data.getBirthYear()), String.valueOf(data.getGender()),
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
                 String.valueOf(data.getWalkSpeed()), String.valueOf(data.getTemperature()),
                 String.valueOf(data.getPrecipitationProbability()), String.valueOf(data.getPrecipitation()),
-                String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()),
-                aiModel.getAiModelPath(), String.valueOf(aiModel.getHiddenLayer()),
-                String.valueOf(aiModel.getNumLayer()));
+                String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()));
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         String takeTime = null;
@@ -210,26 +124,27 @@ public class AIService {
             String printLine;
             while ((printLine = reader.readLine()) != null) {
                 takeTime = printLine;
+                log.info(takeTime);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         process.destroy();
 
-        int startIndex = takeTime.indexOf("[[") + 2;
-        int endIndex = takeTime.indexOf("]]", startIndex);
+        takeTime = takeTime.substring(1, takeTime.length() - 1);
 
-        String numberString = takeTime.substring(startIndex, endIndex);
-        return Double.parseDouble(numberString);
+        return Double.parseDouble(takeTime);
     }
 
     public void deleteModel(AiModel aiModel) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(localDeleteSHPath, aiModel.getAiModelName());
+            log.info(aiModel.getAiModelPath());
+            processBuilder = new ProcessBuilder(localDeleteSHPath, aiModel.getAiModelName());
             Process process = processBuilder.start();
 
             int exitCode = process.waitFor();
             log.info("삭제 완료 코드 : " + exitCode);
+            process.destroy();
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

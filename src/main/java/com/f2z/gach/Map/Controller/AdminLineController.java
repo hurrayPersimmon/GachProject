@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -72,6 +73,7 @@ public class AdminLineController {
     }
 
     @PostMapping("/line")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addLine(@Valid @ModelAttribute("lineDto") MapDTO.MapLineDTO mapLineDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -87,6 +89,7 @@ public class AdminLineController {
     }
 
     @GetMapping("/line/{lineId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteLine(@PathVariable Integer lineId,
                              Model model)throws Exception{
         if(mapLineRepository.existsByLineId(lineId)){

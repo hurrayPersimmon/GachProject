@@ -11,20 +11,21 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import mean_absolute_error
 
-localSavePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/temp.pt"
-savePath = "/home/t24102/GachProject/AI/Model/temp.pt"
-csvPath = "/home/t24102/GachProject/AI/Data/data.csv"
-localCsvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
-localAugCsvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/augment_data.csv"
-augCsvPath = "/home/t24102/GachProject/AI/Data/augment_data.csv"
+# savePath = "/home/t24102/GachProject/AI/Model/temp.pt"
+# csvPath = "/home/t24102/GachProject/AI/Data/data.csv"
+# augCsvPath = "/home/t24102/GachProject/AI/Data/augment_data.csv"
+savePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/temp.pt"
+csvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
+augCsvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/augment_data.csv"
 
 def augment_data(row):
     augmented_rows = []
-    for _ in range(5):
+    for _ in range(10):
         augmented_row = row.copy()
-        augmented_row['weight'] += random.uniform(-1, 1)
-        augmented_row['height'] += random.uniform(-1, 1)
-        augmented_row['temperature'] += random.uniform(-1, 1)
+        augmented_row['weight'] += random.uniform(-2, 2)
+        augmented_row['height'] += random.uniform(-2, 2)
+        augmented_row['temperature'] += random.uniform(-2, 2)
+        augmented_row['takeTime'] += random.uniform(-2, 2)
         augmented_rows.append(augmented_row)
     return augmented_rows
 

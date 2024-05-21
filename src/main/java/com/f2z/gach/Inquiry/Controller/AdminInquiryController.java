@@ -2,18 +2,16 @@ package com.f2z.gach.Inquiry.Controller;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
-import com.f2z.gach.Inquiry.DTO.InquiryRequestDTO;
 import com.f2z.gach.Inquiry.DTO.InquiryResponseDTO;
 import com.f2z.gach.Inquiry.Entity.Inquiry;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
-import com.f2z.gach.User.Entity.User;
-import com.f2z.gach.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +28,6 @@ public class AdminInquiryController {
 
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
-    private final UserRepository userRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -81,10 +78,9 @@ public class AdminInquiryController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public String inquiryAnswer(@ModelAttribute Inquiry inquiry){
-        log.info("답변 등록");
         log.info(inquiry.toString());
-        //TODO: 제목, 내용, 닉네임, 시간은 수정하지 못하도록 해야할 듯.
         Inquiry target = inquiryRepository.findByInquiryId(inquiry.getInquiryId());
         target.update(inquiry.getInquiryAnswer());
         inquiryRepository.save(target);

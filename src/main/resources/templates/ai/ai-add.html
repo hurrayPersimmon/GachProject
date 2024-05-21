@@ -22,10 +22,10 @@
         <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
             <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
                 <div class="row ms-5 mb-3 mt-2 nodeHeader">
-                    관리자 > AI관리 > AI 모델 추가
+                    관리자 > AI관리 > AI 모델 재학습
                 </div>
                 <div class="row mb-4 ms-5 fs-1 fontHv">
-                    AI 모델 추가
+                    AI 모델 재학습
                 </div>
                 <div class="row">
                     <div class="col-6 offset-2">
@@ -59,8 +59,8 @@
                             </div>
                             <div class="row mb-3 mt-4">
                                 <div class="col">
-                                    <div class="">기존 데이터 개수</div>
-                                    <div class="fs-3 fontHv" th:text="${dataListLength}">224</div>
+                                    <div>추가 데이터 개수</div>
+                                    <div class="fs-3 fontHv" style="color:cornflowerblue" th:text="${dataListLength}">0</div>
                                 </div>
                                 <div class="col">
                                     <div>필터링된 데이터 개수</div>
@@ -81,31 +81,26 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">은닉층 개수</p>
+                                        <p class="fs-5 nodeHeader text-start">최대 깊이 개수</p>
                                         <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="hidden" disabled>
+                                        <input type="text" class="form-control fontHv fs-6 second" id="depth" disabled>
                                 </div>
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">층의 수</p>
+                                        <p class="fs-5 nodeHeader text-start">최소 샘플 수</p>
                                         <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="layer" disabled>
-                                </div>
-                                <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">에포크 수</p>
-                                        <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="epochs" disabled>
+                                        <input type="text" class="form-control fontHv fs-6 second" id="sample" disabled>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">학습률</p>
+                                        <p class="fs-5 nodeHeader text-start">최소 샘플 수(leaf)</p>
                                         <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="rate" disabled>
+                                        <input type="text" class="form-control fontHv fs-6 second" id="leaf" disabled>
                                 </div>
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">배치 사이즈</p>
+                                        <p class="fs-5 nodeHeader text-start">최대 특성 수</p>
                                         <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="batch" disabled>
+                                        <input type="text" class="form-control fontHv fs-6 second" id="feature" disabled>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -117,7 +112,7 @@
                     </div>
                 </div>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5 sidebarItem" id="exampleModalLabel">모델 학습 결과</h1>
@@ -125,10 +120,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-8" style="height:45vh">
-                                        <canvas id="chart" style="width:100%;"></canvas>
-                                    </div>
-                                    <div class="col-4 border-start">
+                                    <div class="col">
                                         <div class="row">
                                             <div class="col">
                                                 <p class="fs-5 nodeHeader text-start">모델 이름</p>
@@ -163,10 +155,17 @@
     </div>
 </div>
 <script th:replace="fragment::search"></script>
-<script>
+<script th:inline="javascript">
 
     const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    let dataLength = [[${dataListLength}]];
+    if(dataLength < 300){
+        // alert 창 띄우기
+        alert("데이터 길이가 300보다 작습니다.");
 
+        // 이전 페이지로 되돌아가기
+        window.history.back();
+    }
     function doFilter(){
 
         let min = document.getElementById("min").value;
@@ -175,7 +174,7 @@
         let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/${min}/${max}`;
         let localUrl = `http://localhost:60002/admin/ai/model/add/filter/${min}/${max}`;
 
-        fetch(url) // 데이터를 받아올 URL
+        fetch(localUrl) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 const result = parseInt(data);
@@ -198,23 +197,15 @@
         document.getElementById("main").style.opacity = "20%";
         document.getElementById("spin").style.display = "block";
         document.getElementById("comment").style.display = "block";
-        let rate = document.getElementById("rate").value;
-        let epoch = document.getElementById("epochs").value;
-        let layer = document.getElementById("layer").value;
-        let hidden = document.getElementById("hidden").value;
-        let batch = document.getElementById("batch").value;
+        let depth = document.getElementById("depth").value;
+        let sample = document.getElementById("sample").value;
+        let leaf = document.getElementById("leaf").value;
+        let feature = document.getElementById("feature").value;
 
-        let localUrl = `http://localhost:60002/admin/ai/model/add/${hidden}/${epoch}/${rate}/${layer}/${batch}`;
-        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/${hidden}/${epoch}/${rate}/${layer}/${batch}`;
+        let localUrl = `http://localhost:60002/admin/ai/model/learn`;
+        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/learn`;
 
-        let epochs = [];
-        let validationLosses = [];
-        const ctx = document.getElementById('chart');
-        let chartStatus = Chart.getChart(ctx);
-        if (chartStatus !== undefined) {
-            chartStatus.destroy();
-        }
-        fetch(url) // 데이터를 받아올 URL
+        fetch(localUrl) // 데이터를 받아올 URL
             .then(response => response.text()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("spin").style.display = "none";
@@ -222,34 +213,6 @@
                 document.getElementById("comment").style.display = 'none';
                 document.getElementById("doModelButton").innerText = "학습 완료";
 
-                let dataArray = data.split(",");
-                dataArray.forEach(function(data, index) {
-                    // 공백을 기준으로 데이터 분할
-                    let parts = data.split(" ");
-
-                    if (index === dataArray.length - 1) {
-                        document.getElementById("mae").value = parseFloat(parts[0]);
-                    } else {
-                        epochs.push(parseInt(parts[0]));
-                        validationLosses.push(parseFloat(parts[1]));
-                    }
-                });
-                const chartData = {
-                    labels: epochs,
-                    datasets: [{
-                        label: 'Validation Loss',
-                        data: validationLosses
-                    }]
-                };
-                new Chart(ctx, {
-                    type: 'line',
-                    data : chartData,
-                    options : {
-                        plugins : {
-                            legend:false
-                        }
-                    }
-                });
                 myModal.show(myModal);
             })
             .catch(error => {
@@ -260,7 +223,7 @@
     function saveModel(){
         let localUrl = 'http://localhost:60002/admin/ai/model/add';
         let url = 'http://ceprj.gachon.ac.kr:60002/admin/ai/model/add';
-        fetch(url, {
+        fetch(localUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -269,11 +232,10 @@
                 modelName: document.getElementById("modelName").value,
                 modelMae : document.getElementById("mae").value,
                 modelVersion : document.getElementById("modelVersion").value,
-                modelEpochs : document.getElementById("epochs").value,
-                modelBatch : document.getElementById("batch").value,
-                modelHidden : document.getElementById("hidden").value,
-                modelLayer : document.getElementById("layer").value,
-                modelLearning : document.getElementById("rate").value
+                modelDepth : document.getElementById("depth").value,
+                modelSample : document.getElementById("sample").value,
+                modelLeaf : document.getElementById("leaf").value,
+                modelFeature : document.getElementById("feature").value
             }),
         })
             .then(data => {

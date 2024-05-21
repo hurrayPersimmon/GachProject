@@ -1,6 +1,7 @@
 package com.f2z.gach.Admin.DTO;
 
 import com.f2z.gach.Admin.Entity.Admin;
+import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.EnumType.Authorization;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

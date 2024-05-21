@@ -27,6 +27,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/","/admin/main-page");
     }
-
-
 }

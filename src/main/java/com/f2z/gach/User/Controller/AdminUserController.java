@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +73,7 @@ public class AdminUserController {
     }
 
     @PostMapping("/users/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String userUpdate(@ModelAttribute("userForm") UserForm userForm){
         User user = userRepository.findByUserId(userForm.getUserId());
         log.info(userForm.toString());
@@ -82,6 +84,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/delete/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String userDelete(@PathVariable Long userId){
         User user = userRepository.findByUserId(userId);
         userRepository.delete(user);

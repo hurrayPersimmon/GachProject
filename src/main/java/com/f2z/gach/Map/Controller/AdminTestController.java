@@ -1,6 +1,7 @@
 package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.AI.AIService;
+import com.f2z.gach.AI.AdminAIController;
 import com.f2z.gach.AI.AiModel;
 import com.f2z.gach.AI.AiModelRepository;
 import com.f2z.gach.Admin.Repository.AdminRepository;
@@ -33,12 +34,11 @@ public class AdminTestController {
     private final MapLineRepository mapLineRepository;
     private final MapNodeRepository mapNodeRepository;
     private final AdminRepository adminRepository;
-    private final InquiryRepository inquiryRepository;
     private final AiModelRepository aiRepo;
+    private final InquiryRepository inquiryRepository;
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
     private final AIService aiService;
-    AiModel aiModel;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -75,16 +75,15 @@ public class AdminTestController {
         model.addAttribute("departures", mapNodeRepository.findByNodeId(departures));
         model.addAttribute("nodeDto", NavigationResponseDTO.toAdminMapNode(mapNodeRepository.findByNodeId(departures), mapNodeRepository.findByNodeId(arrivals)));
         model.addAttribute("nodeList", NavigationResponseDTO.toAdminNodeList(shortestRoute,optimalRoute));
-        aiModel = aiRepo.findById(2).orElseThrow();
         dataEntity data = new dataEntity();
         data.setGender(0);
         data.setTemperature(19.4);
-        data.setPrecipitationProbability(10);
-        data.setPrecipitation(10.0);
-        data.setBirthYear(2000);
-        data.setWeight(52.1);
+        data.setPrecipitationProbability(0);
+        data.setPrecipitation(0.0);
+        data.setBirthYear(2003);
+        data.setWeight(55.1);
         data.setHeight(165.2);
-        data.setWalkSpeed(1);
+        data.setWalkSpeed(2);
 
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -95,7 +94,7 @@ public class AdminTestController {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(shortestRoute.get(i).getNodeId(), shortestRoute.get(i + 1).getNodeId());
             CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
                 try {
-                    return aiService.modelOutput(aiModel, line, data);
+                    return aiService.modelOutput(line, data);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -107,7 +106,7 @@ public class AdminTestController {
             MapLine line = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(optimalRoute.get(i).getNodeId(), optimalRoute.get(i + 1).getNodeId());
             CompletableFuture<Double> future = CompletableFuture.supplyAsync(() -> {
                 try {
-                    return aiService.modelOutput(aiModel, line, data);
+                    return aiService.modelOutput(line, data);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

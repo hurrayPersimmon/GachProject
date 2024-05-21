@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="~{/fragment :: head}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -89,294 +89,215 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row flex-nowrap">
-        <div class="bg-white col-auto col-md-2" style="max-width: 25vw;">
-            <div class="bg-white p-2">
-                <p class="d-flex mt-2 align-items-center">
-                    <span class="d-none d-sm-inline">
-                        <img src="/image/Gach_homepage_main.png" class="img-fluid">
-                    </span>
-                </p>
-                <ul class="nav flex-column mt-4">
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/squares.leading.rectangle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">대시보드</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <ul id="additionalOptions" class="additional-options nav nav-pills flex-column">
-                            <li class="nav-item mt-1 nav-link">
-                                <img src="/image/dot.viewfinder.png" class="img-fluid mb-1">
-                                <a href="/admin/node" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">노드 관리</a>
-                            </li>
-                            <li class="nav-item mt-1 nav-link">
-                                <img src="/image/rectangle.connected.to.line.below.png" class="img-fluid mb-1">
-                                <a href="/admin/line" class="mt-2 text-body-secondary fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar" style="display:inline; text-decoration: none;">간선 관리</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/brain.head.profile.png" class="img-fluid mb-2 me-4">
-                            <span class="fs-5 d-none d-sm-inline noto-sans-sidebar">AI 관리</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/building.2.png" class="img-fluid mb-2 me-1"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">장소 관리</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/calendar.badge.plus.png" class="img-fluid mb-2"><span class="fs-5 ms-3 d-none d-sm-inline noto-sans-sidebar">행사 관리</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="/admin/users/list" class="nav-link text-body-secondary ps-2">
-                            <img src="/image/person.3.sequence.png" class="img-fluid mb-2 pe-1"><span class="fs-5 ms-1 d-none d-sm-inline noto-sans-sidebar">사용자 관리</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/person.fill.questionmark.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">문의 관리</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="#" class="nav-link text-body-secondary">
-                            <img src="/image/exclamationmark.circle.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">로그</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2">
-                        <a href="/admin/list" class="nav-link text-body-secondary ps-2">
-                            <img src="/image/person.badge.key.png" class="img-fluid mb-2"><span class="fs-5 ms-4 d-none d-sm-inline noto-sans-sidebar">관리자 설정</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Content -->
-
-        <div class="row-mine py-3 px-0 mx-0 shadow-lg bg-body-tertiary rounded">
-            <div class="container">
-
-                <!-- Header -->
-
-                <div class="row">
-                    <div class="col align-items-start noto-sans-700 fs-2">
-                        Dashboard
-                    </div>
-                    <div class="col align-items-end text-end">
-                        <b class="noto-sans-sidebar py-5 my-5" style="font-size:1.5rem;">노명준</b>
-                    </div>
-                </div>
-
-                <!-- Small Box-->
-
-                <div class="row">
-                    <div class="col-3">
-                        <div class="card border-light">
-                            <div class="shadow p-3 rounded border-bottom border-4 border-primary">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card-title fs-5 noto-sans-100">총 회원가입자 수</div>
-                                        <div>
-                                            <span class="card-text noto-sans-400 fs-3">5235명</span>
-                                            <span class="card-text text-primary fs-5 ms-4">+10%</span>
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row">
+        <div th:replace="~{fragment :: sidebar('dash')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top : 5%">
+                <div class="container-fluid pt-4">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="card border-light">
+                                <div class="shadow p-3 rounded border-bottom border-4 border-primary">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-title fs-5 noto-sans-100">총 회원가입자 수</div>
+                                            <div>
+                                                <span class="card-text noto-sans-400 fs-3">5235명</span>
+                                                <span class="card-text text-primary fs-5 ms-4">+10%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 pt-3">
+                                            <i class="bi bi-person-up fs-1 text-primary"></i>
                                         </div>
                                     </div>
-                                    <div class="col-3 pt-3">
-                                        <i class="bi bi-person-up fs-1 text-primary"></i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card border-light">
-                            <div class="shadow p-3 rounded border-bottom border-4 border-success-subtle">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card-title fs-5 noto-sans-100">일일 접속자 수</div>
-                                        <div>
-                                            <span class="card-text noto-sans-400 fs-3">2320명</span>
-                                            <span class="card-text green-color fs-5 ms-4">+1%</span>
+                        <div class="col-3">
+                            <div class="card border-light">
+                                <div class="shadow p-3 rounded border-bottom border-4 border-success-subtle">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-title fs-5 noto-sans-100">일일 접속자 수</div>
+                                            <div>
+                                                <span class="card-text noto-sans-400 fs-3">2320명</span>
+                                                <span class="card-text green-color fs-5 ms-4">+1%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 pt-3">
+                                            <i class="bi bi-graph-up-arrow fs-1 green-color"></i>
                                         </div>
                                     </div>
-                                    <div class="col-3 pt-3">
-                                        <i class="bi bi-graph-up-arrow fs-1 green-color"></i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card border-light">
-                            <div class="shadow p-3 rounded border-bottom border-4 border-warning-subtle">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card-title fs-5 noto-sans-100">일일 요청 수</div>
-                                        <div>
-                                            <span class="card-text noto-sans-400 fs-3">3210건</span>
-                                            <span class="card-text text-warning fs-5 ms-4">+31%</span>
+                        <div class="col-3">
+                            <div class="card border-light">
+                                <div class="shadow p-3 rounded border-bottom border-4 border-warning-subtle">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-title fs-5 noto-sans-100">일일 요청 수</div>
+                                            <div>
+                                                <span class="card-text noto-sans-400 fs-3">3210건</span>
+                                                <span class="card-text text-warning fs-5 ms-4">+31%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 pt-3">
+                                            <i class="bi bi-graph-up-arrow fs-1 text-warning"></i>
                                         </div>
                                     </div>
-                                    <div class="col-3 pt-3">
-                                        <i class="bi bi-graph-up-arrow fs-1 text-warning"></i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card border-light">
-                            <div class="shadow p-3 rounded border-bottom border-4 border-danger">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card-title fs-5 noto-sans-100">일일 오류 발생 수</div>
-                                        <div>
-                                            <span class="card-text noto-sans-400 fs-3">20건</span>
-                                            <span class="card-text text-danger fs-5 ms-4">-0.4%</span>
+                        <div class="col-3">
+                            <div class="card border-light">
+                                <div class="shadow p-3 rounded border-bottom border-4 border-danger">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-title fs-5 noto-sans-100">일일 오류 발생 수</div>
+                                            <div>
+                                                <span class="card-text noto-sans-400 fs-3">20건</span>
+                                                <span class="card-text text-danger fs-5 ms-4">-0.4%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 pt-3">
+                                            <i class="bi bi-graph-down-arrow fs-1 text-danger"></i>
                                         </div>
                                     </div>
-                                    <div class="col-3 pt-3">
-                                        <i class="bi bi-graph-down-arrow fs-1 text-danger"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="shadow card col m-3 border-light rounded ps-4">
+                            <div class="card-title noto-sans-500 fs-2 mb-3">
+                                <div class="row justify-content-between mt-2 p-2">
+                                    <div class="col-4 noto-sans-700">
+                                        경로 요청
+                                    </div>
+                                    <div class="col-3 mt-3 me-4">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>이번주</option>
+                                            <option value="1">이번달</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+                            <canvas id="myChart1"></canvas>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="shadow card col m-3 border-light rounded ps-4">
-                        <div class="card-title noto-sans-500 fs-2 mb-3">
-                            <div class="row justify-content-between mt-2 p-2">
-                                <div class="col-4 noto-sans-700">
-                                    경로 요청
-                                </div>
-                                <div class="col-3 mt-3 me-4">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>이번주</option>
-                                        <option value="1">이번달</option>
-                                    </select>
+                        <div class="shadow card col m-3 border-light rounded">
+                            <div class="card-title noto-sans-500 fs-2 mb-3">
+                                <div class="row justify-content-between mt-2 p-2">
+                                    <div class="col-4 noto-sans-700">
+                                        인기 노드
+                                    </div>
+                                    <div class="col-3 mt-3 me-4">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>오늘</option>
+                                            <option value="1">이번주</option>
+                                            <option value="2">이번달</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <canvas id="myChart2" style="max-height:30vh"></canvas>
                         </div>
-                        <canvas id="myChart1"></canvas>
                     </div>
-                    <div class="shadow card col m-3 border-light rounded">
-                        <div class="card-title noto-sans-500 fs-2 mb-3">
-                            <div class="row justify-content-between mt-2 p-2">
-                                <div class="col-4 noto-sans-700">
-                                    인기 노드
-                                </div>
-                                <div class="col-3 mt-3 me-4">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>오늘</option>
-                                        <option value="1">이번주</option>
-                                        <option value="2">이번달</option>
-                                    </select>
+                    <div class="row">
+                        <div class="shadow card col m-3 border-light rounded ps-4">
+                            <div class="card-title noto-sans-500 fs-2 mb-3">
+                                <div class="row justify-content-between mt-2 p-2">
+                                    <div class="col-7 noto-sans-700">
+                                        AI 소요시간 만족도
+                                    </div>
+                                    <div class="col-3 mt-3 me-4">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>이번주</option>
+                                            <option value="1">이번달</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <canvas id="myChart3"></canvas>
                         </div>
-                        <canvas id="myChart2" style="max-height:30vh"></canvas>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="shadow card col m-3 border-light rounded ps-4">
-                        <div class="card-title noto-sans-500 fs-2 mb-3">
-                            <div class="row justify-content-between mt-2 p-2">
-                                <div class="col-7 noto-sans-700">
-                                    AI 소요시간 만족도
-                                </div>
-                                <div class="col-3 mt-3 me-4">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>이번주</option>
-                                        <option value="1">이번달</option>
-                                    </select>
+                        <div class="shadow card col m-3 border-light rounded">
+                            <div class="card-title noto-sans-500 fs-2 mb-3">
+                                <div class="row justify-content-between mt-2 p-2">
+                                    <div class="col-7 noto-sans-700">
+                                        AI 소요시간 정확도
+                                    </div>
+                                    <div class="col-3 mt-3 me-4">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>오늘</option>
+                                            <option value="1">이번주</option>
+                                            <option value="2">이번달</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <canvas id="myChart4" style="max-height:30vh"></canvas>
                         </div>
-                        <canvas id="myChart3"></canvas>
                     </div>
-                    <div class="shadow card col m-3 border-light rounded">
-                        <div class="card-title noto-sans-500 fs-2 mb-3">
-                            <div class="row justify-content-between mt-2 p-2">
-                                <div class="col-7 noto-sans-700">
-                                    AI 소요시간 정확도
+                    <div class="row">
+                        <div class="shadow card col ms-3 me-3 border-light rounded">
+                            <div class="card-title noto-sans-500 fs-2 mb-3" style="max-height: 30vh">
+                                <div class="row ms-3 mt-3 noto-sans-700">
+                                    로그
                                 </div>
-                                <div class="col-3 mt-3 me-4">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>오늘</option>
-                                        <option value="1">이번주</option>
-                                        <option value="2">이번달</option>
-                                    </select>
+                                <div class="row ms-3 mt-1 me-2" style="font-size:1rem; overflow: scroll; max-height: 15.8vh">
+                                    <table class="table" style="overflow: scroll; white-space: nowrap; border-collapse: collapse;">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Time</th>
+                                            <th scope="col">회원번호</th>
+                                            <th scope="col">Code</th>
+                                            <th scope="col">Message</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>2023-03-14T11:20:36.222</td>
+                                            <td>김민서</td>
+                                            <td>Not Find Node</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-03-14T11:20:34.222</td>
+                                            <td>원웅주</td>
+                                            <td>Not Find Path</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-03-14T11:20:31.222</td>
+                                            <td>이수현</td>
+                                            <td>Connection Failed</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-03-14T11:20:30.222</td>
+                                            <td>이찬용</td>
+                                            <td>Not Find Node</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-03-14T11:20:25.222</td>
+                                            <td>이규동</td>
+                                            <td>Not Find Path</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-03-14T11:19:59.222</td>
+                                            <td>노명준</td>
+                                            <td>Connection Failed</td>
+                                            <td>비전타워 1번출구</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                        </div>
-                        <canvas id="myChart4" style="max-height:30vh"></canvas>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="shadow card col ms-3 me-3 border-light rounded">
-                        <div class="card-title noto-sans-500 fs-2 mb-3" style="max-height: 30vh">
-                            <div class="row ms-3 mt-3 noto-sans-700">
-                                로그
-                            </div>
-                            <div class="row ms-3 mt-1 me-2" style="font-size:1rem; overflow: scroll; max-height: 15.8vh">
-                                <table class="table" style="overflow: scroll; white-space: nowrap; border-collapse: collapse;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Time</th>
-                                        <th scope="col">회원번호</th>
-                                        <th scope="col">Code</th>
-                                        <th scope="col">Message</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>2023-03-14T11:20:36.222</td>
-                                        <td>김민서</td>
-                                        <td>Not Find Node</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-03-14T11:20:34.222</td>
-                                        <td>원웅주</td>
-                                        <td>Not Find Path</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-03-14T11:20:31.222</td>
-                                        <td>이수현</td>
-                                        <td>Connection Failed</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-03-14T11:20:30.222</td>
-                                        <td>이찬용</td>
-                                        <td>Not Find Node</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-03-14T11:20:25.222</td>
-                                        <td>이규동</td>
-                                        <td>Not Find Path</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-03-14T11:19:59.222</td>
-                                        <td>노명준</td>
-                                        <td>Connection Failed</td>
-                                        <td>비전타워 1번출구</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
@@ -502,7 +423,41 @@
             }
         }
     });
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+    Array.from(rows).forEach(function(row, index) {
 
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        }
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                }
+            });
+        });
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            });
+        });
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
 </body>
 </html>

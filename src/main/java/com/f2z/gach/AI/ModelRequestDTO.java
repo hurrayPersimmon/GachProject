@@ -11,9 +11,8 @@ public class ModelRequestDTO {
     private String modelName;
     private double modelMae;
     private String modelVersion;
-    private int modelEpochs;
-    private int modelBatch;
-    private int modelHidden;
-    private int modelLayer;
-    private double modelLearning;
+    private int depth;
+    private int split;
+    private int leaf;
+    private int maxFeature;
 }

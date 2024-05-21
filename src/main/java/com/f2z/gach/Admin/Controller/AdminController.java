@@ -5,12 +5,16 @@ import com.f2z.gach.Admin.DTO.AdminForm;
 import com.f2z.gach.Admin.DTO.loginDTO;
 import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
+import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,18 +29,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/admin")
-@SessionAttributes
 public class AdminController {
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @GetMapping("/main-page")
     public String mainPage(){
-        return "main/main-page";
+        return "/main/main-page";
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(){
+    public String dashboard(Model model){
+        model.addAttribute("userCnt", userRepository.count());
         return "main/dashboard";
     }
 
@@ -95,6 +101,9 @@ public class AdminController {
         }
 
         adminDto.setAdminAuthorization(Authorization.WAITER);
+        adminDto.setAdminPassword(passwordEncoder.encode(adminDto.getAdminPassword()));
+        adminDto.setAdminPasswordCheck(passwordEncoder.encode(adminDto.getAdminPasswordCheck()));
+        log.info(adminDto.toString());
         adminRepository.save(adminDto.toEntity());
         model.addAttribute("message", "회원가입이 완료되었습니다. 관리자 승인까지 잠시만 기다려주세요.");
         model.addAttribute("loginDto", new loginDTO());
@@ -118,6 +127,7 @@ public class AdminController {
 //    }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String adminList(Model model){
 
         List<Admin> admins = adminRepository.findAll();
@@ -131,6 +141,7 @@ public class AdminController {
     }
 
     @GetMapping("/approve/{adminNum}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String approveAdmin(@PathVariable Integer adminNum){
         Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
         admin.setAdminAuthorization(Authorization.GUEST);
@@ -139,6 +150,7 @@ public class AdminController {
     }
 
     @GetMapping("/delete/{adminId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String deleteAdmin(@PathVariable String adminId){
         Admin admin = adminRepository.findByAdminId(adminId);
         log.info(admin.toString());
@@ -156,6 +168,7 @@ public class AdminController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String updateAdmin(AdminForm adminForm){
         log.info(adminForm.toString());
 
@@ -171,18 +184,5 @@ public class AdminController {
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
 
-    }
-
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleError404(HttpServletRequest request, Exception e) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", e);
-        mav.addObject("status", 404);
-        mav.addObject("message", "요청하신 페이지를 찾을 수 없습니다.");
-        mav.addObject("url", request.getRequestURL());
-        mav.setViewName("error/404");
-        log.info("404 error");
-        return mav;
     }
 }

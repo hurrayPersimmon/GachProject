@@ -4,7 +4,8 @@ import sys
 import numpy as np
 
 from torch.utils.data import DataLoader
-
+print("실행")
+print(sys.argv)
 # 모델 정의
 class LSTMModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size):

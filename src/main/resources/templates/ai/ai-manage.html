@@ -6,7 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcwEaZi-gI454I_SqL0EwZuZXtOS0ryLU&callback=initMap&libraries=maps,marker&v=beta"></script>
 <div class="container-fluid">
     <header th:replace="~{/fragment :: header}"></header>
     <div class="row">
@@ -21,7 +20,7 @@
                 </div>
                 <div class="row">
                     <div class="col text-end me-5">
-                        <a href="/admin/ai/model/add" class="btn btn-primary add">모델 학습</a>
+                        <a href="/admin/ai/model/add" class="btn btn-primary add">모델 재학습</a>
                     </div>
                 </div>
                 <div class="row p-5">
@@ -52,9 +51,6 @@
                             <tr style="height:8vh" th:each="ai : ${aiList}">
                                 <td>
                                     <div th:text="${ai.getAiModelVersion()}">v0.0.1</div>
-                                    <div th:if="${ai.getAiModelId() eq selectedAiModelId}">
-                                        <span class="badge rounded-pill text-bg-success">사용중</span>
-                                    </div>
                                 </td>
                                 <td th:text="${ai.getAiModelName()}">초기 모델</td>
                                 <td th:text="${ai.getMae()}">15%</td>
@@ -62,35 +58,42 @@
                                 <td>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
-                                            <span>에포크 수 : <span th:text="${ai.getEpochs()}">10</span></span>
+                                            <span>최대 깊이 수 : <span th:text="${ai.getMaxDepth()}">10</span></span>
                                         </div>
                                         <div class="col-4">
-                                            <span>은닉층 수 : <span th:text="${ai.getHiddenLayer()}">10</span></span>
+                                            <span>최소 샘플 수 : <span th:text="${ai.getMinSampleSplit()}">10</span></span>
                                         </div>
                                     </div>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
-                                            <span>층 수 : <span th:text="${ai.getNumLayer()}">10</span></span>
+                                            <span>최소 샘플 수(leaf) : <span th:text="${ai.getMinSampleLeaf()}">10</span></span>
                                         </div>
                                         <div class="col-4">
-                                            <span>배치 사이즈 : <span th:text="${ai.getBatchSize()}">10</span></span>
-                                        </div>
-                                    </div>
-                                    <div class="row text-center justify-content-center">
-                                        <div class="col-4">
-                                            <span>학습률 : <span th:text="${ai.getLearningRate()}">0.01</span></span>
+                                            <span>최대 특성 수: <span th:text="${ai.getMaxFeature()}">10</span></span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="row justify-content-center">
-                                       <div class="col-3">
-                                           <i class="bi bi-gear-fill"
-                                              th:onclick="|location.href='@{/admin/ai/model/{modelId}(modelId=${ai.getAiModelId()})}'|"></i>
-                                       </div>
                                         <div class="col-3">
-                                            <i class="bi bi-trash-fill"
-                                               th:onclick="|location.href='@{/admin/ai/delete/model/{modelId}(modelId=${ai.getAiModelId()})}'|"></i>
+                                            <i class="bi bi-trash-fill" style="cursor: pointer" data-bs-toggle="modal" th:data-bs-target="'#exampleModal' + ${ai.getAiModelId()}"></i>
+                                            <div class="modal fade" th:id="'exampleModal' + ${ai.getAiModelId()}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">모델 삭제</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            정말 삭제하시겠습니까?
+                                                        </div>
+                                                        <div class="modal-footer text-center justify-content-center">
+                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                                            <a type="button" class="btn btn-danger delete" th:href="@{'/admin/ai/delete/model/'+${ai.getAiModelId()}}">삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

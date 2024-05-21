@@ -17,5 +17,6 @@ public interface MapNodeRepository extends JpaRepository<MapNode, Integer> {
 
     @Query("SELECT p FROM MapNode p WHERE p.nodeName LIKE %?1%")
     Page<MapNode> findAllByNodeNameContaining(String placeName, Pageable pageable);
-
+    @Query("SELECT COUNT(DISTINCT node) FROM MapNode node WHERE node NOT IN (SELECT DISTINCT line.nodeFirst FROM MapLine line) AND node NOT IN (SELECT DISTINCT line.nodeSecond FROM MapLine line)")
+    Long countNodesNotInLines();
 }

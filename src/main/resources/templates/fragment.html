@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <meta charset="UTF-8">
 
@@ -25,6 +26,14 @@
                 <div class="col-6 fs-5 sidebarItem">
                     대시보드
                 </div>
+        </a>
+        <a class="row menu" href="/admin/dashboard" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'dash' ? 'link' : 'white'">
+            <div class="col-3 ms-4 ps-3">
+                <i class="bi bi-grid-1x2-fill fs-4"></i>
+            </div>
+            <div class="col-6 fs-5 sidebarItem">
+                대시보드
+            </div>
         </a>
         <a href="/admin/node" th:href="@{/admin/node/list/0}" class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'node' ? 'link' : 'white'">
             <div class="col-3 ms-4 mt-1 ps-3">
@@ -90,7 +99,7 @@
                 문의 관리
             </div>
         </a>
-        <a href="/admin/log" th:href="@{/admin/log}"  class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'log' ? 'link' : 'white'">
+        <a href="/admin/log/manage" th:href="@{/admin/log/manage}"  class="row menu" style="height : 7vh; line-height: 7vh;" th:classappend="${param1} == 'log' ? 'link' : 'white'">
             <div class="col-3 ms-4 mt-2 ps-3">
                 <i class="fa-solid fa-server fs-4"></i>
             </div>
@@ -108,7 +117,7 @@
     </div>
     <header th:fragment="header" class="row text-center pb-1" style="background-color: white; width:100%; height:10%; position:fixed; z-index:1100; margin-top:0; padding-top:0">
         <div class="col-2 ms-0">
-            <img src="/image/Gach_homepage_main.png" width="280rem" style="margin-right : 15%;" alt="경로 오류 발생">
+            <img src="/image/Gach_homepage_main.png" width="280rem" style="margin-right : 15%; cursor: pointer" onclick="window.location.href = '/admin/dashboard';" alt="경로 오류 발생">
         </div>
         <div class="col-2 mt-4">
             <div class="search">
@@ -126,7 +135,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
             <i class="bi bi-bell-fill fs-3"></i>-->
-            <span th:text="|${waiterListSize}+|" class="translate-middle badge rounded-pill" style="position:absolute; top:25%; left:87.8%; background-color: rgb(220, 38,38);">
+            <span th:text="|${waiterListSize}+|" class="translate-middle badge rounded-pill" style="position:absolute; top:25%; left:85.8%; background-color: rgb(220, 38,38);">
                 3+
                 <span class="visually-hidden">unread messages</span>
             </span>
@@ -134,7 +143,7 @@
             <a href="/admin/main-page" class="text-center ms-5" style="color:black;">
                 <i class="bi bi-door-closed-fill fs-3"></i>
             </a>
-            <!--<i class="bi bi-person-fill fs-3 ms-5"></i>-->
+            <span class="badge rounded-pill text-bg-primary ms-4 mb-2" th:text="${#authentication.name}">Primary</span>
         </div>
     </header>
 <script th:fragment="search">
@@ -144,6 +153,7 @@
         let relatedKeywords = []; // 연관 검색어를 저장할 배열
 
         let keywordMapping = {
+            "대시보드" : "/admin/dashboard",
             "노드 관리": "/admin/node/list/0",
             "경로 관리": "/admin/line/list/0",
             "경로 테스트" : "/admin/map/test",

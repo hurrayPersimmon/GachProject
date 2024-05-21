@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -68,6 +69,7 @@ public class AdminPlaceSourceController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public String addPlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDTO){
         AdminPlaceRequestDTO fileUpdatedPlaceDTO = fileSave(placeDTO);
 
@@ -93,6 +95,7 @@ public class AdminPlaceSourceController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updatePlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDto, BindingResult result){
 
         PlaceSource target = placeSourceRepository.findByPlaceId(placeDto.getPlace().getPlaceId());
@@ -113,6 +116,7 @@ public class AdminPlaceSourceController {
     }
 
     @GetMapping("/delete/{placeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deletePlace(@PathVariable Integer placeId){
         log.info("Deleting place with id {}", placeId);
         PlaceSource placeSource = placeSourceRepository.findByPlaceId(placeId);

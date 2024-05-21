@@ -8,6 +8,7 @@ import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,8 @@ public class AdminAIController {
     private final AIService aiService;
     private final AiModelRepository aiRepo;
     long dataLength;
-    final String modelPath = "/home/t24102/GachProject/AI/Model";
-    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model";
-    AiModel selectedAiModel;
+//    final String modelPath = "/home/t24102/GachProject/AI/Model";
+    final String modelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model";
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -41,18 +41,19 @@ public class AdminAIController {
     @GetMapping("")
     public String list(Model model) {
         model.addAttribute("aiList", aiRepo.findAll());
-        selectedAiModel = aiRepo.findAll().get(2);
-        model.addAttribute("selectedAiModelId", selectedAiModel.getAiModelId());
         return "ai/ai-manage";
     }
 
+    // 뷰
     @GetMapping("/model/add")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String addModel(Model model) {
-        dataLength = dataRepo.count() + lineTimeRepository.count();
+        dataLength = lineTimeRepository.count();
         model.addAttribute("dataListLength", dataLength);
         return "ai/ai-add";
     }
 
+    // 필터링
     @GetMapping("/model/add/filter/{min}/{max}")
     @ResponseBody
     public long getFilterNum(@PathVariable int min, @PathVariable int max){
@@ -60,61 +61,32 @@ public class AdminAIController {
         return dataLength;
     }
 
-    @GetMapping("/model/re/filter/{modelId}/{min}/{max}")
+    @GetMapping("/model/learn")
     @ResponseBody
-    public long getFilterReNum(@PathVariable int modelId, @PathVariable int min, @PathVariable int max){
-        AiModel aiModel = aiRepo.findById(modelId).orElseThrow();
-        List<dataEntity> dataEntityList = dataRepo.findByDataIdBetween(aiModel.getDataLength()-dataRepo.count(), lineTimeRepository.count());
-        dataLength = aiService.filterData(min, max, dataEntityList);
-        return dataLength;
+    public int learningModel() throws Exception {
+        aiService.reLearnModel();
+        return 1;
     }
 
-    @GetMapping("/model/add/{hidden}/{epochs}/{rate}/{layer}/{batchSize}")
-    @ResponseBody
-    public String getLearnNum(@PathVariable int epochs, @PathVariable int layer, @PathVariable int hidden,
-                            @PathVariable double rate, @PathVariable int batchSize) throws Exception {
-        String str = aiService.makeModel(hidden, epochs, layer, rate, batchSize);
-        return str;
-    }
-
-    @GetMapping("/model/add/{epochs}/{rate}/{modelId}")
-    @ResponseBody
-    public String getReLearnNum(@PathVariable int epochs, @PathVariable double rate, @PathVariable int modelId) throws Exception {
-        AiModel aiModel = aiRepo.findById(modelId).orElseThrow();
-        String str = aiService.doMakeModel(epochs, rate,aiModel.getAiModelPath());
-        return str;
-    }
-
+    // 모델 추가 작업
     @PostMapping("/model/add")
     @ResponseBody
     public int saveModel(@RequestBody ModelRequestDTO dto) {
         dataLength = dataRepo.count() + lineTimeRepository.count();
         AiModel aiModel = AiModel.setToDto(dto);
         aiModel.setAverSatis(0);
-        aiModel.setDataLength(dataLength);
         aiModel.setLastDataIndex(lineTimeRepository.count());
         aiService.saveModel(dto.getModelName());
-        aiModel.setAiModelPath(modelPath + "/" + dto.getModelName() + ".pt");
+        aiModel.setAiModelPath(modelPath + "/" + dto.getModelName() + ".pkl");
         aiRepo.save(aiModel);
         return 1;
     }
 
-    @GetMapping("/model/{id}")
-    public String getLearnNum(@PathVariable int id, Model model) {
-        AiModel aiModel = aiRepo.findById(id).orElseThrow();
-        dataLength = dataRepo.count() + lineTimeRepository.count();
-        long additionalDataLength = dataLength - aiModel.getDataLength();
-        model.addAttribute("aiModel", aiModel);
-        model.addAttribute("additionalDataLength", additionalDataLength);
-        return "ai/ai-detail";
-    }
-
     @GetMapping("/delete/model/{id}")
-    public String deleteModel(@PathVariable int id, Model model) {
+    public String deleteModel(@PathVariable int id) {
         AiModel aiModel = aiRepo.findById(id).orElseThrow();
         aiService.deleteModel(aiModel);
         aiRepo.delete(aiModel);
-
         return "redirect:/admin/ai";
     }
 }

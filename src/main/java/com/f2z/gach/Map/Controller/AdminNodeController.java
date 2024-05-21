@@ -2,6 +2,7 @@ package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.InquiryCategory;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,7 @@ public class AdminNodeController {
 
     @GetMapping("/node/list/{page}")
     public String nodeListPage(Model model, @PathVariable Integer page){
+        Date date = new Date();
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"nodeId").withPage(page);
         Page<MapNode> nodePage = mapNodeRepository.findAll(pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
@@ -52,6 +56,9 @@ public class AdminNodeController {
                 .collect(Collectors.toList());
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
+        model.addAttribute("nodeInquiry", inquiryRepository.findAllByInquiryCategory(InquiryCategory.Node));
+        model.addAttribute("lineRepo", mapLineRepository.findAll());
+        model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
     }
 
@@ -64,6 +71,8 @@ public class AdminNodeController {
                 .collect(Collectors.toList());
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
+        model.addAttribute("lineRepo", mapLineRepository.findAll());
+        model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
     }
 
@@ -75,6 +84,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -93,6 +103,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node/update")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String updateNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapDTO,
                              BindingResult result){
         if(result.hasErrors()){
@@ -106,6 +117,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/delete/{nodeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteNode(@PathVariable Integer nodeId) throws Exception{
         if(mapNodeRepository.existsByNodeId(nodeId)) {
             mapLineRepository.deleteAllByNodeFirst_NodeId(nodeId);

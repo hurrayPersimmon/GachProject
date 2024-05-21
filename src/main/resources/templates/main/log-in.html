@@ -34,27 +34,15 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <form id="login-form" action="#" th:object="${loginDto}" th:action="@{/admin/login}" method="post">
+                    <form id="login-form" action="/login-process" method="post">
                         <div class="col">
                             <div class="form-floating mb-1">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com"
-                                th:field="*{adminId}"
-                                th:classappend="${#fields.hasErrors('adminId')} or ${idMessage} == '아이디가 존재하지 않습니다.' ? 'border border-danger' : ''">
+                                <input type="text" class="form-control" id="floatingInput" name="adminId" placeholder="name@example.com">
                                 <label for="floatingInput">아이디</label>
                             </div>
-                            <div th:if="${#fields.hasErrors('adminId')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminId}">아이디 오류</span>
-                            </div>
-                            <div th:if="${idMessage == '아이디가 존재하지 않습니다.'}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:text="${idMessage}">아이디 오류</span>
-                            </div>
                             <div class="form-floating mt-2 mb-1">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" th:field="*{adminPassword}"
-                                       th:classappend="${#fields.hasErrors('adminPassword')} ? 'border border-danger' : ''">
+                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="adminPassword">
                                 <label for="floatingPassword">비밀번호</label>
-                            </div>
-                            <div th:if="${#fields.hasErrors('adminPassword')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{adminPassword}">패스워드 오류</span>
                             </div>
                         </div>
                     </form>
