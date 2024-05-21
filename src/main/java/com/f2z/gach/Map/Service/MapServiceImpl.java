@@ -333,8 +333,8 @@ public class MapServiceImpl implements MapService{
 
         // 경로 역추적
         routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
-
-        return NavigationResponseDTO.toNavigationResponseDTO(routeType, 0, nodeList);
+        int totalTime = 0;
+        return NavigationResponseDTO.toNavigationResponseDTO(routeType, totalTime, nodeList);
     }
 
     public static void routeBackTracking(Integer departuresNodeId, Integer arrivalsNodeId, List<NavigationResponseDTO.NodeDTO> nodeList, Map<Integer, Integer> previousNodes, MapNodeRepository mapNodeRepository) {

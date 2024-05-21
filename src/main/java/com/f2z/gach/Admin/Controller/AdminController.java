@@ -7,7 +7,12 @@ import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.LogLevel;
+import com.f2z.gach.History.Entity.UserHistory;
+import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.User.Repository.UserRepository;
+import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -22,27 +27,55 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/admin")
+@SessionAttributes
 public class AdminController {
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserHistoryRepository userHistoryRepository;
+    private final LogRepository logRepository;
+
+    @ModelAttribute
+    public void setAttributes(Model model){
+        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
+        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
+    }
 
     @GetMapping("/main-page")
     public String mainPage(){
-        return "/main/main-page";
+        return "main/main-page";
     }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model){
         model.addAttribute("userCnt", userRepository.count());
+    public String dashboard(Model model) {
+        model.addAttribute("userCount", userRepository.count());
+        model.addAttribute("userTodaySignUpCount", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("requestTodayCount", logRepository.countLogsCreatedToday(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)));
+        model.addAttribute("requestErrorTodayCount", logRepository.countByLogLevel(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                LogLevel.ERROR));
+
+        model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(10));
         return "main/dashboard";
     }
 
@@ -101,9 +134,6 @@ public class AdminController {
         }
 
         adminDto.setAdminAuthorization(Authorization.WAITER);
-        adminDto.setAdminPassword(passwordEncoder.encode(adminDto.getAdminPassword()));
-        adminDto.setAdminPasswordCheck(passwordEncoder.encode(adminDto.getAdminPasswordCheck()));
-        log.info(adminDto.toString());
         adminRepository.save(adminDto.toEntity());
         model.addAttribute("message", "회원가입이 완료되었습니다. 관리자 승인까지 잠시만 기다려주세요.");
         model.addAttribute("loginDto", new loginDTO());
@@ -184,5 +214,18 @@ public class AdminController {
         model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
 
+    }
+
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleError404(HttpServletRequest request, Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", e);
+        mav.addObject("status", 404);
+        mav.addObject("message", "요청하신 페이지를 찾을 수 없습니다.");
+        mav.addObject("url", request.getRequestURL());
+        mav.setViewName("error/404");
+        log.info("404 error");
+        return mav;
     }
 }

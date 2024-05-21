@@ -21,11 +21,7 @@ public class Log extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LogLevel logLevel;
     private Properties property;
-    private Long userCode;
-    private Integer guestCode;
-    private Integer adminCode;
     private String message;
     private String url;
-    private HttpMethod httpMethod;
-    // 로그가 발생하는 시간도 필요함
+    private String httpMethod;
 }
