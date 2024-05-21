@@ -37,7 +37,6 @@
                                         <th scope="col">시간</th>
                                         <th scope="col">레벨</th>
                                         <th scope="col">Code</th>
-                                        <th scope="col">UserCode</th>
                                         <th scope="col">메시지</th>
                                         <th scope="col">Method</th>
                                         <th scope="col">URL</th>
@@ -48,7 +47,6 @@
                                         <td th:text="${log.getCreateDt()}">2024-05-05T00:02:01</td>
                                         <td th:text="${log.logLevel}">DEBUG</td>
                                         <td th:text="${log.getProperty().getCode()}">200</td>
-                                        <td th:text="${log.getUserCode()}">1012</td>
                                         <td th:text="${log.getProperty().getMessage()}">경로 조회 요청</td>
                                         <td th:text="${log.getHttpMethod()}">GET</td>
                                         <td th:text="${log.getUrl()}">ceprj.~~:60002/path??</td>

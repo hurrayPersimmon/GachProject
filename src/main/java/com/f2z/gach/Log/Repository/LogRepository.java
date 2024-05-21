@@ -12,8 +12,6 @@ import java.util.Date;
 
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
-    Integer countAllByLogLevel(LogLevel logLevel);
-    Integer countAllByCreateDtAndUrl(String url);
     @Query("SELECT COUNT(l) FROM Log l WHERE l.createDt >= :startOfDay AND l.createDt < :endOfDay AND l.httpMethod = :httpMethod AND l.logLevel = :logLevel AND l.url = :url")
     Integer countBySpecificConditions(@Param("startOfDay") LocalDateTime startOfDay,
                                       @Param("endOfDay") LocalDateTime endOfDay,

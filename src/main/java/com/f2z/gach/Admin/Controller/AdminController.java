@@ -43,7 +43,6 @@ public class AdminController {
     private final InquiryRepository inquiryRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final LogRepository logRepository;
 
@@ -59,8 +58,6 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model){
-        model.addAttribute("userCnt", userRepository.count());
     public String dashboard(Model model) {
         model.addAttribute("userCount", userRepository.count());
         model.addAttribute("userTodaySignUpCount", logRepository.countBySpecificConditions(
@@ -208,14 +205,6 @@ public class AdminController {
         log.info("저장완료");
         return "redirect:/admin/list";
     }
-
-    @ModelAttribute
-    public void setAttributes(Model model){
-        model.addAttribute("waiterListSize", adminRepository.findByAdminAuthorization(Authorization.WAITER).size());
-        model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
-
-    }
-
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleError404(HttpServletRequest request, Exception e) {
