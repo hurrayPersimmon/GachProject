@@ -40,7 +40,6 @@ public class MapServiceImpl implements MapService{
     private final String routeTypeShortest = "SHORTEST";
     private final String routeTypeOptimal = "OPTIMAL";
     private final String routeBus = "busRoute";
-    private final AIService aiService;
 
 
 
@@ -386,7 +385,7 @@ public class MapServiceImpl implements MapService{
 
         // 경로 역추적
         routeBackTracking(departuresNodeId, arrivalsNodeId, nodeList, previousNodes, mapNodeRepository);
-        int totalTime = AIService.calculateTime(nodeList, aIData);
+        int totalTime = aiService.calculateTime(nodeList, aIData);
         return NavigationResponseDTO.toNavigationResponseDTO(routeType, totalTime, nodeList);
     }
 
