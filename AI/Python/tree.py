@@ -51,4 +51,4 @@ y_pred = regressor.predict(X_test)
 
 print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 
-joblib.dump(regressor, "temp.pkl")
+joblib.dump(regressor, "/home/t24102/AI/temp.pkl")
