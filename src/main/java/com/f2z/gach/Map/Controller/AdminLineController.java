@@ -104,12 +104,9 @@ public class AdminLineController {
 
         model.addAttribute("lineSatisList", map);
 
-        model.addAttribute("lineCnt", logRepository.countLogsByDateRangeAndUrlV2(
+        model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/route%"));
-        log.info(logRepository.countLogsByDateRangeAndUrlV2(
-                LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/route%").toString());
         return "line/line-manage";
     }
 
