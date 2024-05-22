@@ -25,9 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,7 +96,8 @@ public class AdminLineController {
         model.addAttribute("lineInquiryList", result2);
         Map<LocalDate, Double> map = new LinkedHashMap<>();
         for(Object[] objects : userHistoryRepository.findAverageSatisfactionRouteByDateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now())){
-            LocalDate date = (LocalDate) objects[0];
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
             Double averSatisfaction = (Double) objects[1];
             map.put(date, averSatisfaction);
         }

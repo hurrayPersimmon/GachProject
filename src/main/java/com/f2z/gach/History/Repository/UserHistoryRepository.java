@@ -35,7 +35,7 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
             "LIMIT :limit", nativeQuery = true)
     List<Object[]> findBottomMapNodes(@Param("limit") Integer limit);
 
-    @Query("SELECT FUNCTION('DATE', uh.createDt), AVG(uh.satisfactionRoute) " +
+    @Query("SELECT new java.sql.Date(FUNCTION('DATE', uh.createDt)), AVG(uh.satisfactionRoute) " +
             "FROM UserHistory uh " +
             "WHERE uh.createDt BETWEEN :startOfDay AND :endOfDay " +
             "GROUP BY FUNCTION('DATE', uh.createDt)")
