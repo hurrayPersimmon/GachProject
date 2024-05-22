@@ -53,9 +53,13 @@ public class AdminUserController {
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
         model.addAttribute("userSignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
+                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/signup"));
+        log.info(logRepository.countBySpecificConditions(
+                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/signup").toString());
         model.addAttribute("userDeleteCnt", logRepository.countBySpecificConditions(
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
