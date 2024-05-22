@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-4 ps-5">
                         <div class="shadow p-3 mb-5 text-start rounded" style="background-color: white;">
-                            <p class="fs-4 ms-3 nodeHeader">만족도가 낮게 평가된 경로</p>
+                            <p class="fs-4 ms-3 nodeHeader">경로에 대한 평균 만족도</p>
                             <hr>
                             <div>
                                 <canvas id="myChart2"></canvas>
@@ -60,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-2 me-0 pe-0 rounded" style="background-color: rgb(110, 231, 183);"><i class="fa-regular fa-message" style="color:white"></i></div>
                                     <div class="col-9 fs-1 ms-2 ps-0 text-center">
-                                        45<span class="fs-4" style="color:rgb(203, 213, 225)">경로</span>
+                                        <span class="fs-1" th:text="|${lineCnt}| " }></span><span class="fs-4" style="color:rgb(203, 213, 225)">경로</span>
                                     </div>
                                 </div>
                             </div>
@@ -180,20 +180,25 @@
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
-<script>
+<script th:inline="javascript">
+
+    const inquiryList = [[${inquiryList}]];
+    const lineInquiryList = [[${lineInquiryList}]];
+    const lineSatis = [[${lineSatisList}]];
+
     const ctx1 = document.getElementById('myChart1');
 
     new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['5월 1일', '5월 2일', '5월 3일', '5월 4일', '5월 5일', '5월 6일', '5월 7일', '5월 8일', '5월 9일', '5월 10일', '5월 11일'],
+            labels: Object.keys(inquiryList),
             datasets: [{
                 label: '전체 문의',
-                data: [24, 20, 30, 19, 15, 10,20,25,30,29,10,32],
+                data: Object.values(inquiryList),
                 borderWidth: 1
             },{
                 label: '경로 문의',
-                data: [12, 19, 3, 5, 2, 3,4,1,21,23,3,5,2],
+                data: Object.values(lineInquiryList),
                 borderWidth: 1
             }]
         },
@@ -211,10 +216,10 @@
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['가천관', '제2기숙사', '공과대학2', '무당이 정류장', '가천대역 1번출구'],
+            labels: Object.keys(lineSatis),
             datasets: [{
-                label: '만족도 평균 하위 Top5',
-                data: [1.5, 2, 4, 4.7, 5],
+                label: '평균 만족도',
+                data: Object.values(lineSatis),
                 borderWidth: 1
             }]
         },

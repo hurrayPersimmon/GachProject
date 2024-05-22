@@ -2,7 +2,11 @@ package com.f2z.gach.Map.Controller;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
+import com.f2z.gach.EnumType.InquiryCategory;
+import com.f2z.gach.History.Repository.UserHistoryRepository;
+import com.f2z.gach.Inquiry.Entity.Inquiry;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Repository.MapLineRepository;
@@ -21,8 +25,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -35,6 +42,8 @@ public class AdminLineController {
     private final MapNodeRepository mapNodeRepository;
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final UserHistoryRepository userHistoryRepository;
+    private final LogRepository logRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -51,6 +60,54 @@ public class AdminLineController {
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         model.addAttribute("lineChartData", mapLineRepository.findAll());
+        List<LocalDate> dateRange = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
+        List<Inquiry> lineInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Route);
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = now.minusWeeks(1).plusDays(i).toLocalDate();
+            dateRange.add(date);
+        }
+        Map<String, Long> inquiryCountByDate = allInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ));
+        Map<String, Long> result = new LinkedHashMap<>();
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
+            result.put(dateString, inquiryCount);
+        }
+        model.addAttribute("inquiryList", result);
+
+        Map<String, Long> inquiryCountByDate2 = lineInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ));
+
+        Map<String, Long> result2 = new LinkedHashMap<>();
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate2.getOrDefault(dateString, 0L);
+            result2.put(dateString, inquiryCount);
+        }
+
+        model.addAttribute("lineInquiryList", result2);
+        Map<LocalDate, Double> map = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findAverageSatisfactionRouteByDateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now())){
+            LocalDate date = (LocalDate) objects[0];
+            Double averSatisfaction = (Double) objects[1];
+            map.put(date, averSatisfaction);
+        }
+
+        model.addAttribute("lineSatisList", map);
+
+        model.addAttribute("lineCnt", logRepository.countLogsByDateRangeAndUrl(
+                LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/route"));
         return "line/line-manage";
     }
 

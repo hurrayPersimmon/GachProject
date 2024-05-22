@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -34,4 +35,11 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
             "LIMIT :limit", nativeQuery = true)
     List<Object[]> findBottomMapNodes(@Param("limit") Integer limit);
 
+    @Query("SELECT FUNCTION('DATE', uh.createDt), AVG(uh.satisfactionRoute) " +
+            "FROM UserHistory uh " +
+            "WHERE uh.createDt BETWEEN :startOfDay AND :endOfDay " +
+            "GROUP BY FUNCTION('DATE', uh.createDt)")
+    List<Object[]> findAverageSatisfactionRouteByDateRange(
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay);
 }
