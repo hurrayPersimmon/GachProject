@@ -170,20 +170,18 @@
 
     const inquiryList = [[${inquiryList}]];
     const nodeInquiryList = [[${nodeInquiryList}]];
-    console.log(inquiryList);
-    console.log(nodeInquiryList);
 
     new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: dateList,
+            labels: Object.keys(inquiryList),
             datasets: [{
                 label: '전체 문의',
-                data: Object.values(allCnt),
+                data: Object.values(inquiryList),
                 borderWidth: 1
             },{
                 label: '지점 문의',
-                data: Object.values(newData),
+                data: Object.values(nodeInquiryList),
                 borderWidth: 1
             }]
         },
@@ -196,29 +194,25 @@
         }
     });
 
-    // const ctx2 = document.getElementById('myChart2');
-    //
-    // let unSaNodeList = [[${unSatisfaction}]];
-    // console.log(unSaNodeList);
-    //
-    // new Chart(ctx2, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: [123],
-    //         datasets: [{
-    //             label: '만족도 평균 하위 Top5',
-    //             data: [123],
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             y: {
-    //                 beginAtZero: true
-    //             }
-    //         }
-    //     }
-    // });
+    const ctx2 = document.getElementById('myChart2');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: [123],
+            datasets: [{
+                label: '만족도 평균 하위 Top5',
+                data: [123],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
 <script>
     function changeUp() {

@@ -96,10 +96,10 @@ public class AdminNodeController {
         for (LocalDate date : dateRange) {
             String dateString = date.toString();
             Long inquiryCount = inquiryCountByDate2.getOrDefault(dateString, 0L);
-            result.put(dateString, inquiryCount);
+            result2.put(dateString, inquiryCount);
         }
 
-        model.addAttribute("nodeInquiryList2", result2);
+        model.addAttribute("nodeInquiryList", result2);
         model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
