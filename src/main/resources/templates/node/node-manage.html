@@ -173,40 +173,6 @@
     console.log(inquiryList);
     console.log(nodeInquiryList);
 
-    let dates = Object.keys(inquiryList);
-    const newData = {};
-    const allCnt = {};
-
-    originalDateList = [];
-    dates.forEach(
-        i => originalDateList.push(new Date(i))
-    );
-    for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
-        const dateString = date.toISOString().split('T')[0];
-        if (nodeInquiryList.hasOwnProperty(dateString)) {
-            newData[dateString] = nodeInquiryList[dateString];
-        } else {
-            newData[dateString] = 0;
-        }
-    }
-
-    dataDateList = []
-    dates.forEach(
-        i => dataDateList.push(new Date(i))
-    );
-
-    let dateList = [];
-
-    for (let date = dataDateList[0]; date <= dateList[dataDateList.length-1]; date.setDate(date.getDate() + 1)) {
-        const dateString2 = date.toISOString().split('T')[0];
-        if (inquiryList.hasOwnProperty(dateString2)) {
-            allCnt[dateString2] = inquiryList[dateString2];
-        } else {
-            allCnt[dateString2] = 0;
-        }
-        dateList.push(dateString2);
-    }
-
     new Chart(ctx1, {
         type: 'line',
         data: {

@@ -24,8 +24,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -59,18 +63,43 @@ public class AdminNodeController {
         List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
-        model.addAttribute("inquiryList", allInquiryList.stream()
+
+        List<LocalDate> dateRange = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = now.minusWeeks(1).plusDays(i).toLocalDate();
+            dateRange.add(date);
+        }
+
+        Map<String, Long> inquiryCountByDate = allInquiryList.stream()
                 .collect(Collectors.groupingBy(
                         inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
                         Collectors.counting()
-                ))
-        );
-        model.addAttribute("nodeInquiryList", nodeInquiryList.stream()
+                ));
+
+        Map<String, Long> result = new LinkedHashMap<>();
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
+            result.put(dateString, inquiryCount);
+        }
+
+        model.addAttribute("inquiryList", result);
+
+        Map<String, Long> inquiryCountByDate2 = nodeInquiryList.stream()
                 .collect(Collectors.groupingBy(
                         inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
                         Collectors.counting()
-                ))
-        );
+                ));
+
+        Map<String, Long> result2 = new LinkedHashMap<>();
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate2.getOrDefault(dateString, 0L);
+            result.put(dateString, inquiryCount);
+        }
+
+        model.addAttribute("nodeInquiryList2", result2);
         model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
