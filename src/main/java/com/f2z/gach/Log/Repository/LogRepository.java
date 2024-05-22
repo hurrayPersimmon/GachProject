@@ -37,4 +37,11 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
             @Param("endOfDay") LocalDateTime endOfDay,
             @Param("httpMethod") String httpMethod,
             @Param("url") String url);
+
+    @Query("SELECT DATE(l.createDt), COUNT(l) FROM Log l " +
+            "WHERE l.httpMethod = :httpMethod AND l.url = :url " +
+            "GROUP BY DATE(l.createDt)")
+    List<Object[]> countLogsByUrlAndHttpMethod(
+            @Param("httpMethod") String httpMethod,
+            @Param("url") String url);
 }
