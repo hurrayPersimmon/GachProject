@@ -205,8 +205,6 @@
         dateList.push(dateString);
     }
 
-    console.log(allCnt);
-
     new Chart(ctx1, {
         type: 'line',
         data: {
@@ -233,7 +231,7 @@
     const ctx2 = document.getElementById('myChart2');
 
     let unSaNodeList = [[${unSatisfaction}]];
-
+    console.log(unSaNodeList);
     new Chart(ctx2, {
         type: 'bar',
         data: {

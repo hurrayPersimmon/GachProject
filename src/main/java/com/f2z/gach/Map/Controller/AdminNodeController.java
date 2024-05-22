@@ -85,11 +85,24 @@ public class AdminNodeController {
                 .collect(Collectors.toList());
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
-        model.addAttribute("lineRepo", mapLineRepository.findAll());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
-        model.addAttribute("inquiryList", inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now()));
-        model.addAttribute("inquiryNodeList", inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node));
-
+        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
+        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node);
+        model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
+        model.addAttribute("nodeChartData", mapNodeRepository.findAll());
+        model.addAttribute("inquiryList", allInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ))
+        );
+        model.addAttribute("nodeInquiryList", nodeInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ))
+        );
+        model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
         return "node/node-manage";
     }
 
