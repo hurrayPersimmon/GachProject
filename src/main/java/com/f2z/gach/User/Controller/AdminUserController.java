@@ -60,10 +60,10 @@ public class AdminUserController {
                 LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
                 "DELETE", "/user").size());
-        model.addAttribute("userLoginCnt", logRepository.countBySpecificConditions(
+        model.addAttribute("userLoginCnt", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/login"));
+                "POST", "/user/login"));
         return "user/user-manage";
     }
 

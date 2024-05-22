@@ -45,7 +45,7 @@
                                     <i class="fa-solid fa-user-check fs-4 pt-2 me-5" style="color:white;"></i>
                                 </div>
                                 <div class="col">
-                                    <span class="fs-4 ms-3 nodeHeader">일일 계정 삭제 수</span>
+                                    <span class="fs-4 ms-3 nodeHeader">일일 접속 수</span>
                                 </div>
                             </div>
                             <hr>
@@ -230,7 +230,7 @@
         data: {
             labels: Object.keys(userLoginCnt),
             datasets: [{
-                label: '계정 삭제 유저 수',
+                label: '일일 접속 수',
                 data: Object.values(userLoginCnt),
                 borderWidth: 1
             }]
