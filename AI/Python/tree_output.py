@@ -16,7 +16,7 @@ precipitation = float(sys.argv[8])
 weightShortest = float(sys.argv[9])
 weightOptimal = float(sys.argv[10])
 
-regressor = joblib.load("/home/t24102/GachProject/AI/Python/temp.pkl")
+regressor = joblib.load("/home/t24102/AI/temp.pkl")
 
 X_new = [[birthYear, gender, height, weight, walkSpeed, temperature, precipitationProbability, precipitation, weightShortest, weightOptimal]]
 
