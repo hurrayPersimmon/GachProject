@@ -71,9 +71,7 @@ public class AdminNodeController {
                         Collectors.counting()
                 ))
         );
-        // 불만족 노드 5개
         model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
-        model.addAttribute("lineRepo", mapLineRepository.findAll());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
     }
