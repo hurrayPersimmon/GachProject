@@ -100,7 +100,11 @@ public class AdminNodeController {
         }
 
         model.addAttribute("nodeInquiryList", result2);
-        model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
+        Map<String, Integer> map = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findBottomMapNodes(5)){
+            map.put(mapNodeRepository.findByNodeId((Integer) objects[0]).getNodeName(), (Integer) objects[1]);
+        }
+        model.addAttribute("map", map);
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
     }

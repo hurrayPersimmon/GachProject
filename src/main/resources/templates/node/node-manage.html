@@ -194,14 +194,16 @@
         }
     });
 
+    const map = [[${map}]];
+
     const ctx2 = document.getElementById('myChart2');
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: [123],
+            labels: map.keys(),
             datasets: [{
                 label: '만족도 평균 하위 Top5',
-                data: [123],
+                data: map.values(),
                 borderWidth: 1
             }]
         },
