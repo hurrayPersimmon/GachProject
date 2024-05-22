@@ -74,8 +74,7 @@ public class AdminController {
         model.addAttribute("inquiryRequest", inquiryRepository.findAll());
         model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
         model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
-        model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(10));
-        List<MapNode> nodeList = new ArrayList<>();
+        model.addAttribute("top10Nodes" ,userHistoryRepository.findTopMapNodes(5));
 
         return "main/dashboard";
     }

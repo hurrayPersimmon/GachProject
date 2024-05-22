@@ -3,6 +3,8 @@ package com.f2z.gach.Map.Controller;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.InquiryCategory;
+import com.f2z.gach.History.Repository.UserHistoryRepository;
+import com.f2z.gach.Inquiry.Entity.Inquiry;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapNode;
@@ -22,9 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +39,7 @@ public class AdminNodeController {
     private final MapLineRepository mapLineRepository;
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
+    private final UserHistoryRepository userHistoryRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -48,15 +49,30 @@ public class AdminNodeController {
 
     @GetMapping("/node/list/{page}")
     public String nodeListPage(Model model, @PathVariable Integer page){
-        Date date = new Date();
+
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"nodeId").withPage(page);
         Page<MapNode> nodePage = mapNodeRepository.findAll(pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
+        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
+        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
-        model.addAttribute("nodeInquiry", inquiryRepository.findAllByInquiryCategory(InquiryCategory.Node));
+        model.addAttribute("inquiryList", allInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ))
+        );
+        model.addAttribute("nodeInquiryList", nodeInquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ))
+        );
+        // 불만족 노드 5개
+        model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
         model.addAttribute("lineRepo", mapLineRepository.findAll());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
@@ -73,6 +89,9 @@ public class AdminNodeController {
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
         model.addAttribute("lineRepo", mapLineRepository.findAll());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
+        model.addAttribute("inquiryList", inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now()));
+        model.addAttribute("inquiryNodeList", inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node));
+
         return "node/node-manage";
     }
 

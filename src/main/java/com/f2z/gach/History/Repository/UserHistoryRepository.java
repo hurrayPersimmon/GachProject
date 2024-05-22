@@ -24,4 +24,20 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
             "ORDER BY frequency DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Object[]> findTopMapNodes(@Param("limit") Integer limit);
+
+    @Query(value = "SELECT nodeId, COUNT(nodeId) AS frequency FROM (" +
+            "SELECT Arrivals AS nodeId FROM UserHistory " +
+            "UNION ALL " +
+            "SELECT Departures AS nodeId FROM UserHistory) AS all_nodes " +
+            "GROUP BY nodeId " +
+            "ORDER BY frequency DESC " +
+            "LIMIT :limit OFFSET (SELECT COUNT(*) FROM (" +
+            "SELECT DISTINCT nodeId FROM (" +
+            "SELECT Arrivals AS nodeId FROM UserHistory " +
+            "UNION ALL " +
+            "SELECT Departures AS nodeId FROM UserHistory" +
+            ") AS all_nodes" +
+            ") AS unique_nodes) - :limit", nativeQuery = true)
+    List<Object[]> findBottomMapNodes(@Param("limit") Integer limit);
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{/fragment :: head}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
                 <div class="row text-center" id="temp">
                     <div class="col-4 ps-5">
                         <div class="shadow p-3 mb-5 text-start rounded" style="background-color: white;">
-                            <p class="fs-4 ms-3 nodeHeader">일일 지점 문의 / 일일 전체 문의</p>
+                            <p class="fs-4 ms-3 nodeHeader">지점 문의 / 전체 문의</p>
                             <hr>
                             <div>
                                 <canvas id="myChart1"></canvas>
@@ -43,24 +43,24 @@
                     <div class="col-4 ps-5">
                         <div class="row w-75">
                             <div class="shadow p-3 mb-1 text-start rounded" style="background-color: white;">
-                                <p class="fs-4 nodeHeader">경로 미등록 지점 수 / 총 지점 수</p>
+                                <p class="fs-4 nodeHeader">총 지점 수</p>
                                 <hr>
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-2 rounded-4" style="background-color: rgb(163, 230, 53);"><i class="bi bi-clipboard-check" style="color:white;"></i></div>
                                     <div class="col-9 fs-1 ms-2 ps-0 text-center">
-                                        <span class="fs-1" th:text="${countNodes}">6</span><span class="fs-4" style="color:rgb(203, 213, 225)">&nbsp;/&nbsp;<span th:text="${nodeChartData.size()}">200</span>지점</span>
+                                        <span class="fs-2" th:text="${nodeChartData.size()}">45</span><span class="fs-4" style="color:rgb(203, 213, 225)">지점</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row w-75">
                             <div class="shadow p-3 mt-1 text-start rounded" style="background-color: white;">
-                                <p class="fs-4 nodeHeader">미 사용 지점 수</p>
+                                <p class="fs-4 nodeHeader">경로 미등록 지점 수</p>
                                 <hr>
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-2 me-0 pe-0 rounded" style="background-color: rgb(110, 231, 183);"><i class="fa-regular fa-message" style="color:white"></i></div>
                                     <div class="col-9 fs-1 ms-2 ps-0 text-center">
-                                        45<span class="fs-4" style="color:rgb(203, 213, 225)">지점</span>
+                                        <span class="fs-2" th:text="${countNodes}">45</span><span class="fs-4" style="color:rgb(203, 213, 225)">지점</span>
                                     </div>
                                 </div>
                             </div>
@@ -165,20 +165,59 @@
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
-<script>
+<script th:inline="javascript">
     const ctx1 = document.getElementById('myChart1');
+
+    const inquiryList = [[${inquiryList}]];
+    const nodeInquiryList = [[${nodeInquiryList}]];
+
+    let dates = Object.keys(inquiryList);
+    const newData = {};
+    const allCnt = {};
+
+    originalDateList = [];
+    dates.forEach(
+        i => originalDateList.push(new Date(i))
+    );
+    for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
+        const dateString = date.toISOString().split('T')[0];
+        if (nodeInquiryList.hasOwnProperty(dateString)) {
+            newData[dateString] = nodeInquiryList[dateString];
+        } else {
+            newData[dateString] = 0;
+        }
+    }
+
+    originalDateList = [];
+    dates.forEach(
+        i => originalDateList.push(new Date(i))
+    );
+
+    let dateList = [];
+
+    for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
+        const dateString = date.toISOString().split('T')[0];
+        if (inquiryList.hasOwnProperty(dateString)) {
+            allCnt[dateString] = inquiryList[dateString];
+        } else {
+            allCnt[dateString] = 0;
+        }
+        dateList.push(dateString);
+    }
+
+    console.log(allCnt);
 
     new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['5월 1일', '5월 2일', '5월 3일', '5월 4일', '5월 5일', '5월 6일', '5월 7일', '5월 8일', '5월 9일', '5월 10일', '5월 11일'],
+            labels: dateList,
             datasets: [{
                 label: '전체 문의',
-                data: [24, 20, 30, 19, 15, 10,20,25,30,29,10,32],
+                data: Object.values(allCnt),
                 borderWidth: 1
             },{
                 label: '지점 문의',
-                data: [12, 19, 3, 5, 2, 3,4,1,21,23,3,5,2],
+                data: Object.values(newData),
                 borderWidth: 1
             }]
         },
@@ -193,13 +232,15 @@
 
     const ctx2 = document.getElementById('myChart2');
 
+    let unSaNodeList = [[${unSatisfaction}]];
+
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['가천관', '제2기숙사', '공과대학2', '무당이 정류장', '가천대역 1번출구'],
+            labels: unSaNodeList.keys(),
             datasets: [{
                 label: '만족도 평균 하위 Top5',
-                data: [1.5, 2, 4, 4.7, 5],
+                data: unSaNodeList.values(),
                 borderWidth: 1
             }]
         },
