@@ -12,4 +12,9 @@ public class AuthController {
     public String deny() {
         return "deny";
     }
+
+    @GetMapping("/")
+    public String main(){
+        return "main/main-page";
+    }
 }

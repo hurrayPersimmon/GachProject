@@ -57,11 +57,6 @@ public class AdminController {
         return "main/main-page";
     }
 
-    @GetMapping("/")
-    public String main(){
-        return "main/main-page";
-    }
-
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("userCount", userRepository.count());
