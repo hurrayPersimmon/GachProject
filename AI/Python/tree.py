@@ -7,12 +7,10 @@ from sklearn.metrics import mean_squared_error
 import pandas as pd
 import random
 import joblib
-import sys
-import pickle
 
-csvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
+#csvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
 # savePath = "/home/t24102/GachProject/AI/Model/temp.pkl"
-# csvPath = "/home/t24102/GachProject/AI/Data/data.csv"
+csvPath = "/home/t24102/GachProject/AI/Data/data.csv";
 
 data = pd.read_csv(csvPath, encoding='UTF-8')
 

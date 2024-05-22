@@ -162,8 +162,9 @@ public class AIService {
         process.destroy();
 
         takeTime = takeTime.substring(1, takeTime.length() - 1);
+        double number = Double.parseDouble(takeTime);
 
-        return Integer.parseInt(takeTime);
+        return (int) Math.round(number);
     }
 
     public void deleteModel(AiModel aiModel) {
