@@ -74,7 +74,7 @@
                                 <div class="row">
                                     <div class="col-2 fs-1 ms-3 ps-3 me-0 pe-0 rounded" style="background-color: rgb(110, 231, 183);"><i class="fa-solid fa-percent" style="color : white;"></i></div>
                                     <div class="col-9 fs-1 ms-2 ps-0 text-center">
-                                        <span th:text="${userTodaySignUpCount}">45</span><span class="fs-4" style="color:rgb(203, 213, 225)">명</span>
+                                        <span th:text="${userLoginCnt}">45</span><span class="fs-4" style="color:rgb(203, 213, 225)">명</span>
                                     </div>
                                 </div>
                             </div>
@@ -176,20 +176,42 @@
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
-<script>
+<script th:inline="javascript">
+
+
+    // 현재 날짜
+    let currentDate = new Date();
+
+    // 5일 전 날짜
+    let fiveDaysAgo = new Date();
+    fiveDaysAgo.setDate(currentDate.getDate() - 4);
+
+    // 현재 날짜부터 5일 전까지의 날짜 배열 생성
+    let dateArray = [];
+    let currentDateCopy = new Date(currentDate);
+    while (currentDateCopy >= fiveDaysAgo) {
+        let month = (currentDateCopy.getMonth() + 1).toString().padStart(2, '0'); // 월을 두 자리 문자열로 변환
+        let day = currentDateCopy.getDate().toString().padStart(2, '0'); // 일을 두 자리 문자열로 변환
+        let dateString = `${month}-${day}`;
+        dateArray.push(dateString);
+        currentDateCopy.setDate(currentDateCopy.getDate() - 1);
+    }
+
+    // 날짜 배열 출력
+    console.log(dateArray);
+    let userSignUpCount = [[${userSignUpCount}]];
+    let userDeleteCnt = [[${userDeleteCnt}]];
+    let userLoginCnt = [[${userLoginCnt}]];
+
     const ctx1 = document.getElementById('myChart1');
 
     new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: ['5월 1일', '5월 2일', '5월 3일', '5월 4일', '5월 5일', '5월 6일', '5월 7일', '5월 8일', '5월 9일', '5월 10일', '5월 11일'],
+            labels: dateArray.reverse(),
             datasets: [{
-                label: '전체 문의',
-                data: [24, 20, 30, 19, 15, 10,20,25,30,29,10,32],
-                borderWidth: 1
-            },{
-                label: '경로 문의',
-                data: [12, 19, 3, 5, 2, 3,4,1,21,23,3,5,2],
+                label: '신규 가입자 수',
+                data: userSignUpCount,
                 borderWidth: 1
             }]
         },
@@ -205,12 +227,12 @@
     const ctx2 = document.getElementById('myChart2');
 
     new Chart(ctx2, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: ['가천관', '제2기숙사', '공과대학2', '무당이 정류장', '가천대역 1번출구'],
+            labels: dateArray,
             datasets: [{
-                label: '만족도 평균 하위 Top5',
-                data: [1.5, 2, 4, 4.7, 5],
+                label: '계정 삭제 유저 수',
+                data: userDeleteCnt,
                 borderWidth: 1
             }]
         },

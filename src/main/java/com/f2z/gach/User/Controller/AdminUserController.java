@@ -52,26 +52,18 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
-        model.addAttribute("userTodaySignUpCount", logRepository.countBySpecificConditions(
+        model.addAttribute("userSignUpCount", logRepository.countBySpecificConditions(
                 LocalDateTime.now().with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/signup"));
-        model.addAttribute("1minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(1).with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(1).with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/signup"));
-        model.addAttribute("2minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(2).with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(2).with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/signup"));
-        model.addAttribute("3minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(3).with(LocalTime.MIN),
-                LocalDateTime.now().minusDays(3).with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/signup"));
-        model.addAttribute("4minusDaySignUpCount", logRepository.countBySpecificConditions(
-                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
                 LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/signup"));
+        model.addAttribute("userDeleteCnt", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
+                "DELETE", LogLevel.INFO, "/user/"));
+        model.addAttribute("userLoginCnt", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(4).with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/login"));
         return "user/user-manage";
     }
 
