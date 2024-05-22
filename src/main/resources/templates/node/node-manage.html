@@ -172,87 +172,87 @@
     const nodeInquiryList = [[${nodeInquiryList}]];
     console.log(inquiryList);
     console.log(nodeInquiryList);
-    //
-    // let dates = Object.keys(inquiryList);
-    // const newData = {};
-    // const allCnt = {};
-    //
-    // originalDateList = [];
-    // dates.forEach(
-    //     i => originalDateList.push(new Date(i))
-    // );
-    // for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
-    //     const dateString = date.toISOString().split('T')[0];
-    //     if (nodeInquiryList.hasOwnProperty(dateString)) {
-    //         newData[dateString] = nodeInquiryList[dateString];
-    //     } else {
-    //         newData[dateString] = 0;
-    //     }
-    // }
-    //
-    // originalDateList = [];
-    // dates.forEach(
-    //     i => originalDateList.push(new Date(i))
-    // );
-    //
-    // let dateList = [];
-    //
-    // for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
-    //     const dateString = date.toISOString().split('T')[0];
-    //     if (inquiryList.hasOwnProperty(dateString)) {
-    //         allCnt[dateString] = inquiryList[dateString];
-    //     } else {
-    //         allCnt[dateString] = 0;
-    //     }
-    //     dateList.push(dateString);
-    // }
-    //
-    // new Chart(ctx1, {
-    //     type: 'line',
-    //     data: {
-    //         labels: dateList,
-    //         datasets: [{
-    //             label: '전체 문의',
-    //             data: Object.values(allCnt),
-    //             borderWidth: 1
-    //         },{
-    //             label: '지점 문의',
-    //             data: Object.values(newData),
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             y: {
-    //                 beginAtZero: true
-    //             }
-    //         }
-    //     }
-    // });
-    //
-    // const ctx2 = document.getElementById('myChart2');
-    //
-    // let unSaNodeList = [[${unSatisfaction}]];
-    // console.log(unSaNodeList);
-    //
-    // new Chart(ctx2, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: [123],
-    //         datasets: [{
-    //             label: '만족도 평균 하위 Top5',
-    //             data: [123],
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             y: {
-    //                 beginAtZero: true
-    //             }
-    //         }
-    //     }
-    // });
+
+    let dates = Object.keys(inquiryList);
+    const newData = {};
+    const allCnt = {};
+
+    originalDateList = [];
+    dates.forEach(
+        i => originalDateList.push(new Date(i))
+    );
+    for (let date = originalDateList[0]; date <= originalDateList[originalDateList.length-1]; date.setDate(date.getDate() + 1)) {
+        const dateString = date.toISOString().split('T')[0];
+        if (nodeInquiryList.hasOwnProperty(dateString)) {
+            newData[dateString] = nodeInquiryList[dateString];
+        } else {
+            newData[dateString] = 0;
+        }
+    }
+
+    dataDateList = []
+    dates.forEach(
+        i => dataDateList.push(new Date(i))
+    );
+
+    let dateList = [];
+
+    for (let date = dataDateList[0]; date <= dateList[dataDateList.length-1]; date.setDate(date.getDate() + 1)) {
+        const dateString2 = date.toISOString().split('T')[0];
+        if (inquiryList.hasOwnProperty(dateString2)) {
+            allCnt[dateString2] = inquiryList[dateString2];
+        } else {
+            allCnt[dateString2] = 0;
+        }
+        dateList.push(dateString2);
+    }
+
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: dateList,
+            datasets: [{
+                label: '전체 문의',
+                data: Object.values(allCnt),
+                borderWidth: 1
+            },{
+                label: '지점 문의',
+                data: Object.values(newData),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctx2 = document.getElementById('myChart2');
+
+    let unSaNodeList = [[${unSatisfaction}]];
+    console.log(unSaNodeList);
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: [123],
+            datasets: [{
+                label: '만족도 평균 하위 Top5',
+                data: [123],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
 <script>
     function changeUp() {
