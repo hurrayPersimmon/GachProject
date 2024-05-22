@@ -52,10 +52,10 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
-        model.addAttribute("userSignUpCount", logRepository.countBySpecificConditions(
+        model.addAttribute("userSignUpCount", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
-                "POST", LogLevel.INFO, "/user/signup"));
+                "POST", "/user/signup"));
         log.info(logRepository.countBySpecificConditions(
                 LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),

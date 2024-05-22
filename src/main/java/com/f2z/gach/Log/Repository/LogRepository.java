@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -29,4 +28,13 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
 //    List<Integer> avarageSatisfactionScoreByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 //
 
+    @Query("SELECT DATE(l.createDt), COUNT(l) FROM Log l " +
+            "WHERE l.createDt >= :startOfDay AND l.createDt < :endOfDay " +
+            "AND l.httpMethod = :httpMethod AND l.url = :url " +
+            "GROUP BY DATE(l.createDt)")
+    List<Object[]> countLogsByDateRangeAndUrl(
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay,
+            @Param("httpMethod") String httpMethod,
+            @Param("url") String url);
 }
