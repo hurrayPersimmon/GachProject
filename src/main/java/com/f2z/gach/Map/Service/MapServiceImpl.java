@@ -106,8 +106,13 @@ public class MapServiceImpl implements MapService{
         if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
             BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
             PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
-            targetPlace.setPlaceSummary(keyword.getProfessorClass());
-            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
+
+            return ResponseEntity.requestSuccess(Collections.singletonList(
+                    PlaceResponseDTO.toKeywordList(PlaceSource.builder()
+                            .placeId(targetPlace.getPlaceId())
+                            .placeName(targetPlace.getPlaceName())
+                            .placeSummary(keyword.getProfessorClass())
+                            .build())));
         }
         else {
             return ResponseEntity.saveButNoContent(null);
