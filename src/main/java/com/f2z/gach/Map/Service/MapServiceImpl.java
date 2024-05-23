@@ -111,7 +111,11 @@ public class MapServiceImpl implements MapService{
                     PlaceResponseDTO.toKeywordList(PlaceSource.builder()
                             .placeId(targetPlace.getPlaceId())
                             .placeName(targetPlace.getPlaceName())
-                            .placeSummary(keyword.getProfessorClass())
+                            .placeSummary(keyword.getCollege().toString() + " "
+                                    +keyword.getDepartment()+ " "
+                                    +targetPlace.getPlaceName()+ " "
+                                    +keyword.getProfessorClass()+ " "
+                                    +keyword.getProfessorName())
                             .build())));
         }
         else {
