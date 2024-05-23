@@ -6,7 +6,6 @@ import com.f2z.gach.Admin.DTO.loginDTO;
 import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
-import com.f2z.gach.EnumType.InquiryCategory;
 import com.f2z.gach.EnumType.LogLevel;
 import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
@@ -18,7 +17,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -82,7 +80,7 @@ public class AdminController {
         model.addAttribute("pathRequest", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
-                "POST", "/map/find"));
+                "POST", "/map/find%"));
 
         return "main/dashboard";
     }
