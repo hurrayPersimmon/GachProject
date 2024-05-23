@@ -78,10 +78,11 @@ public class AdminController {
         }
         model.addAttribute("top5Nodes" , map);
         Map<String, String> pathMap = new LinkedHashMap<>();
-        for(Object[] objects : logRepository.countLogsByDateRangeAndUrl(
+        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
+                "/map/route-now?",
                 LocalDateTime.now().with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX),
-                "POST", "/map/route-now?")){
+                LocalDateTime.now().with(LocalTime.MAX)
+                )){
             pathMap.put((String) objects[0], (String) objects[1]);
         }
         model.addAttribute("pathRequest", pathMap);
