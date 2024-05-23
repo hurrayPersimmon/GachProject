@@ -58,15 +58,17 @@ public class AdminLineController {
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         model.addAttribute("lineChartData", mapLineRepository.findAll());
-        List<LocalDate> dateRange = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
 
         List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now());
         List<Inquiry> lineInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Route);
+
+        List<LocalDate> dateRange = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < 7; i++) {
             LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
             dateRange.add(date);
         }
+
         Map<String, Long> inquiryCountByDate = allInquiryList.stream()
                 .collect(Collectors.groupingBy(
                         inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
@@ -106,7 +108,7 @@ public class AdminLineController {
 
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/route%"));
+                LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/find?%"));
         return "line/line-manage";
     }
 
