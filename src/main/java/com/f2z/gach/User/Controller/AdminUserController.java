@@ -52,18 +52,20 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
-        model.addAttribute("userSignUpCount", logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX),
-                "POST", "/user/signup"));
+        model.addAttribute("userSignUpCount", logRepository.countLogsGroupedByDateAndUrlPattern(
+                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
+                LocalDateTime.now().with(LocalDateTime.MAX),
+                "POST", "/user/signup"
+        ));
         model.addAttribute("userDeleteCnt", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
                 "DELETE", "/user").size());
-        model.addAttribute("userLoginCnt", logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusDays(4).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX),
-                "POST", "/user/login"));
+        model.addAttribute("userLoginCnt", logRepository.countLogsGroupedByDateAndUrlPattern(
+                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
+                LocalDateTime.now().with(LocalDateTime.MAX),
+                "POST", "/user/login"
+        ));
         return "user/user-manage";
     }
 

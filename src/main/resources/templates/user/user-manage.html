@@ -179,26 +179,6 @@
 <script th:inline="javascript">
 
 
-    // 현재 날짜
-    let currentDate = new Date();
-
-    // 5일 전 날짜
-    let fiveDaysAgo = new Date();
-    fiveDaysAgo.setDate(currentDate.getDate() - 4);
-
-    // 현재 날짜부터 5일 전까지의 날짜 배열 생성
-    let dateArray = [];
-    let currentDateCopy = new Date(currentDate);
-    while (currentDateCopy >= fiveDaysAgo) {
-        let month = (currentDateCopy.getMonth() + 1).toString().padStart(2, '0'); // 월을 두 자리 문자열로 변환
-        let day = currentDateCopy.getDate().toString().padStart(2, '0'); // 일을 두 자리 문자열로 변환
-        let dateString = `${month}-${day}`;
-        dateArray.push(dateString);
-        currentDateCopy.setDate(currentDateCopy.getDate() - 1);
-    }
-
-    // 날짜 배열 출력
-    console.log(dateArray);
     let userSignUpCount = [[${userSignUpCount}]];
     let userLoginCnt = [[${userLoginCnt}]];
 
