@@ -273,16 +273,10 @@
     const ctx2 = document.getElementById('myChart2');
 
     const data2 = {
-        labels: [
-            '가천대역 1번출구',
-            'AI공학관 1번출구',
-            '교육대학원 식당',
-            '가천관 2번출구',
-            '산학협력관 1번출구'
-        ],
+        labels: Object.keys(popularNodes),
         datasets: [{
             label: 'Popular Node',
-            data: [300, 200, 100, 50, 10],
+            data: Object.values(popularNodes),
             backgroundColor: [
                 'rgb(13, 110, 253)',
                 'rgb(163, 207, 187)',

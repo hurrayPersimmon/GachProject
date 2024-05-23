@@ -71,6 +71,10 @@ public class AdminController {
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
                 LogLevel.ERROR));
+        model.addAttribute("loginRequest", logRepository.countBySpecificConditions(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", LogLevel.INFO, "/user/login"));
         model.addAttribute("inquiryRequest", inquiryRepository.findAll());
         model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
         model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
