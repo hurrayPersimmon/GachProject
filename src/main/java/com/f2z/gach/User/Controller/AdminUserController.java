@@ -57,7 +57,7 @@ public class AdminUserController {
                 LocalDateTime.now().with(LocalDateTime.MAX),
                 "POST", "/user/signup%"
         ));
-        log.info(String.valueOf(logRepository.countLogsByDateAndUrl(
+        log.info(String.valueOf(logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX),
                 "POST", "/user/signup"
@@ -71,7 +71,7 @@ public class AdminUserController {
                 LocalDateTime.now().with(LocalDateTime.MAX),
                 "POST", "/user/login"
         ));
-        log.info(String.valueOf(logRepository.countLogsByDateAndUrl(
+        log.info(String.valueOf(logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX),
                 "POST", "/user/login"
