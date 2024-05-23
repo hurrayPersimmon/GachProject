@@ -72,9 +72,6 @@ public class AdminController {
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
                 "POST", LogLevel.INFO, "/user/login"));
-        model.addAttribute("inquiryRequest", inquiryRepository.findAll());
-        model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
-        model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
         Map<String, Integer> map = new LinkedHashMap<>();
         for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
             int nodeId = Integer.parseInt(objects[0].toString());
@@ -82,6 +79,10 @@ public class AdminController {
             map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
         }
         model.addAttribute("top5Nodes" , map);
+        model.addAttribute("pathRequest", logRepository.countLogsByDateRangeAndUrl(
+                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX),
+                "POST", "/map/find"));
 
         return "main/dashboard";
     }
