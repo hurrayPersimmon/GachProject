@@ -106,11 +106,12 @@ public class MapServiceImpl implements MapService{
         if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
             BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
             PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
+            //targetPlace.setPlaceSummary 했었다가 영속성 에러로 진짜 변환되더라.
 
             return ResponseEntity.requestSuccess(Collections.singletonList(
                     PlaceResponseDTO.toKeywordList(PlaceSource.builder()
                             .placeId(targetPlace.getPlaceId())
-                            .placeName(keyword.getPlaceName())
+                            .placeName(keyword.getProfessorName())
                             .placeSummary(keyword.getCollege().toString() + " "
                                     +keyword.getDepartment()+ " "
                                     +targetPlace.getPlaceName()+ " "
