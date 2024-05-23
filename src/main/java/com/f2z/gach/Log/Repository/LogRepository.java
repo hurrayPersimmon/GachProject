@@ -28,7 +28,7 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
 //    List<Integer> avarageSatisfactionScoreByDate(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 //
 
-    @Query("SELECT DATE(l.createDt), COUNT(l) FROM Log l WHERE l.url = :url AND l.createDt BETWEEN :startDate AND :endDate GROUP BY DATE(l.createDt)")
+    @Query("SELECT DATE(l.createDt), COUNT(l) FROM Log l WHERE l.url LIKE CONCAT('%', :url, '%') AND l.createDt BETWEEN :startDate AND :endDate GROUP BY DATE(l.createDt)")
     List<Object[]> countRequestsByUrlAndDate(@Param("url") String url, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
 
