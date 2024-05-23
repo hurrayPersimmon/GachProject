@@ -61,10 +61,10 @@ public class AdminLineController {
         List<LocalDate> dateRange = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
-        List<Inquiry> lineInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Route);
+        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now());
+        List<Inquiry> lineInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Route);
         for (int i = 0; i < 7; i++) {
-            LocalDate date = now.minusWeeks(1).plusDays(i).toLocalDate();
+            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
             dateRange.add(date);
         }
         Map<String, Long> inquiryCountByDate = allInquiryList.stream()
@@ -105,7 +105,7 @@ public class AdminLineController {
         model.addAttribute("lineSatisList", map);
 
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
-                LocalDateTime.now().minusDays(7).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX), "POST", "/map/route%"));
         return "line/line-manage";
     }
