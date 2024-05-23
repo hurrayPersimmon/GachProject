@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 
 @Controller
@@ -77,13 +76,15 @@ public class AdminController {
             map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
         }
         model.addAttribute("top5Nodes" , map);
-        Map<String, String> pathMap = new LinkedHashMap<>();
+        Map<LocalDate, String> pathMap = new LinkedHashMap<>();
         for(Object[] objects : logRepository.countRequestsByUrlAndDate(
                 "/map/route-now?",
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX)
                 )){
-            pathMap.put((String) objects[0], (String) objects[1]);
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            pathMap.put(date, (String) objects[1]);
         }
         model.addAttribute("pathRequest", pathMap);
         return "main/dashboard";
