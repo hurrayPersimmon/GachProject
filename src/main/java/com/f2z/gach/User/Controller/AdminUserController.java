@@ -57,25 +57,25 @@ public class AdminUserController {
                 LocalDateTime.now().with(LocalDateTime.MAX),
                 "POST", "/user/signup%"
         ));
-        log.info(String.valueOf(logRepository.countLogsGroupedByDateAndUrlPattern(
+        log.info(String.valueOf(logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/signup%"
-        ).size()));
+                "POST", "/user/signup"
+        )));
         model.addAttribute("userDeleteCnt", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
-                "DELETE", "/user").size());
-        model.addAttribute("userLoginCnt", logRepository.countLogsGroupedByDateAndUrlPattern(
+                "DELETE", "/user"));
+        model.addAttribute("userLoginCnt", logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/login%"
+                "POST", "/user/login"
         ));
-        log.info(String.valueOf(logRepository.countLogsGroupedByDateAndUrlPattern(
+        log.info(String.valueOf(logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/login%"
-        ).size()));
+                "POST", "/user/login"
+        )));
         return "user/user-manage";
     }
 
