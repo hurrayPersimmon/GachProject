@@ -76,7 +76,7 @@ public class AdminController {
             map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
         }
         model.addAttribute("top5Nodes" , map);
-        Map<LocalDate, String> pathMap = new LinkedHashMap<>();
+        Map<LocalDate, Long> pathMap = new LinkedHashMap<>();
         for(Object[] objects : logRepository.countRequestsByUrlAndDate(
                 "/map/route-now?",
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
@@ -84,7 +84,7 @@ public class AdminController {
                 )){
             Date sqlDate = (Date) objects[0];
             LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            pathMap.put(date, (String) objects[1]);
+            pathMap.put(date, (long) objects[1]);
         }
         model.addAttribute("pathRequest", pathMap);
         return "main/dashboard";

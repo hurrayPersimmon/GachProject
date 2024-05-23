@@ -51,7 +51,7 @@ public class AdminUserController {
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
 
-        Map<LocalDate, String> signUpMap = new LinkedHashMap<>();
+        Map<LocalDate, Long> signUpMap = new LinkedHashMap<>();
         for(Object[] objects : logRepository.countRequestsByUrlAndDate(
                 "/user/singup",
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
@@ -59,7 +59,7 @@ public class AdminUserController {
         )){
             Date sqlDate = (Date) objects[0];
             LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            signUpMap.put(date, (String) objects[1]);
+            signUpMap.put(date, (long) objects[1]);
         }
         model.addAttribute("pathRequest", signUpMap);
         return "user/user-manage";
