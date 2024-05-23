@@ -59,15 +59,15 @@ public class AdminNodeController {
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
-        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
-        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node);
+        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now());
+        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Node);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
 
         List<LocalDate> dateRange = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < 7; i++) {
-            LocalDate date = now.minusWeeks(1).plusDays(i).toLocalDate();
+            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
             dateRange.add(date);
         }
 
