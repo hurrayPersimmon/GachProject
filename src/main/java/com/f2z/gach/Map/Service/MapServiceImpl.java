@@ -110,12 +110,12 @@ public class MapServiceImpl implements MapService{
             return ResponseEntity.requestSuccess(Collections.singletonList(
                     PlaceResponseDTO.toKeywordList(PlaceSource.builder()
                             .placeId(targetPlace.getPlaceId())
-                            .placeName(targetPlace.getPlaceName())
+                            .placeName(keyword.getPlaceName())
                             .placeSummary(keyword.getCollege().toString() + " "
                                     +keyword.getDepartment()+ " "
                                     +targetPlace.getPlaceName()+ " "
-                                    +keyword.getProfessorClass()+ " "
-                                    +keyword.getProfessorName())
+                                    +keyword.getProfessorClass()
+                                    )
                             .build())));
         }
         else {
