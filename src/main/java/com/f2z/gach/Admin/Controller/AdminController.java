@@ -5,18 +5,14 @@ import com.f2z.gach.Admin.DTO.AdminForm;
 import com.f2z.gach.Admin.DTO.loginDTO;
 import com.f2z.gach.Admin.Entity.Admin;
 import com.f2z.gach.Admin.Repository.AdminRepository;
-import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.EnumType.InquiryCategory;
 import com.f2z.gach.EnumType.LogLevel;
-import com.f2z.gach.History.Entity.UserHistory;
 import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
-import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
 import com.f2z.gach.User.Repository.UserRepository;
 import com.f2z.gach.Log.Repository.LogRepository;
-import com.f2z.gach.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +29,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,7 +38,6 @@ import java.util.stream.Collectors;
 public class AdminController {
     private final AdminRepository adminRepository;
     private final InquiryRepository inquiryRepository;
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final LogRepository logRepository;
@@ -82,8 +76,11 @@ public class AdminController {
         model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
         model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
         Map<String, Integer> map = new LinkedHashMap<>();
-        userHistoryRepository.findTopMapNodes(5).forEach(
-                i -> map.put(mapNodeRepository.findByNodeId((Integer) i[0]).getNodeName(), (Integer) i[1]));
+        for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
+            int nodeId = Integer.parseInt(objects[0].toString());
+            int value = Integer.parseInt(objects[1].toString());
+            map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
+        }
         model.addAttribute("top5Nodes" , map);
 
         return "main/dashboard";
