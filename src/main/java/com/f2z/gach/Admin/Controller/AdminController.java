@@ -77,11 +77,14 @@ public class AdminController {
             map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
         }
         model.addAttribute("top5Nodes" , map);
-        model.addAttribute("pathRequest", logRepository.countLogsByDateRangeAndUrl(
+        Map<String, String> pathMap = new LinkedHashMap<>();
+        for(Object[] objects : logRepository.countLogsByDateRangeAndUrl(
                 LocalDateTime.now().with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX),
-                "POST", "/map/find%"));
-
+                "POST", "/map/route-now?")){
+            pathMap.put((String) objects[0], (String) objects[1]);
+        }
+        model.addAttribute("pathRequest", pathMap);
         return "main/dashboard";
     }
 
