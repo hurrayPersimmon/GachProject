@@ -79,7 +79,7 @@ public class AdminController {
         Map<LocalDate, String> pathMap = new LinkedHashMap<>();
         for(Object[] objects : logRepository.countRequestsByUrlAndDate(
                 "/map/route-now?",
-                LocalDateTime.now().with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX)
                 )){
             Date sqlDate = (Date) objects[0];

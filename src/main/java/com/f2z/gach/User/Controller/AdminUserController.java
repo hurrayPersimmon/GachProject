@@ -22,10 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,30 +50,18 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
-        model.addAttribute("userSignUpCount", logRepository.countLogsGroupedByDateAndUrlPattern(
-                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
-                LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/signup%"
-        ));
-        log.info(String.valueOf(logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
-                LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/signup"
-        )));
-        model.addAttribute("userDeleteCnt", logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusYears(1).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX),
-                "DELETE", "/user"));
-        model.addAttribute("userLoginCnt", logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
-                LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/login"
-        ));
-        log.info(String.valueOf(logRepository.countLogsByDateRangeAndUrl(
-                LocalDateTime.now().minusDays(4).with(LocalDateTime.MIN),
-                LocalDateTime.now().with(LocalDateTime.MAX),
-                "POST", "/user/login"
-        )));
+
+        Map<LocalDate, String> signUpMap = new LinkedHashMap<>();
+        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
+                "/user/singup",
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)
+        )){
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            signUpMap.put(date, (String) objects[1]);
+        }
+        model.addAttribute("pathRequest", signUpMap);
         return "user/user-manage";
     }
 
