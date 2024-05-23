@@ -13,6 +13,7 @@ import com.f2z.gach.History.Entity.UserHistory;
 import com.f2z.gach.History.Repository.UserHistoryRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Map.Entity.MapNode;
+import com.f2z.gach.Map.Repository.MapNodeRepository;
 import com.f2z.gach.User.Repository.UserRepository;
 import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.User.Repository.UserRepository;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,6 +47,7 @@ public class AdminController {
     private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final LogRepository logRepository;
+    private final MapNodeRepository mapNodeRepository;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -78,7 +81,10 @@ public class AdminController {
         model.addAttribute("inquiryRequest", inquiryRepository.findAll());
         model.addAttribute("inquiryAr", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AR));
         model.addAttribute("inquiryAI", inquiryRepository.findAllByInquiryCategory(InquiryCategory.AITime));
-        model.addAttribute("top5Nodes" ,userHistoryRepository.findTopMapNodes(5));
+        Map<String, Integer> map = new LinkedHashMap<>();
+        userHistoryRepository.findTopMapNodes(5).forEach(
+                i -> map.put(mapNodeRepository.findByNodeId((Integer) i[0]).getNodeName(), (Integer) i[1]));
+        model.addAttribute("top5Nodes" , map);
 
         return "main/dashboard";
     }
