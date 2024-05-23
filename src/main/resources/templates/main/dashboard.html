@@ -246,13 +246,12 @@
 
     let popularNodes = [[${top5Nodes}]];
     let pathRequest = [[${pathRequest}]];
-    alert(pathRequest);
 
     const data1 = {
-        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        labels: Object.keys(pathRequest),
         datasets: [{
             label: '이번주 요청건수',
-            data: [145, 189, 280, 381, 156, 355, 340],
+            data: Object.values(pathRequest),
             fill: false,
             borderColor: '#1167b1',
             tension: 0.1
