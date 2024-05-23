@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class AIService {
     private final AiModelRepository aiRepo;
+    //ㅁㄴㅇ
     private final HistoryLineTimeRepository lineTimeRepo;
     private final MapLineRepository mapLineRepository;
     private ProcessBuilder processBuilder;
