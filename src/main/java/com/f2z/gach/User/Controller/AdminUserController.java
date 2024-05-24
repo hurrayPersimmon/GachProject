@@ -53,7 +53,7 @@ public class AdminUserController {
 
         Map<LocalDate, Long> signUpMap = new LinkedHashMap<>();
         for(Object[] objects : logRepository.countRequestsByUrlAndDate(
-                "/user/singup",
+                "/user/signup",
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX)
         )){
@@ -62,6 +62,17 @@ public class AdminUserController {
             signUpMap.put(date, (long) objects[1]);
         }
         model.addAttribute("signUpCount", signUpMap);
+        Map<LocalDate, Long> loginMap = new LinkedHashMap<>();
+        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
+                "/user/login",
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)
+        )){
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            loginMap.put(date, (long) objects[1]);
+        }
+        model.addAttribute("loginCount", loginMap);
         return "user/user-manage";
     }
 
