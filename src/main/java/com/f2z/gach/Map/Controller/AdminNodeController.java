@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -143,7 +144,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/add")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Secured("ROLE_ADMIN")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
@@ -151,7 +152,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Secured("ROLE_ADMIN")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -170,7 +171,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node/update")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Secured("ROLE_ADMIN")
     public String updateNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapDTO,
                              BindingResult result){
         if(result.hasErrors()){
@@ -184,7 +185,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/delete/{nodeId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Secured("ROLE_ADMIN")
     public String deleteNode(@PathVariable Integer nodeId) throws Exception{
         if(mapNodeRepository.existsByNodeId(nodeId)) {
             mapLineRepository.deleteAllByNodeFirst_NodeId(nodeId);
