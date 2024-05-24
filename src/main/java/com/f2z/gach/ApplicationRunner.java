@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-//@Service
+@Service
 @RequiredArgsConstructor
 public class ApplicationRunner implements org.springframework.boot.ApplicationRunner {
 
@@ -22,10 +22,10 @@ public class ApplicationRunner implements org.springframework.boot.ApplicationRu
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Admin admin = new Admin();
-        admin.setAdminPassword(passwordEncoder.encode("1234"));
+        admin.setAdminPassword(passwordEncoder.encode("guest1234"));
         admin.setAdminBirthday(LocalDate.now());
-        admin.setAdminName("admin");
-        admin.setAdminAuthorization(Authorization.ADMIN);
+        admin.setAdminName("guest");
+        admin.setAdminAuthorization(Authorization.GUEST);
         admin.setAdminId("admin");
         adminRepository.save(admin);
     }
