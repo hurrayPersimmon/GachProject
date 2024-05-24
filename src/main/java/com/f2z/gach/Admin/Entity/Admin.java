@@ -55,6 +55,8 @@ public class Admin implements UserDetails {
         return List.of(new SimpleGrantedAuthority(adminAuthorization.getValue()));
     }
 
+
+
     @Override
     public String getPassword() {
         return adminPassword;

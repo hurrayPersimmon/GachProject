@@ -143,6 +143,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
@@ -150,7 +151,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -169,7 +170,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node/update")
-    @PreAuthorize("hasRole('ADMIN') and hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapDTO,
                              BindingResult result){
         if(result.hasErrors()){
