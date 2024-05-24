@@ -2,25 +2,24 @@ package com.f2z.gach.Config;
 
 
 import com.f2z.gach.Auth.CustomAccessDeniedHandler;
-import com.f2z.gach.Auth.CustomPasswordEncoder;
 import com.f2z.gach.Auth.CustomUserDetailService;
-import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
@@ -82,7 +81,7 @@ public class WebSecurityConfig {
                 )
                 .logout(out -> out.logoutUrl("/"))
                 .userDetailsService(customUserDetailService)
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.accessDeniedHandler(accessDeniedHandler).accessDeniedPage("/admin/deny")
                 );
