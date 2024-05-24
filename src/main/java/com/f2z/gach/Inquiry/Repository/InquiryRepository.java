@@ -26,11 +26,11 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     List<Inquiry> findAllByInquiryCategory(InquiryCategory category);
 
-    @Query("SELECT new com.f2z.gach.Inquiry.DTO.chartDTO(DATE(i.createDt), COUNT(i)) " +
+    @Query("SELECT new com.f2z.gach.Inquiry.DTO.chartDTO(CAST(i.createDt AS date), COUNT(i)) " +
             "FROM Inquiry i " +
             "WHERE i.createDt >= :startDate AND i.createDt < :endDate " +
-            "GROUP BY DATE(i.createDt) " +
-            "ORDER BY DATE(i.createDt)")
+            "GROUP BY CAST(i.createDt AS date) " +
+            "ORDER BY CAST(i.createDt AS date)")
     List<chartDTO> findDailyInquiryCounts(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Inquiry> findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime startDate, LocalDateTime endDate, InquiryCategory category);
