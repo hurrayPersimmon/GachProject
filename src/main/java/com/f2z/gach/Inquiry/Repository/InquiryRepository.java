@@ -32,7 +32,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
             "WHERE i.createDt >= :startDate AND i.createDt < :endDate " +
             "GROUP BY DATE(i.createDt) " +
             "ORDER BY DATE(i.createDt)")
-    List<chartDTO> findDailyInquiryCounts(LocalDate startDate, LocalDate endDate);
+    List<chartDTO> findDailyInquiryCounts(LocalDateTime startDate, LocalDateTime endDate);
 
 
 

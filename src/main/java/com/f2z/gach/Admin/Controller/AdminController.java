@@ -88,8 +88,8 @@ public class AdminController {
         }
         model.addAttribute("pathRequest", pathMap);
         model.addAttribute("inquiryList", inquiryRepository.findDailyInquiryCounts(
-                LocalDate.now().minusDays(6),
-                LocalDate.now()));
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)));
         return "main/dashboard";
     }
 
