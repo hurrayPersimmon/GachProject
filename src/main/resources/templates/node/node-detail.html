@@ -26,10 +26,7 @@
                             <div class="form-floating mb-4">
                                 <p class="fs-4 nodeHeader">지점이름</p>
                                 <hr>
-                                <input type="text" th:field="*{nodeName}" class="form-control fontHv mt-0 pt-0 fs-6" name="nodeName" placeholder="name@example.com" readonly>
-                            </div>
-                            <div th:if="${#fields.hasErrors('nodeName')}" class="text-start ms-2 text-danger" style="font-size:80%">
-                                <i class="bi bi-exclamation-circle"></i><span class="ps-1 pt-1" th:errors="*{nodeName}">아이디 오류</span>
+                                <input type="text" th:field="*{nodeName}" class="form-control fontHv mt-0 pt-0 fs-6" name="nodeName" placeholder="name@example.com">
                             </div>
                             <div class="row mt-3">
                                 <div class="col">

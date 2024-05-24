@@ -8,6 +8,7 @@ import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,7 @@ public class AdminAIController {
     }
 
     @GetMapping("")
+    @Secured("ROLE_ADMIN or ROLE_GUEST")
     public String list(Model model) {
         model.addAttribute("aiList", aiRepo.findAll());
         return "ai/ai-manage";
@@ -46,7 +48,7 @@ public class AdminAIController {
 
     // 뷰
     @GetMapping("/model/add")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @Secured("ROLE_ADMIN")
     public String addModel(Model model) {
         dataLength = lineTimeRepository.count();
         model.addAttribute("dataListLength", dataLength);
@@ -55,6 +57,7 @@ public class AdminAIController {
 
     // 필터링
     @GetMapping("/model/add/filter/{min}/{max}")
+    @Secured("ROLE_ADMIN or ROLE_GUEST")
     @ResponseBody
     public long getFilterNum(@PathVariable int min, @PathVariable int max){
         dataLength = aiService.filterData(min, max);
@@ -62,6 +65,7 @@ public class AdminAIController {
     }
 
     @GetMapping("/model/learn")
+    @Secured("ROLE_ADMIN or ROLE_GUEST")
     @ResponseBody
     public int learningModel() throws Exception {
         aiService.reLearnModel();
@@ -70,6 +74,7 @@ public class AdminAIController {
 
     // 모델 추가 작업
     @PostMapping("/model/add")
+    @Secured("ROLE_ADMIN")
     @ResponseBody
     public int saveModel(@RequestBody ModelRequestDTO dto) {
         dataLength = dataRepo.count() + lineTimeRepository.count();
@@ -83,6 +88,7 @@ public class AdminAIController {
     }
 
     @GetMapping("/delete/model/{id}")
+    @Secured("ROLE_ADMIN")
     public String deleteModel(@PathVariable int id) {
         AiModel aiModel = aiRepo.findById(id).orElseThrow();
         aiService.deleteModel(aiModel);
