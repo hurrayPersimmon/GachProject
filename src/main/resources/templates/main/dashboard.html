@@ -324,10 +324,10 @@
     const ctx4 = document.getElementById('myChart4');
 
     const data4 = {
-        labels: Object.keys(map2),
+        labels: map2.map(obj => obj.date),
         datasets: [{
             label: '이번주 요청건수',
-            data: Object.values(map2),
+            data: map2.map(obj => obj.count),
             fill: false,
             borderColor: '#1167b1',
             tension: 0.1
