@@ -5,6 +5,7 @@ import com.f2z.gach.Log.Entity.Log;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -72,4 +73,6 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
             @Param("httpMethod") String httpMethod,
             @Param("urlPattern") String urlPattern);
 
+    @Query("SELECT l FROM Log l WHERE l.httpMethod = 'DELETE' AND l.createDt >= :oneWeekAgo")
+    List<Log> findAllWithHttpMethodDeleteAndTimestampAfter(@Param("oneWeekAgo") LocalDateTime oneWeekAgo);
 }
