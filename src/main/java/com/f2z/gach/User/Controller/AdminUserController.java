@@ -73,6 +73,12 @@ public class AdminUserController {
             loginMap.put(date, (long) objects[1]);
         }
         model.addAttribute("loginCount", loginMap);
+        model.addAttribute("deleteUserCount", logRepository.countLogsByDateAndUrl(
+                LocalDateTime.now().minusDays(6).with(LocalDateTime.MIN),
+                LocalDateTime.now().with(LocalDateTime.MAX),
+                "DELETE",
+                "/user/%"
+        ));
         return "user/user-manage";
     }
 
