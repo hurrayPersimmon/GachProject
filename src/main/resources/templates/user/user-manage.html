@@ -178,10 +178,10 @@
 </script>
 <script th:inline="javascript">
 
-
     let userSignUpCount = [[${userSignUpCount}]];
     let userLoginCnt = [[${userLoginCnt}]];
-
+    console.log(userSignUpCount);
+    console.log(userLoginCnt);
     const ctx1 = document.getElementById('myChart1');
 
     new Chart(ctx1, {

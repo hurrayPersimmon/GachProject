@@ -61,7 +61,7 @@ public class AdminUserController {
             LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
             signUpMap.put(date, (long) objects[1]);
         }
-        model.addAttribute("pathRequest", signUpMap);
+        model.addAttribute("signUpCount", signUpMap);
         return "user/user-manage";
     }
 
