@@ -150,7 +150,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
