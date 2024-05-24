@@ -101,7 +101,7 @@ public class AdminNodeController {
 
         model.addAttribute("nodeInquiryList", result2);
         Map<String, Integer> map = new LinkedHashMap<>();
-        for(Object[] objects : userHistoryRepository.findBottomMapNodes(5)){
+        for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
             int nodeId = Integer.parseInt(objects[0].toString());
             int value = Integer.parseInt(objects[1].toString());
             map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);

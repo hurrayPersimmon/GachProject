@@ -31,7 +31,7 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
             "UNION ALL " +
             "SELECT Departures AS nodeId FROM UserHistory) AS all_nodes " +
             "GROUP BY nodeId " +
-            "ORDER BY frequency ASC " + // 빈도수가 낮은 순으로 정렬
+            "ORDER BY frequency ASC " +
             "LIMIT :limit", nativeQuery = true)
     List<Object[]> findBottomMapNodes(@Param("limit") Integer limit);
 

@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-4 ps-5">
                         <div class="shadow p-3 mb-5 text-start rounded" style="background-color: white;">
-                            <p class="fs-4 ms-3 nodeHeader">만족도가 낮게 평가된 지점</p>
+                            <p class="fs-4 ms-3 nodeHeader">조회수 상위 노드</p>
                             <hr>
                             <div>
                                 <canvas id="myChart2"></canvas>
@@ -202,7 +202,7 @@
         data: {
             labels: Object.keys(map),
             datasets: [{
-                label: '만족도 평균 하위 Top5',
+                label: '조회수 지점 상위 Top5',
                 data: Object.values(map),
                 borderWidth: 1
             }]

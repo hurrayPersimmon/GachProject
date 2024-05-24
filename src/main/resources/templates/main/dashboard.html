@@ -169,13 +169,7 @@
                             <div class="card-title noto-sans-500 fs-2 mb-3">
                                 <div class="row justify-content-between mt-2 p-2">
                                     <div class="col-4 noto-sans-700">
-                                        경로 요청
-                                    </div>
-                                    <div class="col-3 mt-3 me-4">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected>이번주</option>
-                                            <option value="1">이번달</option>
-                                        </select>
+                                        이번주 경로 요청
                                     </div>
                                 </div>
                             </div>
@@ -188,11 +182,6 @@
                                         인기 노드
                                     </div>
                                     <div class="col-3 mt-3 me-4">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected>오늘</option>
-                                            <option value="1">이번주</option>
-                                            <option value="2">이번달</option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -220,14 +209,9 @@
                             <div class="card-title noto-sans-500 fs-2 mb-3">
                                 <div class="row justify-content-between mt-2 p-2">
                                     <div class="col-7 noto-sans-700">
-                                        AI 소요시간 정확도
+                                        이번주 문의 요청 수
                                     </div>
                                     <div class="col-3 mt-3 me-4">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected>오늘</option>
-                                            <option value="1">이번주</option>
-                                            <option value="2">이번달</option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -335,13 +319,15 @@
         }
     });
 
+    let map2 = [[${inquiryList}]]
+
     const ctx4 = document.getElementById('myChart4');
 
     const data4 = {
-        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        labels: Object.keys(map2),
         datasets: [{
             label: '이번주 요청건수',
-            data: [145, 189, 280, 381, 156, 355, 340],
+            data: Object.values(map2),
             fill: false,
             borderColor: '#1167b1',
             tension: 0.1

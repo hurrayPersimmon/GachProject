@@ -1,6 +1,7 @@
 package com.f2z.gach.Inquiry.Repository;
 
 import com.f2z.gach.EnumType.InquiryCategory;
+import com.f2z.gach.Inquiry.DTO.chartDTO;
 import com.f2z.gach.Inquiry.Entity.Inquiry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,13 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     Page<Inquiry> findByInquiryProgressFalse(Pageable pageable);
 
     List<Inquiry> findAllByInquiryCategory(InquiryCategory category);
+
+    @Query("SELECT new com.f2z.gach.Inquiry.DTO.chartDTO(DATE(i.createDt), COUNT(i)) " +
+            "FROM Inquiry i " +
+            "WHERE i.createDt >= :startDate AND i.createDt < :endDate " +
+            "GROUP BY DATE(i.createDt) " +
+            "ORDER BY DATE(i.createDt)")
+    List<chartDTO> findDailyInquiryCounts(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Inquiry> findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime startDate, LocalDateTime endDate, InquiryCategory category);
 
