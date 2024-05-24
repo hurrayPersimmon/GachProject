@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +32,9 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
             "WHERE i.createDt >= :startDate AND i.createDt < :endDate " +
             "GROUP BY DATE(i.createDt) " +
             "ORDER BY DATE(i.createDt)")
-    List<chartDTO> findDailyInquiryCounts(LocalDateTime startDate, LocalDateTime endDate);
+    List<chartDTO> findDailyInquiryCounts(LocalDate startDate, LocalDate endDate);
+
+
 
     List<Inquiry> findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime startDate, LocalDateTime endDate, InquiryCategory category);
 
