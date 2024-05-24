@@ -22,11 +22,19 @@ public class ApplicationRunner implements org.springframework.boot.ApplicationRu
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Admin admin = new Admin();
-        admin.setAdminPassword(passwordEncoder.encode("guest1234"));
+        admin.setAdminPassword(passwordEncoder.encode("1234"));
         admin.setAdminBirthday(LocalDate.now());
-        admin.setAdminName("guest");
-        admin.setAdminAuthorization(Authorization.GUEST);
+        admin.setAdminName("관리자");
+        admin.setAdminAuthorization(Authorization.ADMIN);
         admin.setAdminId("admin");
         adminRepository.save(admin);
+
+        Admin guest = new Admin();
+        guest.setAdminPassword(passwordEncoder.encode("1234"));
+        guest.setAdminBirthday(LocalDate.now());
+        guest.setAdminName("게스트");
+        guest.setAdminAuthorization(Authorization.GUEST);
+        guest.setAdminId("guest");
+        adminRepository.save(guest);
     }
 }
