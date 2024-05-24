@@ -90,6 +90,9 @@ public class AdminController {
         model.addAttribute("inquiryList", inquiryRepository.findDailyInquiryCounts(
                 LocalDateTime.now().minusDays(6).with(LocalDateTime.MIN),
                 LocalDateTime.now().with(LocalDateTime.MAX)));
+        log.info(String.valueOf(inquiryRepository.findDailyInquiryCounts(
+                LocalDateTime.now().minusDays(6).with(LocalDateTime.MIN),
+                LocalDateTime.now().with(LocalDateTime.MAX)).size()));
         return "main/dashboard";
     }
 
