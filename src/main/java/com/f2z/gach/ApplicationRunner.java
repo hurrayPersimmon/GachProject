@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-//@Service
+@Service
 @RequiredArgsConstructor
 public class ApplicationRunner implements org.springframework.boot.ApplicationRunner {
 
