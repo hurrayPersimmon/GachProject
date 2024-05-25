@@ -32,7 +32,7 @@ public class AIService {
     private ProcessBuilder processBuilder;
 
     final String localPythonPath = "python3";
-    final String tempOutputPath = "/home/t24102/tree_output.py";
+    final String tempOutputPath = "/home/t24102/AI/tree_output.py";
     final String localReModelPath = "/home/t24102/AI/re_learn.py";
     // 이 경로에 필터링 && 증식 데이터 저장
     final String csvFilePath = "/home/t24102/AI/data.csv";
