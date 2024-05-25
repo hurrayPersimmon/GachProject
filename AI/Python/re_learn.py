@@ -21,7 +21,6 @@ additional_data = pd.read_csv(additional_data_path, encoding='UTF-8')
 data = pd.DataFrame(additional_data)
 realData = np.array(data)
 
-
 # 데이터 전처리 및 학습 데이터 준비
 X_add = realData.iloc[:, :-1]
 y_add = realData.iloc[:, -1]
