@@ -40,7 +40,7 @@ public class AdminAIController {
     }
 
     @GetMapping("")
-    @Secured("ROLE_ADMIN or ROLE_GUEST")
+    @PreAuthorize("hasRole('ROLE_ADMIN or ROLE_GUEST')")
     public String list(Model model) {
         model.addAttribute("aiList", aiRepo.findAll());
         return "ai/ai-manage";
