@@ -1,5 +1,6 @@
 package com.f2z.gach.Map;
 import com.f2z.gach.Map.Entity.MapNode;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -30,6 +31,7 @@ public class BusLine {
         private Integer departuresIndex;
         private Integer arrivalsIndex;
         private String csvPath;
+        private Integer totalTime;
 
         public static Points toPoints(MapNode departures, MapNode arrivals) {
             return Points.builder()
@@ -48,7 +50,16 @@ public class BusLine {
         private Double longitude;
     }
 
-    public static List<Node> getBusLine(MapNode departures, MapNode arrivals) throws Exception {
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class ResultList{
+        private List<Node> busLine;
+        private Integer totalTime;
+    }
+
+    public static ResultList getBusLine(MapNode departures, MapNode arrivals) throws Exception {
         Points points = Points.toPoints(departures, arrivals);
         Points updatedPoints = getNearestNode(points, busDownPath, busUpPath);
         if(updatedPoints == null){
@@ -97,11 +108,12 @@ public class BusLine {
         return resultIndex;
     }
 
-    private static List<Node> getNodeList(Points points) throws IOException {
+    private static ResultList getNodeList(Points points) throws IOException {
         Reader reader = new FileReader(points.getCsvPath());
         CSVParser csvParser = CSVFormat.DEFAULT.withHeader().parse(reader);
         List<Node> busLine = new ArrayList<>();
         int index = 0;
+        int TotalTime = 0;
         for (CSVRecord record : csvParser){
             if(index >= points.getDeparturesIndex() && index <= points.getArrivalsIndex()){
                 Node node = Node.builder()
@@ -109,10 +121,13 @@ public class BusLine {
                         .longitude(Double.parseDouble(record.get("X")))
                         .build();
                 busLine.add(node);
+                if(record.get("Line").equals("STOP")){
+                    TotalTime += Integer.parseInt(record.get("Time"));
+                }
             }
             index++;
         }
-        return busLine;
+        return ResultList.builder().busLine(busLine).totalTime(TotalTime).build();
     }
 
     private static double getDistance(double lon1, double lat1, double lon2, double lat2) {

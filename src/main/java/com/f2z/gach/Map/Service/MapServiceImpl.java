@@ -285,8 +285,9 @@ public class MapServiceImpl implements MapService{
 
     private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId, AIData aiData) throws Exception {
         List<BusLine.Node> busLine;
-        busLine = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
-//        Integer busTime = BusLine.getBusTime(busLine);
+        BusLine.ResultList busList = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
+        busLine = busList.getBusLine();
+        Integer busTime = busList.getTotalTime();
         if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
 
         else{
@@ -304,10 +305,9 @@ public class MapServiceImpl implements MapService{
             NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null), aiData);
             NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId, aiData);
             List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
-            Integer totalTime = 0;
+            Integer totalTime = busTime;
             totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
             totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
-//            totalTime +=
             if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
             if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
             if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
