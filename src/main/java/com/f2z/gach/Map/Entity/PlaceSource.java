@@ -56,6 +56,18 @@ public class PlaceSource {
         if(placeSource.getArImagePath() !=null) this.arImagePath = placeSource.getArImagePath();
     }
 
+    public static PlaceSource createSearchPlaceSource(BuildingKeyword keyword){
+        return PlaceSource.builder()
+                .placeId(keyword.getPlaceSource().getPlaceId())
+                .placeName(keyword.getProfessorName())
+                .placeSummary(keyword.getCollege().toString() + " "
+                        +keyword.getDepartment()+ " "
+                        +keyword.getPlaceSource().getPlaceName()+ " "
+                        +keyword.getProfessorClass()
+                )
+                .build();
+    }
+
 
 
 }

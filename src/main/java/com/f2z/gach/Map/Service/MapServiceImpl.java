@@ -42,8 +42,6 @@ public class MapServiceImpl implements MapService{
     private final String routeTypeOptimal = "OPTIMAL";
     private final String routeBus = "busRoute";
 
-
-
     @Override
     public ResponseEntity<PlaceResponseDTO.respondPlaceList> getBuildingInfoList() {
         List<PlaceSource> buildingInfoList = placeSourceRepository.findAllByPlaceCategory(PlaceCategory.BUILDING);
@@ -54,7 +52,6 @@ public class MapServiceImpl implements MapService{
                     .toRespondPlaceList(buildingInfoList));
         }
     }
-
 
     @Override
     public ResponseEntity<PlaceResponseDTO.toRespondBuildingInfo> getBuildingInfo(Integer placeId) {
@@ -68,53 +65,60 @@ public class MapServiceImpl implements MapService{
         }
     }
 
-
     @Override
     public ResponseEntity<List<PlaceResponseDTO.respondKeywordList>> getKeywordResult(String target) {
         // 1. 장소 이름 자체를 검색하는 경우
-        // 1-2. 카테고리로 검색
-        try {placeSourceRepository.findPlaceSourcesByPlaceCategoryContaining(PlaceCategory.valueOf(target));
-            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(placeSourceRepository.findPlaceSourcesByPlaceCategoryContaining(PlaceCategory.valueOf(target))));
-        } catch (IllegalArgumentException e) {
-            log.info("Not a category");
-        }
         // 1-1. 건물 이름으로 검색
         if(!placeSourceRepository.findPlaceSourcesByPlaceNameContaining(target).isEmpty()){
             List<PlaceSource> targetList = placeSourceRepository.findPlaceSourcesByPlaceNameContaining(target);
             return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
         }
-
-        // 2. 키워드로 검색하는 경우
-        // 2-1. 학과로 검색
-        try {
-            BuildingKeyword keyword = buildingKeywordRepository.findByDepartmentContaining(Departments.valueOf(target));
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
-            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
-        } catch (IllegalArgumentException e){
-            log.info("Not a department");
+        // 1-2. 카테고리로 검색
+        if(PlaceCategory.getPlaceCategoryContaining(target) !=null){
+            List<PlaceSource> targetList = placeSourceRepository.findPlaceSourcesByPlaceCategory(PlaceCategory.getPlaceCategoryContaining(target));
+            return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(targetList));
         }
-        // 2-2. 단과대학으로 검색
-        try{
-            BuildingKeyword keyword = buildingKeywordRepository.findByCollegeContaining(College.valueOf(target));
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
-            return ResponseEntity.requestSuccess(Collections.singletonList(PlaceResponseDTO.toKeywordList(targetPlace)));
-        } catch (IllegalArgumentException e){
-            log.info("Not a college");
+
+        // 2-1. 단과대학으로 검색
+        if(College.getCollegeContaining(target) !=null){
+            if(buildingKeywordRepository.existsByCollege(College.getCollegeContaining(target))){
+                List<BuildingKeyword> keywordList = buildingKeywordRepository.findAllByCollege(College.getCollegeContaining(target));
+                PlaceSource mainPlace = placeSourceRepository.findByPlaceId(keywordList.get(0).getPlaceSource().getPlaceId());
+                List<PlaceSource> placeList = new ArrayList<>();
+                placeList.add(mainPlace);
+                for(BuildingKeyword keyword : keywordList){
+                    placeList.add(PlaceSource.createSearchPlaceSource(keyword));
+                }
+                return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(placeList));
+            }
+        }
+
+        // 2-2. 학과로 검색
+        if(Departments.getDepartmentsContaining(target)!=null){
+            if(buildingKeywordRepository.existsByDepartment(Departments.getDepartmentsContaining(target))){
+                List<BuildingKeyword> keywordList = buildingKeywordRepository.findAllByDepartment(Departments.getDepartmentsContaining(target));
+                PlaceSource mainPlace = placeSourceRepository.findByPlaceId(keywordList.get(0).getPlaceSource().getPlaceId());
+                List<PlaceSource> placeList = new ArrayList<>();
+                placeList.add(mainPlace);
+                for(BuildingKeyword keyword : keywordList){
+                    placeList.add(PlaceSource.createSearchPlaceSource(keyword));
+                }
+                return ResponseEntity.requestSuccess(PlaceResponseDTO.toKeywordList(placeList));
+            }
         }
 
         // 2-3. 교수님 성함으로 검색
         if (buildingKeywordRepository.findByProfessorNameContaining(target) != null) {
             BuildingKeyword keyword = buildingKeywordRepository.findByProfessorNameContaining(target);
-            PlaceSource targetPlace = placeSourceRepository.findByPlaceId(keyword.getPlaceSource().getPlaceId());
             //targetPlace.setPlaceSummary 했었다가 영속성 에러로 진짜 변환되더라.
 
             return ResponseEntity.requestSuccess(Collections.singletonList(
                     PlaceResponseDTO.toKeywordList(PlaceSource.builder()
-                            .placeId(targetPlace.getPlaceId())
+                            .placeId(keyword.getPlaceSource().getPlaceId())
                             .placeName(keyword.getProfessorName())
                             .placeSummary(keyword.getCollege().toString() + " "
                                     +keyword.getDepartment()+ " "
-                                    +targetPlace.getPlaceName()+ " "
+                                    +keyword.getPlaceSource().getPlaceName()+ " "
                                     +keyword.getProfessorClass()
                                     )
                             .build())));
