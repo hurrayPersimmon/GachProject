@@ -14,7 +14,8 @@ public interface BuildingKeywordRepository extends JpaRepository<BuildingKeyword
 
     @Query("SELECT b FROM BuildingKeyword b WHERE b.professorName LIKE %?1%")
     BuildingKeyword findByProfessorNameContaining(String target);
-    BuildingKeyword findByDepartmentContaining(Departments target);
-    BuildingKeyword findByCollegeContaining(College target);
-    BuildingKeyword findByKeywordId(Integer keywordId);
+    Boolean existsByCollege(College college);
+    Boolean existsByDepartment(Departments departments);
+    List<BuildingKeyword> findAllByCollege(College collegeContaining);
+    List<BuildingKeyword> findAllByDepartment(Departments departmentsContaining);
 }
