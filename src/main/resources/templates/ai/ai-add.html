@@ -52,6 +52,14 @@
                                     <input type="text" class="form-control fontHv fs-6" id="max" value="360">
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    데이터 증식
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="augment" value="5">
+                                </div>
+                            </div>
                             <div class="row mb-5">
                                 <div class="col">
                                     <a class="btn btn-primary" onclick="doFilter()">필터링 시작하기</a>
@@ -63,88 +71,41 @@
                                     <div class="fs-3 fontHv" style="color:cornflowerblue" th:text="${dataListLength}">0</div>
                                 </div>
                                 <div class="col">
-                                    <div>필터링된 데이터 개수</div>
+                                    <div>필터링 및 증식된 데이터 개수</div>
                                     <div class="fs-3 fontHv" style="color:cornflowerblue" id="filterLength">0</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row" id="second-step" style="opacity: 30%; cursor:not-allowed">
+                <div class="row">
                     <div class="col-6 offset-2">
                         <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
                             <div class="row align-items-center">
                                 <div class="form-floating mb-4">
-                                    <p class="fs-3 sidebarItem text-start ms-4">모델 학습 설정</p>
+                                    <p class="fs-3 sidebarItem text-start ms-4">재학습 설정</p>
                                     <hr>
                                 </div>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">최대 깊이 개수</p>
-                                        <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="depth" disabled>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    모델 이름
                                 </div>
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">최소 샘플 수</p>
-                                        <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="sample" disabled>
+                                    <input type="text" class="form-control fontHv fs-6" id="name" value="1">
                                 </div>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">최소 샘플 수(leaf)</p>
-                                        <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="leaf" disabled>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    모델 버전
                                 </div>
                                 <div class="col">
-                                        <p class="fs-5 nodeHeader text-start">최대 특성 수</p>
-                                        <hr>
-                                        <input type="text" class="form-control fontHv fs-6 second" id="feature" disabled>
+                                    <input type="text" class="form-control fontHv fs-6" id="version" value="360">
                                 </div>
                             </div>
-                            <div class="row mt-3">
+                            <div class="row mb-5">
                                 <div class="col">
-                                    <button class="btn btn-primary" id="doModelButton" onclick="doModel()" style="cursor: not-allowed">모델 학습</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5 sidebarItem" id="exampleModalLabel">모델 학습 결과</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="fs-5 nodeHeader text-start">모델 이름</p>
-                                                <hr>
-                                                <input type="text" class="form-control fontHv fs-6 second" id="modelName">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="fs-5 nodeHeader text-start">모델 버전</p>
-                                                <hr>
-                                                <input type="text" class="form-control fontHv fs-6 second" id="modelVersion">
-                                                <input type="hidden" class="form-control fontHv fs-6 second" id="mae">
-                                            </div>
-                                        </div>
-                                        <div class="row mt-5 justify-content-center">
-                                            <div class="col-5">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">다시 학습</button>
-                                            </div>
-                                            <div class="col-5">
-                                                <button type="button" class="btn btn-primary" onclick="saveModel()" data-bs-dismiss="modal">모델 저장</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a class="btn btn-primary" onclick="reLearn()">모델 재학습</a>
                                 </div>
                             </div>
                         </div>
@@ -170,11 +131,11 @@
 
         let min = document.getElementById("min").value;
         let max = document.getElementById("max").value;
+        let augment = document.getElementById("augment").value;
 
-        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/${min}/${max}`;
-        let localUrl = `http://localhost:60002/admin/ai/model/add/filter/${min}/${max}`;
+        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/${min}/${max}/${augment}`;
 
-        fetch(localUrl) // 데이터를 받아올 URL
+        fetch(url) // 데이터를 받아올 URL
             .then(response => response.json()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 const result = parseInt(data);
@@ -193,19 +154,16 @@
             });
     }
 
-    function doModel(){
+    function reLearn(){
         document.getElementById("main").style.opacity = "20%";
         document.getElementById("spin").style.display = "block";
         document.getElementById("comment").style.display = "block";
-        let depth = document.getElementById("depth").value;
-        let sample = document.getElementById("sample").value;
-        let leaf = document.getElementById("leaf").value;
-        let feature = document.getElementById("feature").value;
+        let name = document.getElementById("name").value;
+        let version = document.getElementById("version").value;
 
-        let localUrl = `http://localhost:60002/admin/ai/model/learn`;
-        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/learn`;
+        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/learn/${name}/${version}`;
 
-        fetch(localUrl) // 데이터를 받아올 URL
+        fetch(url) // 데이터를 받아올 URL
             .then(response => response.text()) // JSON 형식으로 응답을 파싱
             .then(data => {
                 document.getElementById("spin").style.display = "none";
@@ -220,31 +178,6 @@
             });
     }
 
-    function saveModel(){
-        let localUrl = 'http://localhost:60002/admin/ai/model/add';
-        let url = 'http://ceprj.gachon.ac.kr:60002/admin/ai/model/add';
-        fetch(localUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                modelName: document.getElementById("modelName").value,
-                modelMae : document.getElementById("mae").value,
-                modelVersion : document.getElementById("modelVersion").value,
-                modelDepth : document.getElementById("depth").value,
-                modelSample : document.getElementById("sample").value,
-                modelLeaf : document.getElementById("leaf").value,
-                modelFeature : document.getElementById("feature").value
-            }),
-        })
-            .then(data => {
-                window.location.href="/admin/ai"
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-            });
-    }
 </script>
 <script>
     let rows = document.getElementsByClassName('row menu');

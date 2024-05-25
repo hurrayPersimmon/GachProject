@@ -1,59 +1,38 @@
-# 필요한 라이브러리 import
-import pandas as pd
-import torch
-from torch.utils.data import TensorDataset, DataLoader
-import torch.nn as nn
-import torch.optim as optim
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+import pandas as pd
+import random
+import joblib
 import sys
 
-# 입력 값 파싱
-num_epochs_new = int(sys.argv[1])
-learning_rate_new = float(sys.argv[2])
-model_path = sys.argv[3]
+# 이전의 저장된 모델 경로는 어디에 있는지
+saved_model_path = sys.argv[1]
+# 추가 CSV 데이터 경로는 어디에 있는지
+additional_data_path = sys.argv[2]
 
-# 데이터 불러오기
-csv_file = 're_data.csv'
-df = pd.read_csv(csv_file)
+# 저장된 모델 로드
+regressor = joblib.load(saved_model_path)
 
-# 데이터 전처리
-X = df.drop('takeTime', axis=1).values
-y = df['takeTime'].values
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
+# 추가 데이터 로드
+additional_data = pd.read_csv(additional_data_path, encoding='UTF-8')
 
-# 데이터를 텐서로 변환하고 TensorDataset으로 묶기
-X_tensor = torch.tensor(X, dtype=torch.float32)
-y_tensor = torch.tensor(y, dtype=torch.float32)
-dataset = TensorDataset(X_tensor, y_tensor)
+# 데이터 전처리 및 학습 데이터 준비
+X_add = additional_data.iloc[:, :-1]
+y_add = additional_data.iloc[:, -1]
 
-# 데이터 로더 생성
-batch_size = 32
-loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+X_train, X_test, y_train, y_test = train_test_split(X_add, y_add, test_size=0.2, random_state=42)
 
-# 모델 불러오기
-model = torch.load(model_path)
 
-# 새로운 optimizer 설정
-optimizer = optim.Adam(model.parameters(), lr=learning_rate_new)
+# 모델에 추가 데이터로 재학습
+regressor.fit(X_train, y_train)
 
-# 손실 함수
-criterion = nn.L1Loss()
+# 예측 결과 확인 등 필요한 작업 수행
+# 예를 들어, 테스트 데이터를 이용하여 모델 성능 평가
+# X_test, y_test 는 새로운 테스트 데이터로 변경해야 함
+y_pred = regressor.predict(X_test)
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 
-# 재학습
-model.train()
-for epoch in range(num_epochs_new):
-    epoch_loss = 0.0
-    for inputs, targets in loader:
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = criterion(outputs.squeeze(), targets)
-        loss.backward()
-        optimizer.step()
-        epoch_loss += loss.item()
-
-    print(f'{epoch+1} {epoch_loss/len(loader):.4f}')
-
-# 모델 저장
-torch.save(model, model_path)
+# 모델 재학습 후 저장 (선택 사항)
+joblib.dump(regressor, saved_model_path)

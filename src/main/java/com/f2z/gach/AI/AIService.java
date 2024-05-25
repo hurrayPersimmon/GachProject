@@ -1,15 +1,12 @@
 package com.f2z.gach.AI;
 
 import com.f2z.gach.DataGetter.dataEntity;
-import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.History.Entity.HistoryLineTime;
 import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
-import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Service.MapServiceImpl;
-import com.f2z.gach.User.Entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,44 +26,49 @@ import java.util.concurrent.Executors;
 @Service
 @RequiredArgsConstructor
 public class AIService {
-    private final AiModelRepository aiRepo;
-    //ㅁㄴㅇ
+    Random random = new Random();
     private final HistoryLineTimeRepository lineTimeRepo;
     private final MapLineRepository mapLineRepository;
     private ProcessBuilder processBuilder;
-//    final String localPythonPath = "/opt/anaconda3/bin/python3";
-    final String localModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/lstm.py";
-//    final String localSaveSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/save.sh";
-    final String localOutPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/output.py";
-//    final String localReModelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/re_learn.py";
-//    final String csvFilePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv";
-//    final String localDeleteSHPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Util/delete.sh";
-//    final String tempOutputPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Python/tree_output.py";
+
     final String localPythonPath = "python3";
-//    final String localModelPath = "/home/t24102/GachProject/AI/Python/lstm.py";
-    final String localSaveSHPath = "/home/t24102/GachProject/AI/Util/save.sh";
-    final String tempOutputPath = "/home/t24102/GachProject/AI/Python/tree_output.py";
-    final String localReModelPath = "/home/t24102/GachProject/AI/Python/re_learn.py";
-    final String csvFilePath = "/home/t24102/GachProject/AI/Data/data.csv";
-    final String localDeleteSHPath = "/home/t24102/GachProject/AI/Util/delete.sh";
+    final String tempOutputPath = "/home/t24102/tree_output.py";
+    final String localReModelPath = "/home/t24102/AI/re_learn.py";
+    // 이 경로에 필터링 && 증식 데이터 저장
+    final String csvFilePath = "/home/t24102/AI/data.csv";
 
-    // 현재의 데이터를 기반으로 필터링 작업 시작
-    public int filterData(int min, int max) {
+    private List<dataEntity> augmentData(dataEntity row, int augmentCnt) {
+        List<dataEntity> augmentedRows = new ArrayList<>();
+        for (int i = 0; i < augmentCnt; i++) {
+            dataEntity augmentedRow = row;
+            row.setWeight(augmentedRow.getWeight() + random.nextDouble() * 4 - 2);
+            row.setHeight(augmentedRow.getHeight() + random.nextDouble() * 4 - 2);
+            row.setTemperature(augmentedRow.getTemperature() + random.nextDouble() * 4 - 2);
+            row.setTakeTime((int) (augmentedRow.getTakeTime() + random.nextDouble() * 4 - 2));
+            augmentedRows.add(row);
+        }
+        return augmentedRows;
+    }
+
+    public int filterAndAugmentData(int min, int max, int augment) {
         List<HistoryLineTime> originalList = lineTimeRepo.findAll();
-        List<dataEntity> filteredList = new ArrayList<>();
 
-        originalList.stream()
-                .filter(data -> data.getLineTime() != null && data.getLineTime() > (double)min && data.getLineTime() < (double)max)
-                .forEach(data -> filteredList.add(dataEntity.parseHistory(data)));
+        // 필터링 과정
+        List<dataEntity> filteredList = originalList.stream()
+                .filter(data -> data.getLineTime() != null && data.getLineTime() > (double) min && data.getLineTime() < (double) max)
+                .map(dataEntity::parseHistory).toList();
 
-        String csvFile = csvFilePath;
+        // 증식 과정
+        List<dataEntity> augmentedList = new ArrayList<>();
+        for (dataEntity data : filteredList) {
+            augmentedList.addAll(augmentData(data, augment));
+        }
 
-        try (FileWriter writer = new FileWriter(csvFile)) {
-            // CSV 파일 헤더 쓰기
+        // CSV 파일 작성 과정
+        try (FileWriter writer = new FileWriter(csvFilePath)) {
             writer.append("birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,weightShortest,weightOptimal,takeTime\n");
 
-            // 데이터 쓰기
-            for (dataEntity data : filteredList) {
+            for (dataEntity data : augmentedList) {
                 writer.append(String.valueOf(data.getBirthYear())).append(",");
                 writer.append(String.valueOf(data.getGender())).append(",");
                 writer.append(String.valueOf(data.getHeight())).append(",");
@@ -84,25 +87,14 @@ public class AIService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return filteredList.size();
+
+        // 필터링 && 증식한 데이터 개수
+        return augmentedList.size();
     }
 
-    public void saveModel(String modelName){
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(localSaveSHPath, modelName);
-            Process process = processBuilder.start();
-
-            int exitCode = process.waitFor();
-            log.info("저장 완료 코드 : " + exitCode);
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 재학습 모델 추가 데이터를 구분하는 작업만 하면 된다. 즉 인덱스 작업만 진행하면 됨.
     public String reLearnModel() throws Exception{
-        processBuilder = new ProcessBuilder(localPythonPath, localReModelPath);
+        processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
+                "/home/t24102/AI/temp.pkl", "/home/t24102/AI/data.csv");
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -111,10 +103,6 @@ public class AIService {
         String line;
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
-            if(line.startsWith("Validation")) {
-                reader.close();
-                return sb.toString();
-            }
         }
         reader.close();
         return sb.toString();
@@ -166,20 +154,5 @@ public class AIService {
         double number = Double.parseDouble(takeTime);
 
         return (int) Math.round(number);
-    }
-
-    public void deleteModel(AiModel aiModel) {
-        try {
-            log.info(aiModel.getAiModelPath());
-            processBuilder = new ProcessBuilder(localDeleteSHPath, aiModel.getAiModelName());
-            Process process = processBuilder.start();
-
-            int exitCode = process.waitFor();
-            log.info("삭제 완료 코드 : " + exitCode);
-            process.destroy();
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

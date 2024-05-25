@@ -56,43 +56,23 @@ public class AdminAIController {
     }
 
     // 필터링
-    @GetMapping("/model/add/filter/{min}/{max}")
+    @GetMapping("/model/add/filter/{min}/{max}/{augment}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
-    public long getFilterNum(@PathVariable int min, @PathVariable int max){
-        dataLength = aiService.filterData(min, max);
+    public long getFilterNum(@PathVariable int min, @PathVariable int max, @PathVariable int augment){
+        dataLength = aiService.filterAndAugmentData(min, max, augment);
         return dataLength;
     }
 
-    @GetMapping("/model/learn")
+    @GetMapping("/model/learn/{name}/{version}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
-    public int learningModel() throws Exception {
-        aiService.reLearnModel();
-        return 1;
-    }
-
-    // 모델 추가 작업
-    @PostMapping("/model/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ResponseBody
-    public int saveModel(@RequestBody ModelRequestDTO dto) {
-        dataLength = dataRepo.count() + lineTimeRepository.count();
-        AiModel aiModel = AiModel.setToDto(dto);
-        aiModel.setAverSatis(0);
-        aiModel.setLastDataIndex(lineTimeRepository.count());
-        aiService.saveModel(dto.getModelName());
-        aiModel.setAiModelPath(modelPath + "/" + dto.getModelName() + ".pkl");
+    public int learningModel(@PathVariable String name, @PathVariable String version) throws Exception {
+        AiModel aiModel = new AiModel();
+        aiModel.setAiModelName(name);
+        aiModel.setAiModelVersion(version);
+        aiModel.setMae(Double.parseDouble(aiService.reLearnModel()));
         aiRepo.save(aiModel);
         return 1;
-    }
-
-    @GetMapping("/delete/model/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deleteModel(@PathVariable int id) {
-        AiModel aiModel = aiRepo.findById(id).orElseThrow();
-        aiService.deleteModel(aiModel);
-        aiRepo.delete(aiModel);
-        return "redirect:/admin/ai";
     }
 }

@@ -1,5 +1,6 @@
 package com.f2z.gach.AI;
 
+import com.f2z.gach.Config.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
-public class AiModel {
+public class AiModel extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer aiModelId;
@@ -24,8 +25,8 @@ public class AiModel {
     private String aiModelName;
     private String aiModelPath;
     private double mae;
-    private double averSatis;
-    private long lastDataIndex;
+    private int cnt;
+    private double totalSatisfaction;
 
     public static AiModel setToDto(ModelRequestDTO dto){
         AiModel aiModel = new AiModel();
