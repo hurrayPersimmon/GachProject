@@ -52,6 +52,7 @@ public class AdminLineController {
     }
 
     @GetMapping("/line/list/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String lineListPage(Model model, @PathVariable Integer page){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"lineId").withPage(page);
         Page<MapLine> linePage = mapLineRepository.findAll(pageable);
@@ -114,6 +115,7 @@ public class AdminLineController {
     }
 
     @GetMapping("/line/sortedlist/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "lineId").withPage(page);
         Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sort, pageable);
@@ -125,6 +127,7 @@ public class AdminLineController {
     }
 
     @GetMapping("/line/add")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String addLinePage(Model model){
         model.addAttribute("lineDto", new MapDTO.MapLineDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
@@ -132,7 +135,7 @@ public class AdminLineController {
     }
 
     @PostMapping("/line")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addLine(@Valid @ModelAttribute("lineDto") MapDTO.MapLineDTO mapLineDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -148,7 +151,7 @@ public class AdminLineController {
     }
 
     @GetMapping("/line/{lineId}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteLine(@PathVariable Integer lineId,
                              Model model)throws Exception{
         if(mapLineRepository.existsByLineId(lineId)){

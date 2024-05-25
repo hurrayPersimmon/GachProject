@@ -44,6 +44,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/list/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String userList(Model model, @PathVariable Integer page){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
         Page<User> users = userRepository.findAll(pageable);
@@ -79,6 +80,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/sortedlist/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
         Page<User> users = userRepository.findAllByUserNicknameContaining(sort, pageable);
@@ -89,6 +91,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String userDetail(Model model, @PathVariable Long userId){
         UserForm user = userRepository.findByUserId(userId).getUserForm();
         log.info(user.toString());
@@ -100,7 +103,7 @@ public class AdminUserController {
     }
 
     @PostMapping("/users/update")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String userUpdate(@ModelAttribute("userForm") UserForm userForm){
         User user = userRepository.findByUserId(userForm.getUserId());
         log.info(userForm.toString());
@@ -111,7 +114,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/delete/{userId}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String userDelete(@PathVariable Long userId){
         User user = userRepository.findByUserId(userId);
         userRepository.delete(user);

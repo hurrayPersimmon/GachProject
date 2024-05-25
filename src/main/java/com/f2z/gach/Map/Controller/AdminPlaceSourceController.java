@@ -49,12 +49,14 @@ public class AdminPlaceSourceController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String placeListPage(Model model){
         model.addAttribute("placeList", placeSourceRepository.findAll());
         return "place/place-manage";
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String addPlacePage(Model model){
         model.addAttribute("placeDto", new AdminPlaceRequestDTO(new PlaceSource()));
         model.addAttribute("placeCategory", PlaceCategory.values());
@@ -62,6 +64,7 @@ public class AdminPlaceSourceController {
     }
 
     @GetMapping("/{placeId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String placeDetailPage(Model model, @PathVariable Integer placeId){
         model.addAttribute("placeDto", AdminPlaceRequestDTO.toPlaceRequestDTO(placeSourceRepository.findByPlaceId(placeId)
                 ,buildingFloorRepository.findAllByPlaceSource_placeId(placeId)));
@@ -70,7 +73,7 @@ public class AdminPlaceSourceController {
     }
 
     @PostMapping()
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addPlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDTO){
         AdminPlaceRequestDTO fileUpdatedPlaceDTO = fileSave(placeDTO);
 
@@ -96,7 +99,7 @@ public class AdminPlaceSourceController {
     }
 
     @PostMapping("/update")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String updatePlace(@ModelAttribute("placeDto") AdminPlaceRequestDTO placeDto, BindingResult result){
 
         PlaceSource target = placeSourceRepository.findByPlaceId(placeDto.getPlace().getPlaceId());
@@ -117,7 +120,7 @@ public class AdminPlaceSourceController {
     }
 
     @GetMapping("/delete/{placeId}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deletePlace(@PathVariable Integer placeId){
         log.info("Deleting place with id {}", placeId);
         PlaceSource placeSource = placeSourceRepository.findByPlaceId(placeId);

@@ -38,6 +38,7 @@ public class AdminInquiryController {
     }
 
     @GetMapping("/list/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String inquiryListPage(Model model, @PathVariable Integer page){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"inquiryId").withPage(page);
         Page<Inquiry> inquiryPage = inquiryRepository.findAll(pageable);
@@ -50,6 +51,7 @@ public class AdminInquiryController {
     }
 
     @GetMapping("sortedlist/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String inquiryListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "inquiryId").withPage(page);
         Page<Inquiry> inquiryPage = inquiryRepository.findAllByInquiryTitleContaining(sort, pageable);
@@ -61,6 +63,7 @@ public class AdminInquiryController {
     }
 
     @GetMapping("/required/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String inquiryRequiredPage(Model model, @PathVariable Integer page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "inquiryId");
         Page<Inquiry> inquiryPage = inquiryRepository.findByInquiryProgressFalse(pageable);
@@ -72,6 +75,7 @@ public class AdminInquiryController {
     }
 
     @GetMapping("/{inquiryId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String inquiryDetailPage(Model model , @PathVariable Integer inquiryId){
         model.addAttribute("inquiry", inquiryRepository.findByInquiryId(inquiryId));
         log.info(inquiryRepository.findByInquiryId(inquiryId).toString());
@@ -79,7 +83,7 @@ public class AdminInquiryController {
     }
 
     @PostMapping()
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String inquiryAnswer(@ModelAttribute Inquiry inquiry){
         log.info(inquiry.toString());
         Inquiry target = inquiryRepository.findByInquiryId(inquiry.getInquiryId());

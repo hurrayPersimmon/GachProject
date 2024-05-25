@@ -173,7 +173,7 @@ public class AdminController {
 //    }
 
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminList(Model model){
 
         List<Admin> admins = adminRepository.findAll();
@@ -187,7 +187,7 @@ public class AdminController {
     }
 
     @GetMapping("/approve/{adminNum}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String approveAdmin(@PathVariable Integer adminNum){
         Admin admin = adminRepository.findById(Long.valueOf(adminNum)).orElseThrow();
         admin.setAdminAuthorization(Authorization.GUEST);
@@ -196,7 +196,7 @@ public class AdminController {
     }
 
     @GetMapping("/delete/{adminId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteAdmin(@PathVariable String adminId){
         Admin admin = adminRepository.findByAdminId(adminId);
         log.info(admin.toString());
@@ -205,6 +205,7 @@ public class AdminController {
     }
 
     @GetMapping("/json/{adminNum}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public Admin adminDetailJson(@PathVariable Integer adminNum){
         log.info("요청");
@@ -214,7 +215,7 @@ public class AdminController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String updateAdmin(AdminForm adminForm){
         log.info(adminForm.toString());
 

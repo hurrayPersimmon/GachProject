@@ -53,6 +53,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/list/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String nodeListPage(Model model, @PathVariable Integer page){
 
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC,"nodeId").withPage(page);
@@ -114,6 +115,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/sortedlist/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.ASC, "nodeId").withPage(page);
         Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sort, pageable);
@@ -144,7 +146,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/add")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
@@ -152,7 +154,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapNodeDTO,
                           BindingResult result){
         if(result.hasErrors()){
@@ -163,6 +165,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/{nodeId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String updateNodePage(@PathVariable Integer nodeId, Model model){
         MapNode mapNode = mapNodeRepository.findByNodeId(nodeId);
         model.addAttribute("nodeDto", mapNode);
@@ -171,7 +174,7 @@ public class AdminNodeController {
     }
 
     @PostMapping("/node/update")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String updateNode(@Valid @ModelAttribute("nodeDto") MapDTO.MapNodeDTO mapDTO,
                              BindingResult result){
         if(result.hasErrors()){
@@ -185,7 +188,7 @@ public class AdminNodeController {
     }
 
     @GetMapping("/node/delete/{nodeId}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteNode(@PathVariable Integer nodeId) throws Exception{
         if(mapNodeRepository.existsByNodeId(nodeId)) {
             mapLineRepository.deleteAllByNodeFirst_NodeId(nodeId);

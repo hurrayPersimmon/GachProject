@@ -19,6 +19,7 @@ import com.f2z.gach.Map.Service.MapServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class AdminTestController {
     }
 
     @GetMapping("/test")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String testPage(Model model) {
         model.addAttribute("MapNodeList", mapNodeRepository.findAll());
         model.addAttribute("nodeDto", new NavigationResponseDTO.AdminMapNode());
@@ -59,6 +61,7 @@ public class AdminTestController {
 
 
     @GetMapping("/test/result")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String getTestRoute(@RequestParam Integer arrivals, @RequestParam Integer departures,
                                Model model) throws Exception{
         MapNode departuresPlace = mapNodeRepository.findByNodeId(departures);
