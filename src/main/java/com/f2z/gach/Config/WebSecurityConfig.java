@@ -46,6 +46,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.accessDeniedHandler(accessDeniedHandler).accessDeniedPage("/admin/deny")
+                )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/images/**","/css/**", "/image/**", "/js/**" ,"/").permitAll()
                         .requestMatchers("/user/login").permitAll()
@@ -81,10 +84,7 @@ public class WebSecurityConfig {
                 )
                 .logout(out -> out.logoutUrl("/"))
                 .userDetailsService(customUserDetailService)
-                .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling((exceptionConfig) ->
-                        exceptionConfig.accessDeniedHandler(accessDeniedHandler).accessDeniedPage("/admin/deny")
-                );
+                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 }
