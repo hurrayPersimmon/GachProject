@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,7 @@ public class AdminController {
     private final UserHistoryRepository userHistoryRepository;
     private final LogRepository logRepository;
     private final MapNodeRepository mapNodeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -146,7 +148,7 @@ public class AdminController {
             model.addAttribute("idMessage", "이미 존재하는 아이디입니다.");
             return "main/sign-up";
         }
-
+        adminDto.setAdminPassword(passwordEncoder.encode(adminDto.getAdminPassword()));
         adminDto.setAdminAuthorization(Authorization.WAITER);
         adminRepository.save(adminDto.toEntity());
         model.addAttribute("message", "회원가입이 완료되었습니다. 관리자 승인까지 잠시만 기다려주세요.");
