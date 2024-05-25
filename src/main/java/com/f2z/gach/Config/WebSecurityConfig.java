@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/history").permitAll()
                         .requestMatchers("/history/top-nodes").permitAll()
                         .requestMatchers("/admin/list").hasRole("ADMIN")
+                        .requestMatchers("/admin/deny").permitAll()
                         .anyRequest().hasAnyRole("ADMIN", "GUEST")
                 )
                 .formLogin(login -> login
