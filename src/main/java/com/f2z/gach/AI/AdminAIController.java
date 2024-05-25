@@ -71,7 +71,6 @@ public class AdminAIController {
         AiModel aiModel = new AiModel();
         aiModel.setAiModelName(name);
         aiModel.setAiModelVersion(version);
-        aiModel.setMae(Double.parseDouble(aiService.reLearnModel()));
         aiRepo.save(aiModel);
         return 1;
     }

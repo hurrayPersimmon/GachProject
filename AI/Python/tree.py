@@ -8,30 +8,13 @@ import pandas as pd
 import random
 import joblib
 
-# csvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
-# savePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/temp.pkl"
 csvPath = "/home/t24102/AI/data.csv"
 savePath = "/home/t24102/AI/temp.pkl"
 
 data = pd.read_csv(csvPath, encoding='UTF-8')
 
-def augment_data(row):
-    augmented_rows = []
-    for _ in range(10):
-        augmented_row = row.copy()
-        augmented_row['weight'] += random.uniform(-2, 2)
-        augmented_row['height'] += random.uniform(-2, 2)
-        augmented_row['temperature'] += random.uniform(-2, 2)
-        augmented_row['takeTime'] += random.uniform(-2, 2)
-        augmented_rows.append(augmented_row)
-    return augmented_rows
 
-augmented_data = []
-
-for index, row in data.iterrows():
-    augmented_data.extend(augment_data(row))
-
-augmented_df = pd.DataFrame(augmented_data)
+augmented_df = pd.DataFrame(data)
 
 combined_data = pd.concat([data, augmented_df], ignore_index=True)
 
