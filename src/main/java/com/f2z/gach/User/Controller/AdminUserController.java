@@ -66,6 +66,7 @@ public class AdminUserController {
         List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
+        model.addAttribute("userChartData", userRepository.findAll());
         model.addAttribute("signUpCount", getMap("/user/signup"));
         model.addAttribute("loginCount", getMap("/user/login"));
         model.addAttribute("deleteUserCount", logRepository.findAllWithHttpMethodDeleteAndTimestampAfter(LocalDateTime.now().minusDays(6).with(LocalTime.MIN)).size());
