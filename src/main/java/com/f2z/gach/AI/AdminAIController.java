@@ -56,8 +56,7 @@ public class AdminAIController {
     @ResponseBody
     public long getFilterNum(@PathVariable int min, @PathVariable int max, @PathVariable int augment){
         log.info(String.valueOf(dataLength));
-        aiService.filterAndAugmentData(min, max, augment, dataLength);
-        return dataLength;
+        return aiService.filterAndAugmentData(min, max, augment, lineTimeRepository.count() + dataRepo.count() - aiRepo.findAiModelWithMaxId().orElseThrow().getDataLength());
     }
 
     // AI모델 재학습 기능
