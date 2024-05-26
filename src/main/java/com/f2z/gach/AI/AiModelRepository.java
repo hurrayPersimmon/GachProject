@@ -11,5 +11,5 @@ public interface AiModelRepository extends JpaRepository<AiModel, Integer> {
     @Query("SELECT am FROM AiModel am WHERE am.aiModelId = (SELECT MAX(am2.aiModelId) FROM AiModel am2)")
     Optional<AiModel> findAiModelWithMaxId();
 
-    Optional<AiModel> findByUseTrue();
+    Optional<AiModel> findByIsCheckedTrue();
 }
