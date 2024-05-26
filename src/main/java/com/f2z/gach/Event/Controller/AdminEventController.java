@@ -104,12 +104,11 @@ public class AdminEventController {
 
         Event event = fileUpdatedRequestDTO.getEvent();
         eventRepository.save(event);
+        if(fileUpdatedRequestDTO.getLocations() != null){
+            fileUpdatedRequestDTO.getLocations().stream().forEach(eventLocation ->
+                    eventLocationRepository.save(EventLocation.updateEventLocation(eventLocation, event)));
+        }
 
-        fileUpdatedRequestDTO.getLocations().stream().forEach(eventLocation -> {
-            if(eventLocation.getEventLatitude() != null){
-                eventLocationRepository.save(EventLocation.updateEventLocation(eventLocation, event));
-            }
-        });
         return "redirect:/admin/event/list/0";
     }
 
@@ -127,6 +126,9 @@ public class AdminEventController {
         Event updatedEvent = eventRepository.save(target);
 
         eventLocationRepository.deleteEventLocationsByEvent_EventId(requestDTO.getEvent().getEventId());
+        if(requestDTO.getLocations() == null){
+            return "redirect:/admin/event/list/0";
+        }
         requestDTO.getLocations().forEach(eventLocation -> {
             if(eventLocation.getEventLatitude() != null){
                 if(eventLocation.getEventLocationId() == null){
