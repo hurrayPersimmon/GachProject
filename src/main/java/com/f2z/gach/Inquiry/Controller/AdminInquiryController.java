@@ -50,7 +50,7 @@ public class AdminInquiryController {
         return "inquiry/inquiry-manage";
     }
 
-    @GetMapping("sortedlist/{page}")
+    @GetMapping("/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String inquiryListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "inquiryId").withPage(page);

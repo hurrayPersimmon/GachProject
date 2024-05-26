@@ -16,15 +16,6 @@ public enum PlaceCategory {
     BUSSTOP("버스 정류장"),;
     private final String placeCategoryName;
 
-    public static PlaceCategory getPlaceCategory(String placeCategoryName) {
-        for(PlaceCategory placeCategory : PlaceCategory.values()) {
-            if(placeCategory.getPlaceCategoryName().equals(placeCategoryName)) {
-                return placeCategory;
-            }
-        }
-        return null;
-    }
-
     public static PlaceCategory getPlaceCategoryContaining(String placeCategoryName) {
         for(PlaceCategory placeCategory : PlaceCategory.values()) {
             if(placeCategory.getPlaceCategoryName().contains(placeCategoryName)) {
