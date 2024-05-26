@@ -286,36 +286,35 @@ public class MapServiceImpl implements MapService{
     private NavigationResponseDTO getBusRoute(Integer shortestDepartureNodeId, Integer shortestArrivalsNodeId, AIData aiData) throws Exception {
         List<BusLine.Node> busLine;
         BusLine.ResultList busList = BusLine.getBusLine(mapNodeRepository.findByNodeId(shortestDepartureNodeId), mapNodeRepository.findByNodeId(shortestArrivalsNodeId));
+        if(busList == null) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
+
         busLine = busList.getBusLine();
         Integer busTime = busList.getTotalTime();
-        if(busLine == null|| busLine.isEmpty()) return NavigationResponseDTO.toNavigationResponseDTO(routeBus, null, new ArrayList<>());
-
-        else{
-            List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
-            for(BusLine.Node node : busLine){
-                nodeList.add(NavigationResponseDTO.NodeDTO.builder()
-                        .nodeId(0)
-                        .latitude(node.getLatitude())
-                        .longitude(node.getLongitude())
-                        .altitude(0.0)
-                        .build());
-            }
-            int tailIndex = nodeList.size() -1;
-
-            NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null), aiData);
-            NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId, aiData);
-            List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
-            Integer totalTime = busTime;
-            totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
-            totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
-            if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
-            if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
-            if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
-
-            NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime, busRouteMergedlist);
-
-            return busMergedRoute;
+        List<NavigationResponseDTO.NodeDTO> nodeList = new ArrayList<>();
+        for(BusLine.Node node : busLine){
+            nodeList.add(NavigationResponseDTO.NodeDTO.builder()
+                    .nodeId(0)
+                    .latitude(node.getLatitude())
+                    .longitude(node.getLongitude())
+                    .altitude(0.0)
+                    .build());
         }
+        int tailIndex = nodeList.size() -1;
+
+        NavigationResponseDTO gettingOnRoute = calculateRoute(routeBus, shortestDepartureNodeId, getNearestNodeId(nodeList.get(0).getLatitude(), nodeList.get(0).getLongitude(), null), aiData);
+        NavigationResponseDTO gettingOffRoute = calculateRoute(routeBus, getNearestNodeId(nodeList.get(tailIndex).getLatitude(), nodeList.get(tailIndex).getLongitude(), null),shortestArrivalsNodeId, aiData);
+        List<NavigationResponseDTO.NodeDTO> busRouteMergedlist = new ArrayList<>();
+        Integer totalTime = busTime;
+        totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
+        totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
+        if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
+        if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
+        if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
+
+        NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime, busRouteMergedlist);
+
+        return busMergedRoute;
+
     }
 
 
