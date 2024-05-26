@@ -10,4 +10,6 @@ public interface AiModelRepository extends JpaRepository<AiModel, Integer> {
     // 마지막에 저장된 ID
     @Query("SELECT am FROM AiModel am WHERE am.aiModelId = (SELECT MAX(am2.aiModelId) FROM AiModel am2)")
     Optional<AiModel> findAiModelWithMaxId();
+
+    Optional<AiModel> findByUseTrue();
 }

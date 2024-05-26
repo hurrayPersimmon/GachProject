@@ -57,6 +57,9 @@
                             <tr style="height:8vh" th:each="ai : ${aiList}">
                                 <td>
                                     <div th:text="${ai.getAiModelVersion()}">v0.0.1</div>
+                                    <div th:if="${ai.getIsUsed() eq true}">
+                                        <span class="badge rounded-pill text-bg-success">사용중</span>
+                                    </div>
                                 </td>
                                 <td th:text="${ai.getAiModelName()}">초기 모델</td>
                                 <td th:text="${ai.getMae()}">15%</td>
@@ -98,6 +101,26 @@
                                                         <div class="modal-footer text-center justify-content-center">
                                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
                                                             <a type="button" class="btn btn-danger delete" th:href="@{'/admin/ai/delete/model/'+${ai.getAiModelId()}}">삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <i class="bi bi-check-lg" style="cursor: pointer" data-bs-toggle="modal" th:data-bs-target="'#exampleModal2' + ${ai.getAiModelId()}"></i>
+                                            <div class="modal fade" th:id="'exampleModal2' + ${ai.getAiModelId()}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel2">모델 선택</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            이 모델을 선택하시겠습니까?
+                                                        </div>
+                                                        <div class="modal-footer text-center justify-content-center">
+                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                                            <a type="button" class="btn btn-danger delete" th:href="@{'/admin/ai/check/'+${ai.getAiModelId()}}">선택</a>
                                                         </div>
                                                     </div>
                                                 </div>

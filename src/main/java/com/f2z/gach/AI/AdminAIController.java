@@ -41,6 +41,20 @@ public class AdminAIController {
         return "ai/ai-manage";
     }
 
+    @GetMapping("/check/{modelId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String checkModel(@PathVariable int modelId) {
+
+        aiRepo.findAll().forEach(aiModel -> {
+            aiModel.setUse(false);
+            aiRepo.save(aiModel);
+        });
+        AiModel aiModel = aiRepo.findById(modelId).orElseThrow();
+        aiModel.setUse(true);
+        aiRepo.save(aiModel);
+        return "redirect:/admin/ai";
+    }
+
     // 뷰
     @GetMapping("/model/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

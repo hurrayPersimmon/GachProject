@@ -8,17 +8,12 @@ import pandas as pd
 import random
 import joblib
 
-csvPath = "/home/t24102/AI/data.csv"
-savePath = "/home/t24102/AI/temp.pkl"
+csvPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Data/data.csv"
+savePath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model/temp.pkl"
 
 data = pd.read_csv(csvPath, encoding='UTF-8')
 
-
-augmented_df = pd.DataFrame(data)
-
-combined_data = pd.concat([data, augmented_df], ignore_index=True)
-
-combined_df = pd.DataFrame(combined_data)
+combined_df = pd.DataFrame(data)
 
 data = np.array(combined_df)
 X = data[:, :-1]

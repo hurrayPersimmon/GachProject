@@ -141,7 +141,7 @@ public class AIService {
                 String.valueOf(data.getHeight()), String.valueOf(data.getWeight()),
                 String.valueOf(data.getWalkSpeed().ordinal()), String.valueOf(data.getTemperature()),
                 String.valueOf(data.getPrecipitationProbability()), String.valueOf(data.getPrecipitation()),
-                String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()), aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath());
+                String.valueOf(line.getWeightShortest()), String.valueOf(line.getWeightOptimal()), aiRepo.findByUseTrue().orElseThrow().getAiModelPath());
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         String takeTime = null;

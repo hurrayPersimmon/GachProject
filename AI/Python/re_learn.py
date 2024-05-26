@@ -14,7 +14,6 @@ new_model_path = sys.argv[3]
 
 # 저장된 모델 로드
 regressor = joblib.load(saved_model_path)
-print(saved_model_path)
 
 # 추가 데이터 로드
 additional_data = pd.read_csv(additional_data_path, encoding='UTF-8')
@@ -31,8 +30,7 @@ regressor.fit(X_train, y_train)
 
 # 왜 MSE가 0으로 나오는지
 y_pred = regressor.predict(X_test)
-print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("MSE:", mean_squared_error(y_test, y_pred))
 
 # 모델 재학습 후 저장 (선택 사항)
 joblib.dump(regressor, new_model_path)
-print(new_model_path)
