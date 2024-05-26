@@ -308,9 +308,10 @@ public class MapServiceImpl implements MapService{
             Integer totalTime = busTime;
             totalTime += aiService.calculateTime(gettingOnRoute.getNodeList(), aiData);
             totalTime += aiService.calculateTime(gettingOffRoute.getNodeList(), aiData);
-            if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
-            if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
-            if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
+//            if(!gettingOnRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOnRoute.getNodeList());
+//            if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
+//            if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
+
             NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime, busRouteMergedlist);
 
             return busMergedRoute;
