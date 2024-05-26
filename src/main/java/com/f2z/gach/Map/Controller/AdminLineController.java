@@ -70,11 +70,11 @@ public class AdminLineController {
         return "line/line-manage";
     }
 
-    @GetMapping("/line/sortedlist/{page}")
+    @GetMapping("/line/sortedList/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedlist){
+    public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "lineId").withPage(page);
-        Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sortedlist, pageable);
+        Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sortedList, pageable);
         List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));

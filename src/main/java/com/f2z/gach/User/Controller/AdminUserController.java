@@ -58,11 +58,11 @@ public class AdminUserController {
         return "user/user-manage";
     }
 
-    @GetMapping("/users/sortedlist/{page}")
+    @GetMapping("/users/sortedList/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedlist){
+    public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
-        Page<User> users = userRepository.findAllByUserNicknameContaining(sortedlist, pageable);
+        Page<User> users = userRepository.findAllByUserNicknameContaining(sortedList, pageable);
         List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
