@@ -55,7 +55,8 @@ public class AdminAIController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public long getFilterNum(@PathVariable int min, @PathVariable int max, @PathVariable int augment){
-        dataLength = aiService.filterAndAugmentData(min, max, augment, dataLength);
+        log.info(String.valueOf(dataLength));
+        aiService.filterAndAugmentData(min, max, augment, dataLength);
         return dataLength;
     }
 

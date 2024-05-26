@@ -52,9 +52,11 @@ public class AIService {
     }
 
     public int filterAndAugmentData(int min, int max, int augment, long startIndex) {
+
+        log.info(String.valueOf(startIndex));
+
         List<HistoryLineTime> originalList = lineTimeRepo.findAll();
         List<HistoryLineTime> sublist = originalList.subList((int)startIndex, originalList.size());
-
 
         // 필터링 과정
         List<dataEntity> filteredList = sublist.stream()
