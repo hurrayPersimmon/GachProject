@@ -95,9 +95,10 @@ public class AIService {
         return augmentedList.size();
     }
 
-    public void reLearnModel(String modelName) throws Exception{
+    public String reLearnModel(String modelName) throws Exception{
+        String tempPath = modelPath + modelName + ".pkl";
         processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, modelPath + modelName + ".pkl");
+                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, tempPath);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -109,6 +110,7 @@ public class AIService {
             sb.append(line).append("\n");
         }
         reader.close();
+        return tempPath;
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){

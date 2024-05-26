@@ -67,7 +67,7 @@ public class AdminAIController {
         dataLength = lineTimeRepository.count() + dataRepo.count();
         AiModel aiModel = new AiModel();
         AiModel beforeModel = aiRepo.findAiModelWithMaxId().orElseThrow();
-        aiService.reLearnModel(name);
+        aiModel.setAiModelPath(aiService.reLearnModel(name));
         aiModel.setAiModelName(name);
         aiModel.setAiModelVersion(version);
         aiModel.setMaxFeature(beforeModel.getMaxFeature());
