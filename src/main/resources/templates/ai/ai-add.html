@@ -12,7 +12,7 @@
             <div class="spinner-border" role="status" id="spin" style="display:none; width:4rem; height:4rem;">
             </div>
             <div class="row fs-1 text-center fontHv" id="comment" style="display : none;">
-                학습중
+                재학습 중
             </div>
         </div>
     </div>
@@ -61,8 +61,8 @@
                                 </div>
                             </div>
                             <div class="row mb-5">
-                                <div class="col">
-                                    <a class="btn btn-primary" onclick="doFilter()">필터링 시작하기</a>
+                                <div class="col" onclick="doFilter()">
+                                    <a class="btn btn-primary">필터링 시작하기</a>
                                 </div>
                             </div>
                             <div class="row mb-3 mt-4">
@@ -142,11 +142,6 @@
                 document.getElementById("filterLength").innerText = result;
                 document.getElementById("second-step").style.opacity = '100%';
                 document.getElementById("second-step").style.cursor = 'auto';
-                document.getElementById("doModelButton").style.cursor = 'pointer';
-                let secondInputs = document.querySelectorAll('input.second');
-                secondInputs.forEach(function(input) {
-                    input.removeAttribute('disabled');
-                });
             })
             .catch(error => {
                 // 에러 처리
@@ -169,11 +164,11 @@
                 document.getElementById("spin").style.display = "none";
                 document.getElementById("main").style.opacity = "100%";
                 document.getElementById("comment").style.display = 'none';
-                document.getElementById("doModelButton").innerText = "학습 완료";
 
                 window.location.href = "http://ceprj.gachon.ac.kr:60002/admin/ai";
             })
             .catch(error => {
+                alert("학습 중 오류 발생");
                 console.error('Error fetching data:', error);
             });
     }
