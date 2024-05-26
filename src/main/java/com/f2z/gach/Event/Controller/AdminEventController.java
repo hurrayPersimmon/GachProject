@@ -65,10 +65,10 @@ public class AdminEventController {
         return "event/event-manage";
     }
 
-    @GetMapping("/sortedList/{page}")
-    public String eventListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
+    @GetMapping("/sortedlist/{page}")
+    public String eventListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "eventId").withPage(page);
-        Page<Event> eventPage = eventRepository.findAllByEventNameContaining(sortedList, pageable);
+        Page<Event> eventPage = eventRepository.findAllByEventNameContaining(sort, pageable);
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
                 .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
         model.addAttribute("eventList", EventResponseDTO.toAdminEventList(eventPage, eventResponseDTOList));

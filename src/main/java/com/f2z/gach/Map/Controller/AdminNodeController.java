@@ -75,9 +75,9 @@ public class AdminNodeController {
 
     @GetMapping("/node/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
+    public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.ASC, "nodeId").withPage(page);
-        Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sortedList, pageable);
+        Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sort, pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());

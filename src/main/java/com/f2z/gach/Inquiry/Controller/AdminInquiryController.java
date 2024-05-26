@@ -50,11 +50,11 @@ public class AdminInquiryController {
         return "inquiry/inquiry-manage";
     }
 
-    @GetMapping("/sortedList/{page}")
+    @GetMapping("/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String inquiryListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
+    public String inquiryListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "inquiryId").withPage(page);
-        Page<Inquiry> inquiryPage = inquiryRepository.findAllByInquiryTitleContaining(sortedList, pageable);
+        Page<Inquiry> inquiryPage = inquiryRepository.findAllByInquiryTitleContaining(sort, pageable);
         List<InquiryResponseDTO.InquiryListStructureForAdmin> inquiryList = inquiryPage.getContent().stream()
                 .map(InquiryResponseDTO.InquiryListStructureForAdmin::toInquiryListResponseDTO).toList();
         model.addAttribute("inquiryList", InquiryResponseDTO.toInquiryResponseList(inquiryPage, inquiryList));
