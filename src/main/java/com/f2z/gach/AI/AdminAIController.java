@@ -88,6 +88,7 @@ public class AdminAIController {
         aiModel.setMinSampleLeaf(beforeModel.getMinSampleLeaf());
         aiModel.setMinSampleSplit(beforeModel.getMinSampleSplit());
         aiModel.setMaxDepth(beforeModel.getMaxDepth());
+        aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
         aiRepo.save(aiModel);
         return 1;
