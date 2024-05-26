@@ -43,6 +43,12 @@
                                 <span>하이퍼파라미터</span>
                             </th>
                             <th scope="col">
+                                <span>학습된 데이터 개수</span>
+                            </th>
+                            <th scope="col">
+                                <span>모델 경로</span>
+                            </th>
+                            <th scope="col">
                                 <span>설정</span>
                             </th>
                         </tr>
@@ -73,6 +79,8 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td th:text="${ai.getDataLength()}">3.2</td>
+                                <td th:text="${ai.getAiModelPath()}">3.2</td>
                                 <td>
                                     <div class="row justify-content-center">
                                         <div class="col-3">

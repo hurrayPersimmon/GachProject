@@ -45,7 +45,7 @@ public class AdminAIController {
     @GetMapping("/model/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addModel(Model model) {
-        dataLength = lineTimeRepository.count();
+        dataLength = lineTimeRepository.count() - aiRepo.findAiModelWithMaxId().orElseThrow().getDataLength();
         model.addAttribute("dataListLength", dataLength);
         return "ai/ai-add";
     }
@@ -55,7 +55,7 @@ public class AdminAIController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public long getFilterNum(@PathVariable int min, @PathVariable int max, @PathVariable int augment){
-        dataLength = aiService.filterAndAugmentData(min, max, augment);
+        dataLength = aiService.filterAndAugmentData(min, max, augment, dataLength);
         return dataLength;
     }
 
@@ -64,6 +64,7 @@ public class AdminAIController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public int learningModel(@PathVariable String name, @PathVariable String version) throws Exception {
+        dataLength = lineTimeRepository.count() + dataRepo.count();
         AiModel aiModel = new AiModel();
         AiModel beforeModel = aiRepo.findAiModelWithMaxId().orElseThrow();
         aiService.reLearnModel(name);
@@ -73,6 +74,7 @@ public class AdminAIController {
         aiModel.setMinSampleLeaf(beforeModel.getMinSampleLeaf());
         aiModel.setMinSampleSplit(beforeModel.getMinSampleSplit());
         aiModel.setMaxDepth(beforeModel.getMaxDepth());
+        aiModel.setDataLength(dataLength);
         aiRepo.save(aiModel);
         return 1;
     }

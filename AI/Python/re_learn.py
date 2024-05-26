@@ -20,16 +20,16 @@ print(saved_model_path)
 additional_data = pd.read_csv(additional_data_path, encoding='UTF-8')
 
 data = pd.DataFrame(additional_data)
-realData = np.array(data)
 
 # 데이터 전처리 및 학습 데이터 준비
-X_add = realData.iloc[:, :-1]
-y_add = realData.iloc[:, -1]
+X_add = data.iloc[:, :-1]
+y_add = data.iloc[:, -1]
 
 X_train, X_test, y_train, y_test = train_test_split(X_add, y_add, test_size=0.2, random_state=42)
 
 regressor.fit(X_train, y_train)
 
+# 왜 MSE가 0으로 나오는지
 y_pred = regressor.predict(X_test)
 print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 

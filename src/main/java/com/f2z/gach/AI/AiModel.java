@@ -24,21 +24,8 @@ public class AiModel extends BaseTimeEntity {
     private int maxFeature;
     private String aiModelName;
     private String aiModelPath;
-    private double mae;
+    private long dataLength;
+    private int mae;
     private int cnt;
-
-    // 만족도 전체 저장
     private double totalSatisfaction;
-
-    public static AiModel setToDto(ModelRequestDTO dto){
-        AiModel aiModel = new AiModel();
-        aiModel.setAiModelName(dto.getModelName());
-        aiModel.setAiModelVersion(dto.getModelVersion());
-        aiModel.setMaxDepth(dto.getDepth());
-        aiModel.setMinSampleSplit(dto.getSplit());
-        aiModel.setMinSampleLeaf(dto.getLeaf());
-        aiModel.setMaxFeature(dto.getMaxFeature());
-        aiModel.setMae(dto.getModelMae());
-        return aiModel;
-    }
 }
