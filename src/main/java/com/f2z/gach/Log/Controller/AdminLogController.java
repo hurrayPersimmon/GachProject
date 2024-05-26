@@ -3,6 +3,7 @@ package com.f2z.gach.Log.Controller;
 import com.f2z.gach.Admin.Repository.AdminRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
+import com.f2z.gach.Log.DTO.LogDTO;
 import com.f2z.gach.Log.Entity.Log;
 import com.f2z.gach.Log.Repository.LogRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,10 @@ public class AdminLogController {
     public String manage(Model model, @PathVariable Integer page) {
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "createDt").withPage(page);
         Page<Log> logPage = logRepository.findAll(pageable);
-        log.info("test"+ logPage.getContent());
-        model.addAttribute("logs", logPage.getContent());
+        List<LogDTO.LogListStructure> logList = logPage.getContent().stream()
+                .map(LogDTO.LogListStructure::toLogListStructure)
+                .toList();
+        model.addAttribute("logs", LogDTO.toAdminlogList(logPage, logList));
         return "log/log-manage";
     }
 }
