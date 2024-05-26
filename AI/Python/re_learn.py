@@ -30,7 +30,7 @@ regressor.fit(X_train, y_train)
 
 # 왜 MSE가 0으로 나오는지
 y_pred = regressor.predict(X_test)
-print("MSE:", mean_squared_error(y_test, y_pred))
+print(mean_squared_error(y_test, y_pred))
 
 # 모델 재학습 후 저장 (선택 사항)
 joblib.dump(regressor, new_model_path)

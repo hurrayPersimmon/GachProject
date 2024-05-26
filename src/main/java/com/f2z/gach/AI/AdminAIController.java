@@ -26,6 +26,8 @@ public class AdminAIController {
     private final AIService aiService;
     private final AiModelRepository aiRepo;
     long dataLength;
+    String modelPath = "/home/t24102/AI/model/";
+
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -78,10 +80,11 @@ public class AdminAIController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public int learningModel(@PathVariable String name, @PathVariable String version) throws Exception {
+        String tempPath = modelPath + name + ".pkl";
         dataLength = lineTimeRepository.count() + dataRepo.count();
         AiModel aiModel = new AiModel();
         AiModel beforeModel = aiRepo.findAiModelWithMaxId().orElseThrow();
-        aiModel.setAiModelPath(aiService.reLearnModel(name));
+        aiModel.setAiModelPath(tempPath);
         aiModel.setAiModelName(name);
         aiModel.setAiModelVersion(version);
         aiModel.setMaxFeature(beforeModel.getMaxFeature());
@@ -90,6 +93,7 @@ public class AdminAIController {
         aiModel.setMaxDepth(beforeModel.getMaxDepth());
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
+        aiModel.setMse(aiService.reLearnModel(aiModel));
         aiRepo.save(aiModel);
         return 1;
     }

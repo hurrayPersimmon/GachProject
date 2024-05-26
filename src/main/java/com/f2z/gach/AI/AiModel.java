@@ -25,7 +25,7 @@ public class AiModel extends BaseTimeEntity {
     private String aiModelName;
     private String aiModelPath;
     private long dataLength;
-    private int mae;
+    private double mse;
     private int cnt;
     private double totalSatisfaction;
     private Boolean isChecked;

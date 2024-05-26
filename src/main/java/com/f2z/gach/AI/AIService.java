@@ -38,7 +38,6 @@ public class AIService {
     final String tempOutputPath = "/home/t24102/AI/python/tree_output.py";
     final String localReModelPath = "/home/t24102/AI/python/re_learn.py";
     final String csvFilePath = "/home/t24102/AI/dataset/data.csv";
-    String modelPath = "/home/t24102/AI/model/";
 
     private List<dataEntity> augmentData(dataEntity row, int augmentCnt) {
         List<dataEntity> augmentedRows = new ArrayList<>();
@@ -97,10 +96,9 @@ public class AIService {
         return augmentedList.size();
     }
 
-    public String reLearnModel(String modelName) throws Exception{
-        String tempPath = modelPath + modelName + ".pkl";
+    public Double reLearnModel(AiModel aiModel) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, tempPath);
+                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, aiModel.getAiModelPath());
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -108,11 +106,10 @@ public class AIService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-            log.info(line);
             sb.append(line).append("\n");
         }
         reader.close();
-        return tempPath;
+        return Double.parseDouble(sb.toString());
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){
