@@ -15,8 +15,9 @@ precipitationProbability = float(sys.argv[7])
 precipitation = float(sys.argv[8])
 weightShortest = float(sys.argv[9])
 weightOptimal = float(sys.argv[10])
+modelPath = sys.argv[11]
 
-regressor = joblib.load("/home/t24102/AI/temp.pkl")
+regressor = joblib.load(modelPath)
 
 X_new = [[birthYear, gender, height, weight, walkSpeed, temperature, precipitationProbability, precipitation, weightShortest, weightOptimal]]
 

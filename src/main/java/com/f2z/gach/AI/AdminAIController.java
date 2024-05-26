@@ -45,7 +45,7 @@ public class AdminAIController {
     @GetMapping("/model/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addModel(Model model) {
-        dataLength = lineTimeRepository.count() - aiRepo.findAiModelWithMaxId().orElseThrow().getDataLength();
+        dataLength = lineTimeRepository.count() + dataRepo.count() - aiRepo.findAiModelWithMaxId().orElseThrow().getDataLength();
         model.addAttribute("dataListLength", dataLength);
         return "ai/ai-add";
     }
