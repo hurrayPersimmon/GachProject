@@ -119,7 +119,7 @@ public class AIService {
 
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
         for(int i = 0; i < list.size()-1; i++){
-            MapLine shortMapLine = mapLineRepository.findLineIdByNodeFirst_NodeIdAndNodeSecond_NodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
+            MapLine shortMapLine = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
             CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
                 try {
                     return modelOutput(shortMapLine, data);
