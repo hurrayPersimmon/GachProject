@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,87 +60,37 @@ public class AdminNodeController {
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
-        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now());
-        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Node);
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
 
-        List<LocalDate> dateRange = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
-            dateRange.add(date);
-        }
+        model.addAttribute("inquiryList",
+                getInquiry(getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
 
-        Map<String, Long> inquiryCountByDate = allInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ));
-
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (LocalDate date : dateRange) {
-            String dateString = date.toString();
-            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
-            result.put(dateString, inquiryCount);
-        }
-
-        model.addAttribute("inquiryList", result);
-
-        Map<String, Long> inquiryCountByDate2 = nodeInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ));
-
-        Map<String, Long> result2 = new LinkedHashMap<>();
-        for (LocalDate date : dateRange) {
-            String dateString = date.toString();
-            Long inquiryCount = inquiryCountByDate2.getOrDefault(dateString, 0L);
-            result2.put(dateString, inquiryCount);
-        }
-
-        model.addAttribute("nodeInquiryList", result2);
-        Map<String, Integer> map = new LinkedHashMap<>();
-        for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
-            int nodeId = Integer.parseInt(objects[0].toString());
-            int value = Integer.parseInt(objects[1].toString());
-            map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
-        }
-
-        model.addAttribute("map", map);
+        model.addAttribute("nodeInquiryList",
+                getInquiry(getDateRange(), inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Node)));
+        model.addAttribute("map", getTopNodes());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
         return "node/node-manage";
     }
 
     @GetMapping("/node/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+    public String nodeListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedList){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.ASC, "nodeId").withPage(page);
-        Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sort, pageable);
+        Page<MapNode> nodePage = mapNodeRepository.findAllByNodeNameContaining(sortedList, pageable);
         List<MapDTO.MapNodeListStructure> nodeList = nodePage.getContent().stream()
                 .map(MapDTO.MapNodeListStructure::toMapNodeListStructure)
                 .collect(Collectors.toList());
         model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
         model.addAttribute("nodeChartData", mapNodeRepository.findAll());
+
+        model.addAttribute("inquiryList",
+                getInquiry(getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+
+        model.addAttribute("nodeInquiryList",
+                getInquiry(getDateRange(), inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Node)));
+        model.addAttribute("map", getTopNodes());
         model.addAttribute("countNodes", mapNodeRepository.countNodesNotInLines());
-        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
-        List<Inquiry> nodeInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), InquiryCategory.Node);
-        model.addAttribute("nodeList", MapDTO.toMapNodeList(nodePage, nodeList));
-        model.addAttribute("nodeChartData", mapNodeRepository.findAll());
-        model.addAttribute("inquiryList", allInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ))
-        );
-        model.addAttribute("nodeInquiryList", nodeInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ))
-        );
-        model.addAttribute("unSatisfaction", userHistoryRepository.findBottomMapNodes(5));
         return "node/node-manage";
     }
 
@@ -198,5 +147,41 @@ public class AdminNodeController {
             return "redirect:/admin/node/list/0";
         }
         throw new Exception();
+    }
+
+    Map<String, Long> getInquiry(List<LocalDate> dateRange, List<Inquiry> inquiryList){
+        Map<String, Long> result = new LinkedHashMap<>();
+        Map<String, Long> inquiryCountByDate = inquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ));
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
+            result.put(dateString, inquiryCount);
+        }
+        return result;
+    }
+
+    Map<String, Integer> getTopNodes(){
+        Map<String, Integer> map = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
+            int nodeId = Integer.parseInt(objects[0].toString());
+            int value = Integer.parseInt(objects[1].toString());
+            map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
+        }
+        return map;
+    }
+
+    List<LocalDate> getDateRange(){
+        List<LocalDate> dateRange = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
+            dateRange.add(date);
+        }
+
+        return dateRange;
     }
 }

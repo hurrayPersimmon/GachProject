@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,54 +59,11 @@ public class AdminLineController {
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         model.addAttribute("lineChartData", mapLineRepository.findAll());
-
-        List<Inquiry> allInquiryList = inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now());
-        List<Inquiry> lineInquiryList = inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Route);
-
-        List<LocalDate> dateRange = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
-            dateRange.add(date);
-        }
-
-        Map<String, Long> inquiryCountByDate = allInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ));
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (LocalDate date : dateRange) {
-            String dateString = date.toString();
-            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
-            result.put(dateString, inquiryCount);
-        }
-        model.addAttribute("inquiryList", result);
-
-        Map<String, Long> inquiryCountByDate2 = lineInquiryList.stream()
-                .collect(Collectors.groupingBy(
-                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
-                        Collectors.counting()
-                ));
-
-        Map<String, Long> result2 = new LinkedHashMap<>();
-        for (LocalDate date : dateRange) {
-            String dateString = date.toString();
-            Long inquiryCount = inquiryCountByDate2.getOrDefault(dateString, 0L);
-            result2.put(dateString, inquiryCount);
-        }
-
-        model.addAttribute("lineInquiryList", result2);
-        Map<LocalDate, Double> map = new LinkedHashMap<>();
-        for(Object[] objects : userHistoryRepository.findAverageSatisfactionRouteByDateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now())){
-            Date sqlDate = (Date) objects[0];
-            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            Double averSatisfaction = (Double) objects[1];
-            map.put(date, averSatisfaction);
-        }
-
-        model.addAttribute("lineSatisList", map);
-
+        model.addAttribute("inquiryList", getInquiry(
+                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+        model.addAttribute("lineInquiryList", getInquiry(
+                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+        model.addAttribute("lineSatisList", getSatisfactionMap());
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/find?%"));
@@ -116,13 +72,21 @@ public class AdminLineController {
 
     @GetMapping("/line/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+    public String lineListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedlist){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "lineId").withPage(page);
-        Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sort, pageable);
+        Page<MapLine> linePage = mapLineRepository.findAllByLineNameContaining(sortedlist, pageable);
         List<MapDTO.MapLineListStructure> lineList = linePage.getContent().stream()
                 .map(MapDTO.MapLineListStructure::toMapLineListStructure).toList();
         model.addAttribute("lineList", MapDTO.toMapLineList(linePage, lineList));
         model.addAttribute("lineChartData", mapLineRepository.findAll());
+        model.addAttribute("inquiryList", getInquiry(
+                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+        model.addAttribute("lineInquiryList", getInquiry(
+                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+        model.addAttribute("lineSatisList", getSatisfactionMap());
+        model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/find?%"));
         return "line/line-manage";
     }
 
@@ -164,5 +128,52 @@ public class AdminLineController {
             return "redirect:/admin/line/list/0";
         }
         throw new Exception();
+    }
+
+    Map<String, Long> getInquiry(List<LocalDate> dateRange, List<Inquiry> inquiryList){
+        Map<String, Long> result = new LinkedHashMap<>();
+        Map<String, Long> inquiryCountByDate = inquiryList.stream()
+                .collect(Collectors.groupingBy(
+                        inquiry -> inquiry.getCreateDt().toLocalDate().toString(),
+                        Collectors.counting()
+                ));
+        for (LocalDate date : dateRange) {
+            String dateString = date.toString();
+            Long inquiryCount = inquiryCountByDate.getOrDefault(dateString, 0L);
+            result.put(dateString, inquiryCount);
+        }
+        return result;
+    }
+
+    Map<String, Integer> getTopModes(){
+        Map<String, Integer> map = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findTopMapNodes(5)){
+            int nodeId = Integer.parseInt(objects[0].toString());
+            int value = Integer.parseInt(objects[1].toString());
+            map.put(mapNodeRepository.findByNodeId(nodeId).getNodeName(), value);
+        }
+        return map;
+    }
+
+    List<LocalDate> getDateRange(){
+        List<LocalDate> dateRange = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = now.minusDays(6).plusDays(i).toLocalDate();
+            dateRange.add(date);
+        }
+
+        return dateRange;
+    }
+
+    Map<LocalDate, Double> getSatisfactionMap(){
+        Map<LocalDate, Double> map = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findAverageSatisfactionRouteByDateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now())){
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            Double averSatisfaction = (Double) objects[1];
+            map.put(date, averSatisfaction);
+        }
+        return map;
     }
 }

@@ -52,41 +52,23 @@ public class AdminUserController {
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
         model.addAttribute("userChartData", userRepository.findAll());
-
-        Map<LocalDate, Long> signUpMap = new LinkedHashMap<>();
-        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
-                "/user/signup",
-                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX)
-        )){
-            Date sqlDate = (Date) objects[0];
-            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            signUpMap.put(date, (long) objects[1]);
-        }
-        model.addAttribute("signUpCount", signUpMap);
-        Map<LocalDate, Long> loginMap = new LinkedHashMap<>();
-        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
-                "/user/login",
-                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX)
-        )){
-            Date sqlDate = (Date) objects[0];
-            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-            loginMap.put(date, (long) objects[1]);
-        }
-        model.addAttribute("loginCount", loginMap);
+        model.addAttribute("signUpCount", getMap("/user/signup"));
+        model.addAttribute("loginCount", getMap("/user/login"));
         model.addAttribute("deleteUserCount", logRepository.findAllWithHttpMethodDeleteAndTimestampAfter(LocalDateTime.now().minusDays(6).with(LocalTime.MIN)).size());
         return "user/user-manage";
     }
 
     @GetMapping("/users/sortedlist/{page}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
-    public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sort){
+    public String userListSortedPage(Model model, @PathVariable Integer page, @RequestParam String sortedlist){
         Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "userId").withPage(page);
-        Page<User> users = userRepository.findAllByUserNicknameContaining(sort, pageable);
+        Page<User> users = userRepository.findAllByUserNicknameContaining(sortedlist, pageable);
         List<UserResponseDTO.UserListStructure> userList = users.getContent().stream()
                 .map(UserResponseDTO.UserListStructure::toUserListResponseDTO).toList();
         model.addAttribute("userList", UserResponseDTO.toUserResponseList(users, userList));
+        model.addAttribute("signUpCount", getMap("/user/signup"));
+        model.addAttribute("loginCount", getMap("/user/login"));
+        model.addAttribute("deleteUserCount", logRepository.findAllWithHttpMethodDeleteAndTimestampAfter(LocalDateTime.now().minusDays(6).with(LocalTime.MIN)).size());
         return "user/user-manage";
     }
 
@@ -122,5 +104,17 @@ public class AdminUserController {
         return "redirect:/admin/users/list/0";
     }
 
-
+    Map<LocalDate, Long> getMap(String path){
+        Map<LocalDate, Long> signUpMap = new LinkedHashMap<>();
+        for(Object[] objects : logRepository.countRequestsByUrlAndDate(
+                path,
+                LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
+                LocalDateTime.now().with(LocalTime.MAX)
+        )){
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            signUpMap.put(date, (long) objects[1]);
+        }
+        return signUpMap;
+    }
 }
