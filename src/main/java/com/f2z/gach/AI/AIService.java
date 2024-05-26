@@ -29,13 +29,14 @@ public class AIService {
     Random random = new Random();
     private final HistoryLineTimeRepository lineTimeRepo;
     private final MapLineRepository mapLineRepository;
+    private final AiModelRepository aiRepo;
     private ProcessBuilder processBuilder;
 
     final String localPythonPath = "python3";
-    final String tempOutputPath = "/home/t24102/AI/tree_output.py";
-    final String localReModelPath = "/home/t24102/AI/re_learn.py";
-    // 이 경로에 필터링 && 증식 데이터 저장
-    final String csvFilePath = "/home/t24102/AI/data.csv";
+    final String tempOutputPath = "/home/t24102/AI/python/tree_output.py";
+    final String localReModelPath = "/home/t24102/AI/python/re_learn.py";
+    final String csvFilePath = "/home/t24102/AI/dataset/data.csv";
+    String modelPath = "/home/t24102/AI/model/";
 
     private List<dataEntity> augmentData(dataEntity row, int augmentCnt) {
         List<dataEntity> augmentedRows = new ArrayList<>();
@@ -92,9 +93,9 @@ public class AIService {
         return augmentedList.size();
     }
 
-    public String reLearnModel() throws Exception{
+    public void reLearnModel(String modelName) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                "/home/t24102/AI/temp.pkl", "/home/t24102/AI/data.csv");
+                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, modelPath + modelName);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -105,7 +106,6 @@ public class AIService {
             sb.append(line).append("\n");
         }
         reader.close();
-        return sb.toString();
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){
@@ -143,7 +143,6 @@ public class AIService {
             String printLine;
             while ((printLine = reader.readLine()) != null) {
                 takeTime = printLine;
-                log.info(takeTime);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,20 +1,16 @@
 package com.f2z.gach.AI;
 
 import com.f2z.gach.Admin.Repository.AdminRepository;
-import com.f2z.gach.DataGetter.dataEntity;
 import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.EnumType.Authorization;
 import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Controller
@@ -30,8 +26,6 @@ public class AdminAIController {
     private final AIService aiService;
     private final AiModelRepository aiRepo;
     long dataLength;
-    final String modelPath = "/home/t24102/GachProject/AI/Model";
-//    final String modelPath = "/Users/nomyeongjun/Documents/2024-1/Project/GachProject/AI/Model";
 
     @ModelAttribute
     public void setAttributes(Model model){
@@ -39,6 +33,7 @@ public class AdminAIController {
         model.addAttribute("inquiryWaitSize", inquiryRepository.countByInquiryProgressIsFalse());
     }
 
+    // List
     @GetMapping("")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     public String list(Model model) {
@@ -64,13 +59,20 @@ public class AdminAIController {
         return dataLength;
     }
 
+    // AI모델 재학습 기능
     @GetMapping("/model/learn/{name}/{version}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
     public int learningModel(@PathVariable String name, @PathVariable String version) throws Exception {
         AiModel aiModel = new AiModel();
+        AiModel beforeModel = aiRepo.findAiModelWithMaxId().orElseThrow();
+        aiService.reLearnModel(name);
         aiModel.setAiModelName(name);
         aiModel.setAiModelVersion(version);
+        aiModel.setMaxFeature(beforeModel.getMaxFeature());
+        aiModel.setMinSampleLeaf(beforeModel.getMinSampleLeaf());
+        aiModel.setMinSampleSplit(beforeModel.getMinSampleSplit());
+        aiModel.setMaxDepth(beforeModel.getMaxDepth());
         aiRepo.save(aiModel);
         return 1;
     }

@@ -1,9 +1,7 @@
 import numpy as np
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import pandas as pd
-import random
 import joblib
 import sys
 
@@ -11,6 +9,8 @@ import sys
 saved_model_path = sys.argv[1]
 # 추가 CSV 데이터 경로는 어디에 있는지
 additional_data_path = sys.argv[2]
+
+new_model_path = sys.argv[3]
 
 # 저장된 모델 로드
 regressor = joblib.load(saved_model_path)
@@ -38,4 +38,4 @@ y_pred = regressor.predict(X_test)
 print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 
 # 모델 재학습 후 저장 (선택 사항)
-joblib.dump(regressor, saved_model_path)
+joblib.dump(regressor, new_model_path)

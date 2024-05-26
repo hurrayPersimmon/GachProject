@@ -26,6 +26,8 @@ public class AiModel extends BaseTimeEntity {
     private String aiModelPath;
     private double mae;
     private int cnt;
+
+    // 만족도 전체 저장
     private double totalSatisfaction;
 
     public static AiModel setToDto(ModelRequestDTO dto){
