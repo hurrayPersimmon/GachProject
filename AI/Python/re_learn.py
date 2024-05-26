@@ -14,6 +14,7 @@ new_model_path = sys.argv[3]
 
 # 저장된 모델 로드
 regressor = joblib.load(saved_model_path)
+print(saved_model_path)
 
 # 추가 데이터 로드
 additional_data = pd.read_csv(additional_data_path, encoding='UTF-8')
@@ -27,15 +28,11 @@ y_add = realData.iloc[:, -1]
 
 X_train, X_test, y_train, y_test = train_test_split(X_add, y_add, test_size=0.2, random_state=42)
 
-
-# 모델에 추가 데이터로 재학습
 regressor.fit(X_train, y_train)
 
-# 예측 결과 확인 등 필요한 작업 수행
-# 예를 들어, 테스트 데이터를 이용하여 모델 성능 평가
-# X_test, y_test 는 새로운 테스트 데이터로 변경해야 함
 y_pred = regressor.predict(X_test)
 print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 
 # 모델 재학습 후 저장 (선택 사항)
 joblib.dump(regressor, new_model_path)
+print(new_model_path)

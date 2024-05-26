@@ -95,7 +95,7 @@ public class AIService {
 
     public void reLearnModel(String modelName) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, modelPath + modelName);
+                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, modelPath + modelName + ".pkl");
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -103,6 +103,7 @@ public class AIService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
+            log.info(line);
             sb.append(line).append("\n");
         }
         reader.close();
