@@ -1,6 +1,7 @@
 package com.f2z.gach.AI;
 
 import com.f2z.gach.DataGetter.dataEntity;
+import com.f2z.gach.DataGetter.dataRepository;
 import com.f2z.gach.History.Entity.HistoryLineTime;
 import com.f2z.gach.History.Repository.HistoryLineTimeRepository;
 import com.f2z.gach.Map.DTO.NavigationResponseDTO;
@@ -30,6 +31,7 @@ public class AIService {
     private final HistoryLineTimeRepository lineTimeRepo;
     private final MapLineRepository mapLineRepository;
     private final AiModelRepository aiRepo;
+    private final dataRepository dataRepo;
     private ProcessBuilder processBuilder;
 
     final String localPythonPath = "python3";
@@ -53,7 +55,7 @@ public class AIService {
 
     public long filterAndAugmentData(int min, int max, int augment, long startIndex) {
 
-
+        List<dataEntity> list = dataRepo.findAll();
         List<HistoryLineTime> originalList = lineTimeRepo.findAll();
         List<HistoryLineTime> sublist = originalList.subList(Math.toIntExact(Math.max(originalList.size() - startIndex, 0)), originalList.size());
         log.info(String.valueOf(sublist.size()));
@@ -61,7 +63,9 @@ public class AIService {
         List<dataEntity> filteredList = sublist.stream()
                 .filter(data -> data.getLineTime() != null && data.getLineTime() > (double) min && data.getLineTime() < (double) max)
                 .map(dataEntity::parseHistory).toList();
-
+        list.stream()
+                .filter(data -> data.getTakeTime() != null && data.getTakeTime() > (double) min && data.getTakeTime() < (double) max)
+                .forEach(filteredList::add);
         // 증식 과정
         List<dataEntity> augmentedList = new ArrayList<>();
         for (dataEntity data : filteredList) {
