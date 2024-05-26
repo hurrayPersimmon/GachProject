@@ -28,5 +28,5 @@ public class AiModel extends BaseTimeEntity {
     private int mae;
     private int cnt;
     private double totalSatisfaction;
-    private boolean use;
+    private Boolean isChecked;
 }

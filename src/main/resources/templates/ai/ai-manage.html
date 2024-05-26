@@ -57,7 +57,7 @@
                             <tr style="height:8vh" th:each="ai : ${aiList}">
                                 <td>
                                     <div th:text="${ai.getAiModelVersion()}">v0.0.1</div>
-                                    <div th:if="${ai.getIsUsed() eq true}">
+                                    <div th:if="${ai.getIsChecked() eq true}">
                                         <span class="badge rounded-pill text-bg-success">사용중</span>
                                     </div>
                                 </td>

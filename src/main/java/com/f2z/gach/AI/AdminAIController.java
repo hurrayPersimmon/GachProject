@@ -46,11 +46,11 @@ public class AdminAIController {
     public String checkModel(@PathVariable int modelId) {
 
         aiRepo.findAll().forEach(aiModel -> {
-            aiModel.setUse(false);
+            aiModel.setIsChecked(false);
             aiRepo.save(aiModel);
         });
         AiModel aiModel = aiRepo.findById(modelId).orElseThrow();
-        aiModel.setUse(true);
+        aiModel.setIsChecked(true);
         aiRepo.save(aiModel);
         return "redirect:/admin/ai";
     }
