@@ -55,7 +55,7 @@ public class AdminEventController {
 
     @GetMapping("/list/{page}")
     public String eventListPage(Model model, @PathVariable Integer page){
-        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.ASC, "eventEndDate").withPage(page);
+        Pageable pageable = PageRequest.ofSize(10).withSort(Sort.Direction.DESC, "eventEndDate").withPage(page);
         Page<Event> eventPage = eventRepository.findAllBy(pageable);
         List<EventResponseDTO.AdminEventListStructure> eventResponseDTOList = eventPage.getContent().stream()
                 .map(EventResponseDTO.AdminEventListStructure::toAdminEventListStructure).toList();
