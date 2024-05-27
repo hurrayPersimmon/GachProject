@@ -50,5 +50,4 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
     List<Object[]> findAverageSatisfactionTimeByDateRange(
             @Param("startOfDay") LocalDateTime startOfDay,
             @Param("endOfDay") LocalDateTime endOfDay);
-
 }
