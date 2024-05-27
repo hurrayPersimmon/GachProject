@@ -16,6 +16,6 @@ public interface MapLineRepository extends JpaRepository<MapLine,Integer>{
     MapLine findByNodeFirstNodeIdAndNodeSecondNodeId(Integer nodeFirstId, Integer nodeSecondId);
     void deleteAllByNodeFirst_NodeId(Integer nodeId);
     void deleteAllByNodeSecond_NodeId(Integer nodeId);
-    @Query("SELECT p FROM MapLine p WHERE p.lineName LIKE %?1%")
-    Page<MapLine> findAllByLineNameContaining(String lineName, Pageable pageable);
+    @Query("SELECT p FROM MapLine p WHERE p.nodeFirst.nodeName LIKE %?1%")
+    Page<MapLine> findAllByNodeNameContaining(String nodeName, Pageable pageable);
 }
