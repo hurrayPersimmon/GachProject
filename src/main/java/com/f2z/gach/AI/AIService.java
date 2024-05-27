@@ -114,12 +114,12 @@ public class AIService {
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/3);
-
+        log.info("경로에 대한 리스트 출력");
+        list.forEach(t -> log.info(t.toString()));
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
         for(int i = 0; i < list.size()-1; i++){
-            log.info(list.get(i).toString());
-            log.info(list.get(i+1).toString());
             List<MapLine> shortMapLine = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
+            log.info("리스트의 첫번째 ID와 두번째 ID로 찾은 라인에 대한 정보 출력");
             shortMapLine.forEach(k -> log.info(k.toString()));
 //            CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
 //                try {
