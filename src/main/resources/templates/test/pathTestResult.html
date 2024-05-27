@@ -95,13 +95,13 @@
     let shortestTakeTime = [[${shortTakeTime}]];
 
     if(optimalTakeTime > 60){
-        let minute = optimalTakeTime / 60;
+        let minute = Math.floor(optimalTakeTime / 60);
         let second = optimalTakeTime % 60;
         document.getElementById("optimal").innerText = `${minute}분 ${second}초`;
     }
 
     if(shortestTakeTime > 60){
-        let minute = shortestTakeTime / 60;
+        let minute = Math.floor(shortestTakeTime / 60);
         let second = shortestTakeTime % 60;
         document.getElementById("short").innerText = `${minute}분 ${second}초`;
     }
