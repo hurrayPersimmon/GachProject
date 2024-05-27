@@ -94,7 +94,7 @@ public enum Departments {
     }
     public static Departments getDepartmentsContaining(String department) {
         for(Departments departmentType : Departments.values()) {
-            if(departmentType.name().equals(department) || departmentType.getDepartmentNickname().equals(department)) {
+            if(departmentType.name().contains(department) || departmentType.getDepartmentNickname().contains(department)) {
                 return departmentType;
             }
         }
