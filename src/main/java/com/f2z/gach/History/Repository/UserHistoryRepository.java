@@ -42,4 +42,13 @@ public interface UserHistoryRepository extends JpaRepository<UserHistory, Long> 
     List<Object[]> findAverageSatisfactionRouteByDateRange(
             @Param("startOfDay") LocalDateTime startOfDay,
             @Param("endOfDay") LocalDateTime endOfDay);
+
+    @Query("SELECT FUNCTION('DATE', uh.createDt), AVG(uh.satisfactionTime) " +
+            "FROM UserHistory uh " +
+            "WHERE uh.createDt BETWEEN :startOfDay AND :endOfDay " +
+            "GROUP BY FUNCTION('DATE', uh.createDt)")
+    List<Object[]> findAverageSatisfactionTimeByDateRange(
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay);
+
 }

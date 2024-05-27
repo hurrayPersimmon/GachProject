@@ -92,6 +92,8 @@ public class AdminController {
         model.addAttribute("inquiryList", inquiryRepository.findDailyInquiryCounts(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
                 LocalDateTime.now().with(LocalTime.MAX)));
+
+        model.addAttribute("satisfaction", getSatisfactionTime());
         return "main/dashboard";
     }
 
@@ -236,5 +238,16 @@ public class AdminController {
         mav.setViewName("error/404");
         log.info("404 error");
         return mav;
+    }
+
+    Map<LocalDate, Double> getSatisfactionTime(){
+        Map<LocalDate, Double> Time = new LinkedHashMap<>();
+        for(Object[] objects : userHistoryRepository.findAverageSatisfactionTimeByDateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now())){
+            Date sqlDate = (Date) objects[0];
+            LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+            Double averSatisfaction = (Double) objects[1];
+            Time.put(date, averSatisfaction);
+        }
+        return Time;
     }
 }
