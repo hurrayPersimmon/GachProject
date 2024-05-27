@@ -4,10 +4,7 @@ package com.f2z.gach.Log.DTO;
 import com.f2z.gach.EnumType.LogLevel;
 import com.f2z.gach.EnumType.Properties;
 import com.f2z.gach.Log.Entity.Log;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -18,6 +15,7 @@ public class LogDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class LogListStructure {
         private Integer logId;
         private LocalDateTime createDt;
@@ -44,6 +42,7 @@ public class LogDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class AdminLogList {
         List<LogListStructure> adminLogList;
         Integer totalPage;
