@@ -99,6 +99,7 @@ public class AdminNodeController {
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
+        model.addAttribute("lineList", mapLineRepository.findAll());
         return "node/node-add";
     }
 

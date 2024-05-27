@@ -158,8 +158,8 @@
         const elevator = new google.maps.ElevationService();
 
         let nodeList = [[${nodeList}]];
-        nodeList.forEach(function(data, index){
-            if(targetNode.nodeId === index + 181){
+        nodeList.forEach(function(data){
+            if(targetNode.nodeId === data.nodeId){
                 const updateTag = document.createElement("div");
                 updateTag.className = "price-tag";
                 updateTag.textContent = data.nodeName;
