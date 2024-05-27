@@ -32,7 +32,7 @@ public enum College {
 
     public static College getCollegeContaining(String college) {
         for(College collegeType : College.values()) {
-            if(collegeType.getCollege().equals(college) || collegeType.getCollegeNickname().equals(college)) {
+            if(collegeType.getCollege().contains(college) || collegeType.getCollegeNickname().contains(college)) {
                 return collegeType;
             }
         }
