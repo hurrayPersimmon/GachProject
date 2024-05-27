@@ -66,10 +66,9 @@ public class HistoryServiceImpl implements HistoryService{
 
         for(HistoryRequestDTO.HistoryLineTimeRequestDTO lineTime : lineTimeList){
             if(lineTime.getFirstNodeId() == 0)continue;
-            List<MapLine> line = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(lineTime.getFirstNodeId(), lineTime.getSecondNodeId());
-            line.forEach(mapLine -> log.info(mapLine.toString()));
-//            Double Velocity = line.getWeightShortest()/lineTime.getTime();
-//            historyLineTimeRepository.save(HistoryRequestDTO.lineHistoryDTO.toEntity(user, line, lineTime.getTime(), Velocity));
+            MapLine line = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(lineTime.getFirstNodeId(), lineTime.getSecondNodeId());
+            Double Velocity = line.getWeightShortest()/lineTime.getTime();
+            historyLineTimeRepository.save(HistoryRequestDTO.lineHistoryDTO.toEntity(user, line, lineTime.getTime(), Velocity));
         }
 
         Optional<AiModel> currentAiModel = aiModelRepository.findAiModelWithMaxId();
