@@ -117,15 +117,18 @@ public class AIService {
 
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
         for(int i = 0; i < list.size()-1; i++){
-            MapLine shortMapLine = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
-            CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return modelOutput(shortMapLine, data);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, executor);
-            futures.add(future);
+            log.info(list.get(i).toString());
+            log.info(list.get(i+1).toString());
+            List<MapLine> shortMapLine = mapLineRepository.findByNodeFirstNodeIdAndNodeSecondNodeId(list.get(i).getNodeId(), list.get(i+1).getNodeId());
+            shortMapLine.forEach(k -> log.info(k.toString()));
+//            CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+//                try {
+//                    return modelOutput(shortMapLine, data);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }, executor);
+//            futures.add(future);
         }
 
         return futures.stream()
