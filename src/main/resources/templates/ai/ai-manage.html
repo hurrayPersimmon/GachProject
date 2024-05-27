@@ -63,7 +63,7 @@
                                 </td>
                                 <td th:text="${ai.getAiModelName()}">초기 모델</td>
                                 <td th:text="${ai.getMse()}">15%</td>
-                                <td th:text="${ai.getCnt()}">3.2</td>
+                                <td th:text="${ai.getTotalSatisfaction()} / ${ai.getCnt()}">3.2</td>
                                 <td>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
