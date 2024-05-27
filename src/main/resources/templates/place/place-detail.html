@@ -113,6 +113,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mt-2" id="building">
+                                            <div class="col">
+                                                <div class="form-floating mb-3">
+                                                    <p class="fs-4 nodeHeader">빌딩 높이</p>
+                                                    <hr>
+                                                    <input th:field="*{place.buildingHeight}" type="text" class="form-control fontHv mt-0 pt-0 fs-6">
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">층별 안내
@@ -287,8 +296,10 @@
         let category = document.getElementById("category");
         if(category.value != "BUILDING"){
             document.getElementById("sideImage").style.visibility = 'hidden';
+            document.getElementById("building").style.display = 'none';
         } else {
             document.getElementById("sideImage").style.visibility = 'visible';
+            document.getElementById("building").style.display = 'flex';
         }
     }
 
