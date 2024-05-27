@@ -44,12 +44,12 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each=" adminLog : ${logs.adminLogList}">
-                                        <td th:text="${adminLog.logId}">2024-05-05T00:02:01</td>
-<!--                                        <td th:text="${log.logLevel}">DEBUG</td>-->
-<!--                                        <td th:text="${log.getProperty().getCode()}">200</td>-->
-<!--                                        <td th:text="${log.getProperty().getMessage()}">경로 조회 요청</td>-->
-<!--                                        <td th:text="${log.getHttpMethod()}">GET</td>-->
-<!--                                        <td th:text="${log.getUrl()}">ceprj.~~:60002/path??</td>-->
+                                        <td th:text="${adminLog.createDt}">2024-05-05T00:02:01</td>
+                                        <td th:text="${adminLog.logLevel.logLevel}">DEBUG</td>
+                                        <td th:text="${log.property.code}">200</td>
+                                        <td th:text="${log.message}">경로 조회 요청</td>
+                                        <td th:text="${log.httpMethod}">GET</td>
+                                        <td th:text="${log.url}">ceprj.~~:60002/path??</td>
                                     </tr>
                                     </tbody>
                                 </table>
