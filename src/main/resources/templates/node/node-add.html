@@ -218,9 +218,12 @@
             path.push(
                 { lat: data[0].nodeLatitude,
                   lng: data[0].nodeLongitude
-                })
-            ;
-            path.push({ lat: data[1].nodeLatitude, lng: data[1].nodeLongitude });
+                });
+            path.push(
+                { lat: data[1].nodeLatitude,
+                  lng: data[1].nodeLongitude
+                });
+            console.log(data[0].nodeName='글로벌센터-예술체육대학1');
         });
 
         const flightPath = new google.maps.Polyline({

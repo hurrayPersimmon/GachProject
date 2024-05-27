@@ -63,7 +63,7 @@ public class AdminLineController {
         model.addAttribute("inquiryList", getInquiry(
                 getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
         model.addAttribute("lineInquiryList", getInquiry(
-                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+                getDateRange(), inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Route)));
         model.addAttribute("lineSatisList", getSatisfactionMap());
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
@@ -83,7 +83,7 @@ public class AdminLineController {
         model.addAttribute("inquiryList", getInquiry(
                 getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
         model.addAttribute("lineInquiryList", getInquiry(
-                getDateRange(), inquiryRepository.findAllByCreateDtBetween(LocalDateTime.now().minusDays(6), LocalDateTime.now())));
+                getDateRange(), inquiryRepository.findAllByCreateDtBetweenAndInquiryCategory(LocalDateTime.now().minusDays(6), LocalDateTime.now(), InquiryCategory.Route)));
         model.addAttribute("lineSatisList", getSatisfactionMap());
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
