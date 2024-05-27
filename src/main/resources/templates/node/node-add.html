@@ -138,17 +138,8 @@
             zoom: 19,
             mapId: 'DEMO_MAP_ID',
         });
-
-        const pinViewScaled = new google.maps.marker.PinView({
-            scale: 0.4,
-        });
-
-        const pinViewBackground = new google.maps.marker.PinView({
-            background: "#046ffb",
-        });
-
+        document.getElementById("alti").value = "44.95606231689453";
         const infoWindow = new google.maps.InfoWindow();
-        const elevator = new google.maps.ElevationService();
 
         let nodeList = [[${nodeList}]];
 
@@ -213,6 +204,8 @@
                     alert("오류원인 : " + e)
                 );
         });
+
+        let lineNodeList = [[${lineNodeList}]];
     }
     window.initMap = initMap;
 </script>
