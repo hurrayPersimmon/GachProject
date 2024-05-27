@@ -227,6 +227,12 @@
                     infoWindow.open(markerView.map, markerView);
                 });
             } else {
+                const pinViewScaled = new google.maps.marker.PinView({
+                    scale: 0.5,
+                    glyphColor: "#ffe54b",
+                    borderColor: "#ffe54b",
+                    background: "#ffe54b",
+                });
                 const tag = document.createElement("div");
                 tag.className = "exist-tag";
                 tag.textContent = data.nodeName;
@@ -234,7 +240,7 @@
                     map,
                     position: {lat: data.nodeLatitude, lng: data.nodeLongitude},
                     title: data.nodeName,
-                    content : tag
+                    content : pinViewScaled.element,
                 });
                 thisMarkerView.nodeAltitude = data.nodeAltitude;
 
@@ -252,6 +258,28 @@
                 });
             }
         });
+
+        let lineNodeList = [[${lineNode}]];
+        let path = [];
+        console.log(lineNodeList);
+        lineNodeList.forEach(function(data){
+            path.push(
+                { lat: data[0].nodeLatitude,
+                    lng: data[0].nodeLongitude
+                })
+            ;
+            path.push({ lat: data[1].nodeLatitude, lng: data[1].nodeLongitude });
+        });
+
+        const flightPath = new google.maps.Polyline({
+            path: path,
+            geodesic: true,
+            strokeColor: "#ffe54b",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+        });
+
+        flightPath.setMap(map);
     }
     window.initMap = initMap;
 </script>

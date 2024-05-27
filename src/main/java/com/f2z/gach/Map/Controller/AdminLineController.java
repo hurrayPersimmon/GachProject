@@ -9,6 +9,7 @@ import com.f2z.gach.Inquiry.Repository.InquiryRepository;
 import com.f2z.gach.Log.Repository.LogRepository;
 import com.f2z.gach.Map.DTO.MapDTO;
 import com.f2z.gach.Map.Entity.MapLine;
+import com.f2z.gach.Map.Entity.MapNode;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Repository.MapNodeRepository;
 import jakarta.transaction.Transactional;
@@ -95,6 +96,7 @@ public class AdminLineController {
     public String addLinePage(Model model){
         model.addAttribute("lineDto", new MapDTO.MapLineDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
+        model.addAttribute("lineNode", getMapNodePairs());
         return "line/line-add";
     }
 
@@ -175,5 +177,14 @@ public class AdminLineController {
             map.put(date, averSatisfaction);
         }
         return map;
+    }
+
+    List<MapNode[]> getMapNodePairs(){
+        List<MapNode[]> mapNodePairs = new ArrayList<>();
+        for (MapLine mapLine : mapLineRepository.findAll()) {
+            MapNode[] nodePair = {mapLine.getNodeFirst(), mapLine.getNodeSecond()};
+            mapNodePairs.add(nodePair);
+        }
+        return mapNodePairs;
     }
 }

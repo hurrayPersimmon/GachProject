@@ -100,20 +100,7 @@ public class AdminNodeController {
     public String addNodePage(Model model){
         model.addAttribute("nodeDto", new MapDTO.MapNodeDTO());
         model.addAttribute("nodeList", mapNodeRepository.findAll());
-        List<MapNode[]> mapNodePairs = new ArrayList<>();
-
-        for (MapLine mapLine : mapLineRepository.findAll()) {
-            MapNode[] nodePair = {mapLine.getNodeFirst(), mapLine.getNodeSecond()};
-            mapNodePairs.add(nodePair);
-        }
-
-        model.addAttribute("lineNode", mapNodePairs);
-
-        // 노드 리스트, 라인 리스트를 던져준다.
-        // 노드 리스트를 노란색 마커로 표시한다.
-        // 라인은 어떻게 표시할 것이냐?
-        // 모든 라인에 포함된 node는 하얀색으로 표시하고 그 노드를 잇는다.
-        // 즉 라인의 노드와 노드 List<Node, Node>를 던져준다. 그러면 그 두개를 잇는다. forEach로 하나씩
+        model.addAttribute("lineNode", getMapNodePairs());
         return "node/node-add";
     }
 
@@ -134,6 +121,7 @@ public class AdminNodeController {
         MapNode mapNode = mapNodeRepository.findByNodeId(nodeId);
         model.addAttribute("nodeDto", mapNode);
         model.addAttribute("nodeList", mapNodeRepository.findAll());
+        model.addAttribute("lineNode", getMapNodePairs());
         return "node/node-detail";
     }
 
@@ -198,5 +186,14 @@ public class AdminNodeController {
         }
 
         return dateRange;
+    }
+
+    List<MapNode[]> getMapNodePairs(){
+        List<MapNode[]> mapNodePairs = new ArrayList<>();
+        for (MapLine mapLine : mapLineRepository.findAll()) {
+            MapNode[] nodePair = {mapLine.getNodeFirst(), mapLine.getNodeSecond()};
+            mapNodePairs.add(nodePair);
+        }
+        return mapNodePairs;
     }
 }
