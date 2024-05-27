@@ -43,13 +43,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="log : ${logs}">
-                                        <td th:text="${log.getCreateDt()}">2024-05-05T00:02:01</td>
-                                        <td th:text="${log.logLevel}">DEBUG</td>
-                                        <td th:text="${log.getProperty().getCode()}">200</td>
-                                        <td th:text="${log.getProperty().getMessage()}">경로 조회 요청</td>
-                                        <td th:text="${log.getHttpMethod()}">GET</td>
-                                        <td th:text="${log.getUrl()}">ceprj.~~:60002/path??</td>
+                                    <tr th:each=" adminLog : ${logs.adminLogList}">
+                                        <td th:text="${adminLog}">2024-05-05T00:02:01</td>
+<!--                                        <td th:text="${log.logLevel}">DEBUG</td>-->
+<!--                                        <td th:text="${log.getProperty().getCode()}">200</td>-->
+<!--                                        <td th:text="${log.getProperty().getMessage()}">경로 조회 요청</td>-->
+<!--                                        <td th:text="${log.getHttpMethod()}">GET</td>-->
+<!--                                        <td th:text="${log.getUrl()}">ceprj.~~:60002/path??</td>-->
                                     </tr>
                                     </tbody>
                                 </table>
@@ -79,7 +79,7 @@
         const url = window.location.href;
         const lastSlashIndex = url.lastIndexOf("/");
         const currentPage = Number(url.substring(lastSlashIndex + 1)) + 1;
-        const totalPage = [[${nodeList.totalPage}]];
+        const totalPage = [[${logs.totalPage}]];
         let paginationHtml = '';
 
         const totalGroup = Math.ceil(totalPage / 10); // 총 그룹 수 계산
