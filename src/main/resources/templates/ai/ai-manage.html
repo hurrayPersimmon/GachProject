@@ -63,7 +63,12 @@
                                 </td>
                                 <td th:text="${ai.getAiModelName()}">초기 모델</td>
                                 <td th:text="${ai.getMse()}">15%</td>
-                                <td th:text="${ai.getTotalSatisfaction()}">3.2</td>
+                                <td>
+                                    <span th:if="${ai.getCnt() eq 0}">
+                                         <span class="badge rounded-pill text-bg-secondary">사용되지 않음</span>
+                                    </span>
+                                    <span th:unless="${ai.getCnt() != 0}" th:text="${ai.getTotalSatisfaction() / ai.getCnt()}">3.2</span>
+                                </td>
                                 <td>
                                     <div class="row justify-content-center">
                                         <div class="col-4">
