@@ -24,11 +24,11 @@
                                 <div class="col-2">
                                     <div class="nodeHeader">
                                         <span style="width:1rem; height:1rem; background-color: red; display:inline-block" class="mt-1"></span> : 최적경로
-                                        <span th:text="${optimalTakeTime}">최적 시간(초)</span>(초)
+                                        <span id="optimal">최적 시간(초)</span>(초)
                                     </div>
                                     <div class="nodeHeader">
                                         <span style="width:1rem; height:1rem; background-color: blue; display: inline-block" class="mt-1"></span> : 최단경로
-                                        <span th:text="${shortTakeTime}">최단 시간(초)</span>(초)
+                                        <span id="short">최단 시간(초)</span>(초)
                                     </div>
                                 </div>
                                 <div class="col-3 offset-1">
@@ -91,6 +91,20 @@
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 </script>
 <script th:inline="javascript">
+    let optimalTakeTime = [[${optimalTakeTime}]];
+    let shortestTakeTime = [[${shortTakeTime}]];
+
+    if(optimalTakeTime > 60){
+        let minute = optimalTakeTime / 60;
+        let second = optimalTakeTime % 60;
+        document.getElementById("optimal").innerText = `${minute}분 ${second}초`;
+    }
+
+    if(shortestTakeTime > 60){
+        let minute = shortestTakeTime / 60;
+        let second = shortestTakeTime % 60;
+        document.getElementById("short").innerText = `${minute}분 ${second}초`;
+    }
 
     const map = null;
     const mapData = {

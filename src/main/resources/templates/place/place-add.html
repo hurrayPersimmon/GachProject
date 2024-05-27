@@ -102,7 +102,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="floorList">
                                             <div class="form-floating mb-3" id="floor">
                                                 <p class="fs-4 nodeHeader">층별 안내
                                                     <span class="ms-3">
@@ -244,9 +244,11 @@
         if(category.value != "BUILDING"){
             document.getElementById("sideImage").style.visibility = 'hidden';
             document.getElementById("building").style.display = 'none';
+            document.getElementById("floorList").style.display = 'none';
         } else {
             document.getElementById("sideImage").style.visibility = 'visible';
             document.getElementById("building").style.display = 'flex';
+            document.getElementById("floorList").style.display = 'flex';
         }
     }
 
