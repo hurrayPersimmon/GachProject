@@ -1,5 +1,7 @@
 package com.f2z.gach.History.Service;
 
+import com.f2z.gach.AI.AiModel;
+import com.f2z.gach.AI.AiModelRepository;
 import com.f2z.gach.History.DTO.HistoryRequestDTO;
 import com.f2z.gach.History.DTO.HistoryResponseDTO;
 import com.f2z.gach.History.Entity.UserHistory;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +37,7 @@ public class HistoryServiceImpl implements HistoryService{
     private final MapNodeRepository mapNodeRepository;
     private final HistoryLineTimeRepository historyLineTimeRepository;
     private final MapLineRepository mapLineRepository;
+    private final AiModelRepository aiModelRepository;
 
     @Override
     public ResponseEntity<List<HistoryResponseDTO.UserHistoryListStructure>> getHistoryList(Long userId) {
@@ -67,6 +71,13 @@ public class HistoryServiceImpl implements HistoryService{
             historyLineTimeRepository.save(HistoryRequestDTO.lineHistoryDTO.toEntity(user, line, lineTime.getTime(), Velocity));
         }
 
+        Optional<AiModel> currentAiModel = aiModelRepository.findAiModelWithMaxId();
+        if(currentAiModel.isPresent()){
+            AiModel aiModel = currentAiModel.get();
+            aiModel.setCnt(aiModel.getCnt()+1);
+            aiModel.setTotalSatisfaction(aiModel.getTotalSatisfaction() + lineHistory.getSatisfactionTime().ordinal() +1);
+            aiModelRepository.save(aiModel);
+        }else log.info("aiModel is null : " + currentAiModel);
 
         return ResponseEntity.saveSuccess(HistoryResponseDTO.toRespondSuccess(user));
     }
