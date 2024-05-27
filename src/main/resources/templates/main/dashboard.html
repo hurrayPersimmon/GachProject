@@ -291,10 +291,10 @@
     const ctx3 = document.getElementById('myChart3');
 
     const data3 = {
-        labels: ['3월 8일', '3월 9일', '3월 10일', '3월 11일', '3월 12일', '3월 13일', '3월 14일'],
+        labels: Object.keys(timeSatisfaction),
         datasets: [{
             label: 'AI 소요시간 만족도',
-            data: [145, 189, 280, 381, 156, 355, 340],
+            data: Object.values(timeSatisfaction),
             fill: false,
             tension: 0.1
         }]
