@@ -43,7 +43,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" log : ${logs}">
+                                    <tr th:each="log : ${logs}">
                                         <td th:text="${log.getCreateDt()}">2024-05-05T00:02:01</td>
                                         <td th:text="${log.logLevel}">DEBUG</td>
                                         <td th:text="${log.getProperty().getCode()}">200</td>
