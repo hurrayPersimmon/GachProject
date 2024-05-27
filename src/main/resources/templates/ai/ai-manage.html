@@ -67,7 +67,9 @@
                                     <span th:if="${ai.getCnt() eq 0}">
                                          <span class="badge rounded-pill text-bg-secondary">사용되지 않음</span>
                                     </span>
-                                    <span th:unless="${ai.getCnt() != 0}" th:text="${ai.getTotalSatisfaction() / ai.getCnt()}">3.2</span>
+                                    <span th:unless="${ai.getCnt() != 0}">
+                                        <span th:text="${ai.getTotalSatisfaction() / ai.getCnt()}">평균 만족도</span>
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="row justify-content-center">
