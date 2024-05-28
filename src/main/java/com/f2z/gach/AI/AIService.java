@@ -170,26 +170,20 @@ public class AIService {
         log.info("학습 시작");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
+        Map<String, Integer> map = new HashMap<>();
         while ((line = reader.readLine()) != null) {
             log.info(line);
+            line = line.replace("'", "\"").replaceAll("[{}]", "");
+            String[] keyValuePairs = line.split(", ");
+            for (String pair : keyValuePairs) {
+                // Split each pair by colon
+                String[] entry = pair.split(": ");
+                // Trim spaces and add to the map
+                map.put(entry[0].trim(), Integer.parseInt(entry[1].trim()));
+            }
         }
         reader.close();
 
-        line = line.replace("'", "\"").replaceAll("[{}]", "");
-
-        // Split the string by commas
-        String[] keyValuePairs = line.split(", ");
-
-        // Create a map to store the values
-        Map<String, Integer> map = new HashMap<>();
-
-        // Iterate through keyValuePairs array
-        for (String pair : keyValuePairs) {
-            // Split each pair by colon
-            String[] entry = pair.split(": ");
-            // Trim spaces and add to the map
-            map.put(entry[0].trim(), Integer.parseInt(entry[1].trim()));
-        }
         log.info(map.toString());
         return map;
     }
