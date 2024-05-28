@@ -66,6 +66,24 @@ public class AdminAIController {
         return "ai/ai-add";
     }
 
+    // 뷰
+    @GetMapping("/admin/ai/model/new/learn")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String addNewModel(Model model) {
+        dataLength = lineTimeRepository.count() + dataRepo.count();
+        model.addAttribute("dataListLength", dataLength);
+        return "ai/ai-newAdd";
+    }
+
+    // 필터링
+    @GetMapping("/model/add/filter/new/{min}/{max}/{augment}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public long getNewFilterNum(@PathVariable int min, @PathVariable int max, @PathVariable int augment){
+        log.info(String.valueOf(dataLength));
+        return aiService.allFilterAndAugmentData(min, max, augment);
+    }
+
     // 필터링
     @GetMapping("/model/add/filter/{min}/{max}/{augment}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -94,6 +112,29 @@ public class AdminAIController {
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
         aiModel.setMse(aiService.reLearnModel(aiModel));
+        aiRepo.save(aiModel);
+        return 1;
+    }
+
+    // AI모델 학습 기능
+    @GetMapping("/model/learn/new/{name}/{version}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public int learningNewModel(@PathVariable String name, @PathVariable String version) throws Exception {
+        String tempPath = modelPath + name + ".pkl";
+        dataLength = lineTimeRepository.count() + dataRepo.count();
+        AiModel aiModel = new AiModel();
+        AiModel beforeModel = aiRepo.findAiModelWithMaxId().orElseThrow();
+        aiModel.setAiModelPath(tempPath);
+        aiModel.setAiModelName(name);
+        aiModel.setAiModelVersion(version);
+        aiModel.setMaxFeature(beforeModel.getMaxFeature());
+        aiModel.setMinSampleLeaf(beforeModel.getMinSampleLeaf());
+        aiModel.setMinSampleSplit(beforeModel.getMinSampleSplit());
+        aiModel.setMaxDepth(beforeModel.getMaxDepth());
+        aiModel.setIsChecked(false);
+        aiModel.setDataLength(dataLength);
+        aiModel.setMse(aiService.learnModel(aiModel));
         aiRepo.save(aiModel);
         return 1;
     }

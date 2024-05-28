@@ -22,6 +22,8 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -37,6 +39,7 @@ public class AIService {
     final String localPythonPath = "python3";
     final String tempOutputPath = "/home/t24102/AI/python/tree_output.py";
     final String localReModelPath = "/home/t24102/AI/python/re_learn.py";
+    final String learnPath = "/home/t24102/AI/python/learn.py";
     final String csvFilePath = "/home/t24102/AI/dataset/data.csv";
 
     private List<dataEntity> augmentData(dataEntity row, int augmentCnt) {
@@ -96,9 +99,56 @@ public class AIService {
         return augmentedList.size();
     }
 
+    public long allFilterAndAugmentData(int min, int max, int augment) {
+        List<dataEntity> dataEntities = dataRepo.findAll();
+        List<HistoryLineTime> originalList = lineTimeRepo.findAll();
+
+        List<dataEntity> filteredList = originalList.stream()
+                .filter(data -> data.getLineTime() != null && data.getLineTime() > (double) min && data.getLineTime() < (double) max)
+                .map(dataEntity::parseHistory).toList();
+        List<dataEntity> filterList = dataEntities.stream()
+                .filter(data -> data.getBirthYear() != 2014 && data.getTakeTime() > (double) min && data.getTakeTime() < (double) max)
+                .toList();
+
+        List<dataEntity> combinedList = Stream.concat(filteredList.stream(), filterList.stream())
+                .collect(Collectors.toList());
+
+        List<dataEntity> augmentedList = new ArrayList<>();
+        for (dataEntity data : combinedList) {
+            augmentedList.addAll(augmentData(data, augment));
+        }
+
+        // CSV 파일 작성 과정
+        try (FileWriter writer = new FileWriter(csvFilePath)) {
+            writer.append("birthYear,gender,height,weight,walkSpeed,temperature,precipitationProbability,precipitation,weightShortest,weightOptimal,takeTime\n");
+
+            for (dataEntity data : augmentedList) {
+                writer.append(String.valueOf(data.getBirthYear())).append(",");
+                writer.append(String.valueOf(data.getGender())).append(",");
+                writer.append(String.valueOf(data.getHeight())).append(",");
+                writer.append(String.valueOf(data.getWeight())).append(",");
+                writer.append(String.valueOf(data.getWalkSpeed())).append(",");
+                writer.append(String.valueOf(data.getTemperature())).append(",");
+                writer.append(String.valueOf(data.getPrecipitationProbability())).append(",");
+                writer.append(String.valueOf(data.getPrecipitation())).append(",");
+                writer.append(String.valueOf(data.getWeightOptimal())).append(",");
+                writer.append(String.valueOf(data.getWeightShortest())).append(",");
+                writer.append(String.valueOf(data.getTakeTime())).append("\n");
+            }
+
+            log.info("CSV 파일이 성공적으로 생성되었습니다.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 필터링 && 증식한 데이터 개수
+        return augmentedList.size();
+    }
+
     public Double reLearnModel(AiModel aiModel) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, localReModelPath,
-                aiRepo.findAiModelWithMaxId().orElseThrow().getAiModelPath(), csvFilePath, aiModel.getAiModelPath());
+                aiRepo.findByIsCheckedTrue().orElseThrow().getAiModelPath(), csvFilePath, aiModel.getAiModelPath());
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
         StringBuilder sb = new StringBuilder();
@@ -107,6 +157,23 @@ public class AIService {
         String line;
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
+        }
+        reader.close();
+        return Double.parseDouble(sb.toString());
+    }
+
+    public Double learnModel(AiModel aiModel) throws Exception{
+        processBuilder = new ProcessBuilder(localPythonPath, learnPath,
+                csvFilePath, aiModel.getAiModelPath());
+        processBuilder.redirectErrorStream(true);
+        Process process = processBuilder.start();
+        StringBuilder sb = new StringBuilder();
+        log.info("학습 시작");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+            log.info(line);
         }
         reader.close();
         return Double.parseDouble(sb.toString());

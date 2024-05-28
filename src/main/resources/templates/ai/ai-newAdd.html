@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{/fragment :: head('AI 학습')}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 학습</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="d-flex justify-content-center" style="position: absolute; top:50%; left:50%; width:10rem; height:10rem;">
+        <div class="row justify-content-center">
+            <div class="spinner-border" role="status" id="spin" style="display:none; width:4rem; height:4rem;">
+            </div>
+            <div class="row fs-1 text-center fontHv" id="comment" style="display : none;">
+                학습 중
+            </div>
+        </div>
+    </div>
+    <header th:replace="~{/fragment :: header}"></header>
+    <div class="row" id="main">
+        <div th:replace="~{fragment :: sidebar('ai')}"></div>
+        <div class="col-10" style="background-color: rgb(242,248,250); width: 85%; margin-left:15%; margin-top:5%;">
+            <div class="container-fluid mt-4 p-0" style="background-color: rgb(242,248,250);">
+                <div class="row ms-5 mb-3 mt-2 nodeHeader">
+                    관리자 > AI관리 > AI 모델 학습
+                </div>
+                <div class="row mb-4 ms-5 fs-1 fontHv">
+                    AI 모델 학습
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
+                            <div class="row align-items-center">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">필터링</p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    경로별 최소 시간(초)
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="min" value="1">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    경로별 최대 시간(초)
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="max" value="360">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    데이터 증식
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="augment" value="5">
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col" onclick="doFilter()">
+                                    <a class="btn btn-primary">필터링 시작하기</a>
+                                </div>
+                            </div>
+                            <div class="row mb-3 mt-4">
+                                <div class="col">
+                                    <div>데이터 개수</div>
+                                    <div class="fs-3 fontHv" style="color:cornflowerblue" th:text="${dataListLength}">0</div>
+                                </div>
+                                <div class="col">
+                                    <div>필터링 및 증식된 데이터 개수</div>
+                                    <div class="fs-3 fontHv" style="color:cornflowerblue" id="filterLength">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center sidebarItem">
+                            <div class="row align-items-center">
+                                <div class="form-floating mb-4">
+                                    <p class="fs-3 sidebarItem text-start ms-4">학습 설정</p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    모델 이름
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="name" value="1">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col fs-6 sidebarItem">
+                                    모델 버전
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control fontHv fs-6" id="version" value="360">
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col">
+                                    <a class="btn btn-primary" onclick="learn()">모델 학습</a>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">설정된 하이퍼 파라미터</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <div class="row mb-3">
+                                                <div class="col fs-6 sidebarItem">
+                                                    트리의 최대 깊이
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control fontHv fs-6" id="depth" value="1">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col fs-6 sidebarItem">
+                                                    최소 자식 잎 구성 샘플 수
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control fontHv fs-6" id="minLeaf" value="1">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col fs-6 sidebarItem">
+                                                    최소 분할 샘플 개수
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control fontHv fs-6" id="minSplit" value="1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer text-center justify-content-center">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                                            <a type="button" class="btn btn-danger delete" th:href="@{'/admin/ai'}">저장</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="fragment::search"></script>
+<script th:inline="javascript">
+
+    const myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    let dataLength = [[${dataListLength}]];
+    if(dataLength < 300){
+        // alert 창 띄우기
+        alert("데이터 길이가 300보다 작습니다.");
+
+        // 이전 페이지로 되돌아가기
+        //window.history.back();
+    }
+    function doFilter(){
+
+        let min = document.getElementById("min").value;
+        let max = document.getElementById("max").value;
+        let augment = document.getElementById("augment").value;
+
+        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/add/filter/new/${min}/${max}/${augment}`;
+
+        fetch(url) // 데이터를 받아올 URL
+            .then(response => response.json()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                const result = parseInt(data);
+                document.getElementById("filterLength").innerText = result;
+                document.getElementById("second-step").style.opacity = '100%';
+                document.getElementById("second-step").style.cursor = 'auto';
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    function learn(){
+        document.getElementById("main").style.opacity = "20%";
+        document.getElementById("spin").style.display = "block";
+        document.getElementById("comment").style.display = "block";
+        let name = document.getElementById("name").value;
+        let version = document.getElementById("version").value;
+
+        let url = `http://ceprj.gachon.ac.kr:60002/admin/ai/model/learn/new/${name}/${version}`;
+
+        fetch(url) // 데이터를 받아올 URL
+            .then(response => response.text()) // JSON 형식으로 응답을 파싱
+            .then(data => {
+                document.getElementById("spin").style.display = "none";
+                document.getElementById("main").style.opacity = "100%";
+                document.getElementById("comment").style.display = 'none';
+
+                myModal.show(myModal);
+            })
+            .catch(error => {
+                alert("학습 중 오류 발생");
+                console.error('Error fetching data:', error);
+            });
+    }
+
+</script>
+<script>
+    let rows = document.getElementsByClassName('row menu');
+    let cnt = 0;
+    let temp = 0;
+
+    Array.from(rows).forEach(function(row, index) {
+        if (row.classList.contains('link')) {
+            cnt = index; // 인덱스 저장
+        } //if
+
+        row.addEventListener('mouseenter', function() {
+            this.classList.add('link');
+
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                if (otherRow !== row) {
+                    otherRow.classList.remove('link');
+                } //if
+            }); //link
+        }); //event
+
+
+        row.addEventListener('mouseleave', function() {
+            document.querySelectorAll('.row.menu').forEach(function(otherRow) {
+                otherRow.classList.remove('link');
+            }); //remove link
+        }); //addEvent
+    });
+
+    function check(){
+        Array.from(rows).forEach(function(row, index){
+            if(index===cnt) row.classList.add('link');
+        });
+    }
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+</body>
+</html>
