@@ -67,7 +67,7 @@ public class AdminAIController {
     }
 
     // 뷰
-    @GetMapping("/admin/ai/model/new/learn")
+    @GetMapping("/model/new/learn")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addNewModel(Model model) {
         dataLength = lineTimeRepository.count() + dataRepo.count();
