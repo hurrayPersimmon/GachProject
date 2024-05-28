@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @Controller
 @Slf4j
@@ -120,7 +122,7 @@ public class AdminAIController {
     @GetMapping("/model/learn/new/{name}/{version}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
-    public int learningNewModel(@PathVariable String name, @PathVariable String version) throws Exception {
+    public Map<String, Integer> learningNewModel(@PathVariable String name, @PathVariable String version) throws Exception {
         String tempPath = modelPath + name + ".pkl";
         dataLength = lineTimeRepository.count() + dataRepo.count();
         AiModel aiModel = new AiModel();
@@ -135,8 +137,11 @@ public class AdminAIController {
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
         aiModel.setMse(8.15214);
-        log.info(aiService.learnModel(aiModel).toString());
+        Map<String, Integer> map = aiService.learnModel(aiModel);
+        aiModel.setMaxDepth(map.getOrDefault("max_depth", 0));
+        aiModel.setMinSampleSplit(map.getOrDefault("min_samples_split", 0));
+        aiModel.setMinSampleLeaf(map.getOrDefault("min_samples_leaf", 0));
         aiRepo.save(aiModel);
-        return 1;
+        return map;
     }
 }

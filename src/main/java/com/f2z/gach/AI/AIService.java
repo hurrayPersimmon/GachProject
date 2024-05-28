@@ -172,7 +172,6 @@ public class AIService {
         String line;
         Map<String, Integer> map = new HashMap<>();
         while ((line = reader.readLine()) != null) {
-            log.info(line);
             line = line.replace("'", "\"").replaceAll("[{}]", "");
             String[] keyValuePairs = line.split(", ");
             for (String pair : keyValuePairs) {
@@ -183,8 +182,6 @@ public class AIService {
             }
         }
         reader.close();
-
-        log.info(map.toString());
         return map;
     }
 
