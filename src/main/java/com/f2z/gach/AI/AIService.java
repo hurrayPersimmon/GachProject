@@ -17,10 +17,7 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -170,25 +167,31 @@ public class AIService {
                 csvFilePath, aiModel.getAiModelPath());
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
-        StringBuilder sb = new StringBuilder();
         log.info("학습 시작");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
+            log.info(line);
         }
         reader.close();
 
-        line = line.replace("Best Hyperparameters: ", "").replace("'", "\"");
-        log.info(line);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Integer> paramMap = null;
-        try {
-            paramMap = objectMapper.readValue(line, Map.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        line = line.replace("'", "\"").replaceAll("[{}]", "");
 
-        return paramMap;
+        // Split the string by commas
+        String[] keyValuePairs = line.split(", ");
+
+        // Create a map to store the values
+        Map<String, Integer> map = new HashMap<>();
+
+        // Iterate through keyValuePairs array
+        for (String pair : keyValuePairs) {
+            // Split each pair by colon
+            String[] entry = pair.split(": ");
+            // Trim spaces and add to the map
+            map.put(entry[0].trim(), Integer.parseInt(entry[1].trim()));
+        }
+        log.info(map.toString());
+        return map;
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){
