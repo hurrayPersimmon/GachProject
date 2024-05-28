@@ -107,8 +107,9 @@ public class AIService {
                 .filter(data -> data.getLineTime() != null && data.getLineTime() > (double) min && data.getLineTime() < (double) max)
                 .map(dataEntity::parseHistory).toList();
         List<dataEntity> filterList = dataEntities.stream()
-                .filter(data -> data.getBirthYear() != 2014 && data.getTakeTime() > (double) min && data.getTakeTime() < (double) max)
+                .filter(data -> data.getBirthYear() != null && data.getBirthYear() != 2014 && data.getTakeTime() > (double) min && data.getTakeTime() < (double) max)
                 .toList();
+
 
         List<dataEntity> combinedList = Stream.concat(filteredList.stream(), filterList.stream())
                 .collect(Collectors.toList());
