@@ -92,7 +92,7 @@
                                     모델 이름
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="name" value="1">
+                                    <input type="text" class="form-control fontHv fs-6" id="name" value="demo">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -100,7 +100,7 @@
                                     모델 버전
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control fontHv fs-6" id="version" value="360">
+                                    <input type="text" class="form-control fontHv fs-6" id="version" value="v0.0.0">
                                 </div>
                             </div>
                             <div class="row mb-5">
@@ -142,8 +142,7 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer text-center justify-content-center">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
-                                            <a type="button" class="btn btn-danger delete" th:href="@{'/admin/ai'}">저장</a>
+                                            <a type="button" class="btn btn-secondary" th:href="@{'/admin/ai'}">확인</a>
                                         </div>
                                     </div>
                                 </div>
@@ -205,7 +204,17 @@
                 document.getElementById("spin").style.display = "none";
                 document.getElementById("main").style.opacity = "100%";
                 document.getElementById("comment").style.display = 'none';
-                console.log(data);
+                let parseData = JSON.parse(data);
+
+                let cleanedData = {};
+                for (let key in parseData) {
+                    let cleanedKey = key.replace(/(^"|"$)/g, '');
+                    cleanedData[cleanedKey] = parseData[key];
+                }
+
+                document.getElementById("depth").value = cleanedData.max_depth || 1;
+                document.getElementById("minLeaf").value = cleanedData.min_samples_leaf || 1;
+                document.getElementById("minSplit").value = cleanedData.min_samples_split || 1;
                 myModal.show(myModal);
             })
             .catch(error => {
