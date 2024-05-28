@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -138,9 +140,18 @@ public class AdminAIController {
         aiModel.setDataLength(dataLength);
         aiModel.setMse(8.15214);
         Map<String, Integer> map = aiService.learnModel(aiModel);
-        aiModel.setMaxDepth(map.getOrDefault("max_depth", 0));
-        aiModel.setMinSampleSplit(map.getOrDefault("min_samples_split", 0));
-        aiModel.setMinSampleLeaf(map.getOrDefault("min_samples_leaf", 0));
+        String[] numbers = map.toString().replaceAll("[^0-9]+", " ").trim().split(" ");
+
+        // List를 사용하여 숫자를 임시로 저장
+        List<Integer> numberList = new ArrayList<>();
+        for (String number : numbers) {
+            if (!number.isEmpty()) {
+                numberList.add(Integer.parseInt(number));
+            }
+        }
+        aiModel.setMaxDepth(numberList.get(1));
+        aiModel.setMinSampleSplit(numberList.get(0));
+        aiModel.setMinSampleLeaf(numberList.get(2));
         aiRepo.save(aiModel);
         return map;
     }
