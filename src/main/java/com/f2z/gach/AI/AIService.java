@@ -8,6 +8,7 @@ import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Service.MapServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -163,7 +165,7 @@ public class AIService {
         return Double.parseDouble(sb.toString());
     }
 
-    public Double learnModel(AiModel aiModel) throws Exception{
+    public Map<String, Integer> learnModel(AiModel aiModel) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, learnPath,
                 csvFilePath, aiModel.getAiModelPath());
         processBuilder.redirectErrorStream(true);
@@ -173,11 +175,20 @@ public class AIService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
-            log.info(line);
         }
         reader.close();
-        return Double.parseDouble(sb.toString());
+
+        line = line.replace("Best Hyperparameters: ", "").replace("'", "\"");
+        log.info(line);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Integer> paramMap = null;
+        try {
+            paramMap = objectMapper.readValue(line, Map.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return paramMap;
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){

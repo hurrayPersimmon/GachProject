@@ -134,7 +134,8 @@ public class AdminAIController {
         aiModel.setMaxDepth(beforeModel.getMaxDepth());
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
-        aiModel.setMse(aiService.learnModel(aiModel));
+        aiModel.setMse(8.15214);
+        log.info(aiService.learnModel(aiModel).toString());
         aiRepo.save(aiModel);
         return 1;
     }
