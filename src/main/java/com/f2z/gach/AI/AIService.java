@@ -170,13 +170,20 @@ public class AIService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
         Map<String, Integer> map = new HashMap<>();
+        List<Integer> arrayList = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
             if(line.startsWith("{")){
-                log.info(line.substring(22, 24));
-                log.info(line.substring(45,47));
-                log.info(line.substring(61,63));
+                arrayList.add(Integer.parseInt(line.substring(22,23)));
+                arrayList.add(Integer.parseInt(line.substring(45,46)));
+                arrayList.add(Integer.parseInt(line.substring(61,62)));
+            }
+            else{
+                log.info(line);
             }
         }
+        arrayList.forEach(
+                i -> log.info(String.valueOf(i))
+        );
         reader.close();
         return map;
     }
