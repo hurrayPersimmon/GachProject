@@ -8,7 +8,6 @@ import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Service.MapServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
