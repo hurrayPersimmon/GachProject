@@ -142,7 +142,6 @@ public class AdminAIController {
         Map<String, Integer> map = aiService.learnModel(aiModel);
         String[] numbers = map.toString().replaceAll("[^0-9]+", " ").trim().split(" ");
 
-        // List를 사용하여 숫자를 임시로 저장
         List<Integer> numberList = new ArrayList<>();
         for (String number : numbers) {
             if (!number.isEmpty()) {

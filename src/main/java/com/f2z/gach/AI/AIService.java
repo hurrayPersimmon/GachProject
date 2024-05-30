@@ -172,14 +172,7 @@ public class AIService {
         String line;
         Map<String, Integer> map = new HashMap<>();
         while ((line = reader.readLine()) != null) {
-            line = line.replace("'", "\"").replaceAll("[{}]", "");
-            String[] keyValuePairs = line.split(", ");
-            for (String pair : keyValuePairs) {
-                // Split each pair by colon
-                String[] entry = pair.split(": ");
-                // Trim spaces and add to the map
-                map.put(entry[0].trim(), Integer.parseInt(entry[1].trim()));
-            }
+            log.info(line);
         }
         reader.close();
         return map;
