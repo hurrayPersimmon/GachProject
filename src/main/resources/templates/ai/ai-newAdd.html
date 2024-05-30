@@ -204,11 +204,18 @@
                 document.getElementById("spin").style.display = "none";
                 document.getElementById("main").style.opacity = "100%";
                 document.getElementById("comment").style.display = 'none';
-                console.log(data);
+                let arr = [];
 
-                // document.getElementById("depth").value = parseData. || 1;
-                // document.getElementById("minLeaf").value = cleanedData.min_samples_leaf || 1;
-                // document.getElementById("minSplit").value = cleanedData.min_samples_split || 1;
+                document.getElementById("depth").value = data[2];
+                document.getElementById("minLeaf").value = data[1];
+                document.getElementById("minSplit").value = data[0];
+
+                for(let k = 0; k < data.length-2; k++){
+                    arr.push(data[k]);
+                }
+
+                console.log(arr);
+
                 myModal.show(myModal);
             })
             .catch(error => {
