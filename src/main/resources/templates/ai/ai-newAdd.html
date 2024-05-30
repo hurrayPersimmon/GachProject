@@ -207,12 +207,12 @@
                 let arr = [];
                 const numbers = data.match(/\d+/g).map(Number);
                 console.log(numbers);
-                document.getElementById("depth").value = data[2];
-                document.getElementById("minLeaf").value = data[1];
-                document.getElementById("minSplit").value = data[0];
+                document.getElementById("depth").value = numbers[2];
+                document.getElementById("minLeaf").value = numbers[1];
+                document.getElementById("minSplit").value = numbers[0];
 
-                for(let k = 0; k < data.length-2; k++){
-                    arr.push(data[k]);
+                for(let k = 3; k < data.length; k++){
+                    arr.push(numbers[k]);
                 }
 
                 myModal.show(myModal);
