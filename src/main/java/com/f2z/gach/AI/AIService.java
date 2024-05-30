@@ -161,7 +161,7 @@ public class AIService {
         return Double.parseDouble(sb.toString());
     }
 
-    public Map<String, Integer> learnModel(AiModel aiModel) throws Exception{
+    public List<Integer> learnModel(AiModel aiModel) throws Exception{
         processBuilder = new ProcessBuilder(localPythonPath, learnPath,
                 csvFilePath, aiModel.getAiModelPath());
         processBuilder.redirectErrorStream(true);
@@ -169,7 +169,6 @@ public class AIService {
         log.info("학습 시작");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
-        Map<String, Integer> map = new HashMap<>();
         List<Integer> arrayList = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
             if(line.startsWith("{")){
@@ -178,14 +177,11 @@ public class AIService {
                 arrayList.add(Integer.parseInt(line.substring(61,62)));
             }
             else{
-                log.info(line);
+                arrayList.add(Integer.parseInt(line));
             }
         }
-        arrayList.forEach(
-                i -> log.info(String.valueOf(i))
-        );
         reader.close();
-        return map;
+        return arrayList;
     }
 
     public int calculateTime(List<NavigationResponseDTO.NodeDTO> list, MapServiceImpl.AIData data){

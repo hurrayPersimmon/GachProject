@@ -204,17 +204,11 @@
                 document.getElementById("spin").style.display = "none";
                 document.getElementById("main").style.opacity = "100%";
                 document.getElementById("comment").style.display = 'none';
-                let parseData = JSON.parse(data);
+                console.log(data);
 
-                let cleanedData = {};
-                for (let key in parseData) {
-                    let cleanedKey = key.replace(/(^"|"$)/g, '');
-                    cleanedData[cleanedKey] = parseData[key];
-                }
-
-                document.getElementById("depth").value = cleanedData.max_depth || 1;
-                document.getElementById("minLeaf").value = cleanedData.min_samples_leaf || 1;
-                document.getElementById("minSplit").value = cleanedData.min_samples_split || 1;
+                // document.getElementById("depth").value = parseData. || 1;
+                // document.getElementById("minLeaf").value = cleanedData.min_samples_leaf || 1;
+                // document.getElementById("minSplit").value = cleanedData.min_samples_split || 1;
                 myModal.show(myModal);
             })
             .catch(error => {

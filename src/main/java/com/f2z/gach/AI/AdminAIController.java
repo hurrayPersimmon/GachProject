@@ -124,7 +124,7 @@ public class AdminAIController {
     @GetMapping("/model/learn/new/{name}/{version}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseBody
-    public Map<String, Integer> learningNewModel(@PathVariable String name, @PathVariable String version) throws Exception {
+    public List<Integer> learningNewModel(@PathVariable String name, @PathVariable String version) throws Exception {
         String tempPath = modelPath + name + ".pkl";
         dataLength = lineTimeRepository.count() + dataRepo.count();
         AiModel aiModel = new AiModel();
@@ -139,19 +139,11 @@ public class AdminAIController {
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
         aiModel.setMse(8.15214);
-        Map<String, Integer> map = aiService.learnModel(aiModel);
-        String[] numbers = map.toString().replaceAll("[^0-9]+", " ").trim().split(" ");
-
-        List<Integer> numberList = new ArrayList<>();
-        for (String number : numbers) {
-            if (!number.isEmpty()) {
-                numberList.add(Integer.parseInt(number));
-            }
-        }
-        aiModel.setMaxDepth(numberList.get(1));
-        aiModel.setMinSampleSplit(numberList.get(0));
-        aiModel.setMinSampleLeaf(numberList.get(2));
+        List<Integer> arrayList = aiService.learnModel(aiModel);
+        aiModel.setMaxDepth(arrayList.get(1));
+        aiModel.setMinSampleSplit(arrayList.get(0));
+        aiModel.setMinSampleLeaf(arrayList.get(2));
         aiRepo.save(aiModel);
-        return map;
+        return arrayList;
     }
 }
