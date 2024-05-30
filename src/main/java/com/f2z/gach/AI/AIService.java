@@ -171,7 +171,11 @@ public class AIService {
         String line;
         Map<String, Integer> map = new HashMap<>();
         while ((line = reader.readLine()) != null) {
-            log.info(line);
+            if(line.startsWith("{")){
+                log.info(line.substring(22, 24));
+                log.info(line.substring(45,47));
+                log.info(line.substring(55,57));
+            }
         }
         reader.close();
         return map;
