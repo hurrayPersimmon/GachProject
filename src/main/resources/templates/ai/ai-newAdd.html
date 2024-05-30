@@ -206,6 +206,8 @@
                 document.getElementById("comment").style.display = 'none';
                 let arr = [];
 
+                let arrList = data;
+
                 document.getElementById("depth").value = data[2];
                 document.getElementById("minLeaf").value = data[1];
                 document.getElementById("minSplit").value = data[0];
@@ -214,8 +216,6 @@
                     console.log(data[k]);
                     arr.push(data[k]);
                 }
-
-
 
                 myModal.show(myModal);
             })
