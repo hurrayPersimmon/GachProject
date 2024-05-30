@@ -117,10 +117,10 @@
                                         </div>
                                         <div class="modal-body text-center">
                                             <div class="row">
-                                                <div class="col-9">
+                                                <div class="col-9 m-0 p-0">
                                                     <canvas id="chart"></canvas>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-3 m-0 p-0">
                                                     <div class="row mb-3">
                                                         <div class="col fs-6 sidebarItem">
                                                             트리의 최대 깊이
@@ -218,7 +218,7 @@
                 document.getElementById("minLeaf").value = numbers[1];
                 document.getElementById("minSplit").value = numbers[0];
                 let index = [];
-                for(let k = 3; k < data.length; k++){
+                for(let k = 3; k < numbers.length; k++){
                     index.push(k-2);
                     arr.push(numbers[k]);
                 }
