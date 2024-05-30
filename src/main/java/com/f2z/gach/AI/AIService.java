@@ -174,7 +174,7 @@ public class AIService {
             if(line.startsWith("{")){
                 log.info(line.substring(22, 24));
                 log.info(line.substring(45,47));
-                log.info(line.substring(55,57));
+                log.info(line.substring(61,63));
             }
         }
         reader.close();
