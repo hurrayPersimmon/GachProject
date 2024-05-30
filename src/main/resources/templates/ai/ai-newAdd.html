@@ -116,28 +116,35 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body text-center">
-                                            <div class="row mb-3">
-                                                <div class="col fs-6 sidebarItem">
-                                                    트리의 최대 깊이
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <div class="row mb-3">
+                                                        <div class="col fs-6 sidebarItem">
+                                                            트리의 최대 깊이
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control fontHv fs-6" id="depth" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col fs-6 sidebarItem">
+                                                            최소 자식 잎 구성 샘플 수
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control fontHv fs-6" id="minLeaf" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col fs-6 sidebarItem">
+                                                            최소 분할 샘플 개수
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control fontHv fs-6" id="minSplit" value="1">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control fontHv fs-6" id="depth" value="1">
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <div class="col fs-6 sidebarItem">
-                                                    최소 자식 잎 구성 샘플 수
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control fontHv fs-6" id="minLeaf" value="1">
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <div class="col fs-6 sidebarItem">
-                                                    최소 분할 샘플 개수
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control fontHv fs-6" id="minSplit" value="1">
+                                                <div class="col-3">
+                                                    <canvas id="chart"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -210,10 +217,34 @@
                 document.getElementById("depth").value = numbers[2];
                 document.getElementById("minLeaf").value = numbers[1];
                 document.getElementById("minSplit").value = numbers[0];
-
+                let index = [];
                 for(let k = 3; k < data.length; k++){
+                    index.push(k-2);
                     arr.push(numbers[k]);
                 }
+
+                const ctx1 = document.getElementById('chart');
+
+                const data1 = {
+                    labels: index,
+                    datasets: [{
+                        label: '테스트 오차 결과',
+                        data: arr,
+                        fill: false,
+                        borderColor: '#1167b1',
+                        tension: 0.1
+                    }]
+                };
+
+                new Chart(ctx1, {
+                    type: 'line',
+                    data : data1,
+                    options : {
+                        plugins : {
+                            legend:false
+                        }
+                    }
+                });
 
                 myModal.show(myModal);
             })
