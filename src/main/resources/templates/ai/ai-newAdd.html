@@ -205,15 +205,12 @@
                 document.getElementById("main").style.opacity = "100%";
                 document.getElementById("comment").style.display = 'none';
                 let arr = [];
-
-                let arrList = data;
-
+                console.log(data);
                 document.getElementById("depth").value = data[2];
                 document.getElementById("minLeaf").value = data[1];
                 document.getElementById("minSplit").value = data[0];
 
                 for(let k = 0; k < data.length-2; k++){
-                    console.log(data[k]);
                     arr.push(data[k]);
                 }
 

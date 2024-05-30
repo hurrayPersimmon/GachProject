@@ -143,9 +143,6 @@ public class AdminAIController {
         aiModel.setMaxDepth(arrayList.get(2));
         aiModel.setMinSampleSplit(arrayList.get(0));
         aiModel.setMinSampleLeaf(arrayList.get(1));
-        arrayList.forEach(
-                i -> log.info(i.toString())
-        );
         aiRepo.save(aiModel);
         return arrayList;
     }
