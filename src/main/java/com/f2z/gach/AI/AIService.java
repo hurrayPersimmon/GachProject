@@ -181,6 +181,7 @@ public class AIService {
             }
         }
         reader.close();
+        log.info(String.valueOf(arrayList.size()));
         return arrayList;
     }
 
