@@ -241,31 +241,47 @@
                 console.log(pred);
                 console.log(pred.length);
 
-                const ctx1 = document.getElementById('chart');
+                const ctx = document.getElementById('chart');
 
-                const data1 = {
-                    labels: real,
-                    datasets: [{
-                        label: '예측 값',
-                        type: 'scatter',
-                        data: pred,
-                        stack : 'combined',
-                        fill: false,
-                        borderColor: '#1167b1',
-                        tension: 0.1
-                    }, {
-                        label: '실제 값',
-                        stack : 'combined',
-                        data : real
-                    }]
-                };
-
-                new Chart(ctx1, {
-                    type: 'line',
-                    data : data1,
-                    options : {
-                        plugins : {
-                            legend:false
+                const myChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Actual vs Predicted',
+                            data: real.map((value, index) => ({
+                                x: value,
+                                y: pred[index]
+                            })),
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Actual Values'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Predicted Values'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Actual: ${context.raw.x}, Predicted: ${context.raw.y}`;
+                                    }
+                                }
+                            }
                         }
                     }
                 });
