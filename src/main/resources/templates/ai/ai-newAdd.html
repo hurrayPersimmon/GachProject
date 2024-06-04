@@ -250,13 +250,16 @@
                             label: 'Actual',
                             data: real,
                             type : 'line',
-                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                            borderColor: 'rgba(0, 123, 255, 1)',
+                            backgroundColor: 'rgb(255,0,0)',
+                            borderColor: 'rgb(255,0,0)',
+                            pointStyle : false,
                             borderWidth: 1
                         }, {
                             label : 'Pred',
                             data : pred,
                             type : 'scatter',
+                            backgroundColor: 'rgb(18,77,225)',
+                            borderColor: 'rgb(18,77,225)',
                         }],
                         labels : real
                     },
