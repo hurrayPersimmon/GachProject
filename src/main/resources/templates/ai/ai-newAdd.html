@@ -247,40 +247,26 @@
                     type: 'scatter',
                     data: {
                         datasets: [{
-                            label: 'Actual vs Predicted',
-                            data: real.map((value, index) => ({
-                                x: value,
-                                y: pred[index]
-                            })),
+                            label: 'Actual',
+                            data: real,
+                            type : 'line',
                             backgroundColor: 'rgba(0, 123, 255, 0.5)',
                             borderColor: 'rgba(0, 123, 255, 1)',
                             borderWidth: 1
-                        }]
+                        }, {
+                            label : 'Pred',
+                            data : pred,
+                            type : 'scatter',
+                        }],
+                        labels : real
                     },
                     options: {
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom',
-                                title: {
-                                    display: true,
-                                    text: 'Actual Values'
-                                }
-                            },
+                        scales : {
                             y: {
-                                title: {
-                                    display: true,
-                                    text: 'Predicted Values'
-                                }
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Actual: ${context.raw.x}, Predicted: ${context.raw.y}`;
-                                    }
-                                }
+                                beginAtZero : true
+                            },
+                            x : {
+                                beginAtZero: true
                             }
                         }
                     }
