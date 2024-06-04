@@ -180,6 +180,7 @@ public class AIService {
                 arrayList.add(Integer.parseInt(line.substring(61,62)));
             } else if(line.startsWith("Mean")){
                 log.info(line);
+                mae = Double.parseDouble(line.substring(21));
             }
             else{
                 arrayList.add(Integer.parseInt(line));
