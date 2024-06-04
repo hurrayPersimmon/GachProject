@@ -171,14 +171,15 @@ public class AIService {
         String line;
         List<Integer> arrayList = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
-            if(line.startsWith("{")){
-                arrayList.add(Integer.parseInt(line.substring(22,23)));
-                arrayList.add(Integer.parseInt(line.substring(45,46)));
-                arrayList.add(Integer.parseInt(line.substring(61,62)));
-            }
-            else{
-                arrayList.add(Integer.parseInt(line));
-            }
+            log.info(line);
+//            if(line.startsWith("{")){
+//                arrayList.add(Integer.parseInt(line.substring(22,23)));
+//                arrayList.add(Integer.parseInt(line.substring(45,46)));
+//                arrayList.add(Integer.parseInt(line.substring(61,62)));
+//            }
+//            else{
+//                arrayList.add(Integer.parseInt(line));
+//            }
         }
         reader.close();
         log.info(String.valueOf(arrayList.size()));
