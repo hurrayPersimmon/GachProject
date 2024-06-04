@@ -223,13 +223,13 @@
                 let real = [];
                 let pred = [];
                 for(let k = 3; k < numbers.length; k++){
-                    index.push(k-2);
                     arr.push(numbers[k]);
                 }
 
                 for(let k=0; k < arr.length; k++){
                     if(k < arr.length/2){
                         real.push(arr[k]);
+                        index.push(k+1);
                     } else {
                         pred.push(arr[k]);
                     }
@@ -246,11 +246,17 @@
                 const data1 = {
                     labels: index,
                     datasets: [{
-                        label: '테스트 오차 결과',
-                        data: arr,
+                        label: '예측 값',
+                        type: 'scatter',
+                        data: pred,
+                        stack : 'combined',
                         fill: false,
                         borderColor: '#1167b1',
                         tension: 0.1
+                    }, {
+                        label: '실제 값',
+                        stack : 'combined',
+                        data : real
                     }]
                 };
 
