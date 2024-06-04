@@ -220,12 +220,27 @@
                 document.getElementById("minLeaf").value = numbers[1];
                 document.getElementById("minSplit").value = numbers[0];
                 let index = [];
+                let real = [];
+                let pred = [];
                 for(let k = 3; k < numbers.length; k++){
                     index.push(k-2);
                     arr.push(numbers[k]);
                 }
-                console.log(arr);
-                console.log(arr.length);
+
+                for(let k=0; k < arr.length; k++){
+                    if(k < arr.length/2){
+                        real.push(arr[k]);
+                    } else {
+                        pred.push(arr[k]);
+                    }
+                }
+
+                console.log(real);
+                console.log(real.length);
+
+                console.log(pred);
+                console.log(pred.length);
+
                 const ctx1 = document.getElementById('chart');
 
                 const data1 = {
