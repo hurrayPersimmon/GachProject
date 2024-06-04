@@ -8,6 +8,7 @@ import com.f2z.gach.Map.DTO.NavigationResponseDTO;
 import com.f2z.gach.Map.Entity.MapLine;
 import com.f2z.gach.Map.Repository.MapLineRepository;
 import com.f2z.gach.Map.Service.MapServiceImpl;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class AIService {
     private final AiModelRepository aiRepo;
     private final dataRepository dataRepo;
     private ProcessBuilder processBuilder;
+    @Getter
+    private double mae;
 
     final String localPythonPath = "python3";
     final String tempOutputPath = "/home/t24102/AI/python/tree_output.py";
@@ -175,13 +178,14 @@ public class AIService {
                 arrayList.add(Integer.parseInt(line.substring(22,23)));
                 arrayList.add(Integer.parseInt(line.substring(45,46)));
                 arrayList.add(Integer.parseInt(line.substring(61,62)));
+            } else if(line.startsWith("Mean")){
+                mae = Double.parseDouble(line.substring(20));
             }
             else{
                 arrayList.add(Integer.parseInt(line));
             }
         }
         reader.close();
-        log.info(String.valueOf(arrayList.size()));
         return arrayList;
     }
 

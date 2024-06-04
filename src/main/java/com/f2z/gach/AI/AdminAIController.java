@@ -138,8 +138,8 @@ public class AdminAIController {
         aiModel.setMaxDepth(beforeModel.getMaxDepth());
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
-        aiModel.setMse(8.15214);
         List<Integer> arrayList = aiService.learnModel(aiModel);
+        aiModel.setMse(aiService.getMae());
         aiModel.setMaxDepth(arrayList.get(2));
         aiModel.setMinSampleSplit(arrayList.get(0));
         aiModel.setMinSampleLeaf(arrayList.get(1));
