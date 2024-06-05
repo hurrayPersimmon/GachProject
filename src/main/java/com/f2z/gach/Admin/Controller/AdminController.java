@@ -88,6 +88,7 @@ public class AdminController {
             LocalDate date = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
             pathMap.put(date, (long) objects[1]);
         }
+        log.info(pathMap.toString());
         model.addAttribute("pathRequest", pathMap);
         model.addAttribute("inquiryList", inquiryRepository.findDailyInquiryCounts(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
