@@ -67,7 +67,7 @@ public class AdminLineController {
         model.addAttribute("lineSatisList", getSatisfactionMap());
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/find?%"));
+                LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/route-now?%"));
         return "line/line-manage";
     }
 
@@ -87,7 +87,7 @@ public class AdminLineController {
         model.addAttribute("lineSatisList", getSatisfactionMap());
         model.addAttribute("lineCnt", logRepository.countLogsByDateAndUrl(
                 LocalDateTime.now().minusDays(6).with(LocalTime.MIN),
-                LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/find?%"));
+                LocalDateTime.now().with(LocalTime.MAX), "GET", "/map/route-now?%"));
         return "line/line-manage";
     }
 
