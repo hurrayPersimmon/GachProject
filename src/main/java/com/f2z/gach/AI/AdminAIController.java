@@ -143,7 +143,36 @@ public class AdminAIController {
         aiModel.setMaxDepth(arrayList.get(2));
         aiModel.setMinSampleSplit(arrayList.get(0));
         aiModel.setMinSampleLeaf(arrayList.get(1));
+        aiModel.setAccuracy(getAccuracy(arrayList));
         aiRepo.save(aiModel);
         return arrayList;
+    }
+
+    double getAccuracy(List<Integer> arrClone){
+        arrClone.remove(0);
+        arrClone.remove(1);
+        arrClone.remove(2);
+
+        List<Integer> real = new ArrayList<>();
+        List<Integer> pred = new ArrayList<>();
+        List<Double> accuracy = new ArrayList<>();
+        for(int i = 0; i < arrClone.size(); i++){
+            if(i < arrClone.size()/2){
+                real.add(arrClone.get(i));
+            } else {
+                pred.add(arrClone.get(i));
+            }
+        }
+
+        for(int i = 0; i < real.size(); i++){
+            accuracy.add(
+                    1.0 - ( (Math.abs((double) real.get(i) - (double) pred.get(i))) / Math.abs((double) real.get(i)) )
+            );
+        }
+
+        log.info(String.valueOf(real.size()));
+        log.info(String.valueOf(pred.size()));
+        accuracy.forEach(i -> log.info(String.valueOf(i)));
+        return 0.0;
     }
 }

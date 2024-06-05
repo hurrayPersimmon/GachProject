@@ -36,6 +36,8 @@ public class AIService {
     private ProcessBuilder processBuilder;
     @Getter
     private double mae;
+    @Getter
+    private double accuracy;
 
     final String localPythonPath = "python3";
     final String tempOutputPath = "/home/t24102/AI/python/tree_output.py";
@@ -185,6 +187,7 @@ public class AIService {
             else{
                 arrayList.add(Integer.parseInt(line));
             }
+
         }
         reader.close();
         return arrayList;
