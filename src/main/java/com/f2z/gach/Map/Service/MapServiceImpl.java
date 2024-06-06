@@ -311,7 +311,7 @@ public class MapServiceImpl implements MapService{
         if(!nodeList.isEmpty()) busRouteMergedlist.addAll(nodeList);
         if(!gettingOffRoute.getNodeList().isEmpty()) busRouteMergedlist.addAll(gettingOffRoute.getNodeList());
 
-        NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime+10, busRouteMergedlist);
+        NavigationResponseDTO busMergedRoute = NavigationResponseDTO.toNavigationResponseDTO(routeBus, totalTime, busRouteMergedlist);
 
         return busMergedRoute;
 
