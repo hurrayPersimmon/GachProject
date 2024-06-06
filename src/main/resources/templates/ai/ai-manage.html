@@ -35,6 +35,9 @@
                                 <span class="">이름</span>
                             </th>
                             <th scope="col">
+                                <span class="">정확도</span>
+                            </th>
+                            <th scope="col">
                                 <span>MSE</span>
                             </th>
                             <th scope="col">
@@ -63,6 +66,7 @@
                                     </div>
                                 </td>
                                 <td th:text="${ai.getAiModelName()}">초기 모델</td>
+                                <td th:text="${ai.getAccuracy()}">정확도</td>
                                 <td th:text="${ai.getMse()}">15%</td>
                                 <td>
                                     <span th:if="${ai.getCnt() == 0}">

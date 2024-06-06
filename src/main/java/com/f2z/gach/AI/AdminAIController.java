@@ -140,7 +140,7 @@ public class AdminAIController {
         aiModel.setDataLength(dataLength);
         List<Integer> arrayList = aiService.learnModel(aiModel);
         List<Integer> arrayListClone = new ArrayList<>(arrayList);
-        aiModel.setMse(aiService.getMae());
+        aiModel.setMse(Math.round(aiService.getMae() * 100.0) / 100.0);
         aiModel.setMaxDepth(arrayList.get(2));
         aiModel.setMinSampleSplit(arrayList.get(0));
         aiModel.setMinSampleLeaf(arrayList.get(1));
@@ -177,10 +177,13 @@ public class AdminAIController {
                 );
             }
         }
+        double sum = 0;
+        for (double acc : accuracy) {
+            sum += acc;
+        }
+        double average = sum / accuracy.size();
+        average = average * 100;
 
-        log.info(String.valueOf(real.size()));
-        log.info(String.valueOf(pred.size()));
-        accuracy.forEach(i -> log.info(String.valueOf(i)));
-        return 0.0;
+        return Math.round(average * 100.0) / 100.0;
     }
 }
