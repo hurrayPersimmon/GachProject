@@ -165,9 +165,16 @@ public class AdminAIController {
         }
 
         for(int i = 0; i < real.size(); i++){
-            accuracy.add(
-                    1.0 - ( (Math.abs((double) real.get(i) - (double) pred.get(i))) / Math.abs((double) real.get(i)) )
-            );
+
+            if(Math.abs((double) real.get(i)) > Math.abs((double) pred.get(i))){
+                accuracy.add(
+                        1.0 - ( (Math.abs((double) real.get(i) - (double) pred.get(i))) / Math.abs((double) real.get(i)) )
+                );
+            } else {
+                accuracy.add(
+                        1.0 - ( (Math.abs((double) pred.get(i) - (double) real.get(i))) / Math.abs((double) pred.get(i)) )
+                );
+            }
         }
 
         log.info(String.valueOf(real.size()));

@@ -176,12 +176,12 @@ public class AIService {
         String line;
         List<Integer> arrayList = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
+            log.info(line);
             if(line.startsWith("{")){
                 arrayList.add(Integer.parseInt(line.substring(22,23)));
                 arrayList.add(Integer.parseInt(line.substring(45,46)));
                 arrayList.add(Integer.parseInt(line.substring(61,62)));
             } else if(line.startsWith("Mean")){
-                log.info(line);
                 mae = Double.parseDouble(line.substring(21));
             }
             else{
