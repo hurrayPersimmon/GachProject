@@ -71,7 +71,7 @@ public class HistoryServiceImpl implements HistoryService{
             historyLineTimeRepository.save(HistoryRequestDTO.lineHistoryDTO.toEntity(user, line, lineTime.getTime(), Velocity));
         }
 
-        Optional<AiModel> currentAiModel = aiModelRepository.findAiModelWithMaxId();
+        Optional<AiModel> currentAiModel = aiModelRepository.findByIsCheckedTrue();
         if(currentAiModel.isPresent()){
             AiModel aiModel = currentAiModel.get();
             aiModel.setCnt(aiModel.getCnt()+1);
