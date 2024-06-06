@@ -127,6 +127,7 @@ public class BusLine {
             }
             index++;
         }
+        log.info("BusTime : " + TotalTime);;
         return ResultList.builder().busLine(busLine).totalTime(TotalTime).build();
     }
 
