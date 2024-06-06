@@ -139,11 +139,12 @@ public class AdminAIController {
         aiModel.setIsChecked(false);
         aiModel.setDataLength(dataLength);
         List<Integer> arrayList = aiService.learnModel(aiModel);
+        List<Integer> arrayListClone = new ArrayList<>(arrayList);
         aiModel.setMse(aiService.getMae());
         aiModel.setMaxDepth(arrayList.get(2));
         aiModel.setMinSampleSplit(arrayList.get(0));
         aiModel.setMinSampleLeaf(arrayList.get(1));
-        aiModel.setAccuracy(getAccuracy(arrayList));
+        aiModel.setAccuracy(getAccuracy(arrayListClone));
         aiRepo.save(aiModel);
         return arrayList;
     }
