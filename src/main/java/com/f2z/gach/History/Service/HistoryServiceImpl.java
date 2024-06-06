@@ -72,10 +72,12 @@ public class HistoryServiceImpl implements HistoryService{
         }
 
         Optional<AiModel> currentAiModel = aiModelRepository.findByIsCheckedTrue();
+        log.info("currentAiModel : " + currentAiModel.toString());
         if(currentAiModel.isPresent()){
             AiModel aiModel = currentAiModel.get();
             aiModel.setCnt(aiModel.getCnt()+1);
             aiModel.setTotalSatisfaction(aiModel.getTotalSatisfaction() + lineHistory.getSatisfactionTime().ordinal() +1);
+            log.info("AiModel에 만족도 정상적으로 저장");
             aiModelRepository.save(aiModel);
         }else log.info("aiModel is null : " + currentAiModel);
 
