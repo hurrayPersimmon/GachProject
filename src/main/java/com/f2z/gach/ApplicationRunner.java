@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Random;
 
-//@Service
 @RequiredArgsConstructor
 public class ApplicationRunner implements org.springframework.boot.ApplicationRunner {
 
@@ -21,20 +21,17 @@ public class ApplicationRunner implements org.springframework.boot.ApplicationRu
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Admin admin = new Admin();
-        admin.setAdminPassword(passwordEncoder.encode("1234"));
-        admin.setAdminBirthday(LocalDate.now());
-        admin.setAdminName("관리자");
-        admin.setAdminAuthorization(Authorization.ADMIN);
-        admin.setAdminId("admin");
-        adminRepository.save(admin);
 
-        Admin guest = new Admin();
-        guest.setAdminPassword(passwordEncoder.encode("1234"));
-        guest.setAdminBirthday(LocalDate.now());
-        guest.setAdminName("게스트");
-        guest.setAdminAuthorization(Authorization.GUEST);
-        guest.setAdminId("guest");
-        adminRepository.save(guest);
+        Random random = new Random();
+
+        for(int i = 0; i < 30; i++){
+            Admin admin = new Admin();
+            admin.setAdminId("guest" + i+1);
+            admin.setAdminName("게스트" + i+1);
+            admin.setAdminBirthday(LocalDate.of(2000, random.nextInt(10), 1).plusDays(random.nextInt(30)));
+            admin.setAdminPassword(passwordEncoder.encode("1234"));
+            admin.setAdminAuthorization(Authorization.GUEST);
+            adminRepository.save(admin);
+        }
     }
 }

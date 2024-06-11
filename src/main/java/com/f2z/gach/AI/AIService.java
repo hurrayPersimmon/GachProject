@@ -187,7 +187,6 @@ public class AIService {
             else{
                 arrayList.add(Integer.parseInt(line));
             }
-
         }
         reader.close();
         return arrayList;
